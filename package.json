@@ -1,0 +1,57 @@
+{
+  "name": "@hce/design-system",
+  "version": "1.0.0",
+  "description": "HCE Design System - Shared component library for HCE projects",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "dev": "storybook dev -p 6006",
+    "build": "tsc -b && vite build",
+    "build-storybook": "storybook build -o storybook-static",
+    "storybook": "storybook dev -p 6006",
+    "lint": "eslint .",
+    "generate:stories": "node scripts/generate-stories.mjs",
+    "generate:stories:force": "node scripts/generate-stories.mjs --force",
+    "prepublishOnly": "npm run build",
+    "publish:local": "npm publish --registry http://localhost:4873",
+    "publish:docker": "npm publish --registry http://verdaccio:4873"
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@mui/material": "^7",
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.1.1",
+    "@mui/material": "^7.1.1",
+    "@storybook/addon-essentials": "8.6.18",
+    "@storybook/addon-interactions": "8.6.18",
+    "@storybook/react": "8.6.18",
+    "@storybook/react-vite": "8.6.18",
+    "@storybook/theming": "8.6.18",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "lucide-react": "^0.577.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.5.0",
+    "typescript": "~5.9.3",
+    "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.4"
+  }
+}

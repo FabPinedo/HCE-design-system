@@ -1,0 +1,40 @@
+services:
+  # ── Private npm Registry (Verdaccio) ────────────────────────
+  verdaccio:
+    image: verdaccio/verdaccio:5
+    container_name: hce-verdaccio
+    ports:
+      - "4873:4873"
+    volumes:
+      - ./docker/verdaccio/config.yaml:/verdaccio/conf/config.yaml:ro
+      - verdaccio-storage:/verdaccio/storage
+    environment:
+      - VERDACCIO_PUBLIC_URL=http://localhost:4873
+    restart: unless-stopped
+
+  # ── Storybook (static build served by nginx) ────────────────
+  storybook:
+    build:
+      context: .
+      dockerfile: docker/storybook/Dockerfile
+    container_name: hce-storybook
+    ports:
+      - "6006:80"
+    restart: unless-stopped
+
+  # ── Publisher (build + publish to Verdaccio) ────────────────
+  publisher:
+    build:
+      context: .
+      dockerfile: docker/publisher/Dockerfile
+    container_name: hce-publisher
+    environment:
+      - VERDACCIO_URL=http://verdaccio:4873
+      - NPM_TOKEN=${NPM_TOKEN:-}
+    depends_on:
+      - verdaccio
+    profiles:
+      - publish
+
+volumes:
+  verdaccio-storage:
