@@ -247,6 +247,26 @@ docker compose up -d
 | Nuevo componente, nueva prop | `npm version minor` | `1.0.6 → 1.1.0` |
 | Cambio que rompe compatibilidad | `npm version major` | `1.0.6 → 2.0.0` |
 
+### Publicar rápido (sin cambios de versión)
+
+Si Verdaccio ya está corriendo y solo querés publicar la versión actual:
+
+```bash
+# Desde el servidor donde corre Verdaccio
+docker compose --profile publish run --rm publisher
+```
+
+O desde cualquier máquina con Node/npm apuntando al registry:
+
+```bash
+npm run build
+npm publish --registry http://localhost:10100
+# Si Verdaccio está en otro servidor:
+# npm publish --registry http://192.168.42.44:10100
+```
+
+---
+
 ### Flujo completo de publicación
 
 Se usa `--no-git-tag-version` para que npm solo actualice `package.json` sin generar commit ni tag automáticos. Esto permite usar el mensaje de gitflow en el commit y crear el tag automáticamente sobre ese commit.

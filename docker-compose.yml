@@ -9,7 +9,7 @@ services:
       - ./docker/verdaccio/config.yaml:/verdaccio/conf/config.yaml:ro
       - verdaccio-storage:/verdaccio/storage
     environment:
-      - VERDACCIO_PUBLIC_URL=http://localhost:10100
+      - VERDACCIO_PUBLIC_URL=http://${SERVER_IP:-localhost}:10100
     restart: unless-stopped
 
   # ── Storybook (static build served by nginx) ────────────────
