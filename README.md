@@ -113,6 +113,8 @@ npm unlink
 
 > Usar `npm link` solo durante desarrollo. Para producción siempre publicar la versión en Verdaccio y consumir vía `npm install`.
 
+> **⚠️ `npm link` y Docker no son compatibles.** Si el link está activo cuando se ejecuta `docker compose build` en un proyecto consumidor, el build fallará porque Docker no puede seguir el symlink fuera del contexto de build. Siempre desactivar el link antes de buildear Docker.
+
 ---
 
 ## Agregar un componente nuevo
@@ -237,65 +239,75 @@ docker compose up -d
 
 ## Publicar en Verdaccio
 
-### Primera vez (o después de cambios)
+### Convención de versionado
 
-**Paso 1 — Actualizar la versión en `package.json`**
+| Tipo de cambio | Comando | Ejemplo |
+|---|---|---|
+| Bugfix, ajuste visual menor | `npm version patch` | `1.0.6 → 1.0.7` |
+| Nuevo componente, nueva prop | `npm version minor` | `1.0.6 → 1.1.0` |
+| Cambio que rompe compatibilidad | `npm version major` | `1.0.6 → 2.0.0` |
 
-Verdaccio no permite sobreescribir una versión ya publicada. Siempre hay que subir la versión antes de publicar.
+### Flujo completo de publicación
 
-```json
-"version": "1.0.0"  →  "1.1.0"
-```
-
-Convención de versionado:
-
-| Cambio | Versión |
-|---|---|
-| Bugfix, ajuste visual menor | `1.0.0 → 1.0.1` (patch) |
-| Nuevo componente, nueva prop | `1.0.0 → 1.1.0` (minor) |
-| Cambio que rompe compatibilidad | `1.0.0 → 2.0.0` (major) |
-
-**Paso 2 — Reconstruir imágenes y publicar**
-
-```bash
-# Bajar servicios
-docker compose down
-
-# Reconstruir con el nuevo código
-docker compose build
-
-# Levantar Verdaccio y Storybook
-docker compose up -d
-
-# Publicar el paquete en Verdaccio (--build fuerza reconstruir con archivos actualizados)
-docker compose --profile publish run --build publisher
-```
-
-El servicio `publisher` espera a que Verdaccio esté listo, construye la librería y publica `@hce/design-system@<nueva-versión>`.
-
----
-
-## Actualizar una versión publicada
-
-El flujo completo cada vez que se hacen cambios:
+Se usa `--no-git-tag-version` para que npm solo actualice `package.json` sin generar commit ni tag automáticos. Esto permite usar el mensaje de gitflow en el commit y crear el tag automáticamente sobre ese commit.
 
 ```bash
 # 1. Hacer los cambios en src/
 
-# 2. Generar stories para componentes nuevos
+# 2. Generar stories para componentes nuevos (si aplica)
 npm run generate:stories
 
 # 3. Verificar que TypeScript no tiene errores
 npx tsc -b tsconfig.lib.json --noEmit
 
-# 4. Subir la versión en package.json
-#    patch → 1.0.1 | minor → 1.1.0 | major → 2.0.0
+# 4. Documentar los cambios en CHANGELOG.md
 
-# 5. Reconstruir y publicar
+# 5. Bump de versión — solo toca package.json, sin commit ni tag automático
+#    Elegir según el tipo de cambio:
+npm version patch --no-git-tag-version
+# npm version minor --no-git-tag-version
+# npm version major --no-git-tag-version
+
+# 6. Commit con mensaje gitflow (incluye src/, CHANGELOG.md y package.json)
+git add .
+git commit -m "feature: descripcion de los cambios"
+
+# 7. Tag automático — lee la versión de package.json sin escribirla a mano
+git tag "v$(node -p "require('./package.json').version")"
+
+# 8. Push al repositorio
+git push
+git push --tags
+
+# 9. Reconstruir imágenes y publicar en Verdaccio
 docker compose down
 docker compose build
 docker compose up -d
 docker compose --profile publish run --build publisher
+```
+
+El servicio `publisher` espera a que Verdaccio esté listo, construye la librería y publica `@hce/design-system@<nueva-versión>`.
+
+Con este flujo cada versión publicada en Verdaccio queda vinculada a un tag de git (`v1.0.7`) que apunta exactamente al commit con los cambios y el CHANGELOG actualizado.
+
+### Verificar versiones publicadas
+
+```bash
+npm view @hce/design-system versions --registry http://localhost:10100
+```
+
+### Rollback a una versión anterior
+
+En el proyecto consumidor, instalar la versión específica que se necesita:
+
+```bash
+npm install @hce/design-system@1.0.3
+```
+
+Para ver qué cambió en esa versión consultar `CHANGELOG.md`, o buscar el tag en git:
+
+```bash
+git show v1.0.3
 ```
 
 ---
