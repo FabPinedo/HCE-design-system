@@ -9,9 +9,14 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Copy source and build storybook
+# Copy source
 COPY . .
-RUN npm run build-storybook
+
+# Compilar la librería primero — genera dist/index.d.ts que necesita vite-plugin-dts al buildear Storybook
+RUN npm run build
+
+# Buildear Storybook (CI=true evita prompts interactivos)
+RUN CI=true npm run build-storybook
 
 # ─────────────────────────────────────────────────────────────
 # Stage 2 — Serve with nginx
