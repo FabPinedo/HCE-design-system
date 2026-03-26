@@ -4,12 +4,12 @@ services:
     image: verdaccio/verdaccio:5
     container_name: hce-verdaccio
     ports:
-      - "5200:4873"
+      - "10100:4873"
     volumes:
       - ./docker/verdaccio/config.yaml:/verdaccio/conf/config.yaml:ro
       - verdaccio-storage:/verdaccio/storage
     environment:
-      - VERDACCIO_PUBLIC_URL=http://localhost:5200
+      - VERDACCIO_PUBLIC_URL=http://localhost:10100
     restart: unless-stopped
 
   # ── Storybook (static build served by nginx) ────────────────
@@ -19,7 +19,7 @@ services:
       dockerfile: docker/storybook/Dockerfile
     container_name: hce-storybook
     ports:
-      - "5201:80"
+      - "10101:80"
     restart: unless-stopped
 
   # ── Publisher (build + publish to Verdaccio) ────────────────

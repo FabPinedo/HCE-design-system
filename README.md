@@ -60,11 +60,58 @@ npm install
 ### Levantar Storybook en modo dev
 
 ```bash
-npm run storybook
-# → http://localhost:6006
+npm start
+# → http://localhost:10101
 ```
 
 Los cambios en `src/` se reflejan en tiempo real sin reiniciar.
+
+---
+
+## Desarrollo en caliente con proyectos consumidores (npm link)
+
+Permite probar cambios del design system directamente en `jarvis-platform-starter` o `jarvis-mf-platform` sin pasar por el ciclo de publicación en Verdaccio.
+
+### Activar el link
+
+```bash
+# 1. En HCE-design-system — compilar y registrar el paquete localmente
+npm run build
+npm link
+
+# 2. En el proyecto consumidor (repetir para cada uno)
+cd ../jarvis-platform-starter/jarvis-ui
+npm link @hce/design-system
+
+# o en mf-platform
+cd ../jarvis-mf-platform
+npm link @hce/design-system
+```
+
+A partir de acá, `node_modules/@hce/design-system` apunta directamente a la carpeta local. Cada vez que se hace `npm run build` en el design system, el cambio se ve al recargar el proyecto.
+
+### Flujo de trabajo
+
+```bash
+# 1. Modificar src/ en HCE-design-system
+# 2. Recompilar
+npm run build
+
+# 3. Recargar el navegador en el proyecto consumidor — el cambio ya está
+```
+
+### Desactivar el link (volver al paquete de Verdaccio)
+
+```bash
+# En el proyecto consumidor
+npm unlink @hce/design-system
+npm install
+
+# En HCE-design-system (opcional, limpia el link global)
+npm unlink
+```
+
+> Usar `npm link` solo durante desarrollo. Para producción siempre publicar la versión en Verdaccio y consumir vía `npm install`.
 
 ---
 
@@ -159,8 +206,8 @@ Genera en `dist/`:
 
 | Servicio | Puerto | Descripción |
 |---|---|---|
-| `verdaccio` | 4873 | Registry npm privado, persistente |
-| `storybook` | 6006 | Storybook estático servido con nginx |
+| `verdaccio` | 10100 | Registry npm privado, persistente |
+| `storybook` | 10101 | Storybook estático servido con nginx |
 | `publisher` | — | Publica el paquete a Verdaccio (perfil: `publish`) |
 
 ### Levantar Verdaccio y Storybook
@@ -169,13 +216,21 @@ Genera en `dist/`:
 docker compose up -d
 ```
 
-- Storybook disponible en `http://localhost:6006`
-- Verdaccio disponible en `http://localhost:4873`
+- Storybook disponible en `http://localhost:10101`
+- Verdaccio disponible en `http://localhost:10100`
 
 ### Detener los servicios
 
 ```bash
 docker compose down
+```
+
+### Reconstruir imágenes
+
+```bash
+docker compose down
+docker compose build
+docker compose up -d
 ```
 
 ---
@@ -252,7 +307,7 @@ docker compose --profile publish run --build publisher
 Crear o editar `.npmrc` en la raíz del proyecto:
 
 ```
-@hce:registry=http://localhost:4873
+@hce:registry=http://localhost:10100
 ```
 
 Esto hace que solo los paquetes `@hce/*` vengan de Verdaccio. El resto (react, axios, etc.) sigue viniendo de npm público.
@@ -260,7 +315,7 @@ Esto hace que solo los paquetes `@hce/*` vengan de Verdaccio. El resto (react, a
 Si Verdaccio está en otra máquina de la red, reemplazar `localhost` por la IP:
 
 ```
-@hce:registry=http://192.168.1.100:4873
+@hce:registry=http://192.168.1.100:10100
 ```
 
 ### Instalar el paquete

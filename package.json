@@ -18,15 +18,16 @@
     "dist"
   ],
   "scripts": {
-    "dev": "storybook dev -p 5201",
+    "start": "storybook dev -p 10101",
+    "dev": "storybook dev -p 10101",
     "build": "tsc -b && vite build",
     "build-storybook": "storybook build -o storybook-static",
-    "storybook": "storybook dev -p 5201",
+    "storybook": "storybook dev -p 10101",
     "lint": "eslint .",
     "generate:stories": "node scripts/generate-stories.mjs",
     "generate:stories:force": "node scripts/generate-stories.mjs --force",
     "prepublishOnly": "npm run build",
-    "publish:local": "npm publish --registry http://localhost:5200",
+    "publish:local": "npm publish --registry http://localhost:10100",
     "publish:docker": "npm publish --registry http://verdaccio:4873"
   },
   "peerDependencies": {
