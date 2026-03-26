@@ -24,7 +24,25 @@ export const DataTable = ({ columns, rows }: Props) => {
           <TableHead>
             <TableRow>
               {columns.map(col => (
-                <TableCell key={col.field}>{col.header}</TableCell>
+                <TableCell
+                  key={col.field}
+                  sx={{
+                    backgroundColor: '#2B5BA8',
+                    color: '#fff !important',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: 0.5,
+                    borderColor: '#2B5BA8',
+                    py: 1.25,
+                    '&.MuiTableCell-stickyHeader': {
+                      backgroundColor: '#2B5BA8',
+                      color: '#fff',
+                    },
+                  }}
+                >
+                  {col.header}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>

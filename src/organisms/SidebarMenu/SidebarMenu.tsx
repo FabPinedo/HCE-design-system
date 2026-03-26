@@ -1,20 +1,18 @@
-import { useLocation } from "react-router-dom"
 import "./SidebarMenu.css"
 import type { MenuItem } from "./types"
 
 interface Props {
-  items:      MenuItem[]
-  collapsed?: boolean
-  onNavigate: (path: string) => void
+  items:        MenuItem[]
+  collapsed?:   boolean
+  onNavigate:   (path: string) => void
+  currentPath?: string
 }
 
-export function SidebarMenu({ items, onNavigate }: Props) {
-  const location = useLocation()
-
+export function SidebarMenu({ items, onNavigate, currentPath = "" }: Props) {
   // Pick the most-specific item that matches the current path
   const activePath = items.reduce<string | null>((best, item) => {
-    const matches = location.pathname === item.path
-      || location.pathname.startsWith(item.path + "/")
+    const matches = currentPath === item.path
+      || currentPath.startsWith(item.path + "/")
     if (!matches) return best
     if (!best || item.path.length > best.length) return item.path
     return best

@@ -1,44 +1,53 @@
-/**
- * ---------------------------------------------------------
- * Component: Button
- * Description:
- * Wrapper del componente Button de Material UI utilizado
- * dentro del Design System de la aplicación.
- *
- * Uso:
- * <Button label="Guardar" onClick={handleSave} />
- * ---------------------------------------------------------
- */
+import { type ReactNode } from "react"
 import MuiButton from "@mui/material/Button"
 
 interface Props {
-  label:      string
+  label?:     string
+  children?:  ReactNode
   onClick?:   () => void
   fullWidth?: boolean
   color?:     "primary" | "secondary"
+  variant?:   "primary" | "secondary" | "danger" | "ghost"
+  size?:      "sm" | "md" | "lg"
   type?:      "button" | "submit" | "reset"
   disabled?:  boolean
+  style?:     React.CSSProperties
+}
+
+const SIZE_MAP: Record<string, "small" | "medium" | "large"> = {
+  sm: "small",
+  md: "medium",
+  lg: "large",
 }
 
 export const Button = ({
   label,
+  children,
   onClick,
-  fullWidth = false,
-  color     = "primary",
-  type      = "button",
-  disabled  = false,
+  fullWidth  = false,
+  color      = "primary",
+  variant,
+  size       = "md",
+  type       = "button",
+  disabled   = false,
+  style,
 }: Props) => {
+  const muiColor  = variant === "danger" ? "error" : color
+  const muiVariant = variant === "ghost" ? "text" : "contained"
+
   return (
     <MuiButton
-      variant="contained"
-      color={color}
+      variant={muiVariant}
+      color={muiColor}
       onClick={onClick}
       fullWidth={fullWidth}
+      size={SIZE_MAP[size] ?? "medium"}
       type={type}
       disabled={disabled}
-      sx={{ textTransform: "none", fontWeight: 700, py: "12px", fontSize: "1rem" }}
+      style={style}
+      sx={{ textTransform: "none", fontWeight: 600 }}
     >
-      {label}
+      {children ?? label}
     </MuiButton>
   )
 }

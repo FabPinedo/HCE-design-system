@@ -3,14 +3,16 @@ import { Box, Typography, OutlinedInput, InputAdornment } from "@mui/material"
 import { baseColors } from "../../tokens/base.tokens"
 
 interface Props {
-  label:       string
+  label?:      string
   value:       string
   onChange:    (value: string) => void
   placeholder?: string
   startIcon?:  ReactNode
-  fullWidth?:  boolean
-  type?:       string
+  fullWidth?:    boolean
+  type?:         string
   endAdornment?: ReactNode
+  required?:     boolean
+  disabled?:     boolean
 }
 
 export function TextInput({
@@ -22,18 +24,22 @@ export function TextInput({
   fullWidth = true,
   type = "text",
   endAdornment,
+  required,
+  disabled,
 }: Props) {
   return (
     <Box>
-      <Typography component="label" sx={{
-        fontSize:   "0.75rem",
-        fontWeight: 600,
-        color:      baseColors.textSecondary,
-        mb:         0.5,
-        display:    "block",
-      }}>
-        {label}
-      </Typography>
+      {label && (
+        <Typography component="label" sx={{
+          fontSize:   "0.75rem",
+          fontWeight: 600,
+          color:      baseColors.textSecondary,
+          mb:         0.5,
+          display:    "block",
+        }}>
+          {label}
+        </Typography>
+      )}
       <OutlinedInput
         fullWidth={fullWidth}
         size="small"
@@ -41,6 +47,8 @@ export function TextInput({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        required={required}
+        disabled={disabled}
         startAdornment={startIcon
           ? <InputAdornment position="start">{startIcon}</InputAdornment>
           : undefined

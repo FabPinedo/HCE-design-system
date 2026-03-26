@@ -1,5 +1,4 @@
 import { useState }                        from "react"
-import { useNavigate }                     from "react-router-dom"
 import {
   Box, Typography, Badge, Avatar,
   Menu, MenuItem, Divider, IconButton,
@@ -58,6 +57,7 @@ type Props = {
   userRole?:        string
   notifications?:   number
   onToggleSidebar?: () => void
+  onLogout?:        () => void
 }
 
 export function Header({
@@ -66,9 +66,8 @@ export function Header({
   userName      = "Usuario",
   userRole      = "",
   onToggleSidebar,
+  onLogout,
 }: Props) {
-  const navigate = useNavigate()
-
   const [userAnchor,  setUserAnchor]  = useState<null | HTMLElement>(null)
   const [notifAnchor, setNotifAnchor] = useState<null | HTMLElement>(null)
   const [notifs, setNotifs]           = useState<Notification[]>(INITIAL_NOTIFICATIONS)
@@ -77,7 +76,7 @@ export function Header({
 
   const handleUserOpen  = (e: React.MouseEvent<HTMLElement>) => setUserAnchor(e.currentTarget)
   const handleUserClose = () => setUserAnchor(null)
-  const handleLogout    = () => { handleUserClose(); navigate("/") }
+  const handleLogout    = () => { handleUserClose(); onLogout?.() }
 
   const handleNotifOpen  = (e: React.MouseEvent<HTMLElement>) => {
     setNotifAnchor(e.currentTarget)

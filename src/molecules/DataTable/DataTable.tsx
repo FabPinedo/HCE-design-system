@@ -47,14 +47,18 @@ export const DataTable = <T extends object>({
                 key={col.key}
                 width={col.width}
                 sx={{
-                  bgcolor: '#2B5BA8',
-                  color: '#fff',
+                  backgroundColor: '#2B5BA8',
+                  color: '#fff !important',
                   fontSize: 12,
                   fontWeight: 700,
                   textTransform: 'uppercase',
                   letterSpacing: 0.5,
                   borderColor: '#2B5BA8',
                   py: 1.25,
+                  '&.MuiTableCell-stickyHeader': {
+                    backgroundColor: '#2B5BA8',
+                    color: '#fff',
+                  },
                 }}
               >
                 {col.label}
