@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client"
 import { addons, types } from "@storybook/manager-api"
 import { create } from "@storybook/theming/create"
 
+
 const STORAGE_KEY = "sb_hce_auth"
 const VALID_USER  = "admin"
 const VALID_PASS  = "admin"
@@ -26,7 +27,7 @@ const C = {
 addons.setConfig({
   theme: create({
     base:            "light",
-    brandTitle:      "HCE Design System",
+    brandTitle:      "HCE Storybook",
     brandUrl:        "javascript:void(0)",
 
     // Colores de la UI

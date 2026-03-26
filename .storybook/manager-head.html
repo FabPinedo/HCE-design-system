@@ -1,0 +1,12 @@
+<script>
+(function() {
+  var TITLE = "HCE Storybook";
+  var desc = Object.getOwnPropertyDescriptor(Document.prototype, "title");
+  Object.defineProperty(Document.prototype, "title", {
+    get: desc.get,
+    set: function() { desc.set.call(this, TITLE); },
+    configurable: true,
+  });
+  document.title = TITLE;
+})();
+</script>
