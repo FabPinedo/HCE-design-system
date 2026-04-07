@@ -1,13 +1,13 @@
-import { type ReactNode }     from "react"
+import { useState, type ReactNode } from "react"
 import { Box, Typography, OutlinedInput, InputAdornment } from "@mui/material"
 import { baseColors } from "../../tokens/base.tokens"
 
 interface Props {
-  label?:      string
-  value:       string
-  onChange:    (value: string) => void
-  placeholder?: string
-  startIcon?:  ReactNode
+  label?:        string
+  value:         string
+  onChange:      (value: string) => void
+  placeholder?:  string
+  startIcon?:    ReactNode
   fullWidth?:    boolean
   type?:         string
   endAdornment?: ReactNode
@@ -27,15 +27,25 @@ export function TextInput({
   required,
   disabled,
 }: Props) {
+  const [focused, setFocused] = useState(false)
+  const [hovered, setHovered] = useState(false)
+
+  const active      = focused || hovered
+  const accentColor = active ? baseColors.primary : baseColors.textSecondary
+
   return (
-    <Box>
+    <Box
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       {label && (
         <Typography component="label" sx={{
           fontSize:   "0.75rem",
           fontWeight: 600,
-          color:      baseColors.textSecondary,
+          color:      accentColor,
           mb:         0.5,
           display:    "block",
+          transition: "color 0.15s",
         }}>
           {label}
         </Typography>
@@ -49,8 +59,21 @@ export function TextInput({
         onChange={(e) => onChange(e.target.value)}
         required={required}
         disabled={disabled}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         startAdornment={startIcon
-          ? <InputAdornment position="start">{startIcon}</InputAdornment>
+          ? (
+            <InputAdornment position="start">
+              <Box sx={{
+                color:      accentColor,
+                display:    "flex",
+                alignItems: "center",
+                transition: "color 0.15s",
+              }}>
+                {startIcon}
+              </Box>
+            </InputAdornment>
+          )
           : undefined
         }
         endAdornment={endAdornment}
@@ -58,9 +81,14 @@ export function TextInput({
           borderRadius:    "8px",
           backgroundColor: baseColors.surface,
           fontSize:        "0.875rem",
-          "& fieldset":               { borderColor: baseColors.border },
-          "&:hover fieldset":         { borderColor: baseColors.primary },
-          "&.Mui-focused fieldset":   { borderColor: baseColors.primary },
+          "& fieldset":             { borderColor: baseColors.border },
+          "&:hover fieldset":       { borderColor: baseColors.primary },
+          "&.Mui-focused fieldset": { borderColor: baseColors.primary },
+          "& input::placeholder": {
+            color:      accentColor,
+            opacity:    1,
+            transition: "color 0.15s",
+          },
         }}
       />
     </Box>

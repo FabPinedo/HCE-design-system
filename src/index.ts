@@ -21,6 +21,15 @@ export {
   injectBaseTokens,
 } from "./tokens/base.tokens"
 
+// ── Design Tokens — HCE Figma Palette ─────────────────────
+export {
+  hceColors,
+  hceTypography,
+  injectHceTokens,
+  injectHceFonts,
+} from "./tokens/hce.tokens"
+export type { HceColors } from "./tokens/hce.tokens"
+
 // ── Design Tokens — Emergency Monitor ─────────────────────
 export {
   emergencyTokens,
@@ -37,7 +46,7 @@ export {
 // ── MUI Primitives re-exported ─────────────────────────────
 export { Box, Typography } from "@mui/material"
 
-// ── Icons ──────────────────────────────────────────────────
+// ── Icons — Lucide ─────────────────────────────────────────
 export {
   Monitor, Users, BarChart, Settings,
   LayoutDashboard, ClipboardList, BedDouble, Scissors,
@@ -47,6 +56,39 @@ export {
   User, Lock,
 } from "./atoms/Icon/Icon"
 export type { LucideIcon } from "./atoms/Icon/Icon"
+
+// ── Icons — HCE Custom SVG ─────────────────────────────────
+export type { HceIconProps } from "./atoms/Icon/Icon"
+export {
+  // Icon1 – Medical
+  BloodTestIcon, DoctorIcon, DrugsIcon, MedicalRoomIcon,
+  PrescriptionIcon, RadiographyIcon, HceStethoscopeIcon,
+  XRaysIcon, AltaMedicaIcon,
+  // Icon2 – UI
+  AddFriendIcon, AddDocumentIcon, AddCircleIcon, SortArrowsIcon,
+  BinIcon, HceCalendarIcon, CheckedCircleIcon, ConfigurationIcon,
+  ConversationIcon, DangerIcon, DeleteCircleIcon, DisketteIcon,
+  DocumentUploadIcon, DocumentIcon, DownloadIcon, EditingIcon,
+  ExchangeIcon, HceEyeIcon, ForgotPasswordIcon, GoogleDocsIcon,
+  HceHistoryIcon, ChevronDownIcon, HceInfoIcon, LoupeIcon,
+  OnButtonIcon, PapersIcon, PasteIcon, SolCurrencyIcon,
+  PrintingIcon, SendMailUpIcon, SendMailIcon, SendIcon,
+  UndoCircleIcon, ClockIcon, WarningIcon, FilterIcon,
+  HceMonitorIcon, CloseIcon,
+  // UIKit
+  UiArrowIcon, UiDoctorIcon, UiAddDocsIcon, UiAddFriendIcon,
+  UiAddIcon, UiArrowsIcon, UiBloodTestIcon, UiCalendarIcon,
+  UiCheckedIcon, UiCloseIcon, UiConfigurationIcon, UiConversationIcon,
+  UiDangerIcon, UiDeleteIcon, UiDisketteIcon, UiDocsIcon,
+  UiDownloadArrowIcon, UiDrugsIcon, UiEditingIcon, UiExchangeIcon,
+  UiEyeIcon, UiFilterIcon, UiHistoryIcon, UiInfoIcon,
+  UiIsotipoClinicaIcon, UiMedicalDischargeIcon, UiMedicalRoomIcon,
+  UiMonitorIcon, UiOnButtonIcon, UiPadlockIcon, UiPapersIcon,
+  UiPasteIcon, UiPrescriptionIcon, UiPrintingIcon, UiRadiographyIcon,
+  UiSearchIcon, UiSendMailIcon, UiSendIcon, UiSolSymbolIcon,
+  UiStethoscopeIcon, UiTrashIcon, UiUndoIcon, UiUploadDocumentIcon,
+  UiVectorIcon, UiWarningIcon, UiXRaysIcon,
+} from "./atoms/Icon/Icon"
 
 // ── Atoms ─────────────────────────────────────────────────
 export { Button }        from "./atoms/Button/Button"
@@ -66,6 +108,10 @@ export { Checkbox }      from "./atoms/Checkbox/Checkbox"
 export type { PriorityLevel } from "./atoms/PriorityBadge/PriorityBadge"
 export type { BoxStatus }     from "./atoms/BoxBadge/BoxBadge"
 export type { BadgeVariant }  from "./atoms/StatusBadge/StatusBadge"
+
+// ── Loading Overlay ───────────────────────────────────────
+export { LoadingOverlay } from "./molecules/LoadingOverlay/LoadingOverlay"
+export type { LoadingOverlayProps } from "./molecules/LoadingOverlay/LoadingOverlay"
 
 // ── Molecules ─────────────────────────────────────────────
 export { ActionBar }           from "./molecules/ActionBar/ActionBar"
@@ -89,6 +135,10 @@ export { PatientTable }        from "./molecules/PatientTable/PatientTable"
 export type { ClinicalIconStatus } from "./molecules/ClinicalStatusIcon/ClinicalStatusIcon"
 export type { PatientRowData }     from "./molecules/PatientRow/PatientRow"
 export type { ExtraAction }        from "./molecules/ActionBar/ActionBar"
+
+// ── Modal ─────────────────────────────────────────────────
+export { HceModal } from "./organisms/HceModal/HceModal"
+export type { HceModalProps, ModalButtonConfig, ModalInputConfig } from "./organisms/HceModal/HceModal"
 
 // ── Organisms ─────────────────────────────────────────────
 export { Header }                from "./organisms/Header/Header"

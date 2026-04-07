@@ -28,7 +28,8 @@ export const baseColors = {
   primaryDark:    '#153B7A',
   primaryLight:   '#EEF2F9',
 
-  secondary:      '#6FB23F',
+  secondary:      '#89C93D',
+
   secondaryLight: '#8BCB5A',
   secondaryDark:  '#5AA12E',
 
@@ -55,7 +56,7 @@ export const baseColors = {
 // TIPOGRAFÍA
 // ─────────────────────────────────────────────────────────
 export const baseTypography = {
-  fontFamily: "'Montserrat', sans-serif",
+  fontFamily: "'Poppins', sans-serif",
   fontSize:   14,
 
   size: {
