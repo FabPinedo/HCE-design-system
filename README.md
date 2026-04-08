@@ -15,6 +15,7 @@ Librería de componentes compartida para los proyectos HCE. Construida con React
 - [Publicar en Verdaccio](#publicar-en-verdaccio)
 - [Actualizar una versión publicada](#actualizar-una-versión-publicada)
 - [Consumir el paquete en otros proyectos](#consumir-el-paquete-en-otros-proyectos)
+- [Diagnóstico en servidor Linux](#diagnóstico-en-servidor-linux)
 - [Versionado](#versionado)
 
 ---
@@ -385,6 +386,115 @@ function App() {
   )
 }
 ```
+
+---
+
+## Diagnóstico en servidor Linux
+
+Comandos para revisar el estado de los servicios cuando algo no levanta correctamente.
+
+### Ver estado de los contenedores
+
+```bash
+docker compose ps
+```
+
+### Ver logs en tiempo real
+
+```bash
+# Todos los servicios
+docker compose logs -f
+
+# Solo Verdaccio
+docker compose logs -f verdaccio
+
+# Solo Storybook
+docker compose logs -f storybook
+```
+
+### Puerto ocupado (el error más común)
+
+Si aparece `bind: address already in use` al hacer `docker compose up`:
+
+```bash
+# 1. Ver qué proceso ocupa el puerto (reemplazar 10101 por el puerto que falla)
+sudo lsof -i :10101
+# o con ss:
+sudo ss -tulnp | grep 10101
+
+# 2. Ver el PID del proceso
+sudo lsof -ti :10101
+
+# 3. Matar el proceso que lo ocupa
+sudo kill -9 $(sudo lsof -ti :10101)
+
+# 4. Verificar que el puerto quedó libre
+sudo ss -tulnp | grep 10101
+
+# 5. Volver a levantar
+docker compose up -d
+```
+
+> En el caso de Storybook (puerto 10101), suele ser un proceso `node` de una sesión de desarrollo anterior. Matar ese proceso y volver a levantar Docker es suficiente.
+
+### Contenedores huérfanos (orphan containers)
+
+Al hacer `docker compose up` puede aparecer el warning `Found orphan containers`. Son contenedores del publisher de versiones anteriores que quedaron detenidos. No afectan el funcionamiento, pero se pueden limpiar:
+
+```bash
+docker compose up -d --remove-orphans
+```
+
+> Esto solo elimina contenedores parados que ya no corresponden a ningún servicio del `compose.yml`. **No toca los volúmenes ni los paquetes publicados en Verdaccio.**
+
+### Verificar paquetes en Verdaccio
+
+```bash
+# Ver todas las versiones publicadas
+npm view @hce/design-system versions --registry http://localhost:10100
+
+# Ver metadata de la versión más reciente
+npm view @hce/design-system --registry http://localhost:10100
+
+# Verificar que el registry responde
+curl http://localhost:10100/-/ping
+```
+
+### Verificar que el volumen de Verdaccio persiste
+
+```bash
+# Listar volúmenes Docker
+docker volume ls | grep verdaccio
+
+# Inspeccionar el volumen (muestra dónde está montado en el host)
+docker volume inspect hce-design-system_verdaccio-storage
+```
+
+> Los paquetes publicados viven en este volumen. Se pierden **solo** si se ejecuta `docker volume rm hce-design-system_verdaccio-storage`. Detener, reiniciar o reconstruir contenedores no lo afecta.
+
+### Forzar rebuild completo (cuando los cambios no se reflejan)
+
+Si el publisher sigue usando código viejo porque la imagen está cacheada:
+
+```bash
+docker compose run --rm --build publisher
+```
+
+El flag `--build` fuerza a reconstruir la imagen del publisher con el código actual antes de publicar.
+
+### Rollback de emergencia en el servidor
+
+Si una versión nueva rompe algo y hay que volver atrás rápido, en el proyecto consumidor:
+
+```bash
+# Instalar una versión anterior específica
+npm install @hce/design-system@1.0.6
+
+# Reconstruir el proyecto consumidor
+npm run build
+```
+
+No es necesario tocar Verdaccio — las versiones anteriores siguen disponibles en el registry.
 
 ---
 
