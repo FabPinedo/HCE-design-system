@@ -7,6 +7,23 @@ Versionado basado en [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.0.11] - 2026-04-14
+
+### Agregado
+- **`CSFLoading`** (Molécula): spinner animado con el logo CSF (Clínica San Felipe). Reproduce una secuencia de 11 frames de intro (build-up + barrido del sector DEF4C5) y luego gira el logo completo indefinidamente con `animateTransform` SVG nativo. Props: `open`, `message?`, `size?` (default 150px), `duration?` (seg/vuelta, default 1.5), `frameDuration?` (ms/frame del intro, default 80), `overlay?`, `opacity?`, `children?`
+- Story `Molecules/CSFLoading` con galería de 16 frames Figma, controles de tamaño, velocidad de spin y velocidad del intro (`frameDuration`)
+
+### Cambiado
+- **Tipografía Poppins explícita en todos los componentes**: se agregó `fontFamily: hceTypography.fontFamily` a todos los `Typography` de los componentes del design system (`LoadingOverlay`, `PageHeader`, `Card`, `DataTable`, `Header`, `Footer`, `SelectField`, `TextInput`, `CSFLoading`). Garantiza Poppins en contextos de Module Federation donde el tema MUI global no se hereda
+
+### Exportaciones nuevas
+```ts
+CSFLoading
+CSFLoadingProps
+```
+
+---
+
 ## [1.0.10] - 2026-04-07
 
 ### Corregido
