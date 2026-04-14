@@ -2,7 +2,7 @@ import { type ReactNode } from "react"
 import Backdrop          from "@mui/material/Backdrop"
 import CircularProgress  from "@mui/material/CircularProgress"
 import Typography        from "@mui/material/Typography"
-import { hceColors }     from "../../tokens/hce.tokens"
+import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
 export interface LoadingOverlayProps {
   /** Muestra u oculta el overlay */
@@ -47,9 +47,10 @@ export function LoadingOverlay({
 
       {message && (
         <Typography sx={{
-          color:      "#fff",
-          fontWeight: 600,
-          fontSize:   "0.9rem",
+          fontFamily:    hceTypography.fontFamily,
+          color:         "#fff",
+          fontWeight:    600,
+          fontSize:      "0.9rem",
           letterSpacing: "0.02em",
         }}>
           {message}

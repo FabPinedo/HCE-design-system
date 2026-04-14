@@ -11,6 +11,7 @@ import CheckCircleOutlineIcon     from "@mui/icons-material/CheckCircleOutline"
 import InfoOutlinedIcon           from "@mui/icons-material/InfoOutlined"
 import WarningAmberOutlinedIcon   from "@mui/icons-material/WarningAmberOutlined"
 import { baseColors }             from "../../tokens/base.tokens"
+import { hceTypography }          from "../../tokens/hce.tokens"
 
 // ─── Tipos de notificación ────────────────────────────────
 type NotifType = "success" | "info" | "warning"
@@ -115,12 +116,13 @@ export function Header({
           </IconButton>
         )}
         {date && (
-          <Typography sx={{ color: "rgba(255,255,255,0.85)", fontSize: "0.78rem", display: { xs: "none", md: "block" } }}>
+          <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "rgba(255,255,255,0.85)", fontSize: "0.78rem", display: { xs: "none", md: "block" } }}>
             {date}
           </Typography>
         )}
         {site && (
           <Typography sx={{
+            fontFamily:      hceTypography.fontFamily,
             color:           "rgba(255,255,255,0.9)",
             fontSize:        "0.72rem",
             backgroundColor: "rgba(255,255,255,0.15)",
@@ -156,10 +158,10 @@ export function Header({
           <LocalHospitalOutlinedIcon sx={{ color: baseColors.primary, fontSize: 24 }} />
         </Box>
         <Box>
-          <Typography sx={{ color: "rgba(255,255,255,0.8)", fontSize: "0.65rem", lineHeight: 1 }}>
+          <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "rgba(255,255,255,0.8)", fontSize: "0.65rem", lineHeight: 1 }}>
             Clínica
           </Typography>
-          <Typography sx={{ color: "white", fontWeight: 700, fontSize: "0.9rem", lineHeight: 1.2 }}>
+          <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "white", fontWeight: 700, fontSize: "0.9rem", lineHeight: 1.2 }}>
             XXXXXXX
           </Typography>
         </Box>
@@ -209,10 +211,11 @@ export function Header({
             alignItems: "center",
             justifyContent: "space-between",
           }}>
-            <Typography sx={{ color: "white", fontWeight: 700, fontSize: "0.85rem" }}>
+            <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "white", fontWeight: 700, fontSize: "0.85rem" }}>
               Notificaciones
             </Typography>
             <Typography sx={{
+              fontFamily:      hceTypography.fontFamily,
               color:           "white",
               fontSize:        "0.7rem",
               backgroundColor: "rgba(255,255,255,0.2)",
@@ -241,13 +244,13 @@ export function Header({
                   {NOTIF_ICON[n.type]}
                 </Box>
                 <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography sx={{ fontSize: "0.8rem", fontWeight: 700, color: baseColors.textPrimary, lineHeight: 1.3 }}>
+                  <Typography sx={{ fontFamily: hceTypography.fontFamily, fontSize: "0.8rem", fontWeight: 700, color: baseColors.textPrimary, lineHeight: 1.3 }}>
                     {n.title}
                   </Typography>
-                  <Typography sx={{ fontSize: "0.75rem", color: baseColors.textSecondary, mt: "2px", lineHeight: 1.4 }}>
+                  <Typography sx={{ fontFamily: hceTypography.fontFamily, fontSize: "0.75rem", color: baseColors.textSecondary, mt: "2px", lineHeight: 1.4 }}>
                     {n.message}
                   </Typography>
-                  <Typography sx={{ fontSize: "0.68rem", color: baseColors.textSecondary, mt: "4px", opacity: 0.7 }}>
+                  <Typography sx={{ fontFamily: hceTypography.fontFamily, fontSize: "0.68rem", color: baseColors.textSecondary, mt: "4px", opacity: 0.7 }}>
                     {n.time}
                   </Typography>
                 </Box>
@@ -266,12 +269,13 @@ export function Header({
             <Typography
               onClick={handleNotifClose}
               sx={{
-                fontSize:  "0.75rem",
-                color:     baseColors.primary,
-                textAlign: "center",
-                cursor:    "pointer",
+                fontFamily: hceTypography.fontFamily,
+                fontSize:   "0.75rem",
+                color:      baseColors.primary,
+                textAlign:  "center",
+                cursor:     "pointer",
                 fontWeight: 600,
-                "&:hover": { opacity: 0.8 },
+                "&:hover":  { opacity: 0.8 },
               }}
             >
               Ver todas las notificaciones
@@ -295,11 +299,11 @@ export function Header({
             {initials}
           </Avatar>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            <Typography sx={{ color: "white", fontWeight: 700, fontSize: "0.85rem", lineHeight: 1.2 }}>
+            <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "white", fontWeight: 700, fontSize: "0.85rem", lineHeight: 1.2 }}>
               {userName}
             </Typography>
             {userRole && (
-              <Typography sx={{ color: "rgba(255,255,255,0.75)", fontSize: "0.72rem", lineHeight: 1.2 }}>
+              <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "rgba(255,255,255,0.75)", fontSize: "0.72rem", lineHeight: 1.2 }}>
                 {userRole}
               </Typography>
             )}

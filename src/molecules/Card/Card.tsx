@@ -1,5 +1,6 @@
 import { Card as MuiCard, CardContent, Typography, Box, Divider } from "@mui/material"
 import type { ReactNode, CSSProperties } from "react"
+import { hceTypography } from "../../tokens/hce.tokens"
 
 interface Props {
   children?: ReactNode
@@ -24,7 +25,7 @@ export const Card = ({ children, title, actions, style, noPadding }: Props) => {
           <>
             <Typography
               variant="subtitle1"
-              sx={{ fontWeight: 700, color: '#1C2B4A', mb: 1.5 }}
+              sx={{ fontFamily: hceTypography.fontFamily, fontWeight: 700, color: '#1C2B4A', mb: 1.5 }}
             >
               {title}
             </Typography>

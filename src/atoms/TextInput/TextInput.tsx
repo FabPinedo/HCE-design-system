@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react"
 import { Box, Typography, OutlinedInput, InputAdornment } from "@mui/material"
 import { baseColors }  from "../../tokens/base.tokens"
-import { hceColors }   from "../../tokens/hce.tokens"
+import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
 interface Props {
   label?:        string
@@ -63,6 +63,7 @@ export function TextInput({
     >
       {label && (
         <Typography component="label" sx={{
+          fontFamily: hceTypography.fontFamily,
           fontSize:   "0.75rem",
           fontWeight: 600,
           color:      accentColor,

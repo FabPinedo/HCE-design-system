@@ -10,6 +10,7 @@ import {
   Box,
 } from "@mui/material"
 import type { ReactNode } from "react"
+import { hceTypography } from "../../tokens/hce.tokens"
 
 interface Column<T = unknown> {
   key: string
@@ -70,7 +71,7 @@ export const DataTable = <T extends object>({
           {rows.length === 0 ? (
             <TableRow>
               <TableCell colSpan={columns.length} sx={{ textAlign: 'center', py: 5 }}>
-                <Typography variant="body2" sx={{ color: '#5A6A85' }}>
+                <Typography variant="body2" sx={{ fontFamily: hceTypography.fontFamily, color: '#5A6A85' }}>
                   {emptyMessage}
                 </Typography>
               </TableCell>

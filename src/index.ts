@@ -113,6 +113,10 @@ export type { BadgeVariant }  from "./atoms/StatusBadge/StatusBadge"
 export { LoadingOverlay } from "./molecules/LoadingOverlay/LoadingOverlay"
 export type { LoadingOverlayProps } from "./molecules/LoadingOverlay/LoadingOverlay"
 
+// ── CSF Loading (spinner animado con logo CSF) ────────────
+export { CSFLoading } from "./molecules/CSFLoading/CSFLoading"
+export type { CSFLoadingProps } from "./molecules/CSFLoading/CSFLoading"
+
 // ── Molecules ─────────────────────────────────────────────
 export { ActionBar }           from "./molecules/ActionBar/ActionBar"
 export { ActionIconButton }    from "./molecules/ActionIconButton/ActionIconButton"

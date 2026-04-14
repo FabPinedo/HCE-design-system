@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material"
 import type { ReactNode } from "react"
+import { hceTypography } from "../../tokens/hce.tokens"
 
 interface Props {
   icon?: ReactNode
@@ -40,14 +41,14 @@ export const PageHeader = ({ icon, title, description, actions }: Props) => {
         <Box>
           <Typography
             variant="h6"
-            sx={{ fontWeight: 700, color: '#1C2B4A', lineHeight: 1.3 }}
+            sx={{ fontFamily: hceTypography.fontFamily, fontWeight: 700, color: '#1C2B4A', lineHeight: 1.3 }}
           >
             {title}
           </Typography>
           {description && (
             <Typography
               variant="body2"
-              sx={{ color: '#5A6A85', mt: 0.5 }}
+              sx={{ fontFamily: hceTypography.fontFamily, color: '#5A6A85', mt: 0.5 }}
             >
               {description}
             </Typography>

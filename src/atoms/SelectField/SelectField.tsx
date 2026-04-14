@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Box, Typography, FormControl, Select, OutlinedInput, MenuItem } from "@mui/material"
 import { baseColors }  from "../../tokens/base.tokens"
-import { hceColors }   from "../../tokens/hce.tokens"
+import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
 interface Option {
   value: string
@@ -50,6 +50,7 @@ export function SelectField({
       onMouseLeave={() => setHovered(false)}
     >
       <Typography component="label" sx={{
+        fontFamily: hceTypography.fontFamily,
         fontSize:   "0.75rem",
         fontWeight: 600,
         color:      accentColor,
@@ -84,6 +85,7 @@ export function SelectField({
           }} />}
           renderValue={(v) => (
             <Typography sx={{
+              fontFamily: hceTypography.fontFamily,
               fontSize:   "0.875rem",
               color:      v
                 ? (error ? hceColors.alert.error[600] : active ? hceColors.primary.blue[600] : baseColors.textPrimary)

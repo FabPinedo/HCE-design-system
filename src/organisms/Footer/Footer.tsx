@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material"
 import { baseColors } from "../../tokens/base.tokens"
+import { hceTypography } from "../../tokens/hce.tokens"
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -20,6 +21,7 @@ export function Footer() {
       }}
     >
       <Typography sx={{
+        fontFamily: hceTypography.fontFamily,
         color:      "rgba(255,255,255,0.6)",
         fontSize:   "0.68rem",
         userSelect: "none",
