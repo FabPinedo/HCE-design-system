@@ -224,6 +224,8 @@ export function CSFLoading({
 
   // ── Overlay — renderiza en document.body via Portal ───────────────────────
   // Portal evita que el stacking context del padre restrinja el Backdrop.
+  // El spinner solo se monta cuando open=true para que la animación de intro
+  // arranque siempre desde el frame 1 (no consume frames mientras está oculto).
   if (overlay) {
     return (
       <Portal>
@@ -238,7 +240,7 @@ export function CSFLoading({
             gap:             2,
           }}
         >
-          {content}
+          {open ? content : null}
         </Backdrop>
       </Portal>
     )
