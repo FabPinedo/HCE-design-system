@@ -333,6 +333,57 @@ git show v1.0.3
 
 ---
 
+## Actualizar una versión publicada
+
+Cuando se necesita republicar la **misma versión** (por ejemplo, se corrigió algo sin subir el número), el proyecto consumidor no detecta el cambio automáticamente porque npm ve que ya tiene instalada esa versión. Hay que eliminar el paquete de Verdaccio, republicarlo y luego forzar la reinstalación en el proyecto front.
+
+### 1. Eliminar el paquete publicado de Verdaccio
+
+Ejecutar desde el directorio del design system:
+
+```bash
+npm unpublish @hce/design-system@1.0.20 --registry http://localhost:10100 --force
+```
+
+Reemplazar `1.0.20` por la versión que se quiere eliminar. Si Verdaccio da error de permisos, borrar directamente del volumen:
+
+```bash
+docker run --rm -v hce-design-system_verdaccio-storage:/storage alpine sh -c "rm -rf /storage/@hce/design-system"
+docker compose restart verdaccio
+```
+
+### 2. Republicar
+
+```bash
+docker compose --profile publish run --build publisher
+```
+
+### 3. Forzar la actualización en el proyecto consumidor
+
+> **Importante:** los siguientes comandos deben ejecutarse desde la raíz del proyecto front (`jarvis-mf-platform`), no desde el design system.
+
+En **PowerShell** (Windows):
+
+```powershell
+npm cache clean --force
+Remove-Item -Recurse -Force "node_modules\@hce\design-system"
+Remove-Item "package-lock.json"
+npm install
+```
+
+En **bash** (Linux/Mac):
+
+```bash
+npm cache clean --force
+rm -rf node_modules/@hce/design-system
+rm package-lock.json
+npm install
+```
+
+Esto es necesario porque npm detecta que la versión instalada coincide con la del `package-lock.json` y no la vuelve a descargar. Al borrar el `package-lock.json` y el directorio del paquete, se fuerza la resolución desde Verdaccio con el hash correcto del nuevo tarball.
+
+---
+
 ## Consumir el paquete en otros proyectos
 
 ### Configurar el registry en el proyecto consumidor

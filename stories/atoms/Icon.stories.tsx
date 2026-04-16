@@ -34,6 +34,8 @@ import {
   UiSearchIcon, UiSendMailIcon, UiSendIcon, UiSolSymbolIcon,
   UiStethoscopeIcon, UiTrashIcon, UiUndoIcon, UiUploadDocumentIcon,
   UiVectorIcon, UiWarningIcon, UiXRaysIcon,
+  //hce
+  LogoClinicaSanFelipeIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon,
 } from "@hce/design-system"
 import type { HceIconProps } from "@hce/design-system"
 import type { LucideIcon } from "@hce/design-system"
@@ -169,7 +171,14 @@ const HCE_UIKIT: { name: string; icon: HceFn }[] = [
   { name: "UiWarningIcon",         icon: UiWarningIcon },
   { name: "UiXRaysIcon",           icon: UiXRaysIcon },
 ]
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const HCE_NoMapeado: { name: string; icon: React.FC<any> }[] = [
+  { name: "LogoClinicaSanFelipeIcon", icon: LogoClinicaSanFelipeIcon },
+  { name: "LogoutIcon",               icon: LogoutIcon },
+  { name: "HceMenuIcon",              icon: HceMenuIcon },
+  { name: "HceStarIcon",              icon: HceStarIcon },
+  { name: "HceConfigIcon",            icon: HceConfigIcon },
+]
 // ─── Estilos compartidos ──────────────────────────────────────────────────────
 const SECTION: React.CSSProperties = {
   marginBottom: 40,
@@ -294,6 +303,19 @@ function IconGallery({ iconColor }: { iconColor: string }) {
         </div>
       </div>
 
+      {/* HCE_NoMapeado */}
+      <div style={SECTION}>
+        <div style={SECTION_TITLE}>UIKit (fill) — {HCE_NoMapeado.length} íconos</div>
+        <div style={GRID}>
+          {HCE_NoMapeado.map(({ name, icon: Icon }) => (
+            <IconCard key={name} name={name} color={iconColor}>
+              <Icon size={28} color={iconColor} />
+            </IconCard>
+          ))}
+        </div>
+      </div>
+      
+
     </div>
   )
 }
@@ -341,6 +363,15 @@ export const SobreAzul: StoryObj = {
       <div style={{ ...SECTION_TITLE, color: "#B8CCE8" }}>UIKit</div>
       <div style={GRID}>
         {HCE_UIKIT.map(({ name, icon: Icon }) => (
+          <div key={name} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+            <Icon size={32} color="#B8CCE8" />
+            <span style={{ ...LABEL, color: "#B8CCE8", fontSize: 8 }}>{name.replace("Icon", "")}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ ...SECTION_TITLE, color: "#B8CCE8" }}>HCE_NoMapeado</div>
+      <div style={GRID}>
+        {HCE_NoMapeado.map(({ name, icon: Icon }) => (
           <div key={name} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
             <Icon size={32} color="#B8CCE8" />
             <span style={{ ...LABEL, color: "#B8CCE8", fontSize: 8 }}>{name.replace("Icon", "")}</span>

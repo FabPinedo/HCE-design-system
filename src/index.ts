@@ -46,6 +46,7 @@ export {
 // ── MUI Primitives re-exported ─────────────────────────────
 export { Box, Typography } from "@mui/material"
 
+
 // ── Icons — Lucide ─────────────────────────────────────────
 export {
   Monitor, Users, BarChart, Settings,
@@ -56,6 +57,9 @@ export {
   User, Lock,
 } from "./atoms/Icon/Icon"
 export type { LucideIcon } from "./atoms/Icon/Icon"
+
+// ── Icons — HCE SVG (logo clínica + iconos de layout) ─────
+export { LogoClinicaSanFelipeIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon, HceBurgerIcon } from "./atoms/Icon/SvgIconsHce"
 
 // ── Icons — HCE Custom SVG ─────────────────────────────────
 export type { HceIconProps } from "./atoms/Icon/Icon"
@@ -113,6 +117,10 @@ export type { BadgeVariant }  from "./atoms/StatusBadge/StatusBadge"
 export { LoadingOverlay } from "./molecules/LoadingOverlay/LoadingOverlay"
 export type { LoadingOverlayProps } from "./molecules/LoadingOverlay/LoadingOverlay"
 
+// ── Quick Access Card ─────────────────────────────────────
+export { HCEQuickAccess } from "./molecules/HCEQuickAccess/HCEQuickAccess"
+export type { HCEQuickAccessProps } from "./molecules/HCEQuickAccess/HCEQuickAccess"
+
 // ── CSF Loading (spinner animado con logo CSF) ────────────
 export { CSFLoading } from "./molecules/CSFLoading/CSFLoading"
 export type { CSFLoadingProps } from "./molecules/CSFLoading/CSFLoading"
@@ -147,6 +155,9 @@ export type { HceModalProps, ModalButtonConfig, ModalInputConfig } from "./organ
 // ── Organisms ─────────────────────────────────────────────
 export { Header }                from "./organisms/Header/Header"
 export { Footer }                from "./organisms/Footer/Footer"
+export { HceHeader }             from "./organisms/HceHeader/HceHeader"
+export { HceSidebar }            from "./organisms/HceSidebar/HceSidebar"
+export { CarruselHome }          from "./organisms/CarruselHome/CarruselHome"
 export { SideNav }               from "./organisms/SideNav/SideNav"
 export { DataTable }             from "./organisms/DataTable/DataTable"
 export { Pagination }            from "./organisms/Pagination/Pagination"
@@ -155,4 +166,7 @@ export { BedAvailabilityDrawer } from "./organisms/BedAvailability/BedAvailabili
 export { SidebarMenu }           from "./organisms/SidebarMenu/SidebarMenu"
 
 // ── Types — Organisms ──────────────────────────────────────
-export type { MenuItem } from "./organisms/SidebarMenu/types"
+export type { MenuItem }       from "./organisms/SidebarMenu/types"
+export type { HceHeaderProps, Sucursal, HceNotificacion } from "./organisms/HceHeader/HceHeader"
+export type { HceSidebarProps, OpcionMAC } from "./organisms/HceSidebar/HceSidebar"
+export type { CarruselHomeProps }           from "./organisms/CarruselHome/CarruselHome"
