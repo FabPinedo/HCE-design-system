@@ -11,7 +11,7 @@ PUB_EMAIL="ci@hce.local"
 # ── 1. Esperar a que Verdaccio esté listo ───────────────────────────────────
 echo ">>> Waiting for Verdaccio at $REGISTRY ..."
 for i in $(seq 1 $MAX_RETRIES); do
-  if curl -sf "$REGISTRY/-/ping" > /dev/null 2>&1; then
+  if wget -q -O /dev/null "$REGISTRY/-/ping" 2>/dev/null; then
     echo "    Verdaccio ready."
     break
   fi
@@ -25,10 +25,11 @@ done
 
 # ── 2. Crear usuario (ignorar error si ya existe) ───────────────────────────
 echo ">>> Creating user (skipped if already exists) ..."
-curl -sf -X PUT "$REGISTRY/-/user/org.couchdb.user:$PUB_USER" \
-  -H "Content-Type: application/json" \
-  -d "{\"name\":\"$PUB_USER\",\"password\":\"$PUB_PASS\",\"email\":\"$PUB_EMAIL\",\"type\":\"user\"}" \
-  > /dev/null 2>&1 || true
+wget -q -O /dev/null \
+  --method=PUT \
+  --header="Content-Type: application/json" \
+  --body-data="{\"name\":\"$PUB_USER\",\"password\":\"$PUB_PASS\",\"email\":\"$PUB_EMAIL\",\"type\":\"user\"}" \
+  "$REGISTRY/-/user/org.couchdb.user:$PUB_USER" 2>/dev/null || true
 
 # ── 3. Configurar Basic Auth en .npmrc ──────────────────────────────────────
 echo ">>> Configuring auth ..."
@@ -49,7 +50,7 @@ npm run build
 PACKAGE_NAME=$(node -p "require('./package.json').name")
 PACKAGE_VERSION=$(node -p "require('./package.json').version")
 
-if curl -sf "$REGISTRY/$PACKAGE_NAME/$PACKAGE_VERSION" > /dev/null 2>&1; then
+if wget -q -O /dev/null "$REGISTRY/$PACKAGE_NAME/$PACKAGE_VERSION" 2>/dev/null; then
   echo ">>> Version $PACKAGE_NAME@$PACKAGE_VERSION already published — skipping."
   exit 0
 fi
