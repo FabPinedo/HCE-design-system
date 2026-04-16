@@ -137,6 +137,22 @@ export type HceSidebarProps = {
    * del contenido principal según el ancho del sidebar.
    */
   floating?:     boolean
+  /**
+   * Modo árbol multinivel (default: false).
+   *
+   * false → renderiza solo un subnivel (padre + hijos directos).
+   *         Los nietos y niveles más profundos se ignoran.
+   *         Es el comportamiento actual y el recomendado para HCE.
+   *
+   * true  → renderiza el árbol completo de forma recursiva.
+   *         Útil si en el futuro MAC devuelve jerarquías más profundas
+   *         que necesiten mostrarse todas.
+   *
+   * Por el momento se deja en false (hardcoded en mf-shell).
+   * Cuando se requiera activar, cambiar el valor en el consumidor:
+   *   <HceSidebar multiLevel={true} ... />
+   */
+  multiLevel?:   boolean
 }
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
@@ -151,6 +167,122 @@ function abbr(titulo: string) {
   return titulo.slice(0, 2).toUpperCase()
 }
 
+// ─── Sub-componente: agrupador nivel 2 (sin vista, con hijos, multiLevel=true) ──
+//
+// Se comporta igual que un ítem de nivel 1: expande/colapsa sus hijos al hacer
+// click, sin navegar a ninguna ruta. Solo se monta cuando multiLevel=true y el
+// ítem de nivel 2 no tiene `vista` pero sí tiene opciones hijas con vista.
+
+type SecondLevelGroupProps = {
+  item:        OpcionMAC
+  currentPath: string
+  onNavigate:  (vista: string) => void
+}
+
+function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupProps) {
+  // Solo renderizamos los nietos que tienen vista
+  const visibleKids = (item.opciones ?? []).filter(gc => !!gc.vista)
+  const grandActive = visibleKids.some(gc => currentPath === gc.vista)
+  const [open, setOpen] = useState(grandActive)
+
+  // Si tras filtrar no quedan nietos con vista, ocultar todo el grupo
+  if (visibleKids.length === 0) return null
+
+  return (
+    <Box>
+      {/* Cabecera del agrupador — solo expande/colapsa, sin navegar */}
+      <Box
+        onClick={() => setOpen(prev => !prev)}
+        sx={{
+          display:         "flex",
+          alignItems:      "center",
+          pr:              1.5,
+          py:              "7px",
+          borderRadius:    "0 8px 8px 0",
+          cursor:          "pointer",
+          backgroundColor: grandActive || open ? hceColors.primary.blue[50] : "transparent",
+          "&:hover":       { backgroundColor: hceColors.primary.blue[50] },
+          userSelect:      "none",
+        }}
+      >
+        <Box sx={{
+          width:           14,
+          height:          1,
+          flexShrink:      0,
+          backgroundColor: hceColors.primary.blue[200],
+          mr:              1,
+        }} />
+        <Typography sx={{
+          fontFamily:   hceTypography.fontFamily,
+          fontSize:     "0.78rem",
+          fontWeight:   grandActive || open ? 700 : 500,
+          color:        grandActive || open ? hceColors.primary.blue[600] : "#444",
+          lineHeight:   1.3,
+          flex:         1,
+          overflow:     "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace:   "nowrap",
+        }}>
+          {item.titulo}
+        </Typography>
+        <ExpandMoreIcon sx={{
+          fontSize:   14,
+          color:      open ? hceColors.primary.blue[500] : "#aaa",
+          transform:  open ? "rotate(180deg)" : "rotate(0deg)",
+          transition: "transform 0.2s",
+          flexShrink: 0,
+        }} />
+      </Box>
+
+      {/* Nietos con vista */}
+      <Collapse in={open} unmountOnExit>
+        <Box sx={{ ml: 2, borderLeft: `2px solid ${hceColors.primary.blue[50]}` }}>
+          {visibleKids.map(gc => {
+            const isGcActive = currentPath === gc.vista
+            return (
+              <Box
+                key={gc.idMenu ?? gc.codigo}
+                onClick={() => onNavigate(gc.vista!)}
+                sx={{
+                  display:         "flex",
+                  alignItems:      "center",
+                  pr:              1,
+                  py:              "6px",
+                  borderRadius:    "0 8px 8px 0",
+                  cursor:          "pointer",
+                  backgroundColor: isGcActive ? hceColors.primary.blue[50] : "transparent",
+                  "&:hover":       { backgroundColor: hceColors.primary.blue[50] },
+                  userSelect:      "none",
+                }}
+              >
+                <Box sx={{
+                  width:           10,
+                  height:          1,
+                  flexShrink:      0,
+                  backgroundColor: isGcActive ? hceColors.primary.blue[400] : hceColors.primary.blue[100],
+                  mr:              0.75,
+                }} />
+                <Typography sx={{
+                  fontFamily:   hceTypography.fontFamily,
+                  fontSize:     "0.73rem",
+                  fontWeight:   isGcActive ? 700 : 400,
+                  color:        isGcActive ? hceColors.primary.blue[700] : "#666",
+                  lineHeight:   1.3,
+                  overflow:     "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace:   "nowrap",
+                }}>
+                  {gc.titulo}
+                </Typography>
+              </Box>
+            )
+          })}
+        </Box>
+      </Collapse>
+    </Box>
+  )
+}
+
 // ─── Sub-componente: item de primer nivel ──────────────────────────────────────
 
 type FirstLevelProps = {
@@ -158,13 +290,18 @@ type FirstLevelProps = {
   collapsed:   boolean
   currentPath: string
   onNavigate:  (vista: string) => void
+  multiLevel:  boolean
 }
 
-function FirstLevelItem({ item, collapsed, currentPath, onNavigate }: FirstLevelProps) {
+function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }: FirstLevelProps) {
   const hasChildren = (item.opciones?.length ?? 0) > 0
   const canNavigate = !!item.vista
   const isActive    = !hasChildren && canNavigate && currentPath === item.vista
-  const childActive = hasChildren && item.opciones!.some(c => !!c.vista && currentPath === c.vista)
+  // childActive: resalta el padre si algún hijo directo o nieto está activo
+  const childActive = hasChildren && item.opciones!.some(c =>
+    (!!c.vista && currentPath === c.vista) ||
+    (c.opciones?.some(gc => !!gc.vista && currentPath === gc.vista) ?? false)
+  )
 
   const [open, setOpen] = useState(childActive)
 
@@ -312,7 +449,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate }: FirstLevel
         )}
       </Box>
 
-      {/* Submenú nivel 2 — estilo árbol con barra vertical + conectores horizontales */}
+      {/* Submenú nivel 2 — barra vertical izquierda + conectores horizontales */}
       {hasChildren && (
         <Collapse in={open} unmountOnExit>
           <Box sx={{
@@ -323,53 +460,120 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate }: FirstLevel
             borderLeft: `2px solid ${hceColors.primary.blue[100]}`,
           }}>
             {item.opciones!.map(child => {
-              const childCanNav   = !!child.vista
-              const isChildActive = childCanNav && currentPath === child.vista
-              return (
-                <Box
-                  key={child.idMenu ?? child.codigo}
-                  onClick={() => childCanNav && onNavigate(child.vista!)}
-                  sx={{
-                    display:         "flex",
-                    alignItems:      "center",
-                    pr:              1.5,
-                    py:              "7px",
-                    borderRadius:    "0 8px 8px 0",
-                    cursor:          childCanNav ? "pointer" : "default",
-                    backgroundColor: isChildActive
-                      ? hceColors.primary.blue[50]
-                      : "transparent",
-                    "&:hover": childCanNav
-                      ? { backgroundColor: hceColors.primary.blue[50] }
-                      : {},
-                    userSelect: "none",
-                  }}
-                >
-                  {/* Conector horizontal ─── */}
-                  <Box sx={{
-                    width:           14,
-                    height:          1,
-                    flexShrink:      0,
-                    backgroundColor: isChildActive
-                      ? hceColors.primary.blue[400]
-                      : hceColors.primary.blue[200],
-                    mr:              1,
-                  }} />
+              const childCanNav  = !!child.vista
+              const childHasKids = (child.opciones?.length ?? 0) > 0
 
-                  <Typography sx={{
-                    fontFamily:   hceTypography.fontFamily,
-                    fontSize:     "0.78rem",
-                    fontWeight:   isChildActive ? 700 : 400,
-                    color:        isChildActive
-                      ? hceColors.primary.blue[700]
-                      : "#444",
-                    lineHeight:   1.3,
-                    overflow:     "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace:   "nowrap",
-                  }}>
-                    {child.titulo}
-                  </Typography>
+              // ── Sin vista y sin hijos → ocultar siempre
+              // ── Sin vista, con hijos y multiLevel=false → ocultar (los nietos no se mostrarían)
+              if (!childCanNav && (!multiLevel || !childHasKids)) return null
+
+              // ── Sin vista pero con hijos y multiLevel=true → agrupador expandible
+              if (!childCanNav) {
+                return (
+                  <SecondLevelGroup
+                    key={child.idMenu ?? child.codigo}
+                    item={child}
+                    currentPath={currentPath}
+                    onNavigate={onNavigate}
+                  />
+                )
+              }
+
+              // ── Con vista → ítem navegable
+              const isChildActive      = currentPath === child.vista
+              // En multiLevel=true mostramos bajo el ítem sus nietos que tengan vista
+              const grandkidsWithVista = multiLevel
+                ? (child.opciones ?? []).filter(gc => !!gc.vista)
+                : []
+
+              return (
+                <Box key={child.idMenu ?? child.codigo}>
+                  <Box
+                    onClick={() => onNavigate(child.vista!)}
+                    sx={{
+                      display:         "flex",
+                      alignItems:      "center",
+                      pr:              1.5,
+                      py:              "7px",
+                      borderRadius:    "0 8px 8px 0",
+                      cursor:          "pointer",
+                      backgroundColor: isChildActive ? hceColors.primary.blue[50] : "transparent",
+                      "&:hover":       { backgroundColor: hceColors.primary.blue[50] },
+                      userSelect:      "none",
+                    }}
+                  >
+                    {/* Conector horizontal ─── */}
+                    <Box sx={{
+                      width:           14,
+                      height:          1,
+                      flexShrink:      0,
+                      backgroundColor: isChildActive
+                        ? hceColors.primary.blue[400]
+                        : hceColors.primary.blue[200],
+                      mr:              1,
+                    }} />
+                    <Typography sx={{
+                      fontFamily:   hceTypography.fontFamily,
+                      fontSize:     "0.78rem",
+                      fontWeight:   isChildActive ? 700 : 400,
+                      color:        isChildActive ? hceColors.primary.blue[700] : "#444",
+                      lineHeight:   1.3,
+                      overflow:     "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace:   "nowrap",
+                      flex:         1,
+                    }}>
+                      {child.titulo}
+                    </Typography>
+                  </Box>
+
+                  {/* Nietos con vista — solo si multiLevel=true */}
+                  {grandkidsWithVista.length > 0 && (
+                    <Box sx={{ ml: 2, borderLeft: `2px solid ${hceColors.primary.blue[50]}` }}>
+                      {grandkidsWithVista.map(gc => {
+                        const isGcActive = currentPath === gc.vista
+                        return (
+                          <Box
+                            key={gc.idMenu ?? gc.codigo}
+                            onClick={() => onNavigate(gc.vista!)}
+                            sx={{
+                              display:         "flex",
+                              alignItems:      "center",
+                              pr:              1,
+                              py:              "6px",
+                              borderRadius:    "0 8px 8px 0",
+                              cursor:          "pointer",
+                              backgroundColor: isGcActive ? hceColors.primary.blue[50] : "transparent",
+                              "&:hover":       { backgroundColor: hceColors.primary.blue[50] },
+                              userSelect:      "none",
+                            }}
+                          >
+                            <Box sx={{
+                              width:           10,
+                              height:          1,
+                              flexShrink:      0,
+                              backgroundColor: isGcActive
+                                ? hceColors.primary.blue[400]
+                                : hceColors.primary.blue[100],
+                              mr:              0.75,
+                            }} />
+                            <Typography sx={{
+                              fontFamily:   hceTypography.fontFamily,
+                              fontSize:     "0.73rem",
+                              fontWeight:   isGcActive ? 700 : 400,
+                              color:        isGcActive ? hceColors.primary.blue[700] : "#666",
+                              lineHeight:   1.3,
+                              overflow:     "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace:   "nowrap",
+                            }}>
+                              {gc.titulo}
+                            </Typography>
+                          </Box>
+                        )
+                      })}
+                    </Box>
+                  )}
                 </Box>
               )
             })}
@@ -390,6 +594,7 @@ export function HceSidebar({
   onNavigate,
   onHome,
   floating    = false,
+  multiLevel  = false,
 }: HceSidebarProps) {
 
   // Estilos del contenedor según modo flotante o incrustado
@@ -563,6 +768,7 @@ export function HceSidebar({
             collapsed={collapsed}
             currentPath={currentPath}
             onNavigate={onNavigate}
+            multiLevel={multiLevel}
           />
         ))}
       </Box>
