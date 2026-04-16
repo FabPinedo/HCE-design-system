@@ -278,7 +278,7 @@ export const Pequeno: Story = {
 
 export const Tamanios: Story = {
   args: {
-    frameDuration: 500
+    frameDuration: 180
   },
 
   name:   "Distintos tamaños",
@@ -297,7 +297,7 @@ export const Tamanios: Story = {
 
 export const Velocidades: Story = {
   args: {
-    frameDuration: 370
+    frameDuration: 160
   },
 
   name:   "Distintas velocidades",
@@ -315,7 +315,13 @@ export const Velocidades: Story = {
 }
 
 export const ComoOverlay: Story = {
+  args: {
+    duration: 1.4,
+    frameDuration: 190
+  },
+
   name:   "Modo overlay — pantalla completa",
+
   render: () => {
     const [open, setOpen] = useState(false)
     return (
@@ -331,7 +337,7 @@ export const ComoOverlay: Story = {
         />
       </Box>
     )
-  },
+  }
 }
 
 export const OverlaySinMensaje: Story = {
@@ -353,7 +359,7 @@ export const Playground: Story = {
   name:   "Playground — controles interactivos",
   args: {
     open:     true,
-    size:     120,
+    size:     160,
     duration: 1.5,
     message:  "Cargando...",
     overlay:  false,

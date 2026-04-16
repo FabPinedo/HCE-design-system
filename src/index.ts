@@ -121,6 +121,10 @@ export type { LoadingOverlayProps } from "./molecules/LoadingOverlay/LoadingOver
 export { HCEQuickAccess } from "./molecules/HCEQuickAccess/HCEQuickAccess"
 export type { HCEQuickAccessProps } from "./molecules/HCEQuickAccess/HCEQuickAccess"
 
+// ── Update Banner (notificación de nueva versión) ─────────
+export { HceUpdateBanner } from "./molecules/HceUpdateBanner/HceUpdateBanner"
+export type { HceUpdateBannerProps } from "./molecules/HceUpdateBanner/HceUpdateBanner"
+
 // ── CSF Loading (spinner animado con logo CSF) ────────────
 export { CSFLoading } from "./molecules/CSFLoading/CSFLoading"
 export type { CSFLoadingProps } from "./molecules/CSFLoading/CSFLoading"

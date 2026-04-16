@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(npm install:*)",
+      "Bash(node -e \"const p = require\\('./node_modules/vite-plugin-svgr/package.json'\\); console.log\\(p.version\\)\")",
+      "Bash(node -e \"console.log\\(JSON.stringify\\(require\\('./package.json'\\).files\\)\\)\")",
+      "Bash(netstat -ano)",
+      "Bash(findstr :10101)",
+      "Bash(tasklist:*)",
+      "Bash(powershell:*)",
+      "Bash(docker compose:*)",
+      "Bash(npm version:*)",
+      "Bash(xargs grep:*)"
+    ]
+  }
+}
