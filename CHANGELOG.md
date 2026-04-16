@@ -7,6 +7,51 @@ Versionado basado en [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.0.20] - 2026-04-16
+
+### Agregado
+
+- **`HceHeader`** (Organismo): nuevo header institucional con soporte para selección de sede, notificaciones, menú de usuario y modo flotante. Props: `sede`, `sucursales`, `onSedeCambiada`, `userName`, `userRole`, `onLogout`, `notifications?`, `onVerTodas?`, `floating?`, `onMenuClick?`
+  - Panel de notificaciones con iconos por tipo (`info`, `warning`, `success`, `error`), marca como leídas al abrir, contador de no leídas en la campana y footer "Ver todas las notificaciones"
+  - Prop `floating`: aplica `borderRadius` + `boxShadow` para alinearse visualmente con el `HceSidebar` flotante
+  - Prop `onMenuClick`: muestra botón hamburguesa (`HceBurgerIcon`) en pantallas pequeñas (< 900px) para abrir el sidebar como overlay. El texto "Historia Clínica" se oculta en móvil
+- **`HceSidebar`** (Organismo): sidebar de navegación basado en opciones MAC
+  - Prop `floating`: esquinas redondeadas + sombra sin romper el flujo del documento
+  - Submenús con árbol visual tipo rama (`|─`) y fondo persistente cuando hay hijo activo o está expandido
+  - Modo colapsado: muestra `UiIsotipoClinicaIcon`, click en cualquier zona del sidebar lo expande; `e.stopPropagation()` en botones para evitar doble-toggle
+  - `ICON_REGISTRY` para resolver el campo `icono` de MAC a componente React
+- **`HceBurgerIcon`**: nuevo ícono SVG de hamburguesa (3 líneas horizontales), equivalente al `MenuIcon` de MUI. Agregado en `SvgIconsHce.tsx`
+- **`HceStarIcon`**: ícono de estrella (outline, stroke), para favoritos / calificación
+- **`HceConfigIcon`**: ícono de engranaje (fill), para configuración
+- **`Footer` — prop `color`**: permite sobreescribir el color de fondo. Ej: `hceColors.primary.blue[600]`
+- **`CarruselHome`**: carrusel con autoplay, flechas de navegación y dots. Prop `images: string[]` recibe las URLs; `objectFit: "contain"` para mostrar la imagen completa sin recorte
+
+### Exportaciones nuevas
+```ts
+HceHeader
+HceHeaderProps
+HceNotificacion
+Sucursal
+HceSidebar
+HceSidebarProps
+OpcionMAC
+HceBurgerIcon
+HceStarIcon
+HceConfigIcon
+CarruselHome
+CarruselHomeProps
+```
+
+### Corregido
+
+- **`HceHeader`**: importación incorrecta de íconos de notificación (`../../../src/...` → `../../atoms/Icon/SvgIcons`)
+- **`HceSidebar`**: doble-toggle al hacer click en el isotipo cuando el sidebar estaba colapsado (se resolvió con `e.stopPropagation()`)
+- **`HceSidebar`**: en modo flotante el sidebar pisaba el footer al ocupar `height: 100vh` con `position: fixed`. Se eliminó el posicionamiento fijo — el padre maneja el espacio vía padding/gap
+- **`CarruselHome`**: `objectFit` cambiado de `"cover"` a `"contain"` para mostrar las imágenes sin recorte
+- **`HceMenuIcon`** ya existía en `SvgIconsHce.tsx` pero no estaba exportado desde `index.ts`
+
+---
+
 ## [1.0.11] - 2026-04-14
 
 ### Agregado
