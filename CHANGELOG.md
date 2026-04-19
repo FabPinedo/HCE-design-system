@@ -7,6 +7,70 @@ Versionado basado en [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.0] - 2026-04-18
+
+### Agregado
+
+- **Tokens `hceTransition`** (`hce.tokens.ts`): constantes de timing para transiciones — `fast` (150ms), `base` (220ms), `slow` (350ms), `width`. Usar en lugar de valores hardcodeados `"0.3s ease"`
+- **Tokens `hceShadows`** (`hce.tokens.ts`): sombras con tinte azul de marca — `card`, `sidebar`, `float`, `modal`. Reemplazan `rgba(0,0,0,*)` por `rgba(0,29,69,*)`
+- **Tokens `hceUi`** (`hce.tokens.ts`): aliases semánticos de texto y superficie — `textPrimary`, `textSecondary`, `textSubtle`, `surface`, `background`
+- **`SkeletonLoader`** (Átomo): nuevo componente de carga esqueleto. Props: `variant` (`text` | `rect` | `circle`), `width`, `height`, `lines` (para text multilinea). Animación shimmer con paleta HCE. Story completa con Default, AllVariants, States, TextMultiline y Circle
+
+### Cambiado
+
+- **`CarruselHome`** — animación de slide con dirección: la imagen saliente se desliza fuera del frame y la entrante entra desde el lado opuesto (derecha al avanzar, izquierda al retroceder). Reemplaza el anterior fade de opacidad
+  - **Nueva prop `objectFit?: "contain" | "cover"`** (default: `"contain"`)
+  - Pausa en hover: el auto-play se suspende cuando el mouse está sobre el carrusel
+  - Swipe táctil: deslizar >40px activa prev/next (esencial para tablets clínicas)
+  - Navegación por teclado: `ArrowLeft` / `ArrowRight`
+  - Accesibilidad: `role="region"`, `aria-label` en flechas, `role="tab"` + `aria-selected` en dots, `focus-visible`
+  - Micro-animación en flechas: `scale(1.1)` en hover
+
+- **`CSFLoading`** — animaciones de entrada para las piezas del logo:
+  - Pieza azul cae desde arriba (`translateY(-18px) → 0`) al aparecer en F02
+  - Pieza blanca sube desde abajo (`translateY(18px) → 0`) al aparecer en F03
+  - Transición basada en estado (se dispara una sola vez, no se reinicia al cambiar `frameDuration`)
+  - **`frameDuration` default cambiado de 80ms a 100ms** — la secuencia de intro es ~25% más lenta
+  - `animDur = Math.min(frameDuration × 4, 1000ms)` — proporcional con tope para no solapar el sweep
+
+- **`HceModal`** — animación de entrada `slideUp` (opacity + translateY + scale) en 200ms con `Fade` de MUI. Sombra migrada a `hceShadows.modal`. Agregado `aria-labelledby` y `aria-describedby`
+
+- **`HceSidebar`** — mejoras de animación y accesibilidad:
+  - Fade de labels al colapsar (`opacity + translateX`)
+  - Hover con `translateX(2px)` en items
+  - Borde izquierdo de acento (`3px solid blue[600]`) en item activo de todos los niveles
+  - `role="button"`, `tabIndex`, `aria-label`, `aria-current`, `aria-expanded`, `onKeyDown` (Enter/Space), `focus-visible` en todos los elementos interactivos
+
+- **`Button`** — micro-interacciones: hover `translateY(-1px)` + sombra elevada, active `scale(0.97)`
+
+- **`TextInput` / `SelectField` / `PasswordInput`** — focus ring animado (`0 0 0 3px blue[100]`), transiciones con `hceTransition.fast`
+
+- **`HceHeader`** (organismo) — `TIPO_CONFIG` migrado de colores hardcodeados a `hceColors.alert.*`. Sombras → `hceShadows`
+
+- **`theme.ts`** — eliminada toda dependencia de `baseColors`. Migrado a `hceColors` + `hceUi`
+
+### Corregido
+
+- **`HceSidebar`** — colores de texto hardcodeados (`"#333"`, `"#444"`, `"#666"`) reemplazados por `hceColors.neutro.*`
+- **`HceModal`** — colores migrados de `baseColors.primary` (`#1E4FA3`) a `hceColors.primary.blue[500]` (`#0043a5`), eliminando inconsistencia visual con el sidebar
+- **`SideNav.css` / `SidebarMenu.css`** — hex literales reemplazados por variables CSS de `injectHceTokens()`
+- **`CarruselHome`** — guard añadido para no aceptar nueva navegación mientras hay animación en curso
+
+### Exportaciones nuevas
+```ts
+// Tokens
+hceTransition
+hceShadows
+hceUi
+
+// Átomos
+SkeletonLoader
+SkeletonLoaderProps
+SkeletonVariant
+```
+
+---
+
 ## [1.0.20] - 2026-04-16
 
 ### Agregado

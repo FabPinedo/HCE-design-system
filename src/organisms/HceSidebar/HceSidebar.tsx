@@ -5,7 +5,7 @@ import {
 import HomeOutlinedIcon    from "@mui/icons-material/HomeOutlined"
 import ExpandMoreIcon      from "@mui/icons-material/ExpandMore"
 import ChevronLeftIcon     from "@mui/icons-material/ChevronLeft"
-import { hceColors, hceTypography } from "../../tokens/hce.tokens"
+import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
 import { LogoClinicaSanFelipeIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon } from "../../atoms/Icon/SvgIconsHce"
 
 // Lucide icons
@@ -48,6 +48,11 @@ import {
 } from "../../atoms/Icon/SvgIconsUiKit"
 
 type IconComponent = ComponentType<{ size?: number; color?: string }>
+
+// ─── Constantes de animación ──────────────────────────────────────────────────
+
+const TRANSITION_FAST = "150ms cubic-bezier(0.4, 0, 0.2, 1)"
+const TRANSITION_BASE = "220ms cubic-bezier(0.4, 0, 0.2, 1)"
 
 /**
  * Registro de iconos por nombre de string.
@@ -168,10 +173,6 @@ function abbr(titulo: string) {
 }
 
 // ─── Sub-componente: agrupador nivel 2 (sin vista, con hijos, multiLevel=true) ──
-//
-// Se comporta igual que un ítem de nivel 1: expande/colapsa sus hijos al hacer
-// click, sin navegar a ninguna ruta. Solo se monta cuando multiLevel=true y el
-// ítem de nivel 2 no tiene `vista` pero sí tiene opciones hijas con vista.
 
 type SecondLevelGroupProps = {
   item:        OpcionMAC
@@ -180,19 +181,28 @@ type SecondLevelGroupProps = {
 }
 
 function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupProps) {
-  // Solo renderizamos los nietos que tienen vista
   const visibleKids = (item.opciones ?? []).filter(gc => !!gc.vista)
   const grandActive = visibleKids.some(gc => currentPath === gc.vista)
   const [open, setOpen] = useState(grandActive)
 
-  // Si tras filtrar no quedan nietos con vista, ocultar todo el grupo
   if (visibleKids.length === 0) return null
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault()
+      setOpen(prev => !prev)
+    }
+  }
 
   return (
     <Box>
-      {/* Cabecera del agrupador — solo expande/colapsa, sin navegar */}
       <Box
+        role="button"
+        tabIndex={0}
+        aria-label={`${item.titulo}, grupo expandible`}
+        aria-expanded={open}
         onClick={() => setOpen(prev => !prev)}
+        onKeyDown={handleKeyDown}
         sx={{
           display:         "flex",
           alignItems:      "center",
@@ -201,8 +211,16 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
           borderRadius:    "0 8px 8px 0",
           cursor:          "pointer",
           backgroundColor: grandActive || open ? hceColors.primary.blue[50] : "transparent",
-          "&:hover":       { backgroundColor: hceColors.primary.blue[50] },
-          userSelect:      "none",
+          transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
+          "&:hover": {
+            backgroundColor: hceColors.primary.blue[50],
+            transform:       "translateX(2px)",
+          },
+          "&:focus-visible": {
+            outline:      `2px solid ${hceColors.primary.blue[500]}`,
+            outlineOffset: "2px",
+          },
+          userSelect: "none",
         }}
       >
         <Box sx={{
@@ -216,7 +234,7 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
           fontFamily:   hceTypography.fontFamily,
           fontSize:     "0.78rem",
           fontWeight:   grandActive || open ? 700 : 500,
-          color:        grandActive || open ? hceColors.primary.blue[600] : "#444",
+          color:        grandActive || open ? hceColors.primary.blue[600] : hceColors.neutro.black[400],
           lineHeight:   1.3,
           flex:         1,
           overflow:     "hidden",
@@ -227,22 +245,34 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
         </Typography>
         <ExpandMoreIcon sx={{
           fontSize:   14,
-          color:      open ? hceColors.primary.blue[500] : "#aaa",
+          color:      open ? hceColors.primary.blue[500] : hceColors.neutro.black[100],
           transform:  open ? "rotate(180deg)" : "rotate(0deg)",
-          transition: "transform 0.2s",
+          transition: `transform ${TRANSITION_FAST}`,
           flexShrink: 0,
         }} />
       </Box>
 
-      {/* Nietos con vista */}
       <Collapse in={open} unmountOnExit>
         <Box sx={{ ml: 2, borderLeft: `2px solid ${hceColors.primary.blue[50]}` }}>
           {visibleKids.map(gc => {
             const isGcActive = currentPath === gc.vista
+
+            const handleGcKeyDown = (e: React.KeyboardEvent) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                onNavigate(gc.vista!)
+              }
+            }
+
             return (
               <Box
                 key={gc.idMenu ?? gc.codigo}
+                role="button"
+                tabIndex={0}
+                aria-label={gc.titulo}
+                aria-current={isGcActive ? "page" : undefined}
                 onClick={() => onNavigate(gc.vista!)}
+                onKeyDown={handleGcKeyDown}
                 sx={{
                   display:         "flex",
                   alignItems:      "center",
@@ -251,8 +281,19 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
                   borderRadius:    "0 8px 8px 0",
                   cursor:          "pointer",
                   backgroundColor: isGcActive ? hceColors.primary.blue[50] : "transparent",
-                  "&:hover":       { backgroundColor: hceColors.primary.blue[50] },
-                  userSelect:      "none",
+                  borderLeft:      isGcActive
+                    ? `3px solid ${hceColors.primary.blue[600]}`
+                    : "3px solid transparent",
+                  transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
+                  "&:hover": {
+                    backgroundColor: hceColors.primary.blue[50],
+                    transform:       "translateX(2px)",
+                  },
+                  "&:focus-visible": {
+                    outline:       `2px solid ${hceColors.primary.blue[500]}`,
+                    outlineOffset: "2px",
+                  },
+                  userSelect: "none",
                 }}
               >
                 <Box sx={{
@@ -266,7 +307,7 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
                   fontFamily:   hceTypography.fontFamily,
                   fontSize:     "0.73rem",
                   fontWeight:   isGcActive ? 700 : 400,
-                  color:        isGcActive ? hceColors.primary.blue[700] : "#666",
+                  color:        isGcActive ? hceColors.primary.blue[700] : hceColors.neutro.black[300],
                   lineHeight:   1.3,
                   overflow:     "hidden",
                   textOverflow: "ellipsis",
@@ -297,7 +338,6 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
   const hasChildren = (item.opciones?.length ?? 0) > 0
   const canNavigate = !!item.vista
   const isActive    = !hasChildren && canNavigate && currentPath === item.vista
-  // childActive: resalta el padre si algún hijo directo o nieto está activo
   const childActive = hasChildren && item.opciones!.some(c =>
     (!!c.vista && currentPath === c.vista) ||
     (c.opciones?.some(gc => !!gc.vista && currentPath === gc.vista) ?? false)
@@ -307,7 +347,6 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
 
   const IconComp: IconComponent | null = item.icono ? (ICON_REGISTRY[item.icono] ?? null) : null
 
-  // Cuando colapsado no hace nada: el click burbujea al contenedor externo que llama onToggle
   const handleClick = (e: React.MouseEvent) => {
     if (collapsed) return
     e.stopPropagation()
@@ -318,11 +357,27 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
     }
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (collapsed) return
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault()
+      if (hasChildren) {
+        setOpen(prev => !prev)
+      } else if (canNavigate) {
+        onNavigate(item.vista!)
+      }
+    }
+  }
+
   // ── Modo colapsado ──
   if (collapsed) {
     return (
       <Tooltip title={item.titulo} placement="right" arrow>
         <Box
+          role="button"
+          tabIndex={0}
+          aria-label={item.titulo}
+          aria-current={isActive ? "page" : undefined}
           sx={{
             display:         "flex",
             alignItems:      "center",
@@ -335,7 +390,15 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
             backgroundColor: isActive || childActive
               ? "rgba(255,255,255,0.2)"
               : "transparent",
-            "&:hover": { backgroundColor: "rgba(255,255,255,0.15)" },
+            transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
+            "&:hover": {
+              backgroundColor: "rgba(255,255,255,0.15)",
+              transform:       "translateX(2px)",
+            },
+            "&:focus-visible": {
+              outline:       `2px solid ${hceColors.neutro.white[50]}`,
+              outlineOffset: "2px",
+            },
           }}
         >
           {IconComp ? (
@@ -352,7 +415,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
             }}>
               <Typography sx={{
                 fontFamily: hceTypography.fontFamily,
-                color:      "white",
+                color:      hceColors.neutro.white[50],
                 fontSize:   "0.65rem",
                 fontWeight: 700,
                 lineHeight: 1,
@@ -367,7 +430,6 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
   }
 
   // ── Modo expandido ──
-  // El padre mantiene fondo persistente cuando está abierto (open) o tiene hijo activo
   const parentBg = isActive
     ? hceColors.primary.blue[100]
     : (childActive || open)
@@ -376,9 +438,14 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
 
   return (
     <Box>
-      {/* Fila del item padre */}
       <Box
+        role="button"
+        tabIndex={0}
+        aria-label={item.titulo}
+        aria-expanded={hasChildren ? open : undefined}
+        aria-current={isActive ? "page" : undefined}
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
         sx={{
           display:         "flex",
           alignItems:      "center",
@@ -389,12 +456,22 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
           borderRadius:    "8px",
           cursor:          "pointer",
           backgroundColor: parentBg,
+          borderLeft:      isActive
+            ? `3px solid ${hceColors.primary.blue[600]}`
+            : "3px solid transparent",
+          paddingLeft:     isActive ? "9px" : "12px",
+          transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
           "&:hover": {
             backgroundColor: isActive
               ? hceColors.primary.blue[100]
               : hceColors.primary.blue[50],
+            transform: "translateX(2px)",
           },
-          userSelect:      "none",
+          "&:focus-visible": {
+            outline:       `2px solid ${hceColors.primary.blue[500]}`,
+            outlineOffset: "2px",
+          },
+          userSelect: "none",
         }}
       >
         {/* Icono o avatar abreviatura */}
@@ -428,12 +505,15 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
           fontWeight:   isActive || childActive || open ? 700 : 500,
           color:        isActive || childActive
             ? hceColors.primary.blue[700]
-            : open ? hceColors.primary.blue[600] : "#333",
+            : open ? hceColors.primary.blue[600] : hceColors.neutro.black[400],
           flex:         1,
           lineHeight:   1.3,
           overflow:     "hidden",
           textOverflow: "ellipsis",
           whiteSpace:   "nowrap",
+          opacity:      1,
+          transform:    "translateX(0)",
+          transition:   `opacity ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
         }}>
           {item.titulo}
         </Typography>
@@ -441,15 +521,15 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
         {hasChildren && (
           <ExpandMoreIcon sx={{
             fontSize:   16,
-            color:      open ? hceColors.primary.blue[500] : "#888",
+            color:      open ? hceColors.primary.blue[500] : hceColors.neutro.black[100],
             transform:  open ? "rotate(180deg)" : "rotate(0deg)",
-            transition: "transform 0.2s",
+            transition: `transform ${TRANSITION_FAST}`,
             flexShrink: 0,
           }} />
         )}
       </Box>
 
-      {/* Submenú nivel 2 — barra vertical izquierda + conectores horizontales */}
+      {/* Submenú nivel 2 */}
       {hasChildren && (
         <Collapse in={open} unmountOnExit>
           <Box sx={{
@@ -463,11 +543,8 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
               const childCanNav  = !!child.vista
               const childHasKids = (child.opciones?.length ?? 0) > 0
 
-              // ── Sin vista y sin hijos → ocultar siempre
-              // ── Sin vista, con hijos y multiLevel=false → ocultar (los nietos no se mostrarían)
               if (!childCanNav && (!multiLevel || !childHasKids)) return null
 
-              // ── Sin vista pero con hijos y multiLevel=true → agrupador expandible
               if (!childCanNav) {
                 return (
                   <SecondLevelGroup
@@ -479,17 +556,27 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                 )
               }
 
-              // ── Con vista → ítem navegable
               const isChildActive      = currentPath === child.vista
-              // En multiLevel=true mostramos bajo el ítem sus nietos que tengan vista
               const grandkidsWithVista = multiLevel
                 ? (child.opciones ?? []).filter(gc => !!gc.vista)
                 : []
 
+              const handleChildKeyDown = (e: React.KeyboardEvent) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault()
+                  onNavigate(child.vista!)
+                }
+              }
+
               return (
                 <Box key={child.idMenu ?? child.codigo}>
                   <Box
+                    role="button"
+                    tabIndex={0}
+                    aria-label={child.titulo}
+                    aria-current={isChildActive ? "page" : undefined}
                     onClick={() => onNavigate(child.vista!)}
+                    onKeyDown={handleChildKeyDown}
                     sx={{
                       display:         "flex",
                       alignItems:      "center",
@@ -498,11 +585,22 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                       borderRadius:    "0 8px 8px 0",
                       cursor:          "pointer",
                       backgroundColor: isChildActive ? hceColors.primary.blue[50] : "transparent",
-                      "&:hover":       { backgroundColor: hceColors.primary.blue[50] },
-                      userSelect:      "none",
+                      borderLeft:      isChildActive
+                        ? `3px solid ${hceColors.primary.blue[600]}`
+                        : "3px solid transparent",
+                      transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
+                      "&:hover": {
+                        backgroundColor: hceColors.primary.blue[50],
+                        transform:       "translateX(2px)",
+                      },
+                      "&:focus-visible": {
+                        outline:       `2px solid ${hceColors.primary.blue[500]}`,
+                        outlineOffset: "2px",
+                      },
+                      userSelect: "none",
                     }}
                   >
-                    {/* Conector horizontal ─── */}
+                    {/* Conector horizontal */}
                     <Box sx={{
                       width:           14,
                       height:          1,
@@ -516,7 +614,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                       fontFamily:   hceTypography.fontFamily,
                       fontSize:     "0.78rem",
                       fontWeight:   isChildActive ? 700 : 400,
-                      color:        isChildActive ? hceColors.primary.blue[700] : "#444",
+                      color:        isChildActive ? hceColors.primary.blue[700] : hceColors.neutro.black[400],
                       lineHeight:   1.3,
                       overflow:     "hidden",
                       textOverflow: "ellipsis",
@@ -527,15 +625,27 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                     </Typography>
                   </Box>
 
-                  {/* Nietos con vista — solo si multiLevel=true */}
                   {grandkidsWithVista.length > 0 && (
                     <Box sx={{ ml: 2, borderLeft: `2px solid ${hceColors.primary.blue[50]}` }}>
                       {grandkidsWithVista.map(gc => {
                         const isGcActive = currentPath === gc.vista
+
+                        const handleGcKeyDown = (e: React.KeyboardEvent) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault()
+                            onNavigate(gc.vista!)
+                          }
+                        }
+
                         return (
                           <Box
                             key={gc.idMenu ?? gc.codigo}
+                            role="button"
+                            tabIndex={0}
+                            aria-label={gc.titulo}
+                            aria-current={isGcActive ? "page" : undefined}
                             onClick={() => onNavigate(gc.vista!)}
+                            onKeyDown={handleGcKeyDown}
                             sx={{
                               display:         "flex",
                               alignItems:      "center",
@@ -544,8 +654,19 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                               borderRadius:    "0 8px 8px 0",
                               cursor:          "pointer",
                               backgroundColor: isGcActive ? hceColors.primary.blue[50] : "transparent",
-                              "&:hover":       { backgroundColor: hceColors.primary.blue[50] },
-                              userSelect:      "none",
+                              borderLeft:      isGcActive
+                                ? `3px solid ${hceColors.primary.blue[600]}`
+                                : "3px solid transparent",
+                              transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
+                              "&:hover": {
+                                backgroundColor: hceColors.primary.blue[50],
+                                transform:       "translateX(2px)",
+                              },
+                              "&:focus-visible": {
+                                outline:       `2px solid ${hceColors.primary.blue[500]}`,
+                                outlineOffset: "2px",
+                              },
+                              userSelect: "none",
                             }}
                           >
                             <Box sx={{
@@ -561,7 +682,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                               fontFamily:   hceTypography.fontFamily,
                               fontSize:     "0.73rem",
                               fontWeight:   isGcActive ? 700 : 400,
-                              color:        isGcActive ? hceColors.primary.blue[700] : "#666",
+                              color:        isGcActive ? hceColors.primary.blue[700] : hceColors.neutro.black[300],
                               lineHeight:   1.3,
                               overflow:     "hidden",
                               textOverflow: "ellipsis",
@@ -597,9 +718,13 @@ export function HceSidebar({
   multiLevel  = false,
 }: HceSidebarProps) {
 
-  // Estilos del contenedor según modo flotante o incrustado
-  // floating=true → esquinas redondeadas + sombra. El padre maneja el espacio
-  // (padding/gap) para que no se superponga con header ni footer.
+  const handleToggleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault()
+      onToggle()
+    }
+  }
+
   const containerSx = floating
     ? {
         width:           collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH,
@@ -608,10 +733,10 @@ export function HceSidebar({
         flexDirection:   "column" as const,
         flexShrink:      0,
         overflow:        "hidden",
-        transition:      "width 0.25s ease",
+        transition:      `width ${TRANSITION_BASE}`,
         backgroundColor: collapsed ? hceColors.primary.blue[600] : "white",
         borderRadius:    "16px",
-        boxShadow:       "0 4px 32px rgba(0,0,0,0.18)",
+        boxShadow:       hceShadows.float,
       }
     : {
         width:           collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH,
@@ -620,10 +745,10 @@ export function HceSidebar({
         display:         "flex",
         flexDirection:   "column" as const,
         flexShrink:      0,
-        transition:      "width 0.25s ease, min-width 0.25s ease",
+        transition:      hceTransition_width,
         overflow:        "hidden",
         backgroundColor: collapsed ? hceColors.primary.blue[600] : "white",
-        boxShadow:       "2px 0 8px rgba(0,0,0,0.08)",
+        boxShadow:       hceShadows.sidebar,
         borderRight:     `1px solid ${hceColors.primary.blue[100]}`,
       }
 
@@ -631,6 +756,10 @@ export function HceSidebar({
     <Box
       sx={{ ...containerSx, cursor: collapsed ? "pointer" : "default" }}
       onClick={collapsed ? onToggle : undefined}
+      onKeyDown={collapsed ? handleToggleKeyDown : undefined}
+      tabIndex={collapsed ? 0 : undefined}
+      role={collapsed ? "button" : undefined}
+      aria-label={collapsed ? "Expandir menú lateral" : undefined}
     >
 
       {/* ── Cabecera ─────────────────────────────────────────── */}
@@ -644,20 +773,32 @@ export function HceSidebar({
         flexShrink:      0,
       }}>
         {collapsed ? (
-          /* Colapsado: isotipo clínica como botón para expandir.
-             stopPropagation evita que el click llegue al container (que también
-             llama onToggle) y cancele la expansión con un doble toggle. */
           <Box
+            role="button"
+            tabIndex={0}
+            aria-label="Expandir menú lateral"
             onClick={e => { e.stopPropagation(); onToggle() }}
+            onKeyDown={e => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                e.stopPropagation()
+                onToggle()
+              }
+            }}
             sx={{
-              width:          40,
-              height:         40,
-              display:        "flex",
-              alignItems:     "center",
+              width:      40,
+              height:     40,
+              display:    "flex",
+              alignItems: "center",
               justifyContent: "center",
               borderRadius:   "50%",
               cursor:         "pointer",
+              transition:     `background-color ${TRANSITION_FAST}`,
               "&:hover":      { backgroundColor: "rgba(255,255,255,0.15)" },
+              "&:focus-visible": {
+                outline:       `2px solid ${hceColors.neutro.white[50]}`,
+                outlineOffset: "2px",
+              },
             }}
           >
             <UiIsotipoClinicaIcon size={28} color="white" />
@@ -665,9 +806,18 @@ export function HceSidebar({
         ) : (
           <>
             <LogoClinicaSanFelipeIcon width={110} />
-            {/* Botón colapsar ‹ */}
             <Box
+              role="button"
+              tabIndex={0}
+              aria-label="Colapsar menú lateral"
               onClick={e => { e.stopPropagation(); onToggle() }}
+              onKeyDown={e => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onToggle()
+                }
+              }}
               sx={{
                 width:           30,
                 height:          30,
@@ -678,7 +828,12 @@ export function HceSidebar({
                 cursor:          "pointer",
                 backgroundColor: "rgba(255,255,255,0.15)",
                 flexShrink:      0,
+                transition:      `background-color ${TRANSITION_FAST}`,
                 "&:hover":       { backgroundColor: "rgba(255,255,255,0.25)" },
+                "&:focus-visible": {
+                  outline:       `2px solid ${hceColors.neutro.white[50]}`,
+                  outlineOffset: "2px",
+                },
               }}
             >
               <ChevronLeftIcon sx={{ color: "white", fontSize: 18 }} />
@@ -695,6 +850,11 @@ export function HceSidebar({
         py:         1,
         backgroundColor: collapsed ? hceColors.primary.blue[600] : "white",
         "&::-webkit-scrollbar": { width: 4 },
+        "&::-webkit-scrollbar-track": {
+          backgroundColor: collapsed
+            ? hceColors.primary.blue[700]
+            : hceColors.primary.blue[50],
+        },
         "&::-webkit-scrollbar-thumb": {
           backgroundColor: collapsed
             ? "rgba(255,255,255,0.3)"
@@ -707,6 +867,17 @@ export function HceSidebar({
         {collapsed ? (
           <Tooltip title="Inicio" placement="right" arrow>
             <Box
+              role="button"
+              tabIndex={0}
+              aria-label="Inicio"
+              onClick={e => { e.stopPropagation(); onHome?.() }}
+              onKeyDown={e => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onHome?.()
+                }
+              }}
               sx={{
                 display:         "flex",
                 alignItems:      "center",
@@ -717,7 +888,15 @@ export function HceSidebar({
                 borderRadius:    "8px",
                 cursor:          "pointer",
                 backgroundColor: "transparent",
-                "&:hover":       { backgroundColor: "rgba(255,255,255,0.15)" },
+                transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
+                "&:hover": {
+                  backgroundColor: "rgba(255,255,255,0.15)",
+                  transform:       "translateX(2px)",
+                },
+                "&:focus-visible": {
+                  outline:       `2px solid ${hceColors.neutro.white[50]}`,
+                  outlineOffset: "2px",
+                },
               }}
             >
               <HomeOutlinedIcon sx={{ color: "white", fontSize: 22 }} />
@@ -725,18 +904,35 @@ export function HceSidebar({
           </Tooltip>
         ) : (
           <Box
+            role="button"
+            tabIndex={0}
+            aria-label="Inicio"
             onClick={onHome}
+            onKeyDown={e => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                onHome?.()
+              }
+            }}
             sx={{
-              display:      "flex",
-              alignItems:   "center",
-              gap:          1,
-              mx:           1,
-              px:           1.5,
-              py:           "10px",
+              display:    "flex",
+              alignItems: "center",
+              gap:        1,
+              mx:         1,
+              px:         1.5,
+              py:         "10px",
               borderRadius: "8px",
               cursor:       "pointer",
-              "&:hover":    { backgroundColor: hceColors.primary.blue[50] },
-              userSelect:   "none",
+              transition:   `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
+              "&:hover": {
+                backgroundColor: hceColors.primary.blue[50],
+                transform:       "translateX(2px)",
+              },
+              "&:focus-visible": {
+                outline:       `2px solid ${hceColors.primary.blue[500]}`,
+                outlineOffset: "2px",
+              },
+              userSelect: "none",
             }}
           >
             <HomeOutlinedIcon sx={{ color: hceColors.primary.blue[600], fontSize: 20 }} />
@@ -745,6 +941,9 @@ export function HceSidebar({
               fontSize:   "0.85rem",
               fontWeight: 600,
               color:      hceColors.primary.blue[600],
+              opacity:    collapsed ? 0 : 1,
+              transform:  collapsed ? "translateX(-6px)" : "translateX(0)",
+              transition: `opacity ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
             }}>
               Inicio
             </Typography>
@@ -775,3 +974,6 @@ export function HceSidebar({
     </Box>
   )
 }
+
+// Valor literal para evitar dependencia circular en el mismo módulo
+const hceTransition_width = "width 220ms cubic-bezier(0.4, 0, 0.2, 1), min-width 220ms cubic-bezier(0.4, 0, 0.2, 1)"

@@ -2,8 +2,7 @@ import { useState }              from "react"
 import { InputAdornment, Box }   from "@mui/material"
 import { TextInput }             from "../../atoms/TextInput/TextInput"
 import { UiEyeIcon }             from "../../atoms/Icon/SvgIconsUiKit"
-import { baseColors }            from "../../tokens/base.tokens"
-import { hceColors }             from "../../tokens/hce.tokens"
+import { hceColors, hceTransition } from "../../tokens/hce.tokens"
 import type { ReactNode }        from "react"
 
 interface Props {
@@ -35,7 +34,7 @@ export function PasswordInput({
     ? hceColors.alert.error[600]
     : (focused || hovered)
       ? hceColors.primary.blue[600]
-      : baseColors.textSecondary
+      : hceColors.neutro.black[200]
 
   const eyeAdornment = (
     <InputAdornment position="end">
@@ -46,7 +45,7 @@ export function PasswordInput({
           alignItems: "center",
           cursor:     "pointer",
           color:      eyeColor,
-          transition: "color 0.15s",
+          transition: `color ${hceTransition.fast}`,
           userSelect: "none",
           WebkitUserSelect: "none",
         }}

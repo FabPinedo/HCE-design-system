@@ -146,6 +146,40 @@ export function injectHceFonts(): void {
 // Inyecta la paleta completa como variables CSS en :root.
 // Uso opcional: llama a injectHceTokens() una vez en tu entry point.
 
+// ── Transiciones ─────────────────────────────────────────────────────────────
+// Curva Material Design estándar (ease-in-out) para animaciones de UI.
+// Usar hceTransition.fast para micro-interacciones, base para layout.
+
+export const hceTransition = {
+  fast:  "150ms cubic-bezier(0.4, 0, 0.2, 1)",
+  base:  "220ms cubic-bezier(0.4, 0, 0.2, 1)",
+  slow:  "350ms cubic-bezier(0.4, 0, 0.2, 1)",
+  width: "width 220ms cubic-bezier(0.4, 0, 0.2, 1), min-width 220ms cubic-bezier(0.4, 0, 0.2, 1)",
+} as const
+
+// ── Sombras ──────────────────────────────────────────────────────────────────
+// Basadas en el color de marca azul oscuro (--hce-blue-900 ≈ #001c45)
+// para mayor coherencia visual que sombras negras puras.
+
+export const hceShadows = {
+  card:    "0 2px 8px rgba(0,29,69,0.08)",
+  sidebar: "2px 0 8px rgba(0,29,69,0.10)",
+  float:   "0 4px 32px rgba(0,29,69,0.18)",
+  modal:   "0 8px 32px rgba(0,29,69,0.16)",
+} as const
+
+// ── UI Semánticos ─────────────────────────────────────────────────────────────
+// Valores de texto y superficie que complementan la paleta Figma.
+// Usados en theme.ts y componentes que necesitan colores semánticos estables.
+
+export const hceUi = {
+  textPrimary:   "#374151",
+  textSecondary: "#545454",
+  textSubtle:    "#8c8c8c",
+  surface:       "#ffffff",
+  background:    "#f5f7fa",
+} as const
+
 export function injectHceTokens(): void {
   const style = document.documentElement.style
 

@@ -9,10 +9,30 @@ import {
 import Box from "@mui/material/Box"
 
 const meta: Meta<typeof HceModal> = {
-  title:     "Organisms/HceModal",
-  component: HceModal,
-  tags:      ["autodocs"],
+  title:      "Organisms/HceModal",
+  component:  HceModal,
+  tags:       ["autodocs"],
   parameters: { layout: "centered" },
+  argTypes: {
+    title: {
+      control:     "text",
+      description: "Título principal del modal.",
+    },
+    description: {
+      control:     "text",
+      description: "Texto descriptivo bajo el título.",
+    },
+    buttonLayout: {
+      control:     "radio",
+      options:     ["row", "column"],
+      description: "Disposición de los botones de acción: en fila o en columna.",
+      table:       { defaultValue: { summary: "row" } },
+    },
+    open: {
+      control:     "boolean",
+      description: "Controla la visibilidad del modal.",
+    },
+  },
 }
 export default meta
 
@@ -153,6 +173,13 @@ function Gallery() {
 }
 
 // ─── Stories ──────────────────────────────────────────────────────────────────
+
+/** AllVariants — los 6 layouts posibles accesibles desde un botón cada uno */
+export const AllVariants: Story = {
+  name:   "AllVariants — 6 layouts",
+  render: () => <Gallery />,
+}
+
 export const Galeria: Story = {
   name:   "Galería — 6 variantes",
   render: () => <Gallery />,

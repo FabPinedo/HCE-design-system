@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Box, Typography, FormControl, Select, OutlinedInput, MenuItem } from "@mui/material"
-import { baseColors }  from "../../tokens/base.tokens"
-import { hceColors, hceTypography } from "../../tokens/hce.tokens"
+import { hceColors, hceTypography, hceTransition } from "../../tokens/hce.tokens"
 
 interface Option {
   value: string
@@ -39,9 +38,9 @@ export function SelectField({
     ? hceColors.alert.error[600]
     : active
       ? hceColors.primary.blue[600]
-      : baseColors.textSecondary
+      : hceColors.neutro.black[200]
 
-  const borderDefault = error ? hceColors.alert.error[600] : baseColors.border
+  const borderDefault = error ? hceColors.alert.error[600] : hceColors.neutro.black[50]
   const borderActive  = error ? hceColors.alert.error[600] : hceColors.primary.blue[600]
 
   return (
@@ -56,7 +55,7 @@ export function SelectField({
         color:      accentColor,
         mb:         0.5,
         display:    "block",
-        transition: "color 0.15s",
+        transition: `color ${hceTransition.fast}`,
       }}>
         {label}
       </Typography>
@@ -70,27 +69,34 @@ export function SelectField({
           onClose={() => setOpen(false)}
           input={<OutlinedInput sx={{
             borderRadius:    "8px",
-            backgroundColor: baseColors.surface,
+            backgroundColor: hceColors.neutro.white[50],
             fontSize:        "0.875rem",
+            transition:      `box-shadow ${hceTransition.fast}`,
             // Texto seleccionado
             "& .MuiSelect-select": {
               color:      value
-                ? (error ? hceColors.alert.error[600] : active ? hceColors.primary.blue[600] : baseColors.textPrimary)
+                ? (error ? hceColors.alert.error[600] : active ? hceColors.primary.blue[600] : hceColors.neutro.black[400])
                 : accentColor,
-              transition: "color 0.15s",
+              transition: `color ${hceTransition.fast}`,
             },
-            "& fieldset":             { borderColor: borderDefault },
+            "& fieldset": {
+              borderColor: borderDefault,
+              transition:  `border-color ${hceTransition.fast}`,
+            },
             "&:hover fieldset":       { borderColor: borderActive },
             "&.Mui-focused fieldset": { borderColor: borderActive },
+            "&.Mui-focused": {
+              boxShadow: `0 0 0 3px ${hceColors.primary.blue[100]}`,
+            },
           }} />}
           renderValue={(v) => (
             <Typography sx={{
               fontFamily: hceTypography.fontFamily,
               fontSize:   "0.875rem",
               color:      v
-                ? (error ? hceColors.alert.error[600] : active ? hceColors.primary.blue[600] : baseColors.textPrimary)
+                ? (error ? hceColors.alert.error[600] : active ? hceColors.primary.blue[600] : hceColors.neutro.black[400])
                 : accentColor,
-              transition: "color 0.15s",
+              transition: `color ${hceTransition.fast}`,
             }}>
               {options.find(o => o.value === v)?.label ?? placeholder}
             </Typography>

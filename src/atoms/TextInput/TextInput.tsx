@@ -1,7 +1,6 @@
 import { useState, type ReactNode } from "react"
 import { Box, Typography, OutlinedInput, InputAdornment } from "@mui/material"
-import { baseColors }  from "../../tokens/base.tokens"
-import { hceColors, hceTypography } from "../../tokens/hce.tokens"
+import { hceColors, hceTypography, hceTransition } from "../../tokens/hce.tokens"
 
 interface Props {
   label?:        string
@@ -37,23 +36,19 @@ export function TextInput({
   const active = focused || hovered
 
   // ── Colores reactivos ──────────────────────────────────────
-  // Label, placeholder, ícono start, borde
   const accentColor = error
     ? hceColors.alert.error[600]
     : active
       ? hceColors.primary.blue[600]
-      : baseColors.textSecondary
+      : hceColors.neutro.black[200]
 
-  // Texto escrito en el input
   const inputTextColor = error
     ? hceColors.alert.error[600]
     : active
       ? hceColors.primary.blue[600]
-      : baseColors.textPrimary
+      : hceColors.neutro.black[400]
 
-  // Borde por defecto (sin hover ni focus)
-  const borderDefault = error ? hceColors.alert.error[600] : baseColors.border
-  // Borde hover / focus
+  const borderDefault = error ? hceColors.alert.error[600] : hceColors.neutro.black[50]
   const borderActive  = error ? hceColors.alert.error[600] : hceColors.primary.blue[600]
 
   return (
@@ -69,7 +64,7 @@ export function TextInput({
           color:      accentColor,
           mb:         0.5,
           display:    "block",
-          transition: "color 0.15s",
+          transition: `color ${hceTransition.fast}`,
         }}>
           {label}
         </Typography>
@@ -91,7 +86,7 @@ export function TextInput({
               color:      accentColor,
               display:    "flex",
               alignItems: "center",
-              transition: "color 0.15s",
+              transition: `color ${hceTransition.fast}`,
             }}>
               {startIcon}
             </Box>
@@ -100,24 +95,31 @@ export function TextInput({
         endAdornment={endAdornment}
         sx={{
           borderRadius:    "8px",
-          backgroundColor: baseColors.surface,
+          backgroundColor: hceColors.neutro.white[50],
           fontSize:        "0.875rem",
+          transition:      `box-shadow ${hceTransition.fast}`,
           // Texto escrito en el input
-          // WebkitTextFillColor tiene prioridad sobre `color` en Chrome/Safari
           "& .MuiInputBase-input": {
-            color:                inputTextColor,
-            WebkitTextFillColor:  inputTextColor,
-            transition:           "color 0.15s, -webkit-text-fill-color 0.15s",
+            color:               inputTextColor,
+            WebkitTextFillColor: inputTextColor,
+            transition:          `color ${hceTransition.fast}, -webkit-text-fill-color ${hceTransition.fast}`,
           },
           // Bordes
-          "& fieldset":             { borderColor: borderDefault },
+          "& fieldset":             {
+            borderColor: borderDefault,
+            transition:  `border-color ${hceTransition.fast}`,
+          },
           "&:hover fieldset":       { borderColor: borderActive },
           "&.Mui-focused fieldset": { borderColor: borderActive },
+          // Focus ring (accesibilidad y feedback visual)
+          "&.Mui-focused": {
+            boxShadow: `0 0 0 3px ${hceColors.primary.blue[100]}`,
+          },
           // Placeholder
           "& input::placeholder": {
             color:      accentColor,
             opacity:    1,
-            transition: "color 0.15s",
+            transition: `color ${hceTransition.fast}`,
           },
         }}
       />

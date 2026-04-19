@@ -1,10 +1,20 @@
+/*
+  SideNav.css
+  Usa variables CSS inyectadas por injectBaseTokens() / injectHceTokens()
+  Valores de diseño: hceColors.primary.blue[50] → #e6ecf6
+                     hceColors.primary.blue[100] → #b0c5e3
+                     hceColors.primary.blue[600] → #003d96
+                     hceColors.neutro.black[200] → #8a8a8a
+                     hceColors.neutro.black[50]  → #e6e6e6
+*/
+
 .jarvis-sidenav {
-  width: 100%;
-  background: #f8fafc;
-  height: 100%;
-  border-right: 1px solid #e5e7eb;
-  position: relative;
-  overflow: visible;
+  width:        100%;
+  background:   var(--hce-blue-50, #e6ecf6);
+  height:       100%;
+  border-right: 1px solid var(--hce-blue-100, #b0c5e3);
+  position:     relative;
+  overflow:     visible;
 }
 
 /* ── Botón colapsar ──────────────────────────────────────── */
@@ -18,9 +28,9 @@
   height:          26px;
   border-radius:   50%;
 
-  border:          1.5px solid #d1d5db;
+  border:          1.5px solid var(--hce-black-50, #e6e6e6);
   background:      #ffffff;
-  color:           #6b7280;
+  color:           var(--hce-black-200, #8a8a8a);
 
   display:         flex;
   align-items:     center;
@@ -29,12 +39,21 @@
   cursor:          pointer;
   z-index:         20;
 
-  box-shadow:      0 1px 4px rgba(0,0,0,0.10);
-  transition:      background 0.15s, color 0.15s, border-color 0.15s;
+  box-shadow:      0 1px 4px rgba(0, 29, 69, 0.10);
+  transition:      background 150ms cubic-bezier(0.4, 0, 0.2, 1),
+                   color      150ms cubic-bezier(0.4, 0, 0.2, 1),
+                   border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+                   transform  150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .jarvis-sidenav-toggle:hover {
-  background:    #1E4FA1;
+  background:    var(--hce-blue-600, #003d96);
   color:         #ffffff;
-  border-color:  #1E4FA1;
+  border-color:  var(--hce-blue-600, #003d96);
+  transform:     scale(1.08);
+}
+
+.jarvis-sidenav-toggle:focus-visible {
+  outline:        2px solid var(--hce-blue-500, #0043a5);
+  outline-offset: 2px;
 }

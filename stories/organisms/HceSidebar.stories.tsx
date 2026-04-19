@@ -158,14 +158,44 @@ function SidebarDemo({ initialCollapsed = false, opciones = OPCIONES_MAC, floati
 // ─── Meta ──────────────────────────────────────────────────
 
 const meta: Meta = {
-  title:     "Organisms/HceSidebar",
-  tags:      ["autodocs"],
+  title:      "Organisms/HceSidebar",
+  tags:       ["autodocs"],
   parameters: { layout: "fullscreen" },
+  argTypes: {
+    collapsed: {
+      control:     "boolean",
+      description: "Cuando es true muestra solo los íconos (modo compacto).",
+      table:       { defaultValue: { summary: "false" } },
+    },
+    floating: {
+      control:     "boolean",
+      description: "Modo flotante: border-radius y sombra para layouts sin tocar el header.",
+      table:       { defaultValue: { summary: "false" } },
+    },
+    currentPath: {
+      control:     "text",
+      description: "Ruta activa actual — se resalta la opción correspondiente.",
+    },
+  },
 }
 export default meta
 type Story = StoryObj
 
 // ─── Stories ───────────────────────────────────────────────
+
+/** AllVariants — todas las presentaciones visuales del sidebar */
+export const AllVariants: Story = {
+  render: () => (
+    <div style={{ display: "flex", gap: 0, height: "100vh" }}>
+      <SidebarDemo initialCollapsed={false} opciones={OPCIONES_MAC} />
+    </div>
+  ),
+}
+
+/** States — expandido vs colapsado (estados principales de visibilidad) */
+export const States: Story = {
+  render: () => <SidebarDemo initialCollapsed={true} />,
+}
 
 /** Sidebar expandido con árbol completo de opciones MAC */
 export const Expandido: Story = {

@@ -1,13 +1,13 @@
-import { type ReactNode } from "react"
-import MuiDialog        from "@mui/material/Dialog"
-import MuiDialogContent from "@mui/material/DialogContent"
-import MuiButton        from "@mui/material/Button"
-import Box              from "@mui/material/Box"
-import Typography       from "@mui/material/Typography"
-import { Button }         from "../../atoms/Button/Button"
-import { TextInput }      from "../../atoms/TextInput/TextInput"
-import { baseColors }     from "../../tokens/base.tokens"
-import { hceTypography }  from "../../tokens/hce.tokens"
+import { type ReactNode }  from "react"
+import MuiDialog           from "@mui/material/Dialog"
+import MuiDialogContent    from "@mui/material/DialogContent"
+import MuiButton           from "@mui/material/Button"
+import Fade                from "@mui/material/Fade"
+import Box                 from "@mui/material/Box"
+import Typography          from "@mui/material/Typography"
+import { Button }          from "../../atoms/Button/Button"
+import { TextInput }       from "../../atoms/TextInput/TextInput"
+import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
 
 // ─── Sub-tipos ────────────────────────────────────────────────────────────────
 
@@ -33,7 +33,7 @@ export interface HceModalProps {
   /** Callback al cerrar (click fuera o ESC). Omitir para bloquear cierre externo */
   onClose?: () => void
 
-  // ── Contenido ──────────────────────────────────────────
+  // ── Contenido ──────────────────────────────────────
   /** Título del modal (requerido) */
   title:        string
   /** Texto descriptivo bajo el título */
@@ -43,16 +43,16 @@ export interface HceModalProps {
   /** Color de fondo del badge del ícono. Default: azul corporativo */
   iconBgColor?: string
 
-  // ── Input opcional ─────────────────────────────────────
+  // ── Input opcional ─────────────────────────────────
   input?: ModalInputConfig
 
-  // ── Botones (ambos opcionales) ─────────────────────────
+  // ── Botones (ambos opcionales) ─────────────────────
   /** Botón principal (verde/filled) */
   confirmButton?: ModalButtonConfig
   /** Botón secundario (outlined azul) */
   cancelButton?:  ModalButtonConfig
 
-  // ── Layout ─────────────────────────────────────────────
+  // ── Layout ─────────────────────────────────────────
   /** "row" = lado a lado | "column" = apilados. Default: "row" */
   buttonLayout?: "row" | "column"
   /** Ancho máximo del card en px. Default: 420 */
@@ -67,7 +67,7 @@ export function HceModal({
   title,
   description,
   icon,
-  iconBgColor  = baseColors.primary,
+  iconBgColor  = hceColors.primary.blue[500],
   input,
   confirmButton,
   cancelButton,
@@ -81,6 +81,12 @@ export function HceModal({
     <MuiDialog
       open={open}
       onClose={onClose}
+      aria-labelledby="hce-modal-title"
+      aria-describedby="hce-modal-description"
+      slots={{ transition: Fade }}
+      slotProps={{
+        transition: { timeout: { enter: 180, exit: 120 } },
+      }}
       PaperProps={{
         sx: {
           borderRadius:  "16px",
@@ -88,9 +94,14 @@ export function HceModal({
           maxWidth:      maxWidth,
           width:         "100%",
           textAlign:     "center",
-          boxShadow:     "0 8px 32px rgba(0,0,0,0.14)",
+          boxShadow:     hceShadows.modal,
           overflow:      "visible",
           fontFamily:    hceTypography.fontFamily,
+          "@keyframes hceSlideUp": {
+            from: { opacity: 0, transform: "translateY(16px) scale(0.97)" },
+            to:   { opacity: 1, transform: "translateY(0) scale(1)" },
+          },
+          animation: "hceSlideUp 200ms cubic-bezier(0.4,0,0.2,1)",
         },
       }}
     >
@@ -107,7 +118,7 @@ export function HceModal({
               height:          56,
               borderRadius:    "12px",
               backgroundColor: iconBgColor,
-              color:           "#fff",
+              color:           hceColors.neutro.white[50],
               flexShrink:      0,
             }}>
               {icon}
@@ -116,25 +127,31 @@ export function HceModal({
         )}
 
         {/* ── Título ──────────────────────────────────────── */}
-        <Typography sx={{
-          fontFamily: hceTypography.fontFamily,
-          fontWeight: 700,
-          fontSize:   "1.125rem",
-          color:      baseColors.primary,
-          mb:         description ? 1 : (input || hasButtons) ? 2.5 : 0,
-        }}>
+        <Typography
+          id="hce-modal-title"
+          sx={{
+            fontFamily: hceTypography.fontFamily,
+            fontWeight: 700,
+            fontSize:   "1.125rem",
+            color:      hceColors.primary.blue[500],
+            mb:         description ? 1 : (input || hasButtons) ? 2.5 : 0,
+          }}
+        >
           {title}
         </Typography>
 
         {/* ── Descripción ─────────────────────────────────── */}
         {description && (
-          <Typography sx={{
-            fontFamily: hceTypography.fontFamily,
-            fontSize:   "0.875rem",
-            color:      baseColors.textSecondary,
-            lineHeight: 1.65,
-            mb:         (input || hasButtons) ? 2.5 : 0,
-          }}>
+          <Typography
+            id="hce-modal-description"
+            sx={{
+              fontFamily: hceTypography.fontFamily,
+              fontSize:   "0.875rem",
+              color:      hceColors.neutro.black[300],
+              lineHeight: 1.65,
+              mb:         (input || hasButtons) ? 2.5 : 0,
+            }}
+          >
             {description}
           </Typography>
         )}
@@ -185,17 +202,18 @@ export function HceModal({
                   fullWidth
                   onClick={cancelButton.onClick}
                   sx={{
-                    borderColor:   baseColors.primary,
-                    color:         baseColors.primary,
+                    borderColor:   hceColors.primary.blue[500],
+                    color:         hceColors.primary.blue[500],
                     fontWeight:    600,
                     fontSize:      "0.875rem",
                     textTransform: "none",
                     borderRadius:  "8px",
                     height:        "100%",
                     minHeight:     36,
+                    transition:    "border-color 150ms cubic-bezier(0.4, 0, 0.2, 1), background-color 150ms cubic-bezier(0.4, 0, 0.2, 1)",
                     "&:hover": {
-                      borderColor:     baseColors.primaryDark,
-                      backgroundColor: baseColors.primaryLight,
+                      borderColor:     hceColors.primary.blue[700],
+                      backgroundColor: hceColors.primary.blue[50],
                     },
                   }}
                 >

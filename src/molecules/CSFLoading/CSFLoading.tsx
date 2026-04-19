@@ -153,42 +153,12 @@ const SECTOR_SM =
   "M75 6C64.1111 6 53.3768 8.57708 43.6747 13.5205C33.9726 18.464 25.5782 25.6335 19.1778 " +
   "34.4428L75 75V6Z"
 
-// ─── Frames de build-up (secuencia Figma F01 → F11) ──────────────────────────
-// Cada elemento es el contenido SVG interno (sin el <svg> wrapper).
-// Se reproducen en orden a FRAME_MS ms por frame, luego gira el logo completo.
+// ─── Configuración de la secuencia de intro ───────────────────────────────────
 
-const FRAME_MS = 80  // ms por frame en la fase de intro
+const FRAME_MS          = 100  // ms por frame en la fase de intro
+const TOTAL_BUILD_FRAMES = 14  // F01 → F14
 
-const BASE_CIRCLE   = <circle cx="75" cy="75" r="69" fill="#89C93D" />
-const DEF4C5_CIRCLE = <circle cx="75" cy="75" r="69" fill="#DEF4C5" />
-const BLUE_SHAPE    = <path d={BLUE_PATH}  fill="#003D96" />
-const WHITE_SHAPE   = <path d={WHITE_PATH} fill="#FFFFFF" />
-
-// Frames en orden de animación (sector se reduce de mayor a menor)
-const BUILD_FRAMES: ReactNode[] = [
-  // F01 — solo círculo base + overlay claro
-  <>{BASE_CIRCLE}{DEF4C5_CIRCLE}</>,
-  // F02 — + forma azul
-  <>{BASE_CIRCLE}{DEF4C5_CIRCLE}{BLUE_SHAPE}</>,
-  // F03 — logo completo + sector 360° (overlay total)
-  <>{BASE_CIRCLE}{DEF4C5_CIRCLE}{BLUE_SHAPE}{WHITE_SHAPE}</>,
-  // F04-F10 — barrido del sector de mayor a menor
-  <>{BASE_CIRCLE}<path d={SECTOR_270} fill="#DEF4C5"/>{BLUE_SHAPE}{WHITE_SHAPE}</>,
-  <>{BASE_CIRCLE}<path d={SECTOR_240} fill="#DEF4C5"/>{BLUE_SHAPE}{WHITE_SHAPE}</>,
-  <>{BASE_CIRCLE}<path d={SECTOR_180} fill="#DEF4C5"/>{BLUE_SHAPE}{WHITE_SHAPE}</>,
-  <>{BASE_CIRCLE}<path d={SECTOR_090} fill="#DEF4C5"/>{BLUE_SHAPE}{WHITE_SHAPE}</>,
-  <>{BASE_CIRCLE}<path d={SECTOR_045} fill="#DEF4C5"/>{BLUE_SHAPE}{WHITE_SHAPE}</>,
-  <>{BASE_CIRCLE}<path d={SECTOR_Q1}  fill="#DEF4C5"/>{BLUE_SHAPE}{WHITE_SHAPE}</>,
-  <>{BASE_CIRCLE}<path d={SECTOR_SM}  fill="#DEF4C5"/>{BLUE_SHAPE}{WHITE_SHAPE}</>,
-  // F11 — logo completo (sin sector)
-  <>{BASE_CIRCLE}{BLUE_SHAPE}{WHITE_SHAPE}</>,
-  // F12 — logo contraído (tamaño menor, primer paso zoom-out)
-  <>{BASE_CIRCLE}<path d={BLUE_PATH_F12} fill="#003D96"/><path d={WHITE_PATH_F12} fill="#FFFFFF"/></>,
-  // F13 — logo más contraído (segundo paso zoom-out)
-  <>{BASE_CIRCLE}<path d={BLUE_PATH_F13} fill="#003D96"/><path d={WHITE_PATH_F13} fill="#FFFFFF"/></>,
-  // F14 — logo completo nuevamente (regresa al tamaño normal), siguiente estado = spin
-  <>{BASE_CIRCLE}{BLUE_SHAPE}{WHITE_SHAPE}</>,
-]
+const SECTORS = [SECTOR_270, SECTOR_240, SECTOR_180, SECTOR_090, SECTOR_045, SECTOR_Q1, SECTOR_SM]
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -215,24 +185,50 @@ export interface CSFLoadingProps {
 }
 
 // ─── Spinner ──────────────────────────────────────────────────────────────────
-// Fase 1 (intro): reproduce BUILD_FRAMES en secuencia a FRAME_MS ms/frame.
+// Fase 1 (intro): renderiza dinámicamente F01→F14 a frameDuration ms/frame.
 // Fase 2 (loop):  gira el logo completo con animateTransform SVG nativo.
 
 function CSFSpinner({ size = 150, duration = 1.5, frameDuration = FRAME_MS }: { size?: number; duration?: number; frameDuration?: number }) {
   const [frameIdx, setFrameIdx] = useState(0)
   const [spinning, setSpinning] = useState(false)
+  const [blueIn,   setBlueIn]  = useState(false)
+  const [whiteIn,  setWhiteIn] = useState(false)
 
+  // Proporcional a frameDuration con tope en 1000ms.
+  // Tope evita que la animación solape el sweep de sectores (frames 3-9).
+  const animDur = Math.min(frameDuration * 4, 1000)
+
+  // Avance de frames de intro
   useEffect(() => {
     if (spinning) return
     const id = setTimeout(() => {
-      if (frameIdx < BUILD_FRAMES.length - 1) {
-        setFrameIdx(i => i + 1)
-      } else {
-        setSpinning(true)
-      }
+      if (frameIdx < TOTAL_BUILD_FRAMES - 1) setFrameIdx(i => i + 1)
+      else setSpinning(true)
     }, frameDuration)
     return () => clearTimeout(id)
   }, [frameIdx, spinning, frameDuration])
+
+  // Dispara la transición de entrada una sola vez por pieza (RAF garantiza
+  // que el browser pintó el estado inicial antes de aplicar la transición).
+  useEffect(() => {
+    if (frameIdx >= 1 && !blueIn) {
+      const id = requestAnimationFrame(() => setBlueIn(true))
+      return () => cancelAnimationFrame(id)
+    }
+  }, [frameIdx, blueIn])
+
+  useEffect(() => {
+    if (frameIdx >= 2 && !whiteIn) {
+      const id = requestAnimationFrame(() => setWhiteIn(true))
+      return () => cancelAnimationFrame(id)
+    }
+  }, [frameIdx, whiteIn])
+
+  // F12/F13 usan paths contraídos (zoom-out); el resto usa el tamaño completo.
+  const bluePath  = frameIdx === 11 ? BLUE_PATH_F12 : frameIdx === 12 ? BLUE_PATH_F13 : BLUE_PATH
+  const whitePath = frameIdx === 11 ? WHITE_PATH_F12 : frameIdx === 12 ? WHITE_PATH_F13 : WHITE_PATH
+
+  const easing = `cubic-bezier(0.22, 1, 0.36, 1)`
 
   return (
     <svg
@@ -245,7 +241,6 @@ function CSFSpinner({ size = 150, duration = 1.5, frameDuration = FRAME_MS }: { 
     >
       {spinning ? (
         // Fase loop — logo completo girando con animateTransform nativo
-        // El centro de rotación (75 75) es el centro exacto del SVG
         <g>
           <animateTransform
             attributeName="transform"
@@ -255,13 +250,53 @@ function CSFSpinner({ size = 150, duration = 1.5, frameDuration = FRAME_MS }: { 
             dur={`${duration}s`}
             repeatCount="indefinite"
           />
-          {BASE_CIRCLE}
-          {BLUE_SHAPE}
-          {WHITE_SHAPE}
+          <circle cx="75" cy="75" r="69" fill="#89C93D" />
+          <path d={BLUE_PATH}  fill="#003D96" />
+          <path d={WHITE_PATH} fill="#FFFFFF" />
         </g>
       ) : (
-        // Fase intro — frame estático del build-up
-        BUILD_FRAMES[frameIdx]
+        // Fase intro — renderizado dinámico frame a frame
+        <>
+          {/* Círculo base siempre visible */}
+          <circle cx="75" cy="75" r="69" fill="#89C93D" />
+
+          {/* Overlay claro — F01 a F03 */}
+          {frameIdx <= 2 && <circle cx="75" cy="75" r="69" fill="#DEF4C5" />}
+
+          {/* Barrido de sector — F04 a F10 */}
+          {frameIdx >= 3 && frameIdx <= 9 && (
+            <path d={SECTORS[frameIdx - 3]} fill="#DEF4C5" />
+          )}
+
+          {/* Pieza azul: cae desde arriba.
+              Estado inicial (blueIn=false): invisible y desplazada — sin transition.
+              Tras el RAF (blueIn=true): transition activa, valores cambian → CSS anima.
+              La transición se dispara UNA sola vez; cambios en frameDuration no la reinician. */}
+          {frameIdx >= 1 && (
+            <g style={{
+              opacity:    blueIn ? 1 : 0,
+              transform:  blueIn ? "translateY(0)" : "translateY(-18px)",
+              transition: blueIn
+                ? `opacity ${animDur}ms ${easing}, transform ${animDur}ms ${easing}`
+                : "none",
+            }}>
+              <path d={bluePath} fill="#003D96" />
+            </g>
+          )}
+
+          {/* Pieza blanca: sube desde abajo. Mismo patrón que la azul. */}
+          {frameIdx >= 2 && (
+            <g style={{
+              opacity:    whiteIn ? 1 : 0,
+              transform:  whiteIn ? "translateY(0)" : "translateY(18px)",
+              transition: whiteIn
+                ? `opacity ${animDur}ms ${easing}, transform ${animDur}ms ${easing}`
+                : "none",
+            }}>
+              <path d={whitePath} fill="#FFFFFF" />
+            </g>
+          )}
+        </>
       )}
     </svg>
   )
@@ -274,7 +309,7 @@ export function CSFLoading({
   message,
   size          = 150,
   duration      = 1.5,
-  frameDuration = 80,
+  frameDuration = 100,
   overlay       = false,
   opacity       = 0.45,
   children,

@@ -1,11 +1,10 @@
 import { Box, Typography } from "@mui/material"
-import { baseColors } from "../../tokens/base.tokens"
-import { hceTypography } from "../../tokens/hce.tokens"
+import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
 type Props = {
   /** Texto de copyright personalizado. Si se omite usa el texto por defecto. */
   copyright?: string
-  /** Color de fondo del footer. Por defecto usa baseColors.primary. Ej: hceColors.primary.blue[600] */
+  /** Color de fondo del footer. Por defecto usa hceColors.primary.blue[600]. Ej: hceColors.primary.blue[700] */
   color?: string
 }
 
@@ -20,7 +19,7 @@ export function Footer({ copyright, color }: Props) {
         width:           "100%",
         py:              "6px",
         px:              3,
-        backgroundColor: color ?? baseColors.primary,
+        backgroundColor: color ?? hceColors.primary.blue[600],
         display:         "flex",
         alignItems:      "center",
         justifyContent:  "center",

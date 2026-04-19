@@ -25,6 +25,9 @@ export {
 export {
   hceColors,
   hceTypography,
+  hceUi,
+  hceTransition,
+  hceShadows,
   injectHceTokens,
   injectHceFonts,
 } from "./tokens/hce.tokens"
@@ -107,6 +110,8 @@ export { SelectField }   from "./atoms/SelectField/SelectField"
 export { SelectInput }   from "./atoms/SelectInput/SelectInput"
 export { StatusBadge }   from "./atoms/StatusBadge/StatusBadge"
 export { Checkbox }      from "./atoms/Checkbox/Checkbox"
+export { SkeletonLoader } from "./atoms/SkeletonLoader/SkeletonLoader"
+export type { SkeletonLoaderProps, SkeletonVariant } from "./atoms/SkeletonLoader/SkeletonLoader"
 
 // ── Types — Atoms ──────────────────────────────────────────
 export type { PriorityLevel } from "./atoms/PriorityBadge/PriorityBadge"

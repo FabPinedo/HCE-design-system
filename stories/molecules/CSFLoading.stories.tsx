@@ -14,7 +14,7 @@ const meta: Meta<typeof CSFLoading> = {
   argTypes: {
     size:          { control: { type: "range", min: 40,  max: 300, step: 10  } },
     duration:      { control: { type: "range", min: 0.5, max: 5,   step: 0.1 } },
-    frameDuration: { control: { type: "range", min: 20,  max: 500, step: 10  }, description: "ms por frame del intro (default 80)" },
+    frameDuration: { control: { type: "range", min: 20,  max: 500, step: 10  }, description: "ms por frame del intro (default 100)" },
     opacity:       { control: { type: "range", min: 0,   max: 1,   step: 0.05 } },
     overlay:       { control: "boolean" },
     open:          { control: "boolean" },
@@ -277,92 +277,115 @@ export const Pequeno: Story = {
 }
 
 export const Tamanios: Story = {
-  args: {
-    frameDuration: 180
-  },
-
-  name:   "Distintos tamaños",
-
-  render: () => (
+  name: "Distintos tamaños",
+  args: { frameDuration: 100 },
+  render: ({ frameDuration }) => (
     <Box sx={{ display: "flex", alignItems: "flex-end", gap: 4, p: 3 }}>
       {[32, 56, 80, 120, 160].map(s => (
         <Box key={s} sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-          <CSFLoading size={s} />
+          <CSFLoading size={s} frameDuration={frameDuration} />
           <span style={{ fontFamily: "monospace", fontSize: 11, color: "#6B7280" }}>{s}px</span>
         </Box>
       ))}
     </Box>
-  )
+  ),
 }
 
 export const Velocidades: Story = {
-  args: {
-    frameDuration: 160
-  },
-
-  name:   "Distintas velocidades",
-
-  render: () => (
+  name: "Distintas velocidades",
+  args: { frameDuration: 100 },
+  render: ({ frameDuration }) => (
     <Box sx={{ display: "flex", alignItems: "flex-end", gap: 4, p: 3 }}>
       {[{ d: 0.6, l: "Rápido" }, { d: 1.5, l: "Normal" }, { d: 3, l: "Lento" }].map(({ d, l }) => (
         <Box key={d} sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-          <CSFLoading size={100} duration={d} />
+          <CSFLoading size={100} duration={d} frameDuration={frameDuration} />
           <span style={{ fontFamily: "monospace", fontSize: 11, color: "#6B7280" }}>{l} ({d}s)</span>
         </Box>
       ))}
     </Box>
-  )
+  ),
 }
 
 export const ComoOverlay: Story = {
-  args: {
-    duration: 1.4,
-    frameDuration: 190
-  },
-
-  name:   "Modo overlay — pantalla completa",
-
-  render: () => {
+  name: "Modo overlay — pantalla completa",
+  args: { duration: 1.4, frameDuration: 160, size: 140, message: "Cargando, por favor espera..." },
+  render: ({ duration, frameDuration, size, message }) => {
     const [open, setOpen] = useState(false)
+    // El intro dura 14 frames × frameDuration ms. El spinner gira 3s adicionales.
+    const totalMs = 14 * (frameDuration ?? 100) + 3000
     return (
       <Box sx={{ p: 3 }}>
-        <Button variant="contained" onClick={() => { setOpen(true); setTimeout(() => setOpen(false), 3000) }}>
-          Activar overlay (3s)
+        <Button variant="contained" onClick={() => { setOpen(true); setTimeout(() => setOpen(false), totalMs) }}>
+          Activar overlay (intro + 3s giro)
         </Button>
-        <CSFLoading
-          overlay
-          open={open}
-          size={140}
-          message="Cargando, por favor espera..."
-        />
+        <CSFLoading overlay open={open} size={size} duration={duration} frameDuration={frameDuration} message={message} />
       </Box>
     )
-  }
+  },
 }
 
 export const OverlaySinMensaje: Story = {
-  name:   "Modo overlay — sin mensaje",
-  render: () => {
+  name: "Modo overlay — sin mensaje",
+  args: { frameDuration: 100 },
+  render: ({ frameDuration }) => {
     const [open, setOpen] = useState(false)
+    const totalMs = 14 * (frameDuration ?? 100) + 3000
     return (
       <Box sx={{ p: 3 }}>
-        <Button variant="contained" onClick={() => { setOpen(true); setTimeout(() => setOpen(false), 2000) }}>
-          Activar overlay (2s)
+        <Button variant="contained" onClick={() => { setOpen(true); setTimeout(() => setOpen(false), totalMs) }}>
+          Activar overlay (intro + 3s giro)
         </Button>
-        <CSFLoading overlay open={open} size={120} />
+        <CSFLoading overlay open={open} size={120} frameDuration={frameDuration} />
       </Box>
     )
   },
+}
+
+// Story que muestra directamente el loop de giro (sin intro) para verificar
+// que la animación es indefinida. En producción el spinner llega aquí solo
+// después de completar el intro.
+export const GirandoLoop: Story = {
+  name: "Loop — giro indefinido (sin intro)",
+  args: { size: 160, duration: 1.5 },
+  render: ({ size = 160, duration = 1.5 }) => (
+    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, p: 3 }}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={size}
+        height={size}
+        viewBox="0 0 150 150"
+        fill="none"
+      >
+        <g>
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from="0 75 75"
+            to="360 75 75"
+            dur={`${duration}s`}
+            repeatCount="indefinite"
+          />
+          <circle cx="75" cy="75" r="69" fill="#89C93D" />
+          <path d={BLUE_PATH}  fill="#003D96" />
+          <path d={WHITE_PATH} fill="#FFFFFF" />
+        </g>
+      </svg>
+      <span style={{ fontFamily: "monospace", fontSize: 11, color: "#6B7280" }}>
+        giro indefinido — {duration}s/vuelta
+      </span>
+    </Box>
+  ),
 }
 
 export const Playground: Story = {
   name:   "Playground — controles interactivos",
   args: {
-    open:     true,
-    size:     160,
-    duration: 1.5,
-    message:  "Cargando...",
-    overlay:  false,
-    opacity:  0.45,
+    open:          true,
+    size:          160,
+    duration:      1.5,
+    frameDuration: 100,
+    message:       "Cargando...",
+    overlay:       false,
+    opacity:       0.45,
   },
 }

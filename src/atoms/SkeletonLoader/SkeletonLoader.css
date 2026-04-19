@@ -1,0 +1,54 @@
+/**
+ * SkeletonLoader.css
+ * Animación shimmer usando los tokens HCE:
+ *   base: hceColors.primary.blue[50]  = #e6ecf6
+ *   highlight: hceColors.neutro.white[50] = #ffffff
+ */
+
+@keyframes hce-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.hce-skeleton {
+  display:       block;
+  border-radius: 4px;
+  overflow:      hidden;
+  flex-shrink:   0;
+}
+
+.hce-skeleton--shimmer {
+  background-color:   #e6ecf6;       /* hceColors.primary.blue[50] */
+  background-image:   linear-gradient(
+    90deg,
+    #e6ecf6 0px,
+    #ffffff 40%,
+    #e6ecf6 80%
+  );
+  background-size:    800px 100%;
+  background-repeat:  no-repeat;
+  animation:          hce-shimmer 1.4s ease-in-out infinite;
+}
+
+/* ── Variantes ──────────────────────────────────────────── */
+
+.hce-skeleton--rect {
+  border-radius: 4px;
+}
+
+.hce-skeleton--circle {
+  border-radius: 50%;
+}
+
+/* ── Bloque de texto: apila líneas con gap ──────────────── */
+
+.hce-skeleton--text-block {
+  display:        flex;
+  flex-direction: column;
+  gap:            6px;
+  width:          100%;
+}
+
+.hce-skeleton__line {
+  border-radius: 4px;
+}

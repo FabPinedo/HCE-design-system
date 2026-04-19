@@ -10,8 +10,7 @@ import MenuIcon                   from "@mui/icons-material/Menu"
 import CheckCircleOutlineIcon     from "@mui/icons-material/CheckCircleOutline"
 import InfoOutlinedIcon           from "@mui/icons-material/InfoOutlined"
 import WarningAmberOutlinedIcon   from "@mui/icons-material/WarningAmberOutlined"
-import { baseColors }             from "../../tokens/base.tokens"
-import { hceTypography }          from "../../tokens/hce.tokens"
+import { hceColors, hceTypography, hceTransition, hceShadows } from "../../tokens/hce.tokens"
 
 // ─── Tipos de notificación ────────────────────────────────
 type NotifType = "success" | "info" | "warning"
@@ -26,9 +25,9 @@ interface Notification {
 }
 
 const NOTIF_ICON = {
-  success: <CheckCircleOutlineIcon sx={{ fontSize: 18, color: "#22c55e" }} />,
-  info:    <InfoOutlinedIcon       sx={{ fontSize: 18, color: "#3b82f6" }} />,
-  warning: <WarningAmberOutlinedIcon sx={{ fontSize: 18, color: "#f59e0b" }} />,
+  success: <CheckCircleOutlineIcon sx={{ fontSize: 18, color: hceColors.alert.success[500] }} />,
+  info:    <InfoOutlinedIcon       sx={{ fontSize: 18, color: hceColors.alert.info[500]    }} />,
+  warning: <WarningAmberOutlinedIcon sx={{ fontSize: 18, color: hceColors.alert.warning[500] }} />,
 }
 
 const INITIAL_NOTIFICATIONS: Notification[] = [
@@ -96,7 +95,7 @@ export function Header({
       component="header"
       sx={{
         height:          64,
-        backgroundColor: baseColors.primary,
+        backgroundColor: hceColors.primary.blue[600],
         display:         "flex",
         alignItems:      "center",
         px:              3,
@@ -110,13 +109,24 @@ export function Header({
         {onToggleSidebar && (
           <IconButton
             onClick={onToggleSidebar}
-            sx={{ color: "white", p: 0.5, display: { xs: "flex", md: "none" } }}
+            sx={{
+              color:      hceColors.neutro.white[50],
+              p:          0.5,
+              display:    { xs: "flex", md: "none" },
+              transition: `background-color ${hceTransition.fast}`,
+              "&:hover":  { backgroundColor: "rgba(255,255,255,0.15)" },
+            }}
           >
             <MenuIcon fontSize="small" />
           </IconButton>
         )}
         {date && (
-          <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "rgba(255,255,255,0.85)", fontSize: "0.78rem", display: { xs: "none", md: "block" } }}>
+          <Typography sx={{
+            fontFamily: hceTypography.fontFamily,
+            color:      "rgba(255,255,255,0.85)",
+            fontSize:   "0.78rem",
+            display:    { xs: "none", md: "block" },
+          }}>
             {date}
           </Typography>
         )}
@@ -149,19 +159,30 @@ export function Header({
           width:           38,
           height:          38,
           borderRadius:    "8px",
-          backgroundColor: "white",
+          backgroundColor: hceColors.neutro.white[50],
           display:         "flex",
           alignItems:      "center",
           justifyContent:  "center",
           flexShrink:      0,
         }}>
-          <LocalHospitalOutlinedIcon sx={{ color: baseColors.primary, fontSize: 24 }} />
+          <LocalHospitalOutlinedIcon sx={{ color: hceColors.primary.blue[600], fontSize: 24 }} />
         </Box>
         <Box>
-          <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "rgba(255,255,255,0.8)", fontSize: "0.65rem", lineHeight: 1 }}>
+          <Typography sx={{
+            fontFamily: hceTypography.fontFamily,
+            color:      "rgba(255,255,255,0.8)",
+            fontSize:   "0.65rem",
+            lineHeight: 1,
+          }}>
             Clínica
           </Typography>
-          <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "white", fontWeight: 700, fontSize: "0.9rem", lineHeight: 1.2 }}>
+          <Typography sx={{
+            fontFamily: hceTypography.fontFamily,
+            color:      hceColors.neutro.white[50],
+            fontWeight: 700,
+            fontSize:   "0.9rem",
+            lineHeight: 1.2,
+          }}>
             XXXXXXX
           </Typography>
         </Box>
@@ -174,7 +195,12 @@ export function Header({
         <IconButton
           onClick={handleNotifOpen}
           size="small"
-          sx={{ p: 0.5, color: "white" }}
+          sx={{
+            p:          0.5,
+            color:      hceColors.neutro.white[50],
+            transition: `background-color ${hceTransition.fast}`,
+            "&:hover":  { backgroundColor: "rgba(255,255,255,0.15)" },
+          }}
         >
           <Badge
             badgeContent={unread}
@@ -194,29 +220,35 @@ export function Header({
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           PaperProps={{
             sx: {
-              mt:        1,
-              width:     320,
-              maxWidth:  "calc(100vw - 16px)",
-              boxShadow: "0 4px 24px rgba(0,0,0,0.14)",
+              mt:           1,
+              width:        320,
+              maxWidth:     "calc(100vw - 16px)",
+              boxShadow:    hceShadows.float,
               borderRadius: "10px",
-              overflow:  "hidden",
+              overflow:     "hidden",
             },
           }}
         >
           {/* Header del panel */}
           <Box sx={{
-            px: 2, py: 1.5,
-            backgroundColor: baseColors.primary,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            px:              2,
+            py:              1.5,
+            backgroundColor: hceColors.primary.blue[600],
+            display:         "flex",
+            alignItems:      "center",
+            justifyContent:  "space-between",
           }}>
-            <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "white", fontWeight: 700, fontSize: "0.85rem" }}>
+            <Typography sx={{
+              fontFamily: hceTypography.fontFamily,
+              color:      hceColors.neutro.white[50],
+              fontWeight: 700,
+              fontSize:   "0.85rem",
+            }}>
               Notificaciones
             </Typography>
             <Typography sx={{
               fontFamily:      hceTypography.fontFamily,
-              color:           "white",
+              color:           hceColors.neutro.white[50],
               fontSize:        "0.7rem",
               backgroundColor: "rgba(255,255,255,0.2)",
               px:              1,
@@ -236,21 +268,40 @@ export function Header({
                 px:              2,
                 py:              1.5,
                 alignItems:      "flex-start",
-                backgroundColor: "white",
-                "&:hover":       { backgroundColor: "#f8fafc" },
+                backgroundColor: hceColors.neutro.white[50],
+                transition:      `background-color ${hceTransition.fast}`,
+                "&:hover":       { backgroundColor: hceColors.primary.blue[50] },
                 cursor:          "default",
               }}>
                 <Box sx={{ mt: "2px", flexShrink: 0 }}>
                   {NOTIF_ICON[n.type]}
                 </Box>
                 <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography sx={{ fontFamily: hceTypography.fontFamily, fontSize: "0.8rem", fontWeight: 700, color: baseColors.textPrimary, lineHeight: 1.3 }}>
+                  <Typography sx={{
+                    fontFamily: hceTypography.fontFamily,
+                    fontSize:   "0.8rem",
+                    fontWeight: 700,
+                    color:      hceColors.neutro.black[400],
+                    lineHeight: 1.3,
+                  }}>
                     {n.title}
                   </Typography>
-                  <Typography sx={{ fontFamily: hceTypography.fontFamily, fontSize: "0.75rem", color: baseColors.textSecondary, mt: "2px", lineHeight: 1.4 }}>
+                  <Typography sx={{
+                    fontFamily: hceTypography.fontFamily,
+                    fontSize:   "0.75rem",
+                    color:      hceColors.neutro.black[200],
+                    mt:         "2px",
+                    lineHeight: 1.4,
+                  }}>
                     {n.message}
                   </Typography>
-                  <Typography sx={{ fontFamily: hceTypography.fontFamily, fontSize: "0.68rem", color: baseColors.textSecondary, mt: "4px", opacity: 0.7 }}>
+                  <Typography sx={{
+                    fontFamily: hceTypography.fontFamily,
+                    fontSize:   "0.68rem",
+                    color:      hceColors.neutro.black[200],
+                    mt:         "4px",
+                    opacity:    0.7,
+                  }}>
                     {n.time}
                   </Typography>
                 </Box>
@@ -263,18 +314,19 @@ export function Header({
           <Box sx={{
             px:              2,
             py:              1,
-            borderTop:       `1px solid ${baseColors.border}`,
-            backgroundColor: "#f8fafc",
+            borderTop:       `1px solid ${hceColors.primary.blue[100]}`,
+            backgroundColor: hceColors.primary.blue[50],
           }}>
             <Typography
               onClick={handleNotifClose}
               sx={{
                 fontFamily: hceTypography.fontFamily,
                 fontSize:   "0.75rem",
-                color:      baseColors.primary,
+                color:      hceColors.primary.blue[600],
                 textAlign:  "center",
                 cursor:     "pointer",
                 fontWeight: 600,
+                transition: `opacity ${hceTransition.fast}`,
                 "&:hover":  { opacity: 0.8 },
               }}
             >
@@ -286,7 +338,14 @@ export function Header({
         {/* Avatar + nombre */}
         <Box
           onClick={handleUserOpen}
-          sx={{ display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }}
+          sx={{
+            display:    "flex",
+            alignItems: "center",
+            gap:        1,
+            cursor:     "pointer",
+            transition: `opacity ${hceTransition.fast}`,
+            "&:hover":  { opacity: 0.85 },
+          }}
         >
           <Avatar sx={{
             width:           36,
@@ -294,16 +353,27 @@ export function Header({
             backgroundColor: "rgba(255,255,255,0.25)",
             fontSize:        "0.8rem",
             fontWeight:      700,
-            color:           "white",
+            color:           hceColors.neutro.white[50],
           }}>
             {initials}
           </Avatar>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "white", fontWeight: 700, fontSize: "0.85rem", lineHeight: 1.2 }}>
+            <Typography sx={{
+              fontFamily: hceTypography.fontFamily,
+              color:      hceColors.neutro.white[50],
+              fontWeight: 700,
+              fontSize:   "0.85rem",
+              lineHeight: 1.2,
+            }}>
               {userName}
             </Typography>
             {userRole && (
-              <Typography sx={{ fontFamily: hceTypography.fontFamily, color: "rgba(255,255,255,0.75)", fontSize: "0.72rem", lineHeight: 1.2 }}>
+              <Typography sx={{
+                fontFamily: hceTypography.fontFamily,
+                color:      "rgba(255,255,255,0.75)",
+                fontSize:   "0.72rem",
+                lineHeight: 1.2,
+              }}>
                 {userRole}
               </Typography>
             )}
@@ -318,12 +388,18 @@ export function Header({
           onClose={handleUserClose}
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-          PaperProps={{ sx: { mt: 1, minWidth: 190, boxShadow: "0 4px 20px rgba(0,0,0,0.12)" } }}
+          PaperProps={{
+            sx: {
+              mt:        1,
+              minWidth:  190,
+              boxShadow: hceShadows.card,
+            },
+          }}
         >
           <MenuItem onClick={handleUserClose}>Perfil</MenuItem>
           <MenuItem onClick={handleUserClose}>Cambiar contraseña</MenuItem>
           <Divider />
-          <MenuItem onClick={handleLogout} sx={{ color: "error.main" }}>
+          <MenuItem onClick={handleLogout} sx={{ color: hceColors.alert.error[500] }}>
             Cerrar sesión
           </MenuItem>
         </Menu>

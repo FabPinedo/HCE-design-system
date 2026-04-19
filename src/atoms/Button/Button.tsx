@@ -1,5 +1,6 @@
 import { type ReactNode } from "react"
 import MuiButton          from "@mui/material/Button"
+import { hceTransition }  from "../../tokens/hce.tokens"
 
 /**
  * Button — átomo del design system HCE
@@ -62,26 +63,47 @@ function buildColorSx(color: string, muiVariant: "contained" | "outlined" | "tex
       return {
         borderColor: color,
         color,
+        transition: `border-color ${hceTransition.fast}, background-color ${hceTransition.fast}, transform ${hceTransition.fast}`,
         "&:hover": {
           borderColor:     color,
           backgroundColor: `${color}18`,  // ~10 % opacidad
+          transform:       "translateY(-1px)",
+          boxShadow:       `0 4px 12px ${color}30`,
         },
-        "&:active": { backgroundColor: `${color}28` },
+        "&:active": {
+          backgroundColor: `${color}28`,
+          transform:       "scale(0.97)",
+          boxShadow:       "none",
+        },
       }
     case "text":
       return {
         color,
-        "&:hover": { backgroundColor: `${color}18` },
-        "&:active": { backgroundColor: `${color}28` },
+        transition: `background-color ${hceTransition.fast}, transform ${hceTransition.fast}`,
+        "&:hover": {
+          backgroundColor: `${color}18`,
+          transform:       "translateY(-1px)",
+        },
+        "&:active": {
+          backgroundColor: `${color}28`,
+          transform:       "scale(0.97)",
+        },
       }
     default: // contained
       return {
         backgroundColor: color,
+        transition: `filter ${hceTransition.fast}, transform ${hceTransition.fast}, box-shadow ${hceTransition.fast}`,
         "&:hover": {
           backgroundColor: color,
           filter:          "brightness(0.88)",
+          transform:       "translateY(-1px)",
+          boxShadow:       `0 4px 12px ${color}40`,
         },
-        "&:active": { filter: "brightness(0.78)" },
+        "&:active": {
+          filter:    "brightness(0.78)",
+          transform: "scale(0.97)",
+          boxShadow: "none",
+        },
       }
   }
 }
@@ -131,6 +153,13 @@ export const Button = ({
       sx={{
         textTransform: "none",
         fontWeight:    600,
+        transition:    `transform ${hceTransition.fast}, box-shadow ${hceTransition.fast}, filter ${hceTransition.fast}`,
+        "&:hover": {
+          transform: "translateY(-1px)",
+        },
+        "&:active": {
+          transform: "scale(0.97)",
+        },
         ...colorSx,
         ...sx,          // overrides del caller (mayor prioridad)
       }}

@@ -153,6 +153,39 @@ export const FullWidth: Story = {
   decorators: [(Story) => <div style={{ width: 320 }}><Story /></div>],
 }
 
+// ── AllVariants ───────────────────────────────────────────
+
+/** Todas las variantes × colores del sistema en una sola vista */
+export const AllVariants: Story = {
+  decorators: [(Story) => (
+    <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+      <Button variant="primary"   label="Primary" />
+      <Button variant="secondary" label="Secondary" />
+      <Button variant="outlined"  label="Outlined" />
+      <Button variant="ghost"     label="Ghost" />
+      <Button variant="danger"    label="Danger" />
+    </div>
+  )],
+  render: () => <></>,
+}
+
+// ── States ────────────────────────────────────────────────
+
+/** Estados del botón primary: normal, disabled */
+export const States: Story = {
+  decorators: [(Story) => (
+    <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+      <Button variant="primary"  label="Normal" />
+      <Button variant="primary"  label="Disabled" disabled />
+      <Button variant="outlined" label="Normal outlined" />
+      <Button variant="outlined" label="Disabled outlined" disabled />
+      <Button variant="danger"   label="Danger" />
+      <Button variant="danger"   label="Danger disabled" disabled />
+    </div>
+  )],
+  render: () => <></>,
+}
+
 // ── Galería completa ──────────────────────────────────────
 
 /** Vista de todas las variantes juntas para comparar */

@@ -7,7 +7,7 @@ import {
 } from "@mui/material"
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined"
 import ExpandMoreIcon            from "@mui/icons-material/ExpandMore"
-import { hceColors, hceTypography } from "../../tokens/hce.tokens"
+import { hceColors, hceTypography, hceUi, hceShadows } from "../../tokens/hce.tokens"
 import { LogoClinicaSanFelipeIcon, LogoutIcon, HceBurgerIcon } from "../../atoms/Icon/SvgIconsHce"
 import {
   CheckedCircleIcon, DangerIcon, HceInfoIcon, WarningIcon,
@@ -43,18 +43,18 @@ const TIPO_CONFIG: Record<HceNotificacion["tipo"], {
     Icon:    HceInfoIcon,
   },
   warning: {
-    color:   "#f59e0b",
-    bgLight: "#fffbeb",
+    color:   hceColors.alert.warning[500],
+    bgLight: hceColors.alert.warning[50],
     Icon:    DangerIcon,
   },
   success: {
-    color:   "#16a34a",
-    bgLight: "#f0fdf4",
+    color:   hceColors.alert.success[500],
+    bgLight: hceColors.alert.success[50],
     Icon:    CheckedCircleIcon,
   },
   error: {
-    color:   "#dc2626",
-    bgLight: "#fef2f2",
+    color:   hceColors.alert.error[500],
+    bgLight: hceColors.alert.error[50],
     Icon:    WarningIcon,
   },
 }
@@ -156,7 +156,7 @@ export function HceHeader({
         zIndex:          10,
         ...(floating && {
           borderRadius: "12px",
-          boxShadow:    "0 4px 20px rgba(0,0,0,0.15)",
+          boxShadow:    hceShadows.float,
         }),
       }}
     >
@@ -271,7 +271,7 @@ export function HceHeader({
               mt:           1.5,
               width:        360,
               borderRadius: "16px",
-              boxShadow:    "0 8px 32px rgba(0,0,0,0.14)",
+              boxShadow:    hceShadows.modal,
               overflow:     "hidden",
               border:       `1px solid ${hceColors.primary.blue[100]}`,
             },
@@ -315,7 +315,7 @@ export function HceHeader({
                 <Typography sx={{
                   fontFamily: hceTypography.fontFamily,
                   fontSize:   "0.82rem",
-                  color:      "#999",
+                  color:      hceColors.neutro.white[900],
                 }}>
                   Sin notificaciones
                 </Typography>
@@ -331,8 +331,8 @@ export function HceHeader({
                       px:              2,
                       py:              1.5,
                       alignItems:      "flex-start",
-                      backgroundColor: "white",
-                      "&:hover":       { backgroundColor: "#f8fafc" },
+                      backgroundColor: hceUi.surface,
+                      "&:hover":       { backgroundColor: hceUi.background },
                       cursor:          "default",
                     }}>
                       {/* Ícono del tipo */}
@@ -346,7 +346,7 @@ export function HceHeader({
                           fontFamily: hceTypography.fontFamily,
                           fontSize:   "0.8rem",
                           fontWeight: 700,
-                          color:      "#1a1a1a",
+                          color:      hceColors.neutro.black[400],
                           lineHeight: 1.3,
                         }}>
                           {n.titulo}
@@ -354,7 +354,7 @@ export function HceHeader({
                         <Typography sx={{
                           fontFamily: hceTypography.fontFamily,
                           fontSize:   "0.75rem",
-                          color:      "#555",
+                          color:      hceUi.textSecondary,
                           mt:         "2px",
                           lineHeight: 1.4,
                         }}>
@@ -364,7 +364,7 @@ export function HceHeader({
                           <Typography sx={{
                             fontFamily: hceTypography.fontFamily,
                             fontSize:   "0.68rem",
-                            color:      "#999",
+                            color:      hceUi.textSubtle,
                             mt:         "4px",
                             opacity:    0.8,
                           }}>
@@ -385,7 +385,7 @@ export function HceHeader({
             px:              2,
             py:              1,
             borderTop:       `1px solid ${hceColors.primary.blue[100]}`,
-            backgroundColor: "#f8fafc",
+            backgroundColor: hceUi.background,
           }}>
             <Typography
               onClick={() => { handleNotifClose(); onVerTodas?.() }}
@@ -469,7 +469,7 @@ export function HceHeader({
           PaperProps={{ sx: {
             mt:           1,
             minWidth:     180,
-            boxShadow:    "0 4px 20px rgba(0,0,0,0.12)",
+            boxShadow:    hceShadows.float,
             borderRadius: "10px",
           }}}
         >
@@ -477,7 +477,7 @@ export function HceHeader({
             onClick={handleLogout}
             sx={{ display: "flex", alignItems: "center", gap: 1.5, py: 1.25 }}
           >
-            <LogoutIcon color="#b3261e" size={14} />
+            <LogoutIcon color={hceColors.alert.error[500]} size={14} />
             <Typography sx={{
               fontFamily: hceTypography.fontFamily,
               fontSize:   "0.85rem",

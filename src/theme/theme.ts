@@ -3,14 +3,17 @@
  * File: theme/theme.ts
  * Description:
  * Tema MUI base del Design System HCE.
- * Consume baseTokens — no define valores crudos aquí.
- * Todos los colores, tamaños y tipografía vienen de
- * tokens/base.tokens.ts.
+ * Consume hceColors y hceUi — paleta oficial Figma.
+ * Todos los colores vienen de tokens/hce.tokens.ts.
  * ---------------------------------------------------------
  */
 import { createTheme }  from "@mui/material/styles"
 import {
-  baseColors,
+  hceColors,
+  hceUi,
+  hceTypography,
+} from "../tokens/hce.tokens"
+import {
   baseTypography,
   baseBorderRadius,
 } from "../tokens/base.tokens"
@@ -18,25 +21,25 @@ import {
 export const theme = createTheme({
   palette: {
     primary: {
-      main:  baseColors.primary,
-      dark:  baseColors.primaryDark,
-      light: baseColors.primaryLight,
+      main:  hceColors.primary.blue[500],
+      dark:  hceColors.primary.blue[700],
+      light: hceColors.primary.blue[50],
     },
     secondary: {
-      main:         baseColors.secondary,
-      light:        baseColors.secondaryLight,
-      dark:         baseColors.secondaryDark,
-      contrastText: baseColors.surface,
+      main:         hceColors.primary.green[500],
+      light:        hceColors.primary.green[300],
+      dark:         hceColors.primary.green[700],
+      contrastText: hceUi.surface,
     },
     background: {
-      default: baseColors.background,
-      paper:   baseColors.surface,
+      default: hceUi.background,
+      paper:   hceUi.surface,
     },
     text: {
-      primary:   baseColors.textPrimary,
-      secondary: baseColors.textSecondary,
+      primary:   hceUi.textPrimary,
+      secondary: hceUi.textSecondary,
     },
-    divider: baseColors.border,
+    divider: hceColors.neutro.black[50],
   },
 
   shape: {
@@ -44,7 +47,7 @@ export const theme = createTheme({
   },
 
   typography: {
-    fontFamily: baseTypography.fontFamily,
+    fontFamily: hceTypography.fontFamily,
     fontSize:   baseTypography.fontSize,
     h1: {
       fontSize:      baseTypography.size.h1,
@@ -74,7 +77,7 @@ export const theme = createTheme({
     MuiTable: {
       styleOverrides: {
         root: {
-          backgroundColor: baseColors.surface,
+          backgroundColor: hceUi.surface,
           borderRadius:    baseBorderRadius.xl,
           overflow:        'hidden',
           boxShadow:       '0px 2px 12px rgba(0,0,0,0.05)',
@@ -84,14 +87,14 @@ export const theme = createTheme({
     MuiTableHead: {
       styleOverrides: {
         root: {
-          backgroundColor: baseColors.surfaceLight,
+          backgroundColor: hceUi.background,
           '& .MuiTableCell-root': {
-            color:         baseColors.textSecondary,
+            color:         hceUi.textSecondary,
             fontWeight:    baseTypography.weight.bold,
             textTransform: 'uppercase',
             fontSize:      baseTypography.size.xs,
             letterSpacing: baseTypography.letterSpacing.wide,
-            borderBottom:  `2px solid ${baseColors.border}`,
+            borderBottom:  `2px solid ${hceColors.neutro.black[50]}`,
           },
         },
       },
@@ -100,8 +103,8 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           padding:     '16px',
-          borderColor: baseColors.border,
-          color:       baseColors.textPrimary,
+          borderColor: hceColors.neutro.black[50],
+          color:       hceUi.textPrimary,
           fontSize:    baseTypography.size.sm,
         },
       },
@@ -110,7 +113,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&:hover': {
-            backgroundColor: baseColors.surfaceLight,
+            backgroundColor: hceUi.background,
             transition:      'background-color 0.2s ease',
           },
           '&:last-child td': {
@@ -131,18 +134,18 @@ export const theme = createTheme({
         root: {
           borderRadius: baseBorderRadius.lg,
           fontWeight:   baseTypography.weight.medium,
-          color:        baseColors.textSecondary,
+          color:        hceUi.textSecondary,
           '&.Mui-selected': {
-            backgroundColor: baseColors.primary,
-            color:           baseColors.surface,
-            '&:hover': { backgroundColor: baseColors.primaryDark },
+            backgroundColor: hceColors.primary.blue[500],
+            color:           hceUi.surface,
+            '&:hover': { backgroundColor: hceColors.primary.blue[700] },
           },
-          '&:hover': { backgroundColor: baseColors.surfaceLight },
+          '&:hover': { backgroundColor: hceUi.background },
         },
         previousNext: {
-          backgroundColor: baseColors.surface,
-          border:          `1px solid ${baseColors.border}`,
-          '&:hover':       { backgroundColor: baseColors.background },
+          backgroundColor: hceUi.surface,
+          border:          `1px solid ${hceColors.neutro.black[50]}`,
+          '&:hover':       { backgroundColor: hceUi.background },
         },
       },
     },
