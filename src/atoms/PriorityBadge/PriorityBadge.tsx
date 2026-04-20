@@ -28,10 +28,10 @@ interface PriorityConfig {
 }
 
 const PRIORITY_CONFIG: Record<string, PriorityConfig> = {
-  "1":    { color: emergencyTokens.colors.priority1,    label: "1", description: "Prioridad 1 — Crítico" },
-  "2":    { color: emergencyTokens.colors.priority2,    label: "2", description: "Prioridad 2 — Urgente" },
-  "3":    { color: emergencyTokens.colors.priority3,    label: "3", description: "Prioridad 3 — Moderado" },
-  "4":    { color: emergencyTokens.colors.priority4,    label: "4", description: "Prioridad 4 — Leve" },
+  "1":    { color: emergencyTokens.colors.priority1,    label: "I", description: "Prioridad 1 — Crítico" },
+  "2":    { color: emergencyTokens.colors.priority2,    label: "II", description: "Prioridad 2 — Urgente" },
+  "3":    { color: emergencyTokens.colors.priority3,    label: "III", description: "Prioridad 3 — Moderado" },
+  "4":    { color: emergencyTokens.colors.priority4,    label: "IV", description: "Prioridad 4 — Leve" },
   "none": { color: emergencyTokens.colors.priorityNone, label: "",  description: "Sin prioridad asignada" },
 }
 

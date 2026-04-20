@@ -13,7 +13,7 @@ const BASE: PatientRowData = {
   patient:       { name: "Juan Pérez García" },
   age:           45,
   sex:           "M",
-  document:      "12.345.678",
+  document:      "12345678",
   doctor:        "Dr. Rodríguez",
   lab:           "ok",
   img:           "alert",

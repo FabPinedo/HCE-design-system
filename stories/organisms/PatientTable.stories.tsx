@@ -24,31 +24,31 @@ const HEADER = [
 const ROWS: PatientRowData[] = [
   {
     id: "E001", priority: 1, box: { status: "urgent", label: "Box 1" },
-    patient: { name: "Carlos Mendoza" }, age: 67, sex: "M", document: "8.765.432",
+    patient: { name: "Carlos Mendoza" }, age: 67, sex: "M", document: "80765432",
     doctor: "Dr. Torres", lab: "urgent", img: "alert", indication: "ok",
     interconsult: "empty", attentionCode: "E097001",
   },
   {
     id: "E002", priority: 2, box: { status: "active", label: "Box 3" },
-    patient: { name: "María García López" }, age: 34, sex: "F", document: "15.234.567",
+    patient: { name: "María García López" }, age: 34, sex: "F", document: "15234567",
     doctor: "Dra. Ramírez", lab: "ok", img: "empty", indication: "alert",
     interconsult: "empty", attentionCode: "E097002",
   },
   {
     id: "E003", priority: 3, box: { status: "active", label: "Box 5" },
-    patient: { name: "Juan Pérez" }, age: 45, sex: "M", document: "12.345.678",
+    patient: { name: "Juan Pérez" }, age: 45, sex: "M", document: "12345678",
     doctor: "Dr. Rodríguez", lab: "alert", img: "ok", indication: "empty",
     interconsult: "ok", attentionCode: "E097003",
   },
   {
     id: "E004", priority: 4, box: { status: "waiting", label: "Espera" },
-    patient: { name: "Ana Martínez" }, age: 28, sex: "F", document: "20.111.222",
+    patient: { name: "Ana Martínez" }, age: 28, sex: "F", document: "20111222",
     doctor: "Dr. Silva", lab: "empty", img: "empty", indication: "empty",
     interconsult: "empty", attentionCode: "E097004",
   },
   {
     id: "E005", priority: "none", box: { status: "tp", label: "TP" },
-    patient: { name: "Luis Hernández" }, age: 52, sex: "M", document: "7.654.321",
+    patient: { name: "Luis Hernández" }, age: 52, sex: "M", document: "79654321",
     doctor: "Dra. Castro", lab: "ok", img: "ok", indication: "ok",
     interconsult: "empty", attentionCode: "E097005",
   },
