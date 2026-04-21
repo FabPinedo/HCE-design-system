@@ -136,6 +136,8 @@ export type { CSFLoadingProps } from "./molecules/CSFLoading/CSFLoading"
 
 // ── Molecules ─────────────────────────────────────────────
 export { ActionBar }           from "./molecules/ActionBar/ActionBar"
+export { MonitoActionBar }     from "./molecules/MonitoActionBar/MonitoActionBar"
+export type { MonitoActionBarProps, MonitoPlacement } from "./molecules/MonitoActionBar/MonitoActionBar"
 export { ActionIconButton }    from "./molecules/ActionIconButton/ActionIconButton"
 export { BedsAvailabilityTab } from "./molecules/BedsAvailabilityTab/BedsAvailabilityTab"
 export { ClinicalStatusIcon }  from "./molecules/ClinicalStatusIcon/ClinicalStatusIcon"
@@ -152,6 +154,18 @@ export { PageHeader }          from "./molecules/PageHeader/PageHeader"
 export { DataTable as DataTableSimple } from "./molecules/DataTable/DataTable"
 export { PatientTable }        from "./molecules/PatientTable/PatientTable"
 
+// ── EvaScale (escala visual de dolor 0-10) ────────────────
+export { EvaScale } from "./molecules/EvaScale/EvaScale"
+export type { EvaScaleProps } from "./molecules/EvaScale/EvaScale"
+
+// ── TriagePriorityDisplay (badges de prioridad I-IV) ──────
+export { TriagePriorityDisplay } from "./molecules/TriagePriorityDisplay/TriagePriorityDisplay"
+export type { TriagePriorityDisplayProps, TriagePriority } from "./molecules/TriagePriorityDisplay/TriagePriorityDisplay"
+
+// ── SearchComboInput (buscador con toggle nombre/CIE-10) ──
+export { SearchComboInput } from "./molecules/SearchComboInput/SearchComboInput"
+export type { SearchComboInputProps, SearchMode, SearchOption } from "./molecules/SearchComboInput/SearchComboInput"
+
 // ── Types — Molecules ──────────────────────────────────────
 export type { ClinicalIconStatus } from "./molecules/ClinicalStatusIcon/ClinicalStatusIcon"
 export type { PatientRowData }     from "./molecules/PatientRow/PatientRow"
@@ -160,6 +174,10 @@ export type { ExtraAction }        from "./molecules/ActionBar/ActionBar"
 // ── Modal ─────────────────────────────────────────────────
 export { HceModal } from "./organisms/HceModal/HceModal"
 export type { HceModalProps, ModalButtonConfig, ModalInputConfig } from "./organisms/HceModal/HceModal"
+
+// ── Form Modal ────────────────────────────────────────────
+export { HceFormModal } from "./organisms/HceFormModal/HceFormModal"
+export type { HceFormModalProps } from "./organisms/HceFormModal/HceFormModal"
 
 // ── Organisms ─────────────────────────────────────────────
 export { Header }                from "./organisms/Header/Header"

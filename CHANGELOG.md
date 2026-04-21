@@ -7,6 +7,23 @@ Versionado basado en [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.2.0] - 2026-04-20
+
+### Agregado
+
+- **`EvaScale`** (Molécula): escala visual analógica del dolor (0-10). Props: `value`, `onChange`, `readOnly`. 11 círculos interactivos con colores progresivos (azul→verde→naranja→rojo), track verde, labels de intensidad y resumen del valor seleccionado
+- **`TriagePriorityDisplay`** (Molécula): badges de clasificación de triaje I/II/III/IV con colores institucionales. Props: `selected`, `onSelect`, `readOnly`. Funciona como display o como selector interactivo
+- **`SearchComboInput`** (Molécula): input de búsqueda con toggle de modo (Por nombre / CIE-10). Props: `searchMode`, `onSearchModeChange`, `value`, `onChange`, `options`, `onSearch`, `onSelect`, `loading`, `disabled`, `debounceMs`. El padre provee las `options` tras llamar a la API; el componente dispara `onSearch(query, mode)` con debounce configurable. Navegación por teclado (↑↓ Enter Escape) y cierre al click fuera
+
+### Exportaciones nuevas
+```ts
+EvaScale, EvaScaleProps
+TriagePriorityDisplay, TriagePriorityDisplayProps, TriagePriority
+SearchComboInput, SearchComboInputProps, SearchMode, SearchOption
+```
+
+---
+
 ## [1.1.0] - 2026-04-18
 
 ### Agregado

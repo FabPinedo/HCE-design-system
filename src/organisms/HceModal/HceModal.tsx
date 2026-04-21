@@ -5,17 +5,23 @@ import MuiButton           from "@mui/material/Button"
 import Fade                from "@mui/material/Fade"
 import Box                 from "@mui/material/Box"
 import Typography          from "@mui/material/Typography"
-import { Button }          from "../../atoms/Button/Button"
 import { TextInput }       from "../../atoms/TextInput/TextInput"
 import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
 
 // ─── Sub-tipos ────────────────────────────────────────────────────────────────
 
 export interface ModalButtonConfig {
-  label:   string
+  label:    string
   /** Ícono a la izquierda del label */
-  icon?:   ReactNode
-  onClick: () => void
+  icon?:    ReactNode
+  onClick:  () => void
+  disabled?: boolean
+  /**
+   * Color personalizado del botón.
+   * - confirmButton (filled): color de fondo. Default: verde hceColors.primary.green[600]
+   * - cancelButton (outlined): color de borde y texto. Default: azul hceColors.primary.blue[500]
+   */
+  color?:   string
 }
 
 export interface ModalInputConfig {
@@ -46,6 +52,10 @@ export interface HceModalProps {
   // ── Input opcional ─────────────────────────────────
   input?: ModalInputConfig
 
+  // ── Contenido libre (reemplaza o complementa input) ─
+  /** JSX libre en el cuerpo del modal (se renderiza después de description y antes de botones) */
+  children?: ReactNode
+
   // ── Botones (ambos opcionales) ─────────────────────
   /** Botón principal (verde/filled) */
   confirmButton?: ModalButtonConfig
@@ -69,6 +79,7 @@ export function HceModal({
   icon,
   iconBgColor  = hceColors.primary.blue[500],
   input,
+  children,
   confirmButton,
   cancelButton,
   buttonLayout = "row",
@@ -158,13 +169,20 @@ export function HceModal({
 
         {/* ── Input opcional ──────────────────────────────── */}
         {input && (
-          <Box sx={{ mb: hasButtons ? 2.5 : 0, textAlign: "left" }}>
+          <Box sx={{ mb: (children || hasButtons) ? 2.5 : 0, textAlign: "left" }}>
             <TextInput
               label={input.label}
               placeholder={input.placeholder ?? "Text"}
               value={input.value}
               onChange={input.onChange}
             />
+          </Box>
+        )}
+
+        {/* ── Contenido libre ──────────────────────────────── */}
+        {children && (
+          <Box sx={{ mb: hasButtons ? 2.5 : 0, textAlign: "left" }}>
+            {children}
           </Box>
         )}
 
@@ -176,52 +194,72 @@ export function HceModal({
             gap:           1.5,
           }}>
 
-            {/* Confirmar (verde / filled) */}
+            {/* Confirmar (filled — color customizable, default verde) */}
             {confirmButton && (
               <Box sx={{ flex: isRow ? 1 : undefined }}>
-                <Button
-                  onClick={confirmButton.onClick}
-                  color="secondary"
+                <MuiButton
+                  variant="contained"
                   fullWidth
+                  onClick={confirmButton.onClick}
+                  disabled={confirmButton.disabled}
+                  startIcon={confirmButton.icon ?? undefined}
+                  sx={{
+                    backgroundColor: confirmButton.color ?? hceColors.primary.green[600],
+                    color:           "#ffffff",
+                    fontFamily:      hceTypography.fontFamily,
+                    fontWeight:      600,
+                    fontSize:        "0.875rem",
+                    textTransform:   "none",
+                    borderRadius:    "8px",
+                    minHeight:       36,
+                    boxShadow:       "none",
+                    transition:      "background-color 150ms cubic-bezier(0.4,0,0.2,1)",
+                    "&:hover:not(:disabled)": {
+                      backgroundColor: `${confirmButton.color ?? hceColors.primary.green[600]}cc`,
+                      boxShadow:       "none",
+                    },
+                    "&:disabled": {
+                      backgroundColor: hceColors.neutro.black[50],
+                      color:           hceColors.neutro.black[200],
+                    },
+                    "& .MuiButton-startIcon": { margin: 0, mr: confirmButton.icon ? "6px" : 0 },
+                  }}
                 >
-                  {confirmButton.icon && (
-                    <Box component="span" sx={{ mr: 1, display: "inline-flex", alignItems: "center" }}>
-                      {confirmButton.icon}
-                    </Box>
-                  )}
                   {confirmButton.label}
-                </Button>
+                </MuiButton>
               </Box>
             )}
 
-            {/* Cancelar (outlined azul) */}
+            {/* Cancelar (outlined — color customizable, default azul) */}
             {cancelButton && (
               <Box sx={{ flex: isRow ? 1 : undefined }}>
                 <MuiButton
                   variant="outlined"
                   fullWidth
                   onClick={cancelButton.onClick}
+                  disabled={cancelButton.disabled}
+                  startIcon={cancelButton.icon ?? undefined}
                   sx={{
-                    borderColor:   hceColors.primary.blue[500],
-                    color:         hceColors.primary.blue[500],
+                    borderColor:   cancelButton.color ?? hceColors.primary.blue[500],
+                    color:         cancelButton.color ?? hceColors.primary.blue[500],
+                    fontFamily:    hceTypography.fontFamily,
                     fontWeight:    600,
                     fontSize:      "0.875rem",
                     textTransform: "none",
                     borderRadius:  "8px",
-                    height:        "100%",
                     minHeight:     36,
-                    transition:    "border-color 150ms cubic-bezier(0.4, 0, 0.2, 1), background-color 150ms cubic-bezier(0.4, 0, 0.2, 1)",
-                    "&:hover": {
-                      borderColor:     hceColors.primary.blue[700],
-                      backgroundColor: hceColors.primary.blue[50],
+                    transition:    "border-color 150ms cubic-bezier(0.4,0,0.2,1), background-color 150ms cubic-bezier(0.4,0,0.2,1)",
+                    "&:hover:not(:disabled)": {
+                      borderColor:     cancelButton.color ?? hceColors.primary.blue[700],
+                      backgroundColor: `${cancelButton.color ?? hceColors.primary.blue[500]}14`,
                     },
+                    "&:disabled": {
+                      borderColor: hceColors.neutro.black[100],
+                      color:       hceColors.neutro.black[100],
+                    },
+                    "& .MuiButton-startIcon": { margin: 0, mr: cancelButton.icon ? "6px" : 0 },
                   }}
                 >
-                  {cancelButton.icon && (
-                    <Box component="span" sx={{ mr: 1, display: "inline-flex", alignItems: "center" }}>
-                      {cancelButton.icon}
-                    </Box>
-                  )}
                   {cancelButton.label}
                 </MuiButton>
               </Box>
