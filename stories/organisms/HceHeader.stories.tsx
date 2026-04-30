@@ -12,6 +12,9 @@ const SUCURSALES_UNA = [
   { id: "1", nombre: "Sede Central" },
 ]
 
+// URL de foto de ejemplo (placeholder público para Storybook)
+const PHOTO_URL_DEMO = "https://picsum.photos/seed/hce-doctor/34/34"
+
 // ─── Meta ──────────────────────────────────────────────────
 const meta: Meta<typeof HceHeader> = {
   title:     "Organisms/HceHeader",
@@ -21,6 +24,7 @@ const meta: Meta<typeof HceHeader> = {
   argTypes: {
     onLogout:       { action: "logout" },
     onSedeCambiada: { action: "sedeCambiada" },
+    userPhotoUrl:   { control: "text", description: "URL de la foto de perfil. Si falla la carga, muestra las iniciales." },
   },
 }
 export default meta
@@ -89,4 +93,36 @@ export const Flotante: Story = {
       </div>
     ),
   ],
+}
+
+/** Con foto de perfil — la foto reemplaza las iniciales en el avatar */
+export const ConFotoPerfil: Story = {
+  args: {
+    sede:         "2",
+    sucursales:   SUCURSALES_MULTI,
+    userName:     "Dra. VIOLETA DEL CARMEN ESCALANTE TRESIERRA",
+    userRole:     "ANESTESIOLOGIA",
+    userPhotoUrl: PHOTO_URL_DEMO,
+  },
+}
+
+/** Foto rota — fallback automático a iniciales cuando la URL no carga */
+export const FotoRotaFallback: Story = {
+  args: {
+    sede:         "2",
+    sucursales:   SUCURSALES_MULTI,
+    userName:     "Dra. VIOLETA DEL CARMEN ESCALANTE TRESIERRA",
+    userRole:     "ANESTESIOLOGIA",
+    userPhotoUrl: "https://example.invalid/foto-no-existe.png",
+  },
+}
+
+/** Sin foto — muestra solo iniciales (comportamiento original) */
+export const SinFoto: Story = {
+  args: {
+    sede:       "2",
+    sucursales: SUCURSALES_MULTI,
+    userName:   "Dr. CARLOS AUGUSTO RIOS MENDOZA",
+    userRole:   "CARDIOLOGIA",
+  },
 }

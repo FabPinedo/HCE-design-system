@@ -87,6 +87,8 @@ export type HceHeaderProps = {
   onSedeCambiada?:  (sedeId: string | number) => void
   userName?:         string
   userRole?:         string
+  /** URL de la foto de perfil del usuario. Si carga correctamente, reemplaza las iniciales. */
+  userPhotoUrl?:     string
   onLogout?:         () => void
   /** Notificaciones externas. Si no se pasan, usa las de ejemplo. */
   notifications?:    HceNotificacion[]
@@ -106,6 +108,7 @@ export function HceHeader({
   onSedeCambiada,
   userName        = "Usuario",
   userRole        = "",
+  userPhotoUrl,
   onLogout,
   notifications,
   onVerTodas,
@@ -416,15 +419,18 @@ export function HceHeader({
             flexShrink: 1,
           }}
         >
-          <Avatar sx={{
-            width:           34,
-            height:          34,
-            backgroundColor: "rgba(255,255,255,0.25)",
-            fontSize:        "0.75rem",
-            fontWeight:      700,
-            color:           "white",
-            flexShrink:      0,
-          }}>
+          <Avatar
+            src={userPhotoUrl}
+            sx={{
+              width:           34,
+              height:          34,
+              backgroundColor: "rgba(255,255,255,0.25)",
+              fontSize:        "0.75rem",
+              fontWeight:      700,
+              color:           "white",
+              flexShrink:      0,
+            }}
+          >
             {initials}
           </Avatar>
 
