@@ -40,7 +40,19 @@ AUTH=$(echo -n "$PUB_USER:$PUB_PASS" | base64 | tr -d '\n')
   echo "//${REGISTRY_HOST}/:always-auth=true"
   echo "//${REGISTRY_HOST}/:email=${PUB_EMAIL}"
 } >> /root/.npmrc
-echo "    Auth configured."
+
+if ! npm whoami --registry "$REGISTRY" >/tmp/whoami.log 2>&1; then
+  echo "    ERROR: Authentication with Verdaccio failed:"
+  cat /tmp/whoami.log
+  echo "    The '$PUB_USER' account in Verdaccio's storage volume doesn't match"
+  echo "    the credentials this script uses. This usually means a stale/partial"
+  echo "    Verdaccio volume from an earlier failed run. Fix with:"
+  echo "      docker compose down"
+  echo "      docker volume rm \$(docker volume ls -q | grep verdaccio-storage)"
+  echo "      docker compose --profile publish run --build publisher"
+  exit 1
+fi
+echo "    Auth configured (logged in as $(npm whoami --registry "$REGISTRY"))."
 
 # ── 4. Build de la librería ─────────────────────────────────────────────────
 echo ">>> Building @hce/design-system ..."
