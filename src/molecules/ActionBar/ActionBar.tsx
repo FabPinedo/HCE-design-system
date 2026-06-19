@@ -12,7 +12,7 @@ import PersonOutlineIcon    from "@mui/icons-material/PersonOutline"
 import PrintOutlinedIcon    from "@mui/icons-material/PrintOutlined"
 import RefreshOutlinedIcon  from "@mui/icons-material/RefreshOutlined"
 import { ActionIconButton } from "../ActionIconButton/ActionIconButton"
-import { emergencyTokens }  from "../../tokens/emergency.tokens"
+import { hceClinicalColors, hceSpacing }  from "../../tokens/hce.tokens"
 import type { SvgIconComponent } from "@mui/icons-material"
 
 /** Definición de un botón adicional personalizado */
@@ -35,7 +35,7 @@ interface Props {
 const separatorSx = {
   height:      "20px",
   mx:          "6px",
-  borderColor: emergencyTokens.colors.border,
+  borderColor: hceClinicalColors.border,
 }
 
 /**
@@ -56,9 +56,9 @@ export const ActionBar = ({
         display:         "flex",
         alignItems:      "center",
         gap:             "4px",
-        padding:         `${emergencyTokens.spacing[2]} ${emergencyTokens.spacing[4]}`,
-        backgroundColor: emergencyTokens.colors.surfaceBg,
-        borderBottom:    `1px solid ${emergencyTokens.colors.border}`,
+        padding:         `${hceSpacing[2]} ${hceSpacing[4]}`,
+        backgroundColor: hceClinicalColors.surfaceBg,
+        borderBottom:    `1px solid ${hceClinicalColors.border}`,
       }}
       role="toolbar"
       aria-label="Barra de acciones"

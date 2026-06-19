@@ -14,9 +14,8 @@ import { ClinicalStatusIcon } from "../ClinicalStatusIcon/ClinicalStatusIcon"
 import type { ClinicalIconStatus } from "../ClinicalStatusIcon/ClinicalStatusIcon"
 import { AttentionCode }  from "../../atoms/AttentionCode/AttentionCode"
 import { InfoButton }     from "../InfoButton/InfoButton"
-import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { hceClinicalColors, hceTypography, hceUi } from "../../tokens/hce.tokens"
 import { UiBloodTestIcon, UiConversationIcon, UiPrescriptionIcon, UiXRaysIcon } from "../../atoms/Icon/SvgIconsUiKit"
-import { baseTokens } from "../../tokens/base.tokens"
 
 /** Estructura de datos de un paciente en la tabla de emergencia */
 export interface PatientRowData {
@@ -69,12 +68,12 @@ export const PatientRow = ({ data, isAlternate = false }: Props) => {
   const isPriority1 = data.priority === 1
 
   const baseBg = data.selected
-    ? emergencyTokens.colors.hoverBg
+    ? hceClinicalColors.hoverBg
     : isPriority1
-      ? emergencyTokens.colors.rowPriority1Bg
+      ? hceClinicalColors.rowPriority1Bg
       : isAlternate
-        ? emergencyTokens.colors.rowAlternate
-        : emergencyTokens.colors.surfaceBg
+        ? hceClinicalColors.rowAlternate
+        : hceClinicalColors.surfaceBg
 
   return (
     <TableRow
@@ -83,11 +82,11 @@ export const PatientRow = ({ data, isAlternate = false }: Props) => {
         backgroundColor:  baseBg,
         borderBottom:     "1px solid #E2EAF4",
         borderLeft:       data.selected
-          ? `3px solid ${emergencyTokens.colors.tableHeaderBg}`
+          ? `3px solid ${hceClinicalColors.tableHeaderBg}`
           : "3px solid transparent",
         transition:       "background-color 0.15s ease",
         cursor:           "default",
-        "&:hover":        { backgroundColor: emergencyTokens.colors.hoverBg },
+        "&:hover":        { backgroundColor: hceClinicalColors.hoverBg },
         "&:last-child td":{ borderBottom: "none" },
       }}
       selected={data.selected}
@@ -108,7 +107,7 @@ export const PatientRow = ({ data, isAlternate = false }: Props) => {
 
       {/* ── N.Documento ── */}
       <TableCell sx={{ ...cellSx, width: 100 }}>
-        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "12px", color: baseTokens.colors.textPrimaryTable, letterSpacing: "0.3px", fontWeight: emergencyTokens.typography.weight.semibold }}>
+        <Typography sx={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "12px", color: hceUi.textPrimaryTable, letterSpacing: "0.3px", fontWeight: hceTypography.weight.semibold }}>
           {data.document}
         </Typography>
       </TableCell>
@@ -118,10 +117,10 @@ export const PatientRow = ({ data, isAlternate = false }: Props) => {
         <Typography
           onClick={data.patient.onClick}
           sx={{
-            fontFamily:     emergencyTokens.typography.fontFamily,
-            fontSize:       emergencyTokens.typography.size.tableCell,
-            fontWeight:     emergencyTokens.typography.weight.semibold,
-            color:          baseTokens.colors.textPrimaryTable,
+            fontFamily:     hceTypography.fontFamilyClinical,
+            fontSize:       hceTypography.size.tableCell,
+            fontWeight:     hceTypography.weight.semibold,
+            color:          hceUi.textPrimaryTable,
             cursor:         data.patient.onClick ? "pointer" : "default",
             userSelect:     "none",
             whiteSpace:     "nowrap",
@@ -138,21 +137,21 @@ export const PatientRow = ({ data, isAlternate = false }: Props) => {
 
       {/* ── Edad ── */}
       <TableCell sx={{ ...cellSx, width: 55, textAlign: "center" }}>
-        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "13px", color: baseTokens.colors.textPrimaryTable, fontWeight: emergencyTokens.typography.weight.semibold }}>
+        <Typography sx={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "13px", color: hceUi.textPrimaryTable, fontWeight: hceTypography.weight.semibold }}>
           {data.age}
         </Typography>
       </TableCell>
 
       {/* ── Sexo ── */}
       <TableCell sx={{ ...cellSx, width: 55, textAlign: "center" }}>
-        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "13px", color: baseTokens.colors.textPrimaryTable, fontWeight: emergencyTokens.typography.weight.semibold }}>
+        <Typography sx={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "13px", color: hceUi.textPrimaryTable, fontWeight: hceTypography.weight.semibold }}>
           {data.sex}
         </Typography>
       </TableCell>
 
       {/* ── Médico ── */}
       <TableCell sx={{ ...cellSx, width: 160, padding: "0 12px" }}>
-        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontWeight: emergencyTokens.typography.weight.semibold,  fontSize: "13px", color: baseTokens.colors.textPrimaryTable, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "160px", display: "block" }}>
+        <Typography sx={{ fontFamily: hceTypography.fontFamilyClinical, fontWeight: hceTypography.weight.semibold,  fontSize: "13px", color: hceUi.textPrimaryTable, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "160px", display: "block" }}>
           {data.doctor}
         </Typography>
       </TableCell>

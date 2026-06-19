@@ -1,6 +1,6 @@
 /*
   SideNav.css
-  Usa variables CSS inyectadas por injectBaseTokens() / injectHceTokens()
+  Usa variables CSS inyectadas por injectHceTokens()
   Valores de diseño: hceColors.primary.blue[50] → #e6ecf6
                      hceColors.primary.blue[100] → #b0c5e3
                      hceColors.primary.blue[600] → #003d96

@@ -19,7 +19,7 @@ import {
 } from "@mui/material"
 import { PatientRow } from "../../molecules/PatientRow/PatientRow"
 import type { PatientRowData } from "../../molecules/PatientRow/PatientRow"
-import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { hceClinicalColors, hceBorderRadius, hceShadows, hceTypography } from "../../tokens/hce.tokens"
 
 /** Definición de columnas del header */
 interface HeaderColumn {
@@ -42,11 +42,11 @@ export const PatientTable = ({ rows, header, maxHeight = "100%" }: Props) => {
       component={Paper}
       elevation={0}
       sx={{
-        border:       `1px solid ${emergencyTokens.colors.border}`,
-        borderRadius: emergencyTokens.borderRadius.lg,
+        border:       `1px solid ${hceClinicalColors.border}`,
+        borderRadius: hceBorderRadius.lg,
         overflow:     "auto",
         maxHeight,
-        boxShadow:    emergencyTokens.shadows.table,
+        boxShadow:    hceShadows.table,
       }}
     >
       <Table stickyHeader size="small" sx={{ minWidth: 1100 }}>
@@ -66,17 +66,17 @@ export const PatientTable = ({ rows, header, maxHeight = "100%" }: Props) => {
                   whiteSpace: "nowrap",
 
                   // Sticky header styles
-                  backgroundColor: emergencyTokens.colors.tableHeaderBg,
-                  color:           "#FFFFFF",
-                  fontFamily:      emergencyTokens.typography.fontFamily,
-                  fontSize:        emergencyTokens.typography.size.tableHeader,
-                  fontWeight:      emergencyTokens.typography.weight.bold,
+                  backgroundColor: hceClinicalColors.tableHeaderBg,
+                  color:           hceClinicalColors.textOnHeader,
+                  fontFamily:      hceTypography.fontFamilyClinical,
+                  fontSize:        hceTypography.size.tableHeader,
+                  fontWeight:      hceTypography.weight.bold,
                   textTransform:   "uppercase",
                   letterSpacing:   "0.5px",
 
                   // MUI sticky header override
                   "&.MuiTableCell-stickyHeader": {
-                    backgroundColor: emergencyTokens.colors.tableHeaderBg,
+                    backgroundColor: hceClinicalColors.tableHeaderBg,
                   },
                 }}
               >
@@ -98,8 +98,8 @@ export const PatientTable = ({ rows, header, maxHeight = "100%" }: Props) => {
                   borderBottom: "none",
                 }}
               >
-                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", color: emergencyTokens.colors.textSecondary }}>
-                  <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "14px", color: emergencyTokens.colors.textSecondary }}>
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", color: hceClinicalColors.textSecondary }}>
+                  <Typography sx={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "14px", color: hceClinicalColors.textSecondary }}>
                     No hay pacientes en el Monitor de Emergencia
                   </Typography>
                 </Box>

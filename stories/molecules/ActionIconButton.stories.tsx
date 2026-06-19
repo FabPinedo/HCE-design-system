@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import FilterListIcon    from "@mui/icons-material/FilterList"
 import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined"
-import { ActionIconButton, injectEmergencyTokens } from "@hce/design-system"
+import { ActionIconButton, injectHceTokens } from "@hce/design-system"
 
-injectEmergencyTokens()
+injectHceTokens()
 
 const meta: Meta<typeof ActionIconButton> = {
   title:     "Molecules/ActionIconButton",

@@ -1,7 +1,7 @@
 /**
   SidebarMenu.css
   Respeta el theme del design system HCE.
-  Usa variables CSS inyectadas por injectBaseTokens() / injectHceTokens()
+  Usa variables CSS inyectadas por injectHceTokens()
   Valores de referencia:
     hceColors.primary.blue[600] → #003d96  (--hce-blue-600)
     hceColors.primary.blue[50]  → #e6ecf6  (--hce-blue-50)

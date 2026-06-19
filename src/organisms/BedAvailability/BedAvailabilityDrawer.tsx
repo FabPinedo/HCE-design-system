@@ -7,7 +7,7 @@ import {
 import CloseIcon                                        from "@mui/icons-material/Close"
 import KingBedOutlinedIcon                              from "@mui/icons-material/KingBedOutlined"
 import ExpandMoreIcon                                   from "@mui/icons-material/ExpandMore"
-import { emergencyTokens }                              from "../../tokens/emergency.tokens"
+import { hceClinicalColors, hceTypography, hceBorderRadius, hceShadows, hceSpacing } from "../../tokens/hce.tokens"
 import { BedsAvailabilityTab }                          from "../../molecules/BedsAvailabilityTab/BedsAvailabilityTab"
 import { PriorityBadge }                                from "../../atoms/PriorityBadge/PriorityBadge"
 import type { PriorityLevel }                           from "../../atoms/PriorityBadge/PriorityBadge"
@@ -69,8 +69,8 @@ const WAITING: WaitingPatient[] = [
 ]
 
 const BOX_STATUS_COLOR = {
-  disponible:    emergencyTokens.colors.boxActive,
-  mantenimiento: emergencyTokens.colors.priority2,
+  disponible:    hceClinicalColors.boxActive,
+  mantenimiento: hceClinicalColors.priority2,
 }
 
 const PRIORITY_LABEL: Record<string, string> = {
@@ -85,18 +85,18 @@ function SummaryChip({ label, count, color }: { label: string; count: number; co
   return (
     <Box sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", py: 1.5 }}>
       <Typography sx={{
-        fontFamily: emergencyTokens.typography.fontFamily,
+        fontFamily: hceTypography.fontFamilyClinical,
         fontSize:   "22px",
-        fontWeight: emergencyTokens.typography.weight.bold,
+        fontWeight: hceTypography.weight.bold,
         color,
         lineHeight: 1,
       }}>
         {count}
       </Typography>
       <Typography sx={{
-        fontFamily: emergencyTokens.typography.fontFamily,
+        fontFamily: hceTypography.fontFamilyClinical,
         fontSize:   "10px",
-        color:      emergencyTokens.colors.textSecondary,
+        color:      hceClinicalColors.textSecondary,
         mt:         "4px",
         textAlign:  "center",
       }}>
@@ -111,12 +111,12 @@ function SummaryGroup({ title, flex, children }: { title: string; flex: number; 
   return (
     <Box sx={{ flex, display: "flex", flexDirection: "column" }}>
       <Typography sx={{
-        fontFamily:    emergencyTokens.typography.fontFamily,
+        fontFamily:    hceTypography.fontFamilyClinical,
         fontSize:      "9px",
         fontWeight:    700,
         textTransform: "uppercase",
         letterSpacing: "0.08em",
-        color:         emergencyTokens.colors.textSecondary,
+        color:         hceClinicalColors.textSecondary,
         textAlign:     "center",
         pt:            "6px",
         pb:            "2px",
@@ -137,33 +137,33 @@ function BoxCell({ box }: { box: BoxData }) {
   const isDisponible = box.status === "disponible"
 
   const borderColor = isOccupied
-    ? emergencyTokens.colors[`priority${(box as BoxOccupied).priority}` as keyof typeof emergencyTokens.colors] as string
+    ? hceClinicalColors[`priority${(box as BoxOccupied).priority}` as keyof typeof hceClinicalColors] as string
     : BOX_STATUS_COLOR[box.status as keyof typeof BOX_STATUS_COLOR]
 
   const bgColor = isOccupied
     ? `${borderColor}18`
     : isDisponible
-      ? `${emergencyTokens.colors.boxActive}12`
-      : `${emergencyTokens.colors.priority2}12`
+      ? `${hceClinicalColors.boxActive}12`
+      : `${hceClinicalColors.priority2}12`
 
   const tooltipContent = isOccupied ? (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "4px", p: "2px" }}>
-      <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "13px", fontWeight: 700, color: "#fff" }}>
+      <Typography sx={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "13px", fontWeight: 700, color: "#fff" }}>
         {(box as BoxOccupied).patient}
       </Typography>
-      <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "11px", color: "#d1d5db" }}>
+      <Typography sx={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "11px", color: "#d1d5db" }}>
         {(box as BoxOccupied).age} años · {(box as BoxOccupied).sex}
       </Typography>
-      <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "11px", color: "#d1d5db" }}>
+      <Typography sx={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "11px", color: "#d1d5db" }}>
         {(box as BoxOccupied).doctor}
       </Typography>
       <Box sx={{
         mt: "2px", alignSelf: "flex-start",
         px: "8px", py: "2px",
-        borderRadius:    emergencyTokens.borderRadius.pill,
+        borderRadius:    hceBorderRadius.pill,
         backgroundColor: borderColor,
         fontSize: "10px", fontWeight: 700, color: "#fff",
-        fontFamily: emergencyTokens.typography.fontFamily,
+        fontFamily: hceTypography.fontFamilyClinical,
       }}>
         P{(box as BoxOccupied).priority} — {PRIORITY_LABEL[String((box as BoxOccupied).priority)]}
       </Box>
@@ -179,7 +179,7 @@ function BoxCell({ box }: { box: BoxData }) {
         justifyContent:  "center",
         gap:             "6px",
         p:               "12px 8px 10px",
-        borderRadius:    emergencyTokens.borderRadius.lg,
+        borderRadius:    hceBorderRadius.lg,
         border:          `2px solid ${borderColor}`,
         borderStyle:     isOccupied ? "solid" : "dashed",
         backgroundColor: bgColor,
@@ -187,13 +187,13 @@ function BoxCell({ box }: { box: BoxData }) {
         cursor:          "default",
         opacity:         box.status === "mantenimiento" ? 0.6 : 1,
         transition:      "transform 0.15s, box-shadow 0.15s",
-        "&:hover":       { transform: "scale(1.03)", boxShadow: emergencyTokens.shadows.card },
+        "&:hover":       { transform: "scale(1.03)", boxShadow: hceShadows.card },
       }}>
         <Typography sx={{
-          fontFamily: emergencyTokens.typography.fontFamily,
+          fontFamily: hceTypography.fontFamilyClinical,
           fontSize:   "12px",
-          fontWeight: emergencyTokens.typography.weight.bold,
-          color:      emergencyTokens.colors.textPrimary,
+          fontWeight: hceTypography.weight.bold,
+          color:      hceClinicalColors.textPrimary,
         }}>
           {box.label}
         </Typography>
@@ -204,7 +204,7 @@ function BoxCell({ box }: { box: BoxData }) {
           <Box sx={{
             fontSize:      "9px",
             fontWeight:    700,
-            fontFamily:    emergencyTokens.typography.fontFamily,
+            fontFamily:    hceTypography.fontFamilyClinical,
             color:         borderColor,
             textTransform: "uppercase",
             letterSpacing: "0.04em",
@@ -220,26 +220,26 @@ function BoxCell({ box }: { box: BoxData }) {
 // ─── WaitingRow ───────────────────────────────────────────
 function WaitingRow({ p, onAssign }: { p: WaitingPatient; onAssign: (id: string) => void }) {
   const isTP      = p.type === "tp"
-  const typeColor = isTP ? emergencyTokens.colors.priority2 : emergencyTokens.colors.boxWaiting
+  const typeColor = isTP ? hceClinicalColors.priority2 : hceClinicalColors.boxWaiting
   const typeLabel = isTP ? "Triage" : "En espera"
 
   return (
     <Box sx={{
       display:         "flex",
       alignItems:      "center",
-      gap:             emergencyTokens.spacing[3],
-      p:               `${emergencyTokens.spacing[2]} ${emergencyTokens.spacing[3]}`,
-      borderRadius:    emergencyTokens.borderRadius.lg,
-      backgroundColor: emergencyTokens.colors.rowAlternate,
-      border:          `1px solid ${emergencyTokens.colors.border}`,
+      gap:             hceSpacing[3],
+      p:               `${hceSpacing[2]} ${hceSpacing[3]}`,
+      borderRadius:    hceBorderRadius.lg,
+      backgroundColor: hceClinicalColors.rowAlternate,
+      border:          `1px solid ${hceClinicalColors.border}`,
       borderLeft:      `4px solid ${typeColor}`,
     }}>
       {/* Tipo */}
       <Box sx={{ minWidth: 60 }}>
         <Typography sx={{
-          fontFamily:    emergencyTokens.typography.fontFamily,
-          fontSize:      emergencyTokens.typography.size.badge,
-          fontWeight:    emergencyTokens.typography.weight.bold,
+          fontFamily:    hceTypography.fontFamilyClinical,
+          fontSize:      hceTypography.size.badge,
+          fontWeight:    hceTypography.weight.bold,
           color:         typeColor,
           textTransform: "uppercase",
           letterSpacing: "0.04em",
@@ -253,10 +253,10 @@ function WaitingRow({ p, onAssign }: { p: WaitingPatient; onAssign: (id: string)
       {/* Info del paciente */}
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Typography sx={{
-          fontFamily:   emergencyTokens.typography.fontFamily,
-          fontSize:     emergencyTokens.typography.size.tableCell,
-          fontWeight:   emergencyTokens.typography.weight.semibold,
-          color:        emergencyTokens.colors.textPrimary,
+          fontFamily:   hceTypography.fontFamilyClinical,
+          fontSize:     hceTypography.size.tableCell,
+          fontWeight:   hceTypography.weight.semibold,
+          color:        hceClinicalColors.textPrimary,
           whiteSpace:   "nowrap",
           overflow:     "hidden",
           textOverflow: "ellipsis",
@@ -264,9 +264,9 @@ function WaitingRow({ p, onAssign }: { p: WaitingPatient; onAssign: (id: string)
           {p.name}
         </Typography>
         <Typography sx={{
-          fontFamily: emergencyTokens.typography.fontFamily,
+          fontFamily: hceTypography.fontFamilyClinical,
           fontSize:   "11px",
-          color:      emergencyTokens.colors.textSecondary,
+          color:      hceClinicalColors.textSecondary,
           mt:         "2px",
         }}>
           {p.age} años · {p.sex} · {p.doctor}
@@ -280,19 +280,19 @@ function WaitingRow({ p, onAssign }: { p: WaitingPatient; onAssign: (id: string)
         onClick={() => onAssign(p.id)}
         sx={{
           fontSize:    "10px",
-          fontFamily:  emergencyTokens.typography.fontFamily,
+          fontFamily:  hceTypography.fontFamilyClinical,
           fontWeight:  700,
           py:          "3px",
           px:          "10px",
           minWidth:    "auto",
           whiteSpace:  "nowrap",
-          borderColor: emergencyTokens.colors.boxActive,
-          color:       emergencyTokens.colors.boxActive,
-          borderRadius: emergencyTokens.borderRadius.md,
+          borderColor: hceClinicalColors.boxActive,
+          color:       hceClinicalColors.boxActive,
+          borderRadius: hceBorderRadius.md,
           textTransform: "none",
           "&:hover": {
-            backgroundColor: `${emergencyTokens.colors.boxActive}14`,
-            borderColor:     emergencyTokens.colors.boxActive,
+            backgroundColor: `${hceClinicalColors.boxActive}14`,
+            borderColor:     hceClinicalColors.boxActive,
           },
         }}
       >
@@ -305,15 +305,15 @@ function WaitingRow({ p, onAssign }: { p: WaitingPatient; onAssign: (id: string)
 // ─── PriorityLegend ───────────────────────────────────────
 function PriorityLegend() {
   const items = [
-    { label: "P1 Crítico",  color: emergencyTokens.colors.priority1 },
-    { label: "P2 Urgente",  color: emergencyTokens.colors.priority2 },
-    { label: "P3 Moderado", color: emergencyTokens.colors.priority3 },
-    { label: "P4 Leve",     color: emergencyTokens.colors.priority4 },
-    { label: "Libre",       color: emergencyTokens.colors.boxActive,  dashed: true },
-    { label: "Mant.",       color: emergencyTokens.colors.priority2,  dashed: true, dim: true },
+    { label: "P1 Crítico",  color: hceClinicalColors.priority1 },
+    { label: "P2 Urgente",  color: hceClinicalColors.priority2 },
+    { label: "P3 Moderado", color: hceClinicalColors.priority3 },
+    { label: "P4 Leve",     color: hceClinicalColors.priority4 },
+    { label: "Libre",       color: hceClinicalColors.boxActive,  dashed: true },
+    { label: "Mant.",       color: hceClinicalColors.priority2,  dashed: true, dim: true },
   ]
   return (
-    <Box sx={{ display: "flex", flexWrap: "wrap", gap: "8px 14px", mt: emergencyTokens.spacing[2] }}>
+    <Box sx={{ display: "flex", flexWrap: "wrap", gap: "8px 14px", mt: hceSpacing[2] }}>
       {items.map(item => (
         <Box key={item.label} sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
           <Box sx={{
@@ -325,9 +325,9 @@ function PriorityLegend() {
             opacity:         item.dim ? 0.6 : 1,
           }} />
           <Typography sx={{
-            fontFamily: emergencyTokens.typography.fontFamily,
+            fontFamily: hceTypography.fontFamilyClinical,
             fontSize:   "10px",
-            color:      emergencyTokens.colors.textSecondary,
+            color:      hceClinicalColors.textSecondary,
           }}>
             {item.label}
           </Typography>
@@ -384,24 +384,24 @@ export function BedAvailabilityDrawer() {
           display:         "flex",
           justifyContent:  "space-between",
           alignItems:      "center",
-          px:              emergencyTokens.spacing[4],
-          py:              emergencyTokens.spacing[3],
-          backgroundColor: emergencyTokens.colors.headerBg,
+          px:              hceSpacing[4],
+          py:              hceSpacing[3],
+          backgroundColor: hceClinicalColors.headerBg,
           flexShrink:      0,
         }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: emergencyTokens.spacing[3] }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: hceSpacing[3] }}>
             <KingBedOutlinedIcon sx={{ fontSize: 24, color: "#fff" }} />
             <Box>
               <Typography sx={{
-                fontFamily: emergencyTokens.typography.fontFamily,
+                fontFamily: hceTypography.fontFamilyClinical,
                 fontSize:   "16px",
-                fontWeight: emergencyTokens.typography.weight.bold,
+                fontWeight: hceTypography.weight.bold,
                 color:      "#fff",
               }}>
                 Disponibilidad de Boxes
               </Typography>
               <Typography sx={{
-                fontFamily: emergencyTokens.typography.fontFamily,
+                fontFamily: hceTypography.fontFamilyClinical,
                 fontSize:   "12px",
                 color:      "rgba(255,255,255,0.75)",
                 mt:         "2px",
@@ -413,7 +413,7 @@ export function BedAvailabilityDrawer() {
           <IconButton onClick={() => setOpen(false)} size="small" sx={{
             color:           "#fff",
             backgroundColor: "rgba(255,255,255,0.12)",
-            borderRadius:    emergencyTokens.borderRadius.sm,
+            borderRadius:    hceBorderRadius.sm,
             "&:hover":       { backgroundColor: "rgba(255,255,255,0.22)" },
           }}>
             <CloseIcon fontSize="small" />
@@ -423,25 +423,25 @@ export function BedAvailabilityDrawer() {
         {/* ── Resumen con grupos etiquetados ── */}
         <Box sx={{
           display:      "flex",
-          borderBottom: `1px solid ${emergencyTokens.colors.border}`,
+          borderBottom: `1px solid ${hceClinicalColors.border}`,
           flexShrink:   0,
         }}>
           {/* Grupo Boxes */}
           <SummaryGroup title="Boxes" flex={3}>
-            <SummaryChip label="Ocupados"      count={ocupados}      color={emergencyTokens.colors.priority1}  />
+            <SummaryChip label="Ocupados"      count={ocupados}      color={hceClinicalColors.priority1}  />
             <Divider orientation="vertical" flexItem />
-            <SummaryChip label="Disponibles"   count={disponibles}   color={emergencyTokens.colors.boxActive}  />
+            <SummaryChip label="Disponibles"   count={disponibles}   color={hceClinicalColors.boxActive}  />
             <Divider orientation="vertical" flexItem />
-            <SummaryChip label="Mantenimiento" count={mantenimiento} color={emergencyTokens.colors.priority2}  />
+            <SummaryChip label="Mantenimiento" count={mantenimiento} color={hceClinicalColors.priority2}  />
           </SummaryGroup>
 
           <Divider orientation="vertical" flexItem />
 
           {/* Grupo Pacientes */}
           <SummaryGroup title="Pacientes" flex={2}>
-            <SummaryChip label="En espera" count={enEspera} color={emergencyTokens.colors.boxWaiting} />
+            <SummaryChip label="En espera" count={enEspera} color={hceClinicalColors.boxWaiting} />
             <Divider orientation="vertical" flexItem />
-            <SummaryChip label="Triage"    count={enTriage} color={emergencyTokens.colors.priority2}  />
+            <SummaryChip label="Triage"    count={enTriage} color={hceClinicalColors.priority2}  />
           </SummaryGroup>
         </Box>
 
@@ -450,39 +450,39 @@ export function BedAvailabilityDrawer() {
           flex:      1,
           minHeight: 0,           // ← clave para que el scroll funcione en flex
           overflowY: "auto",
-          p:         emergencyTokens.spacing[4],
+          p:         hceSpacing[4],
           display:   "flex",
           flexDirection: "column",
-          gap:       emergencyTokens.spacing[5],
+          gap:       hceSpacing[5],
         }}>
 
           {/* Grilla de boxes */}
           <Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: emergencyTokens.spacing[3] }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: hceSpacing[3] }}>
               <Typography sx={{
-                fontFamily:    emergencyTokens.typography.fontFamily,
-                fontSize:      emergencyTokens.typography.size.tableHeader,
-                fontWeight:    emergencyTokens.typography.weight.bold,
+                fontFamily:    hceTypography.fontFamilyClinical,
+                fontSize:      hceTypography.size.tableHeader,
+                fontWeight:    hceTypography.weight.bold,
                 textTransform: "uppercase",
                 letterSpacing: "0.07em",
-                color:         emergencyTokens.colors.textSecondary,
+                color:         hceClinicalColors.textSecondary,
               }}>
                 Boxes de Atención
               </Typography>
               <Box sx={{
                 px: "10px", py: "2px",
-                borderRadius:    emergencyTokens.borderRadius.pill,
-                backgroundColor: emergencyTokens.colors.rowAlternate,
-                border:          `1px solid ${emergencyTokens.colors.border}`,
+                borderRadius:    hceBorderRadius.pill,
+                backgroundColor: hceClinicalColors.rowAlternate,
+                border:          `1px solid ${hceClinicalColors.border}`,
                 fontSize:        "11px",
-                color:           emergencyTokens.colors.textSecondary,
-                fontFamily:      emergencyTokens.typography.fontFamily,
+                color:           hceClinicalColors.textSecondary,
+                fontFamily:      hceTypography.fontFamilyClinical,
               }}>
                 {disponibles} disp. / {BOXES.length}
               </Box>
             </Box>
 
-            <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: emergencyTokens.spacing[2] }}>
+            <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: hceSpacing[2] }}>
               {BOXES.map(box => <BoxCell key={box.label} box={box} />)}
             </Box>
 
@@ -495,55 +495,55 @@ export function BedAvailabilityDrawer() {
               disableGutters
               elevation={0}
               sx={{
-                border:       `1px solid ${emergencyTokens.colors.border}`,
-                borderRadius: `${emergencyTokens.borderRadius.lg} !important`,
+                border:       `1px solid ${hceClinicalColors.border}`,
+                borderRadius: `${hceBorderRadius.lg} !important`,
                 "&:before":   { display: "none" },
               }}
             >
               <AccordionSummary
-                expandIcon={<ExpandMoreIcon sx={{ color: emergencyTokens.colors.textSecondary }} />}
+                expandIcon={<ExpandMoreIcon sx={{ color: hceClinicalColors.textSecondary }} />}
                 sx={{
-                  backgroundColor: emergencyTokens.colors.rowAlternate,
+                  backgroundColor: hceClinicalColors.rowAlternate,
                   minHeight:       "48px !important",
-                  px:              emergencyTokens.spacing[4],
-                  "& .MuiAccordionSummary-content": { alignItems: "center", gap: emergencyTokens.spacing[2], my: "10px" },
+                  px:              hceSpacing[4],
+                  "& .MuiAccordionSummary-content": { alignItems: "center", gap: hceSpacing[2], my: "10px" },
                 }}
               >
                 <Typography sx={{
-                  fontFamily:    emergencyTokens.typography.fontFamily,
-                  fontSize:      emergencyTokens.typography.size.tableHeader,
-                  fontWeight:    emergencyTokens.typography.weight.bold,
+                  fontFamily:    hceTypography.fontFamilyClinical,
+                  fontSize:      hceTypography.size.tableHeader,
+                  fontWeight:    hceTypography.weight.bold,
                   textTransform: "uppercase",
                   letterSpacing: "0.07em",
-                  color:         emergencyTokens.colors.textSecondary,
+                  color:         hceClinicalColors.textSecondary,
                 }}>
                   Pacientes sin Box
                 </Typography>
                 <Box sx={{
                   px: "8px", py: "2px",
-                  borderRadius:    emergencyTokens.borderRadius.pill,
-                  backgroundColor: `${emergencyTokens.colors.boxWaiting}22`,
-                  border:          `1px solid ${emergencyTokens.colors.boxWaiting}`,
+                  borderRadius:    hceBorderRadius.pill,
+                  backgroundColor: `${hceClinicalColors.boxWaiting}22`,
+                  border:          `1px solid ${hceClinicalColors.boxWaiting}`,
                   fontSize:        "10px", fontWeight: 700,
-                  color:           emergencyTokens.colors.boxWaiting,
-                  fontFamily:      emergencyTokens.typography.fontFamily,
+                  color:           hceClinicalColors.boxWaiting,
+                  fontFamily:      hceTypography.fontFamilyClinical,
                 }}>
                   {enEspera} espera
                 </Box>
                 <Box sx={{
                   px: "8px", py: "2px",
-                  borderRadius:    emergencyTokens.borderRadius.pill,
-                  backgroundColor: `${emergencyTokens.colors.priority2}22`,
-                  border:          `1px solid ${emergencyTokens.colors.priority2}`,
+                  borderRadius:    hceBorderRadius.pill,
+                  backgroundColor: `${hceClinicalColors.priority2}22`,
+                  border:          `1px solid ${hceClinicalColors.priority2}`,
                   fontSize:        "10px", fontWeight: 700,
-                  color:           emergencyTokens.colors.priority2,
-                  fontFamily:      emergencyTokens.typography.fontFamily,
+                  color:           hceClinicalColors.priority2,
+                  fontFamily:      hceTypography.fontFamilyClinical,
                 }}>
                   {enTriage} triage
                 </Box>
               </AccordionSummary>
 
-              <AccordionDetails sx={{ p: emergencyTokens.spacing[3], display: "flex", flexDirection: "column", gap: emergencyTokens.spacing[2] }}>
+              <AccordionDetails sx={{ p: hceSpacing[3], display: "flex", flexDirection: "column", gap: hceSpacing[2] }}>
                 {WAITING.map(p => (
                   <WaitingRow key={p.id} p={p} onAssign={handleAssign} />
                 ))}

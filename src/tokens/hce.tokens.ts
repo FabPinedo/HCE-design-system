@@ -1,7 +1,10 @@
 /**
  * hce.tokens.ts
- * Paleta de color HCE exportada desde Figma (colors.json).
- * No reemplaza base.tokens — ambos coexisten.
+ * Fuente única de verdad de los design tokens HCE.
+ * Incluye la paleta exportada desde Figma (colors.json) más los
+ * tokens semánticos de UI, tipografía, espaciado, bordes, sombras
+ * y z-index usados por la plataforma base y por el módulo clínico
+ * de Emergencia.
  *
  * Uso:
  *   import { hceColors } from "@hce/design-system"
@@ -126,6 +129,55 @@ export type HceColors = typeof hceColors
 
 export const hceTypography = {
   fontFamily: "'Poppins', sans-serif",
+  // Tipografía del módulo clínico de Emergencia (distinta de la plataforma base)
+  fontFamilyClinical:     '"IBM Plex Sans", "Roboto", system-ui, sans-serif',
+  fontFamilyClinicalMono: '"IBM Plex Mono", "Roboto Mono", "Courier New", monospace',
+
+  fontSize: 14,
+
+  size: {
+    // Escala general (plataforma base)
+    xs:   '12px',
+    sm:   '13px',
+    base: '14px',
+    md:   '16px',
+    lg:   '20px',
+    xl:   '24px',
+    h1:   '2rem',
+    h4:   '1.25rem',
+    // Escala del módulo de Emergencia
+    headerTitle:  '20px',
+    headerMeta:   '13px',
+    tableHeader:  '12px',
+    tableCell:    '13px',
+    badge:        '11px',
+  },
+
+  weight: {
+    regular:    400,
+    medium:     500,
+    semibold:   600,
+    bold:       700,
+    extrabold:  800,
+  },
+
+  letterSpacing: {
+    tight:  '-0.02em',
+    normal: '0',
+    wide:   '0.05em',
+  },
+
+  // Estilos predefinidos por rol semántico (módulo de Emergencia)
+  styles: {
+    headerTitle:   { fontSize: '20px', fontWeight: 700, color: '#FFFFFF' },
+    headerMeta:    { fontSize: '13px', fontWeight: 500, textTransform: 'uppercase' as const, letterSpacing: '0.3px' },
+    tableHeader:   { fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.5px' },
+    tableCell:     { fontSize: '13px', fontWeight: 400 },
+    tableCellName: { fontSize: '13px', fontWeight: 600 },
+    badgePriority: { fontSize: '11px', fontWeight: 800 },
+    badgeBox:      { fontSize: '11px', fontWeight: 700 },
+  },
+
   googleFontsUrl:
     "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap",
 } as const
@@ -160,12 +212,62 @@ export const hceTransition = {
 // ── Sombras ──────────────────────────────────────────────────────────────────
 // Basadas en el color de marca azul oscuro (--hce-blue-900 ≈ #001c45)
 // para mayor coherencia visual que sombras negras puras.
+// xs/sm/md/lg: escala genérica de plataforma. table/header/tab: módulo de Emergencia.
 
 export const hceShadows = {
   card:    "0 2px 8px rgba(0,29,69,0.08)",
   sidebar: "2px 0 8px rgba(0,29,69,0.10)",
   float:   "0 4px 32px rgba(0,29,69,0.18)",
   modal:   "0 8px 32px rgba(0,29,69,0.16)",
+  xs:      "0 1px 2px rgba(0,0,0,0.05)",
+  sm:      "0 1px 4px rgba(0,0,0,0.08)",
+  md:      "0px 2px 12px rgba(0,0,0,0.05)",
+  lg:      "0 4px 20px rgba(0,0,0,0.1)",
+  table:   "0 2px 12px rgba(26, 58, 107, 0.08)",
+  header:  "0 2px 8px rgba(26, 58, 107, 0.15)",
+  tab:     "-2px 0 8px rgba(26, 58, 107, 0.20)",
+} as const
+
+// ── Espaciado (grid base 4px) ─────────────────────────────────────────────────
+
+export const hceSpacing = {
+  base: 4,
+  1:  '4px',
+  2:  '8px',
+  3:  '12px',
+  4:  '16px',
+  5:  '20px',
+  6:  '24px',
+  8:  '32px',
+  10: '40px',
+  12: '48px',
+} as const
+
+// ── Border Radius ─────────────────────────────────────────────────────────────
+
+export const hceBorderRadius = {
+  none:   '0px',
+  sm:     '4px',
+  md:     '6px',
+  lg:     '8px',
+  xl:     '12px',
+  pill:   '50px',
+  circle: '50%',
+} as const
+
+// ── Z-Index ───────────────────────────────────────────────────────────────────
+
+export const hceZIndex = {
+  base:         0,
+  raised:       10,
+  dropdown:     100,
+  sidebar:      200,
+  modal:        400,
+  overlay:      1050,
+  drawer:       1100,
+  stickyHeader: 100,
+  sideTab:      200,
+  tooltip:      300,
 } as const
 
 // ── UI Semánticos ─────────────────────────────────────────────────────────────
@@ -173,11 +275,58 @@ export const hceShadows = {
 // Usados en theme.ts y componentes que necesitan colores semánticos estables.
 
 export const hceUi = {
-  textPrimary:   "#374151",
-  textSecondary: "#545454",
-  textSubtle:    "#8c8c8c",
-  surface:       "#ffffff",
-  background:    "#f5f7fa",
+  textPrimary:      "#374151",
+  textSecondary:    "#545454",
+  textSubtle:       "#8c8c8c",
+  surface:          "#ffffff",
+  background:       "#f5f7fa",
+  textPrimaryTable: "#003D96",
+} as const
+
+// ── Colores clínicos (módulo Monitor de Emergencia) ──────────────────────────
+// Paleta semántica propia del módulo clínico — distinta de hceUi porque
+// representa un contexto visual propio (header azul, prioridades, estados
+// de box/sala) que no aplica al resto de la plataforma.
+
+export const hceClinicalColors = {
+  // Base
+  headerBg:        '#1A3A6B', // Azul marino institucional — header principal
+  surfaceBg:       '#FFFFFF', // Fondo de superficies / tabla
+  tableHeaderBg:   '#2B5BA8', // Azul medio — encabezado de tabla
+  rowAlternate:    '#F4F7FB', // Fila alterna de tabla
+  border:          '#D0DBF0', // Bordes y divisores
+  hoverBg:         '#EEF2F9', // Fondo hover de fila / botón
+  rowPriority1Bg:  '#FFF5F5', // Fondo sutil para filas críticas
+
+  // Textos
+  textPrimary:     '#1C2B4A',
+  textSecondary:   '#5A6A85',
+  textOnHeader:    '#FFFFFF', // Texto sobre fondos azules (headerBg / tableHeaderBg)
+
+  // Sistema de prioridades
+  priority1:       '#A3231B', // Crítico
+  priority2:       '#E39922', // Urgente
+  priority3:       '#73A876', // Moderado
+  priority4:       '#2A722E', // Leve
+  priorityNone:    '#B0BEC5', // Sin prioridad
+
+  // Estados de Box / Sala
+  boxActive:       '#27AE60', // Sala activa
+  boxUrgent:       '#A3231B', // Urgente/crítico
+  boxWaiting:      '#8A9BB0', // En espera / sin asignar
+  boxTP:           '#5A6A85', // Tópico (TP)
+
+  // Iconos de estado clínico
+  iconAlert:       '#E39922', // Pendiente / alerta
+  iconAlertBg:     '#FFF3E0',
+  iconOk:          '#2A722E', // Completado / normal
+  iconOkBg:        '#E8F5E9',
+  iconUrgent:      '#A3231B', // Urgente
+  iconUrgentBg:    '#FFEBEE',
+  iconInactive:    '#B0BEC5', // Inactivo — opacidad 40%
+
+  // Botón Info
+  btnInfoBg:       '#89C93D', // Color base
 } as const
 
 export function injectHceTokens(): void {
@@ -198,4 +347,7 @@ export function injectHceTokens(): void {
   // Neutro
   Object.entries(hceColors.neutro.white).forEach(([k, v]) => set(`--hce-white-${k}`, v))
   Object.entries(hceColors.neutro.black).forEach(([k, v]) => set(`--hce-black-${k}`, v))
+
+  // UI semántica
+  set('--color-surface', hceUi.surface)
 }

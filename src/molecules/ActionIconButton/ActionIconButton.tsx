@@ -9,7 +9,7 @@
  */
 import { IconButton, Tooltip } from "@mui/material"
 import type { SvgIconComponent } from "@mui/icons-material"
-import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { hceBorderRadius, hceClinicalColors } from "../../tokens/hce.tokens"
 
 interface Props {
   /** Componente de ícono MUI */
@@ -31,24 +31,24 @@ export const ActionIconButton = ({ icon: Icon, tooltip, onClick, disabled = fals
           sx={{
             width:           32,
             height:          32,
-            borderRadius:    emergencyTokens.borderRadius.sm,
-            border:          `1px solid ${emergencyTokens.colors.border}`,
+            borderRadius:    hceBorderRadius.sm,
+            border:          `1px solid ${hceClinicalColors.border}`,
             backgroundColor: "#FFFFFF",
-            color:           emergencyTokens.colors.textSecondary,
+            color:           hceClinicalColors.textSecondary,
             padding:         0,
 
             "&:hover": {
-              backgroundColor: emergencyTokens.colors.hoverBg,
-              borderColor:     emergencyTokens.colors.tableHeaderBg,
-              color:           emergencyTokens.colors.tableHeaderBg,
+              backgroundColor: hceClinicalColors.hoverBg,
+              borderColor:     hceClinicalColors.tableHeaderBg,
+              color:           hceClinicalColors.tableHeaderBg,
             },
             "&:active": {
-              backgroundColor: emergencyTokens.colors.border,
+              backgroundColor: hceClinicalColors.border,
             },
             "&.Mui-disabled": {
               opacity:         0.4,
               backgroundColor: "#FFFFFF",
-              color:           emergencyTokens.colors.textSecondary,
+              color:           hceClinicalColors.textSecondary,
             },
           }}
           aria-label={tooltip}

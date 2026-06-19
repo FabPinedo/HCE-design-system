@@ -11,8 +11,7 @@
  * ---------------------------------------------------------
  */
 import { Typography } from "@mui/material"
-import { emergencyTokens } from "../../tokens/emergency.tokens"
-import { baseTokens } from "../../tokens/base.tokens"
+import { hceTypography, hceUi } from "../../tokens/hce.tokens"
 
 interface Props {
   /** Código alfanumérico de atención (ej: "E097382") */
@@ -30,10 +29,10 @@ export const AttentionCode = ({ code }: Props) => {
     <Typography
       component="span"
       sx={{
-        fontFamily:    emergencyTokens.typography.fontFamily,
-        fontSize:      emergencyTokens.typography.size.tableCell,
-        fontWeight:    emergencyTokens.typography.weight.semibold,
-        color:         baseTokens.colors.textPrimaryTable,
+        fontFamily:    hceTypography.fontFamilyClinical,
+        fontSize:      hceTypography.size.tableCell,
+        fontWeight:    hceTypography.weight.semibold,
+        color:         hceUi.textPrimaryTable,
         letterSpacing: "0.5px",
         display:       "inline-block",
       }}

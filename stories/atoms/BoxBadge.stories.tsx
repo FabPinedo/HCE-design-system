@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { BoxBadge, injectEmergencyTokens } from "@hce/design-system"
+import { BoxBadge, injectHceTokens } from "@hce/design-system"
 
-injectEmergencyTokens()
+injectHceTokens()
 
 const meta: Meta<typeof BoxBadge> = {
   title:     "Atoms/BoxBadge",

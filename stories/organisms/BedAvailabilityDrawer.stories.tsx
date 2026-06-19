@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { BedAvailabilityDrawer, injectEmergencyTokens } from "@hce/design-system"
+import { BedAvailabilityDrawer, injectHceTokens } from "@hce/design-system"
 
-injectEmergencyTokens()
+injectHceTokens()
 
 const meta: Meta<typeof BedAvailabilityDrawer> = {
   title:     "Organisms/BedAvailabilityDrawer",
