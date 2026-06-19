@@ -24,45 +24,52 @@ for i in $(seq 1 $MAX_RETRIES); do
 done
 
 # ── 2/3. Crear usuario + configurar auth, con reintentos ────────────────────
-# `/-/ping` solo confirma que el servidor HTTP de Verdaccio está arriba, no
-# que el plugin htpasswd ya inicializó su storage. En máquinas más lentas o
-# con un volumen recién creado, el PUT de creación de usuario puede llegar
-# antes de que el plugin esté listo y perderse sin dejar rastro en los logs
-# de Verdaccio (se confirmó este síntoma exacto en un entorno real). Por eso
-# se verifica con `npm whoami` y, si falla, se reintenta el ciclo completo.
+# El wget de BusyBox en esta imagen no soporta --method=PUT (solo GET/POST),
+# así que la creación de usuario (que requiere PUT) se hace con curl, que sí
+# soporta cualquier método HTTP y permite leer el código de estado real.
 AUTH=$(echo -n "$PUB_USER:$PUB_PASS" | base64 | tr -d '\n')
 MAX_AUTH_RETRIES=5
 i=1
 while true; do
-  echo ">>> Creating user (attempt $i/$MAX_AUTH_RETRIES, skipped if already exists) ..."
-  wget -q -O /dev/null \
-    --method=PUT \
-    --header="Content-Type: application/json" \
-    --body-data="{\"name\":\"$PUB_USER\",\"password\":\"$PUB_PASS\",\"email\":\"$PUB_EMAIL\",\"type\":\"user\"}" \
-    "$REGISTRY/-/user/org.couchdb.user:$PUB_USER" 2>/dev/null || true
+  echo ">>> Creating user (attempt $i/$MAX_AUTH_RETRIES) ..."
+  HTTP_CODE=$(curl -s -o /tmp/adduser.json -w "%{http_code}" \
+    -X PUT \
+    -H "Content-Type: application/json" \
+    -d "{\"name\":\"$PUB_USER\",\"password\":\"$PUB_PASS\",\"email\":\"$PUB_EMAIL\",\"type\":\"user\"}" \
+    "$REGISTRY/-/user/org.couchdb.user:$PUB_USER" 2>/tmp/adduser.err || echo "000")
 
-  : > /root/.npmrc
-  {
-    echo "registry=$REGISTRY"
-    echo "//${REGISTRY_HOST}/:_auth=${AUTH}"
-    echo "//${REGISTRY_HOST}/:always-auth=true"
-    echo "//${REGISTRY_HOST}/:email=${PUB_EMAIL}"
-  } >> /root/.npmrc
-
-  if npm whoami --registry "$REGISTRY" >/tmp/whoami.log 2>&1; then
-    echo "    Auth configured (logged in as $(cat /tmp/whoami.log))."
+  # 200/201 = usuario creado ahora. 409 + "already registered" = ya existía
+  # (asumimos que la contraseña coincide, ya que es el único usuario que
+  # usa este script). Cualquier otro código (incl. 000 = sin conexión) se
+  # reintenta, ya que normalmente indica que Verdaccio aún no está listo.
+  if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "201" ]; then
+    echo "    User created."
+    break
+  fi
+  if [ "$HTTP_CODE" = "409" ] && grep -q "already registered" /tmp/adduser.json 2>/dev/null; then
+    echo "    User already exists."
     break
   fi
 
   if [ "$i" = "$MAX_AUTH_RETRIES" ]; then
-    echo "    ERROR: Authentication with Verdaccio failed after $MAX_AUTH_RETRIES attempts:"
-    cat /tmp/whoami.log
+    echo "    ERROR: Could not create/verify user '$PUB_USER' after $MAX_AUTH_RETRIES attempts."
+    echo "    Last HTTP status: $HTTP_CODE"
+    echo "    Response body: $(cat /tmp/adduser.json 2>/dev/null)"
+    echo "    curl error: $(cat /tmp/adduser.err 2>/dev/null)"
     exit 1
   fi
-  echo "    Auth attempt $i/$MAX_AUTH_RETRIES failed, retrying in 3s..."
+  echo "    Unexpected response (HTTP $HTTP_CODE), retrying in 3s..."
   i=$((i + 1))
   sleep 3
 done
+
+: > /root/.npmrc
+{
+  echo "registry=$REGISTRY"
+  echo "//${REGISTRY_HOST}/:_auth=${AUTH}"
+  echo "//${REGISTRY_HOST}/:always-auth=true"
+  echo "//${REGISTRY_HOST}/:email=${PUB_EMAIL}"
+} >> /root/.npmrc
 
 # ── 4. Build de la librería ─────────────────────────────────────────────────
 echo ">>> Building @hce/design-system ..."
