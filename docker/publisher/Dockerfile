@@ -4,6 +4,10 @@
 # ─────────────────────────────────────────────────────────────
 FROM node:20-alpine
 
+# El wget de BusyBox en esta imagen no soporta --method=PUT (solo GET/POST),
+# por lo que la creación de usuario en Verdaccio necesita curl.
+RUN apk add --no-cache curl
+
 WORKDIR /app
 
 # Install dependencies
