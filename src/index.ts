@@ -154,7 +154,6 @@ export { Card as ContentCard } from "./molecules/Card/Card"
 export { PageHeader }          from "./molecules/PageHeader/PageHeader"
 // DataTableSimple: molecule DataTable (generic T extends object)
 export { DataTable as DataTableSimple } from "./molecules/DataTable/DataTable"
-export { PatientTable }        from "./molecules/PatientTable/PatientTable"
 
 // ── EvaScale (escala visual de dolor 0-10) ────────────────
 export { EvaScale } from "./molecules/EvaScale/EvaScale"
