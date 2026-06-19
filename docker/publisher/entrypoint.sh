@@ -23,46 +23,50 @@ for i in $(seq 1 $MAX_RETRIES); do
   sleep 2
 done
 
-# ── 2. Crear usuario (ignorar error si ya existe) ───────────────────────────
-echo ">>> Creating user (skipped if already exists) ..."
-wget -q -O /dev/null \
-  --method=PUT \
-  --header="Content-Type: application/json" \
-  --body-data="{\"name\":\"$PUB_USER\",\"password\":\"$PUB_PASS\",\"email\":\"$PUB_EMAIL\",\"type\":\"user\"}" \
-  "$REGISTRY/-/user/org.couchdb.user:$PUB_USER" 2>/dev/null || true
-
-# ── 3. Configurar Basic Auth en .npmrc ──────────────────────────────────────
-echo ">>> Configuring auth ..."
+# ── 2/3. Crear usuario + configurar auth, con reintentos ────────────────────
+# `/-/ping` solo confirma que el servidor HTTP de Verdaccio está arriba, no
+# que el plugin htpasswd ya inicializó su storage. En máquinas más lentas o
+# con un volumen recién creado, el PUT de creación de usuario puede llegar
+# antes de que el plugin esté listo y perderse sin dejar rastro en los logs
+# de Verdaccio (se confirmó este síntoma exacto en un entorno real). Por eso
+# se verifica con `npm whoami` y, si falla, se reintenta el ciclo completo.
 AUTH=$(echo -n "$PUB_USER:$PUB_PASS" | base64 | tr -d '\n')
-{
-  echo "registry=$REGISTRY"
-  echo "//${REGISTRY_HOST}/:_auth=${AUTH}"
-  echo "//${REGISTRY_HOST}/:always-auth=true"
-  echo "//${REGISTRY_HOST}/:email=${PUB_EMAIL}"
-} >> /root/.npmrc
+MAX_AUTH_RETRIES=5
+i=1
+while true; do
+  echo ">>> Creating user (attempt $i/$MAX_AUTH_RETRIES, skipped if already exists) ..."
+  wget -q -O /dev/null \
+    --method=PUT \
+    --header="Content-Type: application/json" \
+    --body-data="{\"name\":\"$PUB_USER\",\"password\":\"$PUB_PASS\",\"email\":\"$PUB_EMAIL\",\"type\":\"user\"}" \
+    "$REGISTRY/-/user/org.couchdb.user:$PUB_USER" 2>/dev/null || true
 
-if ! npm whoami --registry "$REGISTRY" >/tmp/whoami.log 2>&1; then
-  echo "    ERROR: Authentication with Verdaccio failed:"
-  cat /tmp/whoami.log
-  echo "    The '$PUB_USER' account in Verdaccio's storage volume doesn't match"
-  echo "    the credentials this script uses. This usually means a stale/partial"
-  echo "    Verdaccio volume from an earlier failed run. Fix with:"
-  echo "      docker compose down"
-  echo "      docker volume rm \$(docker volume ls -q | grep verdaccio-storage)"
-  echo "      docker compose --profile publish run --build publisher"
-  exit 1
-fi
-echo "    Auth configured (logged in as $(npm whoami --registry "$REGISTRY"))."
+  : > /root/.npmrc
+  {
+    echo "registry=$REGISTRY"
+    echo "//${REGISTRY_HOST}/:_auth=${AUTH}"
+    echo "//${REGISTRY_HOST}/:always-auth=true"
+    echo "//${REGISTRY_HOST}/:email=${PUB_EMAIL}"
+  } >> /root/.npmrc
+
+  if npm whoami --registry "$REGISTRY" >/tmp/whoami.log 2>&1; then
+    echo "    Auth configured (logged in as $(cat /tmp/whoami.log))."
+    break
+  fi
+
+  if [ "$i" = "$MAX_AUTH_RETRIES" ]; then
+    echo "    ERROR: Authentication with Verdaccio failed after $MAX_AUTH_RETRIES attempts:"
+    cat /tmp/whoami.log
+    exit 1
+  fi
+  echo "    Auth attempt $i/$MAX_AUTH_RETRIES failed, retrying in 3s..."
+  i=$((i + 1))
+  sleep 3
+done
 
 # ── 4. Build de la librería ─────────────────────────────────────────────────
 echo ">>> Building @hce/design-system ..."
 npm run build
-
-# Si `npm publish` falla con E401 mas adelante a pesar de que `npm whoami`
-# arriba funcionó: no es un problema del script. La causa típica es una
-# VPN/proxy/antivirus corporativo interceptando el PUT (que es mas grande
-# que el GET de whoami) y descartando el header Authorization. Pedir
-# desactivar VPN/proxy temporalmente y reintentar.
 
 # ── 5. Verificar si la versión ya fue publicada ─────────────────────────────
 PACKAGE_NAME=$(node -p "require('./package.json').name")
