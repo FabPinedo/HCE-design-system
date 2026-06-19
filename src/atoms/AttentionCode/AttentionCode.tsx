@@ -12,6 +12,7 @@
  */
 import { Typography } from "@mui/material"
 import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { baseTokens } from "../../tokens/base.tokens"
 
 interface Props {
   /** Código alfanumérico de atención (ej: "E097382") */
@@ -29,10 +30,10 @@ export const AttentionCode = ({ code }: Props) => {
     <Typography
       component="span"
       sx={{
-        fontFamily:    emergencyTokens.typography.fontFamilyMono,
+        fontFamily:    emergencyTokens.typography.fontFamily,
         fontSize:      emergencyTokens.typography.size.tableCell,
-        fontWeight:    emergencyTokens.typography.weight.regular,
-        color:         emergencyTokens.colors.textPrimary,
+        fontWeight:    emergencyTokens.typography.weight.semibold,
+        color:         baseTokens.colors.textPrimaryTable,
         letterSpacing: "0.5px",
         display:       "inline-block",
       }}

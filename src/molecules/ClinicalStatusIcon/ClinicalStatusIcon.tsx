@@ -13,8 +13,8 @@
  * ---------------------------------------------------------
  */
 import { Box, Tooltip } from "@mui/material"
-import type { SvgIconComponent } from "@mui/icons-material"
 import { emergencyTokens } from "../../tokens/emergency.tokens"
+import type { ComponentType } from "react"
 
 export type ClinicalIconStatus = "alert" | "ok" | "urgent" | "empty"
 
@@ -47,11 +47,16 @@ const STATUS_CONFIG: Record<ClinicalIconStatus, StatusConfig> = {
   },
 }
 
+type CustomIconProps = {
+  color?: string,
+  size?: number
+}
+
 interface Props {
   /** Estado clínico del estudio */
   status: ClinicalIconStatus
-  /** Componente de ícono MUI (SvgIconComponent) */
-  icon: SvgIconComponent
+  /** Componente de ícono MUI (SvgIconComponent) e iconos svg del uiKit*/
+  icon: ComponentType<CustomIconProps>
   /** Texto descriptivo para el tooltip (opcional, sobreescribe el label por defecto) */
   tooltipLabel?: string
 }
@@ -72,6 +77,7 @@ export const ClinicalStatusIcon = ({ status, icon: Icon, tooltipLabel }: Props) 
         sx={{
           width:           28,
           height:          28,
+          border:          `1.5px solid ${config.color}` ,
           borderRadius:    emergencyTokens.borderRadius.md,
           backgroundColor: config.bg,
           display:         "flex",
@@ -83,7 +89,7 @@ export const ClinicalStatusIcon = ({ status, icon: Icon, tooltipLabel }: Props) 
         role="img"
         aria-label={tooltipLabel ?? config.label}
       >
-        <Icon sx={{ fontSize: 16, color: config.color }} />
+        <Icon size= {16} color= {config.color} />
       </Box>
     </Tooltip>
   )

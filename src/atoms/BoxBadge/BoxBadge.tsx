@@ -65,6 +65,7 @@ export const BoxBadge = ({ status, label }: Props) => {
         fontSize:        emergencyTokens.typography.size.badge,
         fontWeight:      emergencyTokens.typography.weight.bold,
         textTransform:   "uppercase",
+        textDecorationLine: "underline",
         letterSpacing:   "0.3px",
         whiteSpace:      "nowrap",
         cursor:          "default",

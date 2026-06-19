@@ -6,6 +6,21 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 Versionado basado en [Semantic Versioning](https://semver.org/).
 
 ---
+## [1.2.1] - 2026-06-16
+
+### Agregado
+- **`MultiSelect`** (Atomo): Dropwodn multiseleccionable con búsqueda.Props `label`, `value`, `onChange`, `options`, `placeholder`, `fullWidth`, `disabled`, `required`, `error`.
+  - Incorporación de checkbox en las opciones mostradas.
+  - Las opciones con checks seleccionados, se muestran primero en fila
+  - Incorporación de búsqueda en el Input Multiselect.
+- **`RadioGroup`** (Molécula): Grupo de radioButton. Props `name`, `legend`, `value`, `onChange`, `options`, `disabled`. Funciona seleccionando solo una opción por grupo.
+  - Personalización de color y tamaño de letra.
+- **`NavTab`** (Organismo): Grupo de Navegadores. Props `tabs`, `value`, `onChange`.
+  - Personalización de estilos con **`MuiTab`**.
+  - Bordes superiores redondeados
+### Cambiado
+- **`Checkbox`** (Atomo): Incorporación de color de check y fondo del recuadro. Modificación de estilos
+---
 
 ## [1.2.0] - 2026-04-20
 

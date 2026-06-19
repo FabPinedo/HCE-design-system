@@ -28,9 +28,9 @@ export const InfoButton = ({ onClick, tooltip = "Ver información del paciente",
           sx={{
             width:           28,
             height:          28,
-            borderRadius:    "50%",
+            borderRadius:    "4px",
             padding:         0,
-            backgroundColor: emergencyTokens.colors.tableHeaderBg,
+            backgroundColor: emergencyTokens.colors.btnInfoBg,
             color:           "#FFFFFF",
             flexShrink:      0,
 

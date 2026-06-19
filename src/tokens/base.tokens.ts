@@ -42,6 +42,9 @@ export const baseColors = {
   textPrimary:    '#374151',
   textSecondary:  '#6B7280',
 
+  //Texto en Tablas
+  textPrimaryTable:    '#003D96',
+
   // Bordes
   border:         '#E5E7EB',
 

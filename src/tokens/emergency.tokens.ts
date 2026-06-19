@@ -36,26 +36,29 @@ export const emergencyColors = {
   textSecondary:   '#5A6A85',
 
   // Sistema de prioridades
-  priority1:       '#E53E3E', // Crítico
-  priority2:       '#F6A623', // Urgente
-  priority3:       '#27AE60', // Moderado
-  priority4:       '#3498DB', // Leve
+  priority1:       '#A3231B', // Crítico
+  priority2:       '#E39922', // Urgente
+  priority3:       '#73A876', // Moderado
+  priority4:       '#2A722E', // Leve
   priorityNone:    '#B0BEC5', // Sin prioridad
 
   // Estados de Box / Sala
   boxActive:       '#27AE60', // Sala activa
-  boxUrgent:       '#E53E3E', // Urgente/crítico
+  boxUrgent:       '#A3231B', // Urgente/crítico
   boxWaiting:      '#8A9BB0', // En espera / sin asignar
   boxTP:           '#5A6A85', // Tópico (TP)
 
   // Iconos de estado clínico
-  iconAlert:       '#F6A623', // Pendiente / alerta
+  iconAlert:       '#E39922', // Pendiente / alerta
   iconAlertBg:     '#FFF3E0',
-  iconOk:          '#27AE60', // Completado / normal
+  iconOk:          '#2A722E', // Completado / normal
   iconOkBg:        '#E8F5E9',
-  iconUrgent:      '#E53E3E', // Urgente
+  iconUrgent:      '#A3231B', // Urgente
   iconUrgentBg:    '#FFEBEE',
   iconInactive:    '#B0BEC5', // Inactivo — opacidad 40%
+
+  // Boton Info
+  btnInfoBg:        '#89C93D' // Color base
 } as const
 
 // ─────────────────────────────────────────────────────────

@@ -6,10 +6,6 @@
  * ---------------------------------------------------------
  */
 import { TableRow, TableCell, Typography, Box } from "@mui/material"
-import ScienceOutlinedIcon      from "@mui/icons-material/ScienceOutlined"
-import ImageSearchOutlinedIcon  from "@mui/icons-material/ImageSearchOutlined"
-import AssignmentOutlinedIcon   from "@mui/icons-material/AssignmentOutlined"
-import PeopleAltOutlinedIcon    from "@mui/icons-material/PeopleAltOutlined"
 import { PriorityBadge } from "../../atoms/PriorityBadge/PriorityBadge"
 import type { PriorityLevel } from "../../atoms/PriorityBadge/PriorityBadge"
 import { BoxBadge } from "../../atoms/BoxBadge/BoxBadge"
@@ -19,6 +15,8 @@ import type { ClinicalIconStatus } from "../ClinicalStatusIcon/ClinicalStatusIco
 import { AttentionCode }  from "../../atoms/AttentionCode/AttentionCode"
 import { InfoButton }     from "../InfoButton/InfoButton"
 import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { UiBloodTestIcon, UiConversationIcon, UiPrescriptionIcon, UiXRaysIcon } from "../../atoms/Icon/SvgIconsUiKit"
+import { baseTokens } from "../../tokens/base.tokens"
 
 /** Estructura de datos de un paciente en la tabla de emergencia */
 export interface PatientRowData {
@@ -108,6 +106,13 @@ export const PatientRow = ({ data, isAlternate = false }: Props) => {
         </Box>
       </TableCell>
 
+      {/* ── N.Documento ── */}
+      <TableCell sx={{ ...cellSx, width: 100 }}>
+        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "12px", color: baseTokens.colors.textPrimaryTable, letterSpacing: "0.3px", fontWeight: emergencyTokens.typography.weight.semibold }}>
+          {data.document}
+        </Typography>
+      </TableCell>
+
       {/* ── Paciente (nombre clickeable) ── */}
       <TableCell sx={{ ...cellSx, width: 180, padding: "0 12px" }}>
         <Typography
@@ -116,7 +121,7 @@ export const PatientRow = ({ data, isAlternate = false }: Props) => {
             fontFamily:     emergencyTokens.typography.fontFamily,
             fontSize:       emergencyTokens.typography.size.tableCell,
             fontWeight:     emergencyTokens.typography.weight.semibold,
-            color:          emergencyTokens.colors.tableHeaderBg,
+            color:          baseTokens.colors.textPrimaryTable,
             cursor:         data.patient.onClick ? "pointer" : "default",
             userSelect:     "none",
             whiteSpace:     "nowrap",
@@ -133,28 +138,21 @@ export const PatientRow = ({ data, isAlternate = false }: Props) => {
 
       {/* ── Edad ── */}
       <TableCell sx={{ ...cellSx, width: 55, textAlign: "center" }}>
-        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "13px", color: emergencyTokens.colors.textPrimary }}>
+        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "13px", color: baseTokens.colors.textPrimaryTable, fontWeight: emergencyTokens.typography.weight.semibold }}>
           {data.age}
         </Typography>
       </TableCell>
 
       {/* ── Sexo ── */}
       <TableCell sx={{ ...cellSx, width: 55, textAlign: "center" }}>
-        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "13px", color: emergencyTokens.colors.textPrimary }}>
+        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "13px", color: baseTokens.colors.textPrimaryTable, fontWeight: emergencyTokens.typography.weight.semibold }}>
           {data.sex}
-        </Typography>
-      </TableCell>
-
-      {/* ── N.Documento ── */}
-      <TableCell sx={{ ...cellSx, width: 100 }}>
-        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamilyMono, fontSize: "12px", color: emergencyTokens.colors.textSecondary, letterSpacing: "0.3px" }}>
-          {data.document}
         </Typography>
       </TableCell>
 
       {/* ── Médico ── */}
       <TableCell sx={{ ...cellSx, width: 160, padding: "0 12px" }}>
-        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontSize: "13px", color: emergencyTokens.colors.textPrimary, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "160px", display: "block" }}>
+        <Typography sx={{ fontFamily: emergencyTokens.typography.fontFamily, fontWeight: emergencyTokens.typography.weight.semibold,  fontSize: "13px", color: baseTokens.colors.textPrimaryTable, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "160px", display: "block" }}>
           {data.doctor}
         </Typography>
       </TableCell>
@@ -162,28 +160,28 @@ export const PatientRow = ({ data, isAlternate = false }: Props) => {
       {/* ── Lab ── */}
       <TableCell sx={{ ...cellSx, width: 50, textAlign: "center" }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <ClinicalStatusIcon status={data.lab} icon={ScienceOutlinedIcon} tooltipLabel={`Laboratorio: ${data.lab}`} />
+          <ClinicalStatusIcon status={data.lab} icon={UiBloodTestIcon} tooltipLabel={`Laboratorio: ${data.lab}`} />
         </Box>
       </TableCell>
 
       {/* ── Img ── */}
       <TableCell sx={{ ...cellSx, width: 50, textAlign: "center" }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <ClinicalStatusIcon status={data.img} icon={ImageSearchOutlinedIcon} tooltipLabel={`Imágenes: ${data.img}`} />
+          <ClinicalStatusIcon status={data.img} icon={UiXRaysIcon} tooltipLabel={`Imágenes: ${data.img}`} />
         </Box>
       </TableCell>
 
       {/* ── Indicación médica ── */}
       <TableCell sx={{ ...cellSx, width: 50, textAlign: "center" }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <ClinicalStatusIcon status={data.indication} icon={AssignmentOutlinedIcon} tooltipLabel={`Indicación médica: ${data.indication}`} />
+          <ClinicalStatusIcon status={data.indication} icon={UiPrescriptionIcon} tooltipLabel={`Indicación médica: ${data.indication}`} />
         </Box>
       </TableCell>
 
       {/* ── Interconsulta ── */}
       <TableCell sx={{ ...cellSx, width: 50, textAlign: "center" }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <ClinicalStatusIcon status={data.interconsult} icon={PeopleAltOutlinedIcon} tooltipLabel={`Interconsulta: ${data.interconsult}`} />
+          <ClinicalStatusIcon status={data.interconsult} icon={UiConversationIcon} tooltipLabel={`Interconsulta: ${data.interconsult}`} />
         </Box>
       </TableCell>
 

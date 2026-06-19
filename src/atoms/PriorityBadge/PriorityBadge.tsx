@@ -64,7 +64,7 @@ export const PriorityBadge = ({ priority, tooltipText }: Props) => {
         sx={{
           width:           24,
           height:          24,
-          borderRadius:    "50%",
+          borderRadius:    "6px",
           display:         "flex",
           alignItems:      "center",
           justifyContent:  "center",
@@ -80,6 +80,7 @@ export const PriorityBadge = ({ priority, tooltipText }: Props) => {
           fontFamily:  emergencyTokens.typography.fontFamily,
           fontSize:    emergencyTokens.typography.size.badge,
           fontWeight:  emergencyTokens.typography.weight.extrabold,
+          textDecorationLine: "underline",
           lineHeight:  1,
           userSelect:  "none",
         }}
