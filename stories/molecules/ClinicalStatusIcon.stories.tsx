@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import ScienceOutlinedIcon from "@mui/icons-material/ScienceOutlined"
-import { ClinicalStatusIcon, injectEmergencyTokens } from "@hce/design-system"
+import { ClinicalStatusIcon, injectEmergencyTokens, UiBloodTestIcon } from "@hce/design-system"
 
 injectEmergencyTokens()
 
@@ -8,7 +7,7 @@ const meta: Meta<typeof ClinicalStatusIcon> = {
   title:     "Molecules/ClinicalStatusIcon",
   component: ClinicalStatusIcon,
   tags:      ["autodocs"],
-  args: { icon: ScienceOutlinedIcon },
+  args: { icon: UiBloodTestIcon },
 }
 export default meta
 type Story = StoryObj<typeof ClinicalStatusIcon>
