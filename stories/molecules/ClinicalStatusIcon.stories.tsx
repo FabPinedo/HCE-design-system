@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { ClinicalStatusIcon, injectEmergencyTokens, UiBloodTestIcon } from "@hce/design-system"
+import { ClinicalStatusIcon, injectHceTokens, UiBloodTestIcon } from "@hce/design-system"
 
-injectEmergencyTokens()
+injectHceTokens()
 
 const meta: Meta<typeof ClinicalStatusIcon> = {
   title:     "Molecules/ClinicalStatusIcon",

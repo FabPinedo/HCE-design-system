@@ -9,7 +9,7 @@
  */
 import { IconButton, Tooltip } from "@mui/material"
 import VisibilityIcon from "@mui/icons-material/Visibility"
-import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { hceClinicalColors } from "../../tokens/hce.tokens"
 
 interface Props {
   onClick?:  () => void
@@ -30,19 +30,19 @@ export const InfoButton = ({ onClick, tooltip = "Ver información del paciente",
             height:          28,
             borderRadius:    "4px",
             padding:         0,
-            backgroundColor: emergencyTokens.colors.btnInfoBg,
+            backgroundColor: hceClinicalColors.btnInfoBg,
             color:           "#FFFFFF",
             flexShrink:      0,
 
             "&:hover": {
-              backgroundColor: emergencyTokens.colors.headerBg,
+              backgroundColor: hceClinicalColors.headerBg,
             },
             "&:active": {
-              backgroundColor: emergencyTokens.colors.headerBg,
+              backgroundColor: hceClinicalColors.headerBg,
               transform:       "scale(0.95)",
             },
             "&.Mui-disabled": {
-              backgroundColor: emergencyTokens.colors.tableHeaderBg,
+              backgroundColor: hceClinicalColors.tableHeaderBg,
               opacity:         0.4,
               color:           "#FFFFFF",
             },

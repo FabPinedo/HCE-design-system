@@ -12,7 +12,7 @@
 import { Box, Typography, Chip } from "@mui/material"
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined"
-import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { hceTypography, hceClinicalColors, hceShadows, hceZIndex } from "../../tokens/hce.tokens"
 
 interface Props {
   /** Título principal del módulo (ej: "Monitor de Emergencia") */
@@ -32,9 +32,9 @@ const chipSx = {
   backgroundColor: "rgba(255, 255, 255, 0.12)",
   color:           "#FFFFFF",
   border:          "1px solid rgba(255, 255, 255, 0.25)",
-  fontFamily:      emergencyTokens.typography.fontFamily,
-  fontSize:        emergencyTokens.typography.size.headerMeta,
-  fontWeight:      emergencyTokens.typography.weight.medium,
+  fontFamily:      hceTypography.fontFamilyClinical,
+  fontSize:        hceTypography.size.headerMeta,
+  fontWeight:      hceTypography.weight.medium,
   textTransform:   "uppercase" as const,
   letterSpacing:   "0.3px",
   height:          28,
@@ -62,15 +62,15 @@ export const EmergencyHeader = ({
       component="header"
       sx={{
         width:           "100%",
-        backgroundColor: emergencyTokens.colors.headerBg,
-        boxShadow:       emergencyTokens.shadows.header,
+        backgroundColor: hceClinicalColors.headerBg,
+        boxShadow:       hceShadows.header,
         display:         "flex",
         alignItems:      "center",
         justifyContent:  "space-between",
         padding:         "0 24px",
         height:          56,
         flexShrink:      0,
-        zIndex:          emergencyTokens.zIndex.stickyHeader,
+        zIndex:          hceZIndex.stickyHeader,
       }}
     >
       {/* ─── Izquierda: Logo + Título ─── */}
@@ -86,9 +86,9 @@ export const EmergencyHeader = ({
         <Typography
           component="h1"
           sx={{
-            fontFamily: emergencyTokens.typography.fontFamily,
-            fontSize:   emergencyTokens.typography.size.headerTitle,
-            fontWeight: emergencyTokens.typography.weight.bold,
+            fontFamily: hceTypography.fontFamilyClinical,
+            fontSize:   hceTypography.size.headerTitle,
+            fontWeight: hceTypography.weight.bold,
             color:      "#FFFFFF",
             margin:     0,
             lineHeight: 1,

@@ -17,7 +17,7 @@
  * ---------------------------------------------------------
  */
 import { Box, Tooltip } from "@mui/material"
-import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { hceClinicalColors, hceTypography } from "../../tokens/hce.tokens"
 
 export type PriorityLevel = 1 | 2 | 3 | 4 | "none"
 
@@ -28,11 +28,11 @@ interface PriorityConfig {
 }
 
 const PRIORITY_CONFIG: Record<string, PriorityConfig> = {
-  "1":    { color: emergencyTokens.colors.priority1,    label: "I", description: "Prioridad 1 — Crítico" },
-  "2":    { color: emergencyTokens.colors.priority2,    label: "II", description: "Prioridad 2 — Urgente" },
-  "3":    { color: emergencyTokens.colors.priority3,    label: "III", description: "Prioridad 3 — Moderado" },
-  "4":    { color: emergencyTokens.colors.priority4,    label: "IV", description: "Prioridad 4 — Leve" },
-  "none": { color: emergencyTokens.colors.priorityNone, label: "",  description: "Sin prioridad asignada" },
+  "1":    { color: hceClinicalColors.priority1,    label: "I", description: "Prioridad 1 — Crítico" },
+  "2":    { color: hceClinicalColors.priority2,    label: "II", description: "Prioridad 2 — Urgente" },
+  "3":    { color: hceClinicalColors.priority3,    label: "III", description: "Prioridad 3 — Moderado" },
+  "4":    { color: hceClinicalColors.priority4,    label: "IV", description: "Prioridad 4 — Leve" },
+  "none": { color: hceClinicalColors.priorityNone, label: "",  description: "Sin prioridad asignada" },
 }
 
 interface Props {
@@ -77,9 +77,9 @@ export const PriorityBadge = ({ priority, tooltipText }: Props) => {
           color:           isNone ? config.color : "#FFFFFF",
 
           // Tipografía del badge
-          fontFamily:  emergencyTokens.typography.fontFamily,
-          fontSize:    emergencyTokens.typography.size.badge,
-          fontWeight:  emergencyTokens.typography.weight.extrabold,
+          fontFamily:  hceTypography.fontFamilyClinical,
+          fontSize:    hceTypography.size.badge,
+          fontWeight:  hceTypography.weight.extrabold,
           textDecorationLine: "underline",
           lineHeight:  1,
           userSelect:  "none",

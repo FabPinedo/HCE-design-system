@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import React from "react"
 import { Table, TableBody } from "@mui/material"
-import { PatientRow, injectEmergencyTokens } from "@hce/design-system"
+import { PatientRow, injectHceTokens } from "@hce/design-system"
 import type { PatientRowData } from "@hce/design-system"
 
-injectEmergencyTokens()
+injectHceTokens()
 
 const BASE: PatientRowData = {
   id:            "E001",

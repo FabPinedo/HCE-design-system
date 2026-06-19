@@ -1,8 +1,8 @@
 import type { Preview } from "@storybook/react"
 import React from "react"
-import { DSProvider }       from "../src/provider/ThemeProvider"
-import { injectBaseTokens } from "../src/tokens/base.tokens"
-injectBaseTokens()
+import { DSProvider }      from "../src/provider/ThemeProvider"
+import { injectHceTokens } from "../src/tokens/hce.tokens"
+injectHceTokens()
 
 const preview: Preview = {
   decorators: [

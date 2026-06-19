@@ -13,7 +13,7 @@
  * ---------------------------------------------------------
  */
 import { Box, Tooltip } from "@mui/material"
-import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { hceClinicalColors, hceBorderRadius } from "../../tokens/hce.tokens"
 import type { ComponentType } from "react"
 
 export type ClinicalIconStatus = "alert" | "ok" | "urgent" | "empty"
@@ -26,18 +26,18 @@ interface StatusConfig {
 
 const STATUS_CONFIG: Record<ClinicalIconStatus, StatusConfig> = {
   alert: {
-    bg:    emergencyTokens.colors.iconAlertBg,
-    color: emergencyTokens.colors.iconAlert,
+    bg:    hceClinicalColors.iconAlertBg,
+    color: hceClinicalColors.iconAlert,
     label: "Pendiente / Alerta",
   },
   ok: {
-    bg:    emergencyTokens.colors.iconOkBg,
-    color: emergencyTokens.colors.iconOk,
+    bg:    hceClinicalColors.iconOkBg,
+    color: hceClinicalColors.iconOk,
     label: "Completado",
   },
   urgent: {
-    bg:    emergencyTokens.colors.iconUrgentBg,
-    color: emergencyTokens.colors.iconUrgent,
+    bg:    hceClinicalColors.iconUrgentBg,
+    color: hceClinicalColors.iconUrgent,
     label: "Urgente",
   },
   empty: {
@@ -78,7 +78,7 @@ export const ClinicalStatusIcon = ({ status, icon: Icon, tooltipLabel }: Props) 
           width:           28,
           height:          28,
           border:          `1.5px solid ${config.color}` ,
-          borderRadius:    emergencyTokens.borderRadius.md,
+          borderRadius:    hceBorderRadius.md,
           backgroundColor: config.bg,
           display:         "flex",
           alignItems:      "center",

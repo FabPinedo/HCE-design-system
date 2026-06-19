@@ -12,11 +12,8 @@ import {
   hceColors,
   hceUi,
   hceTypography,
+  hceBorderRadius,
 } from "../tokens/hce.tokens"
-import {
-  baseTypography,
-  baseBorderRadius,
-} from "../tokens/base.tokens"
 
 export const theme = createTheme({
   palette: {
@@ -43,24 +40,24 @@ export const theme = createTheme({
   },
 
   shape: {
-    borderRadius: parseInt(baseBorderRadius.lg),
+    borderRadius: parseInt(hceBorderRadius.lg),
   },
 
   typography: {
     fontFamily: hceTypography.fontFamily,
-    fontSize:   baseTypography.fontSize,
+    fontSize:   hceTypography.fontSize,
     h1: {
-      fontSize:      baseTypography.size.h1,
-      fontWeight:    baseTypography.weight.semibold,
-      letterSpacing: baseTypography.letterSpacing.tight,
+      fontSize:      hceTypography.size.h1,
+      fontWeight:    hceTypography.weight.semibold,
+      letterSpacing: hceTypography.letterSpacing.tight,
     },
     h4: {
-      fontSize:      baseTypography.size.h4,
-      fontWeight:    baseTypography.weight.semibold,
-      letterSpacing: baseTypography.letterSpacing.tight,
+      fontSize:      hceTypography.size.h4,
+      fontWeight:    hceTypography.weight.semibold,
+      letterSpacing: hceTypography.letterSpacing.tight,
     },
     button: {
-      fontWeight:    baseTypography.weight.medium,
+      fontWeight:    hceTypography.weight.medium,
       textTransform: 'none',
     },
   },
@@ -69,7 +66,7 @@ export const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius:  baseBorderRadius.lg,
+          borderRadius:  hceBorderRadius.lg,
           textTransform: 'none',
         },
       },
@@ -78,7 +75,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: hceUi.surface,
-          borderRadius:    baseBorderRadius.xl,
+          borderRadius:    hceBorderRadius.xl,
           overflow:        'hidden',
           boxShadow:       '0px 2px 12px rgba(0,0,0,0.05)',
         },
@@ -90,10 +87,10 @@ export const theme = createTheme({
           backgroundColor: hceUi.background,
           '& .MuiTableCell-root': {
             color:         hceUi.textSecondary,
-            fontWeight:    baseTypography.weight.bold,
+            fontWeight:    hceTypography.weight.bold,
             textTransform: 'uppercase',
-            fontSize:      baseTypography.size.xs,
-            letterSpacing: baseTypography.letterSpacing.wide,
+            fontSize:      hceTypography.size.xs,
+            letterSpacing: hceTypography.letterSpacing.wide,
             borderBottom:  `2px solid ${hceColors.neutro.black[50]}`,
           },
         },
@@ -105,7 +102,7 @@ export const theme = createTheme({
           padding:     '16px',
           borderColor: hceColors.neutro.black[50],
           color:       hceUi.textPrimary,
-          fontSize:    baseTypography.size.sm,
+          fontSize:    hceTypography.size.sm,
         },
       },
     },
@@ -132,8 +129,8 @@ export const theme = createTheme({
     MuiPaginationItem: {
       styleOverrides: {
         root: {
-          borderRadius: baseBorderRadius.lg,
-          fontWeight:   baseTypography.weight.medium,
+          borderRadius: hceBorderRadius.lg,
+          fontWeight:   hceTypography.weight.medium,
           color:        hceUi.textSecondary,
           '&.Mui-selected': {
             backgroundColor: hceColors.primary.blue[500],

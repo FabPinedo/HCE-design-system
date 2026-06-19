@@ -9,42 +9,21 @@ export { emergencyTheme } from "./theme/emergencyTheme"
 // ── Provider ──────────────────────────────────────────────
 export { DSProvider } from "./provider/ThemeProvider"
 
-// ── Design Tokens — Base ───────────────────────────────────
-export {
-  baseTokens,
-  baseColors,
-  baseTypography,
-  baseSpacing,
-  baseBorderRadius,
-  baseShadows,
-  baseZIndex,
-  injectBaseTokens,
-} from "./tokens/base.tokens"
-
-// ── Design Tokens — HCE Figma Palette ─────────────────────
+// ── Design Tokens — HCE (fuente única de verdad) ──────────
 export {
   hceColors,
   hceTypography,
   hceUi,
   hceTransition,
   hceShadows,
+  hceSpacing,
+  hceBorderRadius,
+  hceZIndex,
+  hceClinicalColors,
   injectHceTokens,
   injectHceFonts,
 } from "./tokens/hce.tokens"
 export type { HceColors } from "./tokens/hce.tokens"
-
-// ── Design Tokens — Emergency Monitor ─────────────────────
-export {
-  emergencyTokens,
-  emergencyColors,
-  emergencyTypography,
-  emergencySpacing,
-  emergencyBorderRadius,
-  emergencyShadows,
-  emergencyZIndex,
-  emergencyTokensJSON,
-  injectEmergencyTokens,
-} from "./tokens/emergency.tokens"
 
 // ── MUI Primitives re-exported ─────────────────────────────
 export { Box, Typography } from "@mui/material"

@@ -9,7 +9,7 @@
 import { Box, Chip, IconButton, Typography } from "@mui/material"
 import ChevronLeftIcon  from "@mui/icons-material/ChevronLeft"
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"
-import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { hceClinicalColors, hceSpacing, hceTypography, hceBorderRadius } from "../../tokens/hce.tokens"
 
 interface Props {
   /** Número total de registros */
@@ -46,14 +46,14 @@ const navButtonSx = {
   width:           28,
   height:          28,
   borderRadius:    "50%",
-  border:          `1px solid ${emergencyTokens.colors.border}`,
+  border:          `1px solid ${hceClinicalColors.border}`,
   backgroundColor: "#FFFFFF",
-  color:           emergencyTokens.colors.textSecondary,
+  color:           hceClinicalColors.textSecondary,
   padding:         0,
   "&:hover:not(.Mui-disabled)": {
-    backgroundColor: emergencyTokens.colors.hoverBg,
-    borderColor:     emergencyTokens.colors.tableHeaderBg,
-    color:           emergencyTokens.colors.tableHeaderBg,
+    backgroundColor: hceClinicalColors.hoverBg,
+    borderColor:     hceClinicalColors.tableHeaderBg,
+    color:           hceClinicalColors.tableHeaderBg,
   },
   "&.Mui-disabled": { opacity: 0.4 },
 }
@@ -74,7 +74,7 @@ export const EmergencyPagination = ({
         alignItems:      "center",
         justifyContent:  "flex-end",
         gap:             "6px",
-        padding:         `${emergencyTokens.spacing[3]} ${emergencyTokens.spacing[4]}`,
+        padding:         `${hceSpacing[3]} ${hceSpacing[4]}`,
       }}
       role="navigation"
       aria-label="Paginación de pacientes"
@@ -84,14 +84,14 @@ export const EmergencyPagination = ({
         label={`${totalItems} pacientes`}
         size="small"
         sx={{
-          backgroundColor: emergencyTokens.colors.rowAlternate,
-          color:           emergencyTokens.colors.textPrimary,
-          fontFamily:      emergencyTokens.typography.fontFamily,
+          backgroundColor: hceClinicalColors.rowAlternate,
+          color:           hceClinicalColors.textPrimary,
+          fontFamily:      hceTypography.fontFamilyClinical,
           fontSize:        "12px",
-          fontWeight:      emergencyTokens.typography.weight.medium,
+          fontWeight:      hceTypography.weight.medium,
           height:          26,
-          borderRadius:    emergencyTokens.borderRadius.sm,
-          border:          `1px solid ${emergencyTokens.colors.border}`,
+          borderRadius:    hceBorderRadius.sm,
+          border:          `1px solid ${hceClinicalColors.border}`,
           marginRight:     "8px",
           "& .MuiChip-label": { padding: "0 10px" },
         }}
@@ -114,9 +114,9 @@ export const EmergencyPagination = ({
           <Typography
             key={`ellipsis-${idx}`}
             sx={{
-              fontFamily: emergencyTokens.typography.fontFamily,
+              fontFamily: hceTypography.fontFamilyClinical,
               fontSize:   "12px",
-              color:      emergencyTokens.colors.textSecondary,
+              color:      hceClinicalColors.textSecondary,
               userSelect: "none",
               padding:    "0 2px",
             }}
@@ -131,17 +131,17 @@ export const EmergencyPagination = ({
             sx={{
               width:           28,
               height:          28,
-              borderRadius:    emergencyTokens.borderRadius.sm,
-              border:          `1px solid ${page === currentPage ? emergencyTokens.colors.tableHeaderBg : emergencyTokens.colors.border}`,
-              backgroundColor: page === currentPage ? emergencyTokens.colors.tableHeaderBg : "#FFFFFF",
-              color:           page === currentPage ? "#FFFFFF" : emergencyTokens.colors.textSecondary,
-              fontFamily:      emergencyTokens.typography.fontFamily,
+              borderRadius:    hceBorderRadius.sm,
+              border:          `1px solid ${page === currentPage ? hceClinicalColors.tableHeaderBg : hceClinicalColors.border}`,
+              backgroundColor: page === currentPage ? hceClinicalColors.tableHeaderBg : "#FFFFFF",
+              color:           page === currentPage ? "#FFFFFF" : hceClinicalColors.textSecondary,
+              fontFamily:      hceTypography.fontFamilyClinical,
               fontSize:        "12px",
-              fontWeight:      page === currentPage ? emergencyTokens.typography.weight.bold : emergencyTokens.typography.weight.regular,
+              fontWeight:      page === currentPage ? hceTypography.weight.bold : hceTypography.weight.regular,
               padding:         0,
               "&:hover": {
-                backgroundColor: page === currentPage ? emergencyTokens.colors.headerBg : emergencyTokens.colors.hoverBg,
-                borderColor:     page === currentPage ? emergencyTokens.colors.headerBg : emergencyTokens.colors.tableHeaderBg,
+                backgroundColor: page === currentPage ? hceClinicalColors.headerBg : hceClinicalColors.hoverBg,
+                borderColor:     page === currentPage ? hceClinicalColors.headerBg : hceClinicalColors.tableHeaderBg,
               },
             }}
             aria-label={`Página ${page}`}

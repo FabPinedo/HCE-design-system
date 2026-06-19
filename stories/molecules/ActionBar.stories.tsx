@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { ActionBar, injectEmergencyTokens } from "@hce/design-system"
+import { ActionBar, injectHceTokens } from "@hce/design-system"
 
-injectEmergencyTokens()
+injectHceTokens()
 
 const meta: Meta<typeof ActionBar> = {
   title:      "Molecules/ActionBar",

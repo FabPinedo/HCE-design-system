@@ -9,7 +9,7 @@
  */
 import { Box, Typography } from "@mui/material"
 import KingBedOutlinedIcon from "@mui/icons-material/KingBedOutlined"
-import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { hceClinicalColors, hceShadows, hceZIndex, hceTypography } from "../../tokens/hce.tokens"
 
 interface Props {
   /** Callback al hacer click en el tab */
@@ -48,16 +48,16 @@ export const BedsAvailabilityTab = ({
         transform:   "rotate(180deg)",
 
         backgroundColor: isActive
-          ? emergencyTokens.colors.headerBg
-          : emergencyTokens.colors.tableHeaderBg,
+          ? hceClinicalColors.headerBg
+          : hceClinicalColors.tableHeaderBg,
 
         // Con rotate(180deg): "0 8px 8px 0" en DOM → esquinas izq redondeadas visualmente
         borderRadius: "0 8px 8px 0",
-        boxShadow:    emergencyTokens.shadows.tab,
+        boxShadow:    hceShadows.tab,
 
         padding:    "20px 10px",
         cursor:     "pointer",
-        zIndex:     emergencyTokens.zIndex.sideTab,
+        zIndex:     hceZIndex.sideTab,
         userSelect: "none",
         transition: "background-color 0.15s ease",
 
@@ -66,10 +66,10 @@ export const BedsAvailabilityTab = ({
         gap:         "6px",
 
         "&:hover": {
-          backgroundColor: emergencyTokens.colors.headerBg,
+          backgroundColor: hceClinicalColors.headerBg,
         },
         "&:focus-visible": {
-          outline:      `2px solid ${emergencyTokens.colors.priority4}`,
+          outline:      `2px solid ${hceClinicalColors.priority4}`,
           outlineOffset: "2px",
         },
       }}
@@ -87,9 +87,9 @@ export const BedsAvailabilityTab = ({
       {/* Texto vertical de abajo hacia arriba */}
       <Typography
         sx={{
-          fontFamily:    emergencyTokens.typography.fontFamily,
+          fontFamily:    hceTypography.fontFamilyClinical,
           fontSize:      "12px",
-          fontWeight:    emergencyTokens.typography.weight.semibold,
+          fontWeight:    hceTypography.weight.semibold,
           color:         "#FFFFFF",
           whiteSpace:    "nowrap",
           letterSpacing: "0.4px",

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { InfoButton, injectEmergencyTokens } from "@hce/design-system"
+import { InfoButton, injectHceTokens } from "@hce/design-system"
 
-injectEmergencyTokens()
+injectHceTokens()
 
 const meta: Meta<typeof InfoButton> = {
   title:     "Molecules/InfoButton",

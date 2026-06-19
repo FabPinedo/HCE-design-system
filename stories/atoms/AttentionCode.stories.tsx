@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { AttentionCode } from "@hce/design-system"
-import { injectEmergencyTokens } from "@hce/design-system"
+import { injectHceTokens } from "@hce/design-system"
 
-injectEmergencyTokens()
+injectHceTokens()
 
 const meta: Meta<typeof AttentionCode> = {
   title:     "Atoms/AttentionCode",

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import React, { useState } from "react"
-import { EmergencyPagination, injectEmergencyTokens } from "@hce/design-system"
+import { EmergencyPagination, injectHceTokens } from "@hce/design-system"
 
-injectEmergencyTokens()
+injectHceTokens()
 
 function PaginationDemo({ total, pages }: { total: number; pages: number }) {
   const [page, setPage] = useState(1)

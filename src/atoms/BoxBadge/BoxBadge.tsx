@@ -18,7 +18,7 @@
  * ---------------------------------------------------------
  */
 import { Box } from "@mui/material"
-import { emergencyTokens } from "../../tokens/emergency.tokens"
+import { hceClinicalColors, hceBorderRadius, hceTypography } from "../../tokens/hce.tokens"
 
 export type BoxStatus = "active" | "urgent" | "waiting" | "tp"
 
@@ -27,10 +27,10 @@ interface BoxStatusConfig {
 }
 
 const STATUS_CONFIG: Record<BoxStatus, BoxStatusConfig> = {
-  active:  { color: emergencyTokens.colors.boxActive  },
-  urgent:  { color: emergencyTokens.colors.boxUrgent  },
-  waiting: { color: emergencyTokens.colors.boxWaiting },
-  tp:      { color: emergencyTokens.colors.boxTP      },
+  active:  { color: hceClinicalColors.boxActive  },
+  urgent:  { color: hceClinicalColors.boxUrgent  },
+  waiting: { color: hceClinicalColors.boxWaiting },
+  tp:      { color: hceClinicalColors.boxTP      },
 }
 
 interface Props {
@@ -57,13 +57,13 @@ export const BoxBadge = ({ status, label }: Props) => {
         alignItems:      "center",
         justifyContent:  "center",
         padding:         "3px 10px",
-        borderRadius:    emergencyTokens.borderRadius.md,
+        borderRadius:    hceBorderRadius.md,
         border:          `1.5px solid ${config.color}`,
         backgroundColor: "transparent",
         color:           config.color,
-        fontFamily:      emergencyTokens.typography.fontFamily,
-        fontSize:        emergencyTokens.typography.size.badge,
-        fontWeight:      emergencyTokens.typography.weight.bold,
+        fontFamily:      hceTypography.fontFamilyClinical,
+        fontSize:        hceTypography.size.badge,
+        fontWeight:      hceTypography.weight.bold,
         textTransform:   "uppercase",
         textDecorationLine: "underline",
         letterSpacing:   "0.3px",

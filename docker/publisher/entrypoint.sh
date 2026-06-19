@@ -58,6 +58,12 @@ echo "    Auth configured (logged in as $(npm whoami --registry "$REGISTRY"))."
 echo ">>> Building @hce/design-system ..."
 npm run build
 
+# Si `npm publish` falla con E401 mas adelante a pesar de que `npm whoami`
+# arriba funcionó: no es un problema del script. La causa típica es una
+# VPN/proxy/antivirus corporativo interceptando el PUT (que es mas grande
+# que el GET de whoami) y descartando el header Authorization. Pedir
+# desactivar VPN/proxy temporalmente y reintentar.
+
 # ── 5. Verificar si la versión ya fue publicada ─────────────────────────────
 PACKAGE_NAME=$(node -p "require('./package.json').name")
 PACKAGE_VERSION=$(node -p "require('./package.json').version")

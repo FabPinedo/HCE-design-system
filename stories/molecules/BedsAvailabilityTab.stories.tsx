@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { BedsAvailabilityTab, injectEmergencyTokens } from "@hce/design-system"
+import { BedsAvailabilityTab, injectHceTokens } from "@hce/design-system"
 
-injectEmergencyTokens()
+injectHceTokens()
 
 const meta: Meta<typeof BedsAvailabilityTab> = {
   title:      "Molecules/BedsAvailabilityTab",

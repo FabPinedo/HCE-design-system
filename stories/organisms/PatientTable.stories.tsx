@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import React from "react"
-import { EmergencyPatientTable, injectEmergencyTokens } from "@hce/design-system"
+import { ThemeProvider } from "@mui/material/styles"
+import { EmergencyPatientTable, emergencyTheme, injectHceTokens } from "@hce/design-system"
 import type { PatientRowData } from "@hce/design-system"
 
-injectEmergencyTokens()
+injectHceTokens()
 
 const HEADER = [
   { label: "Prioridad",   width: 70,  align: "center" as const },
@@ -61,9 +62,17 @@ const meta: Meta = {
 export default meta
 
 export const Default: StoryObj = {
-  render: () => <EmergencyPatientTable rows={ROWS} header={HEADER} />,
+  render: () => (
+    <ThemeProvider theme={emergencyTheme}>
+      <EmergencyPatientTable rows={ROWS} header={HEADER} />
+    </ThemeProvider>
+  ),
 }
 
 export const Vacia: StoryObj = {
-  render: () => <EmergencyPatientTable rows={[]} header={HEADER} />,
+  render: () => (
+    <ThemeProvider theme={emergencyTheme}>
+      <EmergencyPatientTable rows={[]} header={HEADER} />
+    </ThemeProvider>
+  ),
 }
