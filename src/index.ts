@@ -124,6 +124,7 @@ export { ClinicalStatusIcon }  from "./molecules/ClinicalStatusIcon/ClinicalStat
 export { EmergencyHeader }     from "./molecules/EmergencyHeader/EmergencyHeader"
 export { EmergencyPagination } from "./molecules/EmergencyPagination/EmergencyPagination"
 export { IconButton }          from "./molecules/IconButton/IconButton"
+export { GenericRow }          from "./molecules/GenericRow/GenericRow"
 export { InfoButton }          from "./molecules/InfoButton/InfoButton"
 export { PatientRow }          from "./molecules/PatientRow/PatientRow"
 export { PasswordInput }       from "./molecules/PasswordInput/PasswordInput"
@@ -172,6 +173,7 @@ export { PatientTable as EmergencyPatientTable } from "./organisms/PatientTable/
 export { BedAvailabilityDrawer } from "./organisms/BedAvailability/BedAvailabilityDrawer"
 export { SidebarMenu }           from "./organisms/SidebarMenu/SidebarMenu"
 export { NavTab }                from "./organisms/NavTab/NavTab"
+export { EmergencyTable} from "./organisms/EmergencyTable/EmergencyTable"
 
 // ── Types — Organisms ──────────────────────────────────────
 export type { MenuItem }       from "./organisms/SidebarMenu/types"
