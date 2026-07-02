@@ -25,7 +25,7 @@ export const RadioGroup = ({
         border: `1.5px solid ${disabled ? hceColors.neutro.black[200] : hceColors.primary.green[500]}`,
         borderRadius: "8px",
         px: 2,
-        py: 1,
+        py: 0.2,
         m: 0,
         opacity: disabled ? 0.5 : 1,
       }}
@@ -55,7 +55,7 @@ export const RadioGroup = ({
               gap: 0.2,
               cursor: disabled ? "not-allowed" : "pointer",
               fontFamily: hceTypography.fontFamily,
-              fontSize: "16px",
+              fontSize: "0.875rem",
             }}
           >
             {opt}

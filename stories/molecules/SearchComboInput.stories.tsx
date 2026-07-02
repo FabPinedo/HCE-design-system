@@ -19,7 +19,7 @@ const MOCK_DIAGNOSTICOS: SearchOption[] = [
 
 function filterOptions(query: string, mode: SearchMode): SearchOption[] {
   const q = query.toLowerCase()
-  if (mode === "cie10") {
+  if (mode === "cie_code") {
     return MOCK_DIAGNOSTICOS.filter(o => o.secondary?.toLowerCase().startsWith(q))
   }
   return MOCK_DIAGNOSTICOS.filter(o => o.label.toLowerCase().includes(q))
@@ -52,7 +52,7 @@ type Story = StoryObj<typeof SearchComboInput>
 export const Default: Story = {
   name: "Motivo de ingreso",
   render: ({ loading, disabled, debounceMs }) => {
-    const [mode,    setMode]    = useState<SearchMode>("nombre")
+    const [mode,    setMode]    = useState<SearchMode>("cie_description")
     const [value,   setValue]   = useState("")
     const [options, setOptions] = useState<SearchOption[]>([])
     const [selected, setSelected] = useState<SearchOption | null>(null)
@@ -135,7 +135,7 @@ export const Disabled: Story = {
 export const ModoCIE10: Story = {
   name: "Modo CIE-10 por defecto",
   render: () => {
-    const [mode, setMode] = useState<SearchMode>("cie10")
+    const [mode, setMode] = useState<SearchMode>("cie_code")
     const [value, setValue] = useState("")
     const [options, setOptions] = useState<SearchOption[]>([])
 

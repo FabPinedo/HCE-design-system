@@ -20,6 +20,7 @@ Versionado basado en [Semantic Versioning](https://semver.org/).
   - Bordes superiores redondeados
 ### Cambiado
 - **`Checkbox`** (Atomo): Incorporación de color de check y fondo del recuadro. Modificación de estilos
+- **`SearchComboInput`** (Molécula): Modificación de interfaz SearchMode . Se cambio "nombre", "cie10" por "cie_description", "cie_code"
 ---
 
 ## [1.2.0] - 2026-04-20

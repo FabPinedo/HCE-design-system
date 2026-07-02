@@ -5,7 +5,7 @@ import { ChevronDownIcon } from "../../atoms/Icon/Icon"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type SearchMode = "nombre" | "cie10"
+export type SearchMode = "cie_description" | "cie_code"
 
 export interface SearchOption {
   value:      string
@@ -34,8 +34,8 @@ export interface SearchComboInputProps {
 }
 
 const SEARCH_MODES: { value: SearchMode; label: string }[] = [
-  { value: "nombre", label: "Por nombre" },
-  { value: "cie10",  label: "CIE-10"     },
+  { value: "cie_description", label: "Por nombre" },
+  { value: "cie_code",  label: "CIE-10"     },
 ]
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -43,7 +43,7 @@ const SEARCH_MODES: { value: SearchMode; label: string }[] = [
 export function SearchComboInput({
   label,
   required      = false,
-  searchMode    = "nombre",
+  searchMode    = "cie_description",
   onSearchModeChange,
   value         = "",
   onChange,
@@ -134,7 +134,7 @@ export function SearchComboInput({
 
   const currentMode = SEARCH_MODES.find(m => m.value === searchMode)!
 
-  const defaultPlaceholder = searchMode === "cie10"
+  const defaultPlaceholder = searchMode === "cie_code"
     ? "Ej: J06.9, A09..."
     : "Ingrese texto para buscar..."
 
