@@ -1,7 +1,6 @@
 import {
   Autocomplete,
   Box,
-  Checkbox,
   FormControl,
   OutlinedInput,
   Typography,
@@ -12,7 +11,8 @@ import {
   hceTransition,
   hceTypography,
 } from "../../tokens/hce.tokens";
-import { CheckBoxOutlineBlank, CheckBoxOutlined } from "@mui/icons-material";
+import { Checkbox } from "../Checkbox/Checkbox";
+import { VisibilityOutlined } from "@mui/icons-material";
 
 interface Option {
   value: string;
@@ -71,7 +71,7 @@ export const MultiSelect = ({
     (value ?? []).includes(opt.value),
   );
   const [inputValue] = useState("");
-  
+
   if (label) {
     return (
       <Box
@@ -90,7 +90,6 @@ export const MultiSelect = ({
             transition: `color ${hceTransition.fast}`,
           }}
         >
-          {label}
         </Typography>
         <FormControl fullWidth={fullWidth} size="small">
           <Autocomplete
@@ -100,6 +99,14 @@ export const MultiSelect = ({
               },
             }}
             fullWidth={fullWidth}
+            slotProps={{
+              paper: {
+                sx: {
+                  width: "max-content",
+                  minWidth: "100%",
+                },
+              },
+            }}
             multiple
             disabled={disabled}
             disableCloseOnSelect
@@ -108,9 +115,35 @@ export const MultiSelect = ({
               onChange(values);
             }}
             options={options}
-            renderValue={() => null}
             value={selectedOptions ?? []}
             getOptionLabel={(option) => option.label}
+            renderValue={() => {
+              if (value.length === 0) return null;
+              return (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    backgroundColor: hceColors.primary.green[600],
+                    color: "#ffffff",
+                    borderRadius: "8px",
+                    padding: "4px 12px",
+                    fontSize: "0.85rem",
+                    fontWeight: 500,
+                    fontFamily: hceTypography.fontFamily,
+                    mr: 1,
+                    width: "100%",
+                    userSelect: "none",
+                  }}
+                >
+                  <span>
+                    {value.length} seleccionado{value.length > 1 ? "s" : ""}
+                  </span>
+                  <VisibilityOutlined sx={{ fontSize: "1rem", opacity: 0.9 }} />
+                </Box>
+              );
+            }}
             renderOption={(props, option, { selected }) => {
               const { key, ...restProps } = props;
               return (
@@ -122,73 +155,70 @@ export const MultiSelect = ({
                     justifyContent: "space-between",
                     alignItems: "center",
                     width: "100%",
-                    padding: "12px 16px",
+                    padding: "8px 16px",
+                    whiteSpace: "nowrap",
                   }}
                 >
-                  {option.label}
                   <Checkbox
-                    icon={<CheckBoxOutlineBlank fontSize="small" />}
-                    checkedIcon={<CheckBoxOutlined fontSize="small" />}
+                    label={option.label}
                     checked={selected}
-                    sx={{
-                      color: hceColors.primary.green[600],
-                      borderRadius: "6px",
-                      "&.Mui-checked": {
-                        color: hceColors.primary.green[600],
-                      },
-                      "& .MuiSvgIcon-root": {
-                        borderRadius: "6px",
-                      },
-                    }}
+                    disabled={false}
+                    onChange={() => {}}
+                    sideLabel="start"
                   />
                 </li>
               );
             }}
-            renderInput={(params) => (
-              <FormControl fullWidth={fullWidth}>
-                <OutlinedInput
-                  required={required}
-                  fullWidth={fullWidth}
-                  size="small"
-                  inputProps={{ ...params.inputProps, placeholder }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Backspace" && !inputValue) {
-                      e.stopPropagation();
-                    }
-                  }}
-                  inputRef={params.InputProps.ref}
-                  label="Empresas"
-                  endAdornment={params.InputProps.endAdornment}
-                  onFocus={() => setFocused(true)}
-                  onBlur={() => setFocused(false)}
-                  sx={{
-                    borderRadius: "8px",
-                    backgroundColor: hceColors.neutro.white[50],
-                    fontSize: "0.875rem",
-                    transition: `box-shadow ${hceTransition.fast}`,
-                    "& .MuiInputBase-input": {
-                      color: inputTextColor,
-                      WebkitTextFillColor: inputTextColor,
-                      transition: `color ${hceTransition.fast}, -webkit-text-fill-color ${hceTransition.fast}`,
-                    },
-                    "& fieldset": {
-                      borderColor: borderDefault,
-                      transition: `border-color ${hceTransition.fast}`,
-                    },
-                    "&:hover fieldset": { borderColor: borderActive },
-                    "&.Mui-focused fieldset": { borderColor: borderActive },
-                    "&.Mui-focused": {
-                      boxShadow: `0 0 0 3px ${hceColors.primary.blue[100]}`,
-                    },
-                    "& input::placeholder": {
-                      color: accentColor,
-                      opacity: 1,
-                      transition: `color ${hceTransition.fast}`,
-                    },
-                  }}
-                />
-              </FormControl>
-            )}
+            renderInput={(params) => {
+              return (
+                <FormControl fullWidth={fullWidth}>
+                  <OutlinedInput
+                    ref={params.InputProps.ref}
+                    required={required}
+                    fullWidth={fullWidth}
+                    size="small"
+                    startAdornment={params.InputProps.startAdornment}
+                    inputProps={{
+                      ...params.inputProps,
+                      placeholder: value.length > 0 ? "" : placeholder,
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Backspace" && !inputValue) {
+                        e.stopPropagation();
+                      }
+                    }}
+                    endAdornment={params.InputProps.endAdornment}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                    sx={{
+                      borderRadius: "8px",
+                      backgroundColor: hceColors.neutro.white[50],
+                      fontSize: "0.875rem",
+                      transition: `box-shadow ${hceTransition.fast}`,
+                      "& .MuiInputBase-input": {
+                        color: inputTextColor,
+                        WebkitTextFillColor: inputTextColor,
+                        transition: `color ${hceTransition.fast}, -webkit-text-fill-color ${hceTransition.fast}`,
+                      },
+                      "& fieldset": {
+                        borderColor: borderDefault,
+                        transition: `border-color ${hceTransition.fast}`,
+                      },
+                      "&:hover fieldset": { borderColor: borderActive },
+                      "&.Mui-focused fieldset": { borderColor: borderActive },
+                      "&.Mui-focused": {
+                        boxShadow: `0 0 0 3px ${hceColors.primary.blue[100]}`,
+                      },
+                      "& input::placeholder": {
+                        color: accentColor,
+                        opacity: 1,
+                        transition: `color ${hceTransition.fast}`,
+                      },
+                    }}
+                  />
+                </FormControl>
+              );
+            }}
           />
         </FormControl>
       </Box>
