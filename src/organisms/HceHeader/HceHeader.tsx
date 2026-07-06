@@ -1,4 +1,3 @@
-import { useState }                       from "react"
 import {
   Box, Typography, Badge, Avatar,
   Menu, IconButton,
@@ -14,7 +13,7 @@ import {
   CheckedCircleIcon, DangerIcon, HceInfoIcon, WarningIcon,
 } from "../../atoms/Icon/SvgIcons"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 // ─── Tipos públicos ───────────────────────────────────────────────────────────
 
 export type Sucursal = {
@@ -31,6 +30,11 @@ export type HceNotificacion = {
   fecha?:      string
   leida?:      boolean
 }
+
+
+//────────────────────────────────────────────
+
+export type HceHeaderVariant = "default" | "tv"
 
 // ─── Configuración visual por tipo ────────────────────────────────────────────
 
@@ -84,7 +88,8 @@ const NOTIF_EJEMPLO: HceNotificacion[] = [
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 export type HceHeaderProps = {
-  tittle?: string 
+  title?: string 
+  variant?: HceHeaderVariant
   sede?:             string | number
   sucursales?:       Sucursal[]
   onSedeCambiada?:  (sedeId: string | number) => void
@@ -106,7 +111,8 @@ export type HceHeaderProps = {
 // ─── Componente ───────────────────────────────────────────────────────────────
 
 export function HceHeader({
-  tittle,
+  title,
+  variant = "default",
   sede,
   sucursales      = [],
   onSedeCambiada,
@@ -147,8 +153,8 @@ export function HceHeader({
   const multiSede    = sucursales.length > 1
   const selectedSede = String(sede ?? (sucursales[0]?.id ?? ""))
   const unreadCount  = notifs.filter(n => !n.leida).length
-  const hasTittle = Boolean(tittle)
-  const showTittle = tittle ?? "Historia Clínica"
+  const isTvVariant = variant === "tv"
+const headerTitle = title ??  "Historia Clínica"
   const [fechaHora, setFechaHora] = useState(new Date())
 
   useEffect(() => {
@@ -202,7 +208,7 @@ export function HceHeader({
           flexShrink: 0,
           display:    { xs: "none", md: "block" },
         }}>
-         {showTittle} 
+         {headerTitle}
         </Typography>
 
         {sucursales.length > 0 && (
@@ -267,7 +273,7 @@ export function HceHeader({
         minWidth:       0,
       }}>
 
-      {hasTittle && (
+      {isTvVariant  && (
   <>
           <TextField
             name="sede"
@@ -282,10 +288,11 @@ export function HceHeader({
                 width: "150px",
                 maxWidth: "150px",
                 textAlign: "center",
-                color: "#003D96",
+                color: hceColors.primary.blue[600],
+                backgroundColor: hceColors.neutro.white[100],
                 fontWeight: hceTypography.weight.bold,
                 borderRadius: "6px",
-                backgroundColor: "#FFFFFF",
+               
               },
             }}
           />
@@ -311,10 +318,11 @@ export function HceHeader({
                 width: "160px",
                 maxWidth: "160px",
                 textAlign: "center",
-                color: "#003D96",
+                color: hceColors.primary.blue[600],
+                backgroundColor: hceColors.neutro.white[100],
                 fontWeight: hceTypography.weight.bold,
                 borderRadius: "6px",
-                backgroundColor: "#FFFFFF",
+               
               },
             }}
           />
@@ -328,7 +336,7 @@ export function HceHeader({
 
 
         {/* Campana */}
-      {!hasTittle && (
+      {!isTvVariant  && (
           <IconButton
             onClick={handleNotifOpen}
             size="small"
@@ -346,7 +354,7 @@ export function HceHeader({
 
         {/* ── Panel de notificaciones ──────────────────────────── */}
         <Popover
-          open={!hasTittle && Boolean(notifAnchor)}
+          open={!isTvVariant  && Boolean(notifAnchor)}
           anchorEl={notifAnchor}
           onClose={handleNotifClose}
           transformOrigin={{ horizontal: "right", vertical: "top" }}
@@ -493,7 +501,7 @@ export function HceHeader({
 
 
         {/* Avatar + nombre */}
-       {!hasTittle && ( 
+       {!isTvVariant  && ( 
             <Box
           onClick={handleUserOpen}
          
