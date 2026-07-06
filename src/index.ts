@@ -98,6 +98,10 @@ export type { SkeletonLoaderProps, SkeletonVariant } from "./atoms/SkeletonLoade
 // ── Types — Atoms ──────────────────────────────────────────
 export type { PriorityLevel } from "./atoms/PriorityBadge/PriorityBadge"
 export type { BadgeVariant }  from "./atoms/StatusBadge/StatusBadge"
+export type {
+  HceBreadcrumbItem,
+  HceBreadcrumbProps,
+} from "./atoms/HceBreadcrumb/HceBreadcrumb"
 
 // ── Loading Overlay ───────────────────────────────────────
 export { LoadingOverlay } from "./molecules/LoadingOverlay/LoadingOverlay"
@@ -127,7 +131,7 @@ export { EmergencyPagination } from "./molecules/EmergencyPagination/EmergencyPa
 export { IconButton }          from "./molecules/IconButton/IconButton"
 export { GenericRow }          from "./molecules/GenericRow/GenericRow"
 export { GenericCell }          from "./molecules/GenericCell/GenericCell"
-export type { GenericTableColumn, }  from  "./molecules/GenericCell/GenericCell"
+export type { GenericTableColumn }  from  "./molecules/GenericCell/GenericCell"
 export { InfoButton }          from "./molecules/InfoButton/InfoButton"
 
 export { PasswordInput }       from "./molecules/PasswordInput/PasswordInput"
@@ -181,6 +185,12 @@ export { GenericTable} from "./organisms/GenericTable/GenericTable"
 
 // ── Types — Organisms ──────────────────────────────────────
 export type { MenuItem }       from "./organisms/SidebarMenu/types"
-export type { HceHeaderProps, Sucursal, HceNotificacion } from "./organisms/HceHeader/HceHeader"
+export type {
+  HceHeaderProps,
+  HceHeaderVariant,
+  Sucursal,
+  HceNotificacion,
+} from "./organisms/HceHeader/HceHeader"
 export type { HceSidebarProps, OpcionMAC } from "./organisms/HceSidebar/HceSidebar"
 export type { CarruselHomeProps }           from "./organisms/CarruselHome/CarruselHome"
+
