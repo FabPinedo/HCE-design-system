@@ -11,18 +11,22 @@ const meta: Meta<typeof BoxBadge> = {
 export default meta
 type Story = StoryObj<typeof BoxBadge>
 
-export const Active: Story = {
-  args: { status: "active", label: "Box 3" },
-}
-
-export const Urgent: Story = {
-  args: { status: "urgent", label: "Box 7" },
-}
-
 export const Waiting: Story = {
-  args: { status: "waiting", label: "Espera" },
+  args: { stage: "ESPERA" },
 }
 
-export const TP: Story = {
-  args: { status: "tp", label: "TP" },
+export const Assigned: Story = {
+  args: { stage: "BOX_ASIGNADO", label: "Box 7",color:null},
+}
+
+export const Waiting_BOX_5: Story = {
+  args: { stage: "SALA_D",color: 'green' },
+}
+
+export const Waiting_BOX_20: Story = {
+  args: { stage: "SALA_D",  color:'yellow' },
+}
+
+export const Waiting_BOX_35: Story = {
+  args: { stage: "SALA_D",color:'red' },
 }

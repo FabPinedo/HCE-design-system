@@ -83,19 +83,20 @@ export { Chip }           from "./atoms/Chip/Chip"
 export { Card }           from "./atoms/Card/Card"
 export { PriorityBadge }  from "./atoms/PriorityBadge/PriorityBadge"
 export { BoxBadge }       from "./atoms/BoxBadge/BoxBadge"
+export { WaitingBadge }       from "./atoms/WaitingBadge/WaitingBadge"
 export { AttentionCode }  from "./atoms/AttentionCode/AttentionCode"
 export { TextInput }      from "./atoms/TextInput/TextInput"
 export { SelectField }    from "./atoms/SelectField/SelectField"
 export { SelectInput }    from "./atoms/SelectInput/SelectInput"
 export { StatusBadge }    from "./atoms/StatusBadge/StatusBadge"
 export { Checkbox }       from "./atoms/Checkbox/Checkbox"
+export { HceBreadcrumb }       from "./atoms/HceBreadcrumb/HceBreadcrumb"
 export { SkeletonLoader } from "./atoms/SkeletonLoader/SkeletonLoader"
 export { MultiSelect }    from "./atoms/MultiSelect/MultiSelectField"
 export type { SkeletonLoaderProps, SkeletonVariant } from "./atoms/SkeletonLoader/SkeletonLoader"
 
 // ── Types — Atoms ──────────────────────────────────────────
 export type { PriorityLevel } from "./atoms/PriorityBadge/PriorityBadge"
-export type { BoxStatus }     from "./atoms/BoxBadge/BoxBadge"
 export type { BadgeVariant }  from "./atoms/StatusBadge/StatusBadge"
 
 // ── Loading Overlay ───────────────────────────────────────
@@ -125,8 +126,10 @@ export { EmergencyHeader }     from "./molecules/EmergencyHeader/EmergencyHeader
 export { EmergencyPagination } from "./molecules/EmergencyPagination/EmergencyPagination"
 export { IconButton }          from "./molecules/IconButton/IconButton"
 export { GenericRow }          from "./molecules/GenericRow/GenericRow"
+export { GenericCell }          from "./molecules/GenericCell/GenericCell"
+export type { GenericTableColumn, }  from  "./molecules/GenericCell/GenericCell"
 export { InfoButton }          from "./molecules/InfoButton/InfoButton"
-export { PatientRow }          from "./molecules/PatientRow/PatientRow"
+
 export { PasswordInput }       from "./molecules/PasswordInput/PasswordInput"
 export { RadioGroup }          from "./molecules/RadioGroup/RadioGroup"
 // ContentCard: molecule Card with title, divider, actions
@@ -149,7 +152,7 @@ export type { SearchComboInputProps, SearchMode, SearchOption } from "./molecule
 
 // ── Types — Molecules ──────────────────────────────────────
 export type { ClinicalIconStatus } from "./molecules/ClinicalStatusIcon/ClinicalStatusIcon"
-export type { PatientRowData }     from "./molecules/PatientRow/PatientRow"
+
 export type { ExtraAction }        from "./molecules/ActionBar/ActionBar"
 
 // ── Modal ─────────────────────────────────────────────────
@@ -169,11 +172,12 @@ export { CarruselHome }          from "./organisms/CarruselHome/CarruselHome"
 export { SideNav }               from "./organisms/SideNav/SideNav"
 export { DataTable }             from "./organisms/DataTable/DataTable"
 export { Pagination }            from "./organisms/Pagination/Pagination"
-export { PatientTable as EmergencyPatientTable } from "./organisms/PatientTable/PatientTable"
+
 export { BedAvailabilityDrawer } from "./organisms/BedAvailability/BedAvailabilityDrawer"
 export { SidebarMenu }           from "./organisms/SidebarMenu/SidebarMenu"
 export { NavTab }                from "./organisms/NavTab/NavTab"
-export { EmergencyTable} from "./organisms/EmergencyTable/EmergencyTable"
+
+export { GenericTable} from "./organisms/GenericTable/GenericTable"
 
 // ── Types — Organisms ──────────────────────────────────────
 export type { MenuItem }       from "./organisms/SidebarMenu/types"

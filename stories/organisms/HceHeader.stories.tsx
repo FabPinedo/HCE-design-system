@@ -67,6 +67,15 @@ export const Minimo: Story = {
   },
 }
 
+/** Header para monitorTV */
+export const MonitorTV: Story = {
+  args: {
+    tittle: "Monitor TV",
+    sede: "Jesus Maria",
+  },
+}
+
+
 /** Nombre largo — verifica que no se trunca prematuramente */
 export const NombreLargo: Story = {
   args: {

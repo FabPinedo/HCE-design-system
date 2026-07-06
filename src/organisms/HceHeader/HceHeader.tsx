@@ -4,6 +4,7 @@ import {
   Menu, IconButton,
   Select, FormControl, MenuItem,
   Divider, Popover,
+  TextField,
 } from "@mui/material"
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined"
 import ExpandMoreIcon            from "@mui/icons-material/ExpandMore"
@@ -13,6 +14,7 @@ import {
   CheckedCircleIcon, DangerIcon, HceInfoIcon, WarningIcon,
 } from "../../atoms/Icon/SvgIcons"
 
+import { useEffect } from "react"
 // ─── Tipos públicos ───────────────────────────────────────────────────────────
 
 export type Sucursal = {
@@ -82,6 +84,7 @@ const NOTIF_EJEMPLO: HceNotificacion[] = [
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 export type HceHeaderProps = {
+  tittle?: string 
   sede?:             string | number
   sucursales?:       Sucursal[]
   onSedeCambiada?:  (sedeId: string | number) => void
@@ -103,6 +106,7 @@ export type HceHeaderProps = {
 // ─── Componente ───────────────────────────────────────────────────────────────
 
 export function HceHeader({
+  tittle,
   sede,
   sucursales      = [],
   onSedeCambiada,
@@ -143,10 +147,22 @@ export function HceHeader({
   const multiSede    = sucursales.length > 1
   const selectedSede = String(sede ?? (sucursales[0]?.id ?? ""))
   const unreadCount  = notifs.filter(n => !n.leida).length
+  const hasTittle = Boolean(tittle)
+  const showTittle = tittle ?? "Historia Clínica"
+  const [fechaHora, setFechaHora] = useState(new Date())
+
+  useEffect(() => {
+  const interval = setInterval(() => {
+    setFechaHora(new Date())
+  }, 60000)
+
+  return () => clearInterval(interval)
+}, [])
 
   return (
     <Box
       component="header"
+      
       sx={{
         height:          64,
         backgroundColor: hceColors.primary.blue[600],
@@ -164,7 +180,7 @@ export function HceHeader({
       }}
     >
       {/* ── Izquierda ────────────────────────────────────────── */}
-      <Box sx={{ flex: 1, display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}>
+      <Box  sx={{ flex: 1, display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}>
 
         {/* Hamburguesa — solo visible en pantallas pequeñas (< md = 900px) */}
         {onMenuClick && (
@@ -186,11 +202,11 @@ export function HceHeader({
           flexShrink: 0,
           display:    { xs: "none", md: "block" },
         }}>
-          Historia Clínica
+         {showTittle} 
         </Typography>
 
         {sucursales.length > 0 && (
-          <FormControl size="small" variant="standard" sx={{ minWidth: 110, maxWidth: 200 }}>
+          <FormControl  size="small" variant="standard" sx={{ minWidth: 110, maxWidth: 200 }}>
             <Select
               value={selectedSede}
               onChange={e => onSedeCambiada?.(e.target.value)}
@@ -216,6 +232,7 @@ export function HceHeader({
             >
               {sucursales.map(s => (
                 <MenuItem
+               
                   key={String(s.id)}
                   value={String(s.id)}
                   sx={{ fontFamily: hceTypography.fontFamily, fontSize: "0.82rem" }}
@@ -250,21 +267,87 @@ export function HceHeader({
         minWidth:       0,
       }}>
 
+      {hasTittle && (
+  <>
+          <TextField
+            name="sede"
+            value={`Sede ${sede ?? ""}`}
+            InputProps={{
+              readOnly: true,
+            }}
+            sx={{
+              fontFamily: hceTypography.fontFamily,
+              "& .MuiInputBase-input": {
+                py: "4px",
+                width: "150px",
+                maxWidth: "150px",
+                textAlign: "center",
+                color: "#003D96",
+                fontWeight: hceTypography.weight.bold,
+                borderRadius: "6px",
+                backgroundColor: "#FFFFFF",
+              },
+            }}
+          />
+
+          <TextField
+            name="fechaHora"
+            value={`${fechaHora.toLocaleDateString("es-PE", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            })} ${fechaHora.toLocaleTimeString("es-PE", {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false,
+            })}`}
+            InputProps={{
+              readOnly: true,
+            }}
+            sx={{
+              fontFamily: hceTypography.fontFamily,
+              "& .MuiInputBase-input": {
+                py: "4px",
+                width: "160px",
+                maxWidth: "160px",
+                textAlign: "center",
+                color: "#003D96",
+                fontWeight: hceTypography.weight.bold,
+                borderRadius: "6px",
+                backgroundColor: "#FFFFFF",
+              },
+            }}
+          />
+        </>
+      )}
+
+
+
+
+
+
+
         {/* Campana */}
-        <IconButton onClick={handleNotifOpen} size="small" sx={{ color: "white", p: 0.5, flexShrink: 0 }}>
-          <Badge
-            badgeContent={unreadCount}
-            color="error"
-            sx={{ "& .MuiBadge-badge": { fontSize: "0.58rem", minWidth: 15, height: 15 } }}
+      {!hasTittle && (
+          <IconButton
+            onClick={handleNotifOpen}
+            size="small"
+            sx={{ color: "white", p: 0.5, flexShrink: 0 }}
           >
-            <NotificationsOutlinedIcon sx={{ fontSize: 22 }} />
-          </Badge>
-        </IconButton>
+            <Badge
+              badgeContent={unreadCount}
+              color="error"
+              sx={{ "& .MuiBadge-badge": { fontSize: "0.58rem", minWidth: 15, height: 15 } }}
+            >
+              <NotificationsOutlinedIcon sx={{ fontSize: 22 }} />
+            </Badge>
+          </IconButton>
+        )}
 
         {/* ── Panel de notificaciones ──────────────────────────── */}
         <Popover
+          open={!hasTittle && Boolean(notifAnchor)}
           anchorEl={notifAnchor}
-          open={Boolean(notifAnchor)}
           onClose={handleNotifClose}
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
@@ -407,9 +490,13 @@ export function HceHeader({
           </Box>
         </Popover>
 
+
+
         {/* Avatar + nombre */}
-        <Box
+       {!hasTittle && ( 
+            <Box
           onClick={handleUserOpen}
+         
           sx={{
             display:    "flex",
             alignItems: "center",
@@ -464,6 +551,8 @@ export function HceHeader({
 
           <ExpandMoreIcon sx={{ color: "rgba(255,255,255,0.8)", fontSize: 18, flexShrink: 0 }} />
         </Box>
+
+        )}
 
         {/* Menú usuario */}
         <Menu

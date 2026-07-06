@@ -9,11 +9,18 @@
 import { Box, Chip, IconButton, Typography } from "@mui/material"
 import ChevronLeftIcon  from "@mui/icons-material/ChevronLeft"
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"
-import { hceClinicalColors, hceSpacing, hceTypography, hceBorderRadius } from "../../tokens/hce.tokens"
+import { hceClinicalColors, hceSpacing, hceTypography, hceBorderRadius, hceColors } from "../../tokens/hce.tokens"
+
+interface summaryContent{
+
+  label:string
+  value:number
+
+}
 
 interface Props {
   /** Número total de registros */
-  totalItems:   number
+  summary:   summaryContent[]
   /** Página actualmente activa (1-based) */
   currentPage:  number
   /** Número total de páginas */
@@ -45,10 +52,10 @@ function buildPageRange(current: number, total: number, siblings: number): (numb
 const navButtonSx = {
   width:           28,
   height:          28,
-  borderRadius:    "50%",
-  border:          `1px solid ${hceClinicalColors.border}`,
+  borderRadius:    "4px",
+  border:          `1px solid ${hceColors.primary.blue[600]}`,
   backgroundColor: "#FFFFFF",
-  color:           hceClinicalColors.textSecondary,
+  color:           hceColors.primary.blue[600],
   padding:         0,
   "&:hover:not(.Mui-disabled)": {
     backgroundColor: hceClinicalColors.hoverBg,
@@ -59,7 +66,7 @@ const navButtonSx = {
 }
 
 export const EmergencyPagination = ({
-  totalItems,
+  summary,
   currentPage,
   totalPages,
   onPageChange,
@@ -79,23 +86,35 @@ export const EmergencyPagination = ({
       role="navigation"
       aria-label="Paginación de pacientes"
     >
-      {/* Total de items */}
-      <Chip
-        label={`${totalItems} pacientes`}
-        size="small"
-        sx={{
-          backgroundColor: hceClinicalColors.rowAlternate,
-          color:           hceClinicalColors.textPrimary,
-          fontFamily:      hceTypography.fontFamilyClinical,
-          fontSize:        "12px",
-          fontWeight:      hceTypography.weight.medium,
-          height:          26,
-          borderRadius:    hceBorderRadius.sm,
-          border:          `1px solid ${hceClinicalColors.border}`,
-          marginRight:     "8px",
-          "& .MuiChip-label": { padding: "0 10px" },
-        }}
-      />
+      {/* casillas genericas */}
+      {summary.map((item) => (
+        <Chip
+          key={item.label}
+         label={
+            <Box component="span" sx={{gap: '5px', display:'flex'}}>
+              <Box component="span" sx={{ fontWeight: hceTypography.weight.bold }}>
+                {item.value}
+              </Box>{" "}
+              {item.label}
+            </Box>
+          }
+          size="small"
+          sx={{
+            backgroundColor: hceColors.neutro.white[100],
+            color: hceColors.primary.blue[600],
+            fontFamily: hceTypography.fontFamilyClinical,
+            fontSize: "12px",
+            fontWeight: hceTypography.weight.medium,
+            height: 26,
+            borderRadius: hceBorderRadius.sm,
+            border: `1px solid ${hceColors.primary.blue[600]}`,
+            marginRight: "8px",
+            "& .MuiChip-label": { padding: "0 10px" },
+          }}
+        />
+      ))}
+     
+     
 
       {/* Botón anterior */}
       <IconButton
@@ -105,7 +124,7 @@ export const EmergencyPagination = ({
         sx={navButtonSx}
         aria-label="Página anterior"
       >
-        <ChevronLeftIcon sx={{ fontSize: 16 }} />
+        <ChevronLeftIcon sx={{ fontSize: 16, borderRadius: 'none !important' }} />
       </IconButton>
 
       {/* Páginas */}
@@ -116,7 +135,7 @@ export const EmergencyPagination = ({
             sx={{
               fontFamily: hceTypography.fontFamilyClinical,
               fontSize:   "12px",
-              color:      hceClinicalColors.textSecondary,
+              color:      hceColors.primary.blue[600],
               userSelect: "none",
               padding:    "0 2px",
             }}
@@ -134,7 +153,7 @@ export const EmergencyPagination = ({
               borderRadius:    hceBorderRadius.sm,
               border:          `1px solid ${page === currentPage ? hceClinicalColors.tableHeaderBg : hceClinicalColors.border}`,
               backgroundColor: page === currentPage ? hceClinicalColors.tableHeaderBg : "#FFFFFF",
-              color:           page === currentPage ? "#FFFFFF" : hceClinicalColors.textSecondary,
+              color:           page === currentPage ? "#FFFFFF" : hceColors.primary.blue[600],
               fontFamily:      hceTypography.fontFamilyClinical,
               fontSize:        "12px",
               fontWeight:      page === currentPage ? hceTypography.weight.bold : hceTypography.weight.regular,

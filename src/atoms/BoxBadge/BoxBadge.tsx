@@ -18,63 +18,123 @@
  * ---------------------------------------------------------
  */
 import { Box } from "@mui/material"
-import { hceClinicalColors, hceBorderRadius, hceTypography } from "../../tokens/hce.tokens"
+import {
+  hceBorderRadius,
+  hceColors,
+  hceTypography,
+} from "../../tokens/hce.tokens"
 
-export type BoxStatus = "active" | "urgent" | "waiting" | "tp"
+export type BoxStage = "ESPERA" | "SALA_D" | "BOX_ASIGNADO"
 
-interface BoxStatusConfig {
+interface BoxBadgeColors {
+  border: string
+  background: string
   color: string
 }
 
-const STATUS_CONFIG: Record<BoxStatus, BoxStatusConfig> = {
-  active:  { color: hceClinicalColors.boxActive  },
-  urgent:  { color: hceClinicalColors.boxUrgent  },
-  waiting: { color: hceClinicalColors.boxWaiting },
-  tp:      { color: hceClinicalColors.boxTP      },
-}
-
 interface Props {
-  /** Estado de la sala/box */
-  status: BoxStatus
-  /** Etiqueta visible: número de box, "Espera", "TP", etc. */
-  label: string
+  /** Texto visible: ESPERA, SALA D, TP08, Box 3, etc. */
+  label?: string
+
+  /** Estado funcional del box */
+  stage: BoxStage
+
+  /** Minutos de espera desde creación de atención hasta asignación de box */
+  color?: 'green' | 'yellow' | 'red' | null;
 }
 
-/**
- * BoxBadge
- *
- * Pill de borde 1.5px del color del estado.
- * Fondo transparente, texto uppercase.
- */
-export const BoxBadge = ({ status, label }: Props) => {
-  const config = STATUS_CONFIG[status]
+const getBoxBadgeColors = (
+  stage: BoxStage,
+  color: 'green' | 'yellow' | 'red' | null, 
+): BoxBadgeColors => {
+  if (stage === "ESPERA") {
+    return {
+      border: hceColors.neutro.white[900],
+      background: hceColors.neutro.white[600],
+      color: hceColors.neutro.white[900],
+    }
+  }
 
+  else if (stage === "BOX_ASIGNADO") {
+    return {
+      border: hceColors.primary.blue[600],
+      background: hceColors.neutro.white[100],
+      color: hceColors.primary.blue[600],
+    }
+  }
+
+  else if (stage === "SALA_D") {
+    switch (color) {
+      case 'red':
+        return {
+          border: "#BD0000",
+          background: "#FDECEC",
+          color: "#BD0000",
+        }
+
+      case 'yellow':
+        return {
+          border: hceColors.alert.warning[600],
+          background: hceColors.alert.warning[50],
+          color: hceColors.alert.warning[600],
+        }
+
+      case 'green':
+        return {
+          border: hceColors.alert.success[600],
+          background: hceColors.primary.green[50],
+          color: hceColors.alert.success[600],
+        }
+
+      default:
+        return {
+          border: hceColors.primary.blue[600],
+          background: hceColors.neutro.white[100],
+          color: hceColors.primary.blue[600],
+        }
+    }
+  }
+
+  // fallback si no coincide ningún stage
+  return {
+    border: hceColors.neutro.white[900],
+    background: hceColors.neutro.white[100],
+    color: hceColors.neutro.white[900],  }
+
+}
+
+export const BoxBadge = ({ label, stage, color=null}: Props) => {
+  const colors = getBoxBadgeColors(stage, color)
+console.log(stage)
   return (
     <Box
       component="span"
       sx={{
-        display:         "inline-flex",
-        alignItems:      "center",
-        justifyContent:  "center",
-        padding:         "3px 10px",
-        borderRadius:    hceBorderRadius.md,
-        border:          `1.5px solid ${config.color}`,
-        backgroundColor: "transparent",
-        color:           config.color,
-        fontFamily:      hceTypography.fontFamilyClinical,
-        fontSize:        hceTypography.size.badge,
-        fontWeight:      hceTypography.weight.bold,
-        textTransform:   "uppercase",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minWidth: 72,
+        height: 30,
+        padding: "3px 10px",
+        borderRadius: hceBorderRadius.md,
+        border: `1.5px solid ${colors.border}`,
+        backgroundColor: colors.background,
+        color: colors.color,
+        fontFamily: hceTypography.fontFamilyClinical,
+        fontSize: hceTypography.size.badge,
+        fontWeight: hceTypography.weight.bold,
+        textTransform: "uppercase",
         textDecorationLine: "underline",
-        letterSpacing:   "0.3px",
-        whiteSpace:      "nowrap",
-        cursor:          "default",
-        userSelect:      "none",
-        lineHeight:      1.4,
+        letterSpacing: "0.3px",
+        whiteSpace: "nowrap",
+        cursor: "default",
+        userSelect: "none",
+        lineHeight: 1.4,
+        boxSizing: "border-box",
       }}
-      aria-label={`Box ${label} — ${status}`}
+      aria-label={`Box ${label}`}
     >
-      {label}
+      {label?  label:stage}
     </Box>
   )
 }

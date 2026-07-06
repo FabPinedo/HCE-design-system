@@ -137,7 +137,7 @@ export function MonitoActionBar({
         display:         "flex",
         flexDirection:   isVertical ? "column" : "row",
         alignItems:      "center",
-        justifyContent:  "flex-start",
+        justifyContent:  "space-between",
         gap:             "6px",
         padding:         "6px 10px",
         backgroundColor: "#ffffff",
@@ -147,6 +147,19 @@ export function MonitoActionBar({
         width:           isVertical ? "fit-content" : "100%",
       }}
     >
+
+      <Box
+      sx={{
+        display:         "flex",
+        flexDirection:   isVertical ? "column" : "row",
+        alignItems:       isVertical ? "start": "center",
+    
+        gap:             "35px",
+        padding:         "6px 10px",
+        backgroundColor: "#ffffff",
+        width:           isVertical ? "fit-content" : "100%",
+      }}
+      >
       {/* Triaje */}
       <BubbleTooltip title="Triaje" placement={tooltipPlacement}>
         <span>
@@ -161,19 +174,6 @@ export function MonitoActionBar({
         </span>
       </BubbleTooltip>
 
-      {/* Asignar médicos */}
-      <BubbleTooltip title="Asignar médicos" placement={tooltipPlacement}>
-        <span>
-          <IconButton
-            onClick={onAsignarMedicos}
-            disabled={disabled.asignarMedicos}
-            aria-label="Asignar médicos"
-            sx={btnSx}
-          >
-            <UiDoctorIcon size={iconSize} color={disabled.asignarMedicos ? hceColors.primary.blue[300] : BLUE} />
-          </IconButton>
-        </span>
-      </BubbleTooltip>
 
       {/* Reportes */}
       <BubbleTooltip title="Reportes" placement={tooltipPlacement}>
@@ -202,6 +202,59 @@ export function MonitoActionBar({
           </IconButton>
         </span>
       </BubbleTooltip>
+
+
+     </Box>
+      
+      {/* Asignar médicos */}
+     <BubbleTooltip title="Asignar médicos" placement={tooltipPlacement}>
+      <span>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: "2px",
+            width: '100%',
+            borderRadius:"8px",
+            border: `1.5px solid ${hceColors.primary.blue[600]}`,
+            padding: ' 0 15px'
+          }}
+        >
+          <IconButton
+            onClick={onAsignarMedicos}
+            disabled={disabled.asignarMedicos}
+            aria-label="Asignar médicos"
+         
+          >
+            <UiDoctorIcon
+              size={iconSize}
+              color={
+                disabled.asignarMedicos
+                  ? hceColors.primary.blue[300]
+                  : BLUE
+              }
+            />
+          </IconButton>
+
+          <Box
+            component="span"
+            sx={{
+              fontSize: hceTypography.size.md,
+              fontWeight: hceTypography.weight.semibold,
+              fontFamily: hceTypography.fontFamilyClinical,
+              color: disabled.asignarMedicos
+                ? hceColors.primary.blue[300]
+                : BLUE,
+              lineHeight: 1,
+              whiteSpace: "nowrap",
+            }}
+          >
+            Asignar médico
+          </Box>
+        </Box>
+      </span>
+    </BubbleTooltip>
     </Box>
   )
 }

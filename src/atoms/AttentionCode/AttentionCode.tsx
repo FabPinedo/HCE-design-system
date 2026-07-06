@@ -16,6 +16,7 @@ import { hceTypography, hceUi } from "../../tokens/hce.tokens"
 interface Props {
   /** Código alfanumérico de atención (ej: "E097382") */
   code: string
+  bold?: boolean
 }
 
 /**
@@ -24,14 +25,14 @@ interface Props {
  * Texto monoespaciado, 13px, color primario.
  * Sin decoraciones adicionales.
  */
-export const AttentionCode = ({ code }: Props) => {
+export const AttentionCode = ({ code, bold }: Props) => {
   return (
     <Typography
       component="span"
       sx={{
         fontFamily:    hceTypography.fontFamilyClinical,
-        fontSize:      hceTypography.size.tableCell,
-        fontWeight:    hceTypography.weight.semibold,
+        fontSize:      hceTypography.size.base,
+        fontWeight:    bold ? hceTypography.weight.bold : hceTypography.weight.regular,
         color:         hceUi.textPrimaryTable,
         letterSpacing: "0.5px",
         display:       "inline-block",

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { ClinicalStatusIcon, injectHceTokens, UiBloodTestIcon } from "@hce/design-system"
+import { ClinicalStatusIcon, injectHceTokens, UiBloodTestIcon, UiCloseIcon } from "@hce/design-system"
 
 injectHceTokens()
 
@@ -13,7 +13,7 @@ export default meta
 type Story = StoryObj<typeof ClinicalStatusIcon>
 
 export const Alert: Story = {
-  args: { status: "alert", tooltipLabel: "Lab pendiente" },
+  args: { status: "alert", tooltipLabel: "Lab pendiente" , icon: UiCloseIcon},
 }
 
 export const Ok: Story = {
