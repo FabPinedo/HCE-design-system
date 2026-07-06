@@ -70,7 +70,8 @@ export const Minimo: Story = {
 /** Header para monitorTV */
 export const MonitorTV: Story = {
   args: {
-    tittle: "Monitor TV",
+    title: "Monitor TV",
+    variant:"tv",
     sede: "Jesus Maria",
   },
 }
@@ -90,6 +91,7 @@ export const NombreLargo: Story = {
 export const Flotante: Story = {
   args: {
     sede:       "2",
+    variant: "default",
     sucursales: SUCURSALES_MULTI,
     userName:   "FABRIZZIO RENZO PINEDO ESPINOZA",
     userRole:   "Administrador Sistemas",
