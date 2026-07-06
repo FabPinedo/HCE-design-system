@@ -24,7 +24,10 @@ import {
   hceTypography,
 } from "../../tokens/hce.tokens"
 
+import { getSemaphoreColors } from "../../tokens/getSemaphoreColors"
+
 export type BoxStage = "ESPERA" | "SALA_D" | "BOX_ASIGNADO"
+export type BoxBadgeColor = "green" | "yellow" | "red" | null
 
 interface BoxBadgeColors {
   border: string
@@ -36,76 +39,43 @@ interface Props {
   /** Texto visible: ESPERA, SALA D, TP08, Box 3, etc. */
   label?: string
 
-  /** Estado funcional del box */
+  /** Estado funcional del box. */
   stage: BoxStage
 
-  /** Minutos de espera desde creación de atención hasta asignación de box */
-  color?: 'green' | 'yellow' | 'red' | null;
+  /** Color semáforo usado principalmente para SALA_D. */
+  color?: BoxBadgeColor
+}
+
+const STAGE_COLORS: Partial<Record<BoxStage, BoxBadgeColors>> = {
+  ESPERA: {
+    border: hceColors.neutro.white[900],
+    background: hceColors.neutro.white[600],
+    color: hceColors.neutro.white[900],
+  },
+  BOX_ASIGNADO: {
+    border: hceColors.primary.blue[600],
+    background: hceColors.neutro.white[100],
+    color: hceColors.primary.blue[600],
+  },
 }
 
 const getBoxBadgeColors = (
   stage: BoxStage,
-  color: 'green' | 'yellow' | 'red' | null, 
+  color: BoxBadgeColor,
 ): BoxBadgeColors => {
-  if (stage === "ESPERA") {
-    return {
-      border: hceColors.neutro.white[900],
-      background: hceColors.neutro.white[600],
-      color: hceColors.neutro.white[900],
-    }
-  }
+  if (stage === "SALA_D") return getSemaphoreColors(color)
 
-  else if (stage === "BOX_ASIGNADO") {
-    return {
-      border: hceColors.primary.blue[600],
-      background: hceColors.neutro.white[100],
-      color: hceColors.primary.blue[600],
-    }
-  }
-
-  else if (stage === "SALA_D") {
-    switch (color) {
-      case 'red':
-        return {
-          border: "#BD0000",
-          background: "#FDECEC",
-          color: "#BD0000",
-        }
-
-      case 'yellow':
-        return {
-          border: hceColors.alert.warning[600],
-          background: hceColors.alert.warning[50],
-          color: hceColors.alert.warning[600],
-        }
-
-      case 'green':
-        return {
-          border: hceColors.alert.success[600],
-          background: hceColors.primary.green[50],
-          color: hceColors.alert.success[600],
-        }
-
-      default:
-        return {
-          border: hceColors.primary.blue[600],
-          background: hceColors.neutro.white[100],
-          color: hceColors.primary.blue[600],
-        }
-    }
-  }
-
-  // fallback si no coincide ningún stage
-  return {
-    border: hceColors.neutro.white[900],
-    background: hceColors.neutro.white[100],
-    color: hceColors.neutro.white[900],  }
-
+  return STAGE_COLORS[stage] ?? getSemaphoreColors(null)
 }
 
-export const BoxBadge = ({ label, stage, color=null}: Props) => {
+export const BoxBadge = ({
+  label,
+  stage,
+  color = null,
+}: Props) => {
   const colors = getBoxBadgeColors(stage, color)
-console.log(stage)
+  const visibleLabel = label ?? stage
+
   return (
     <Box
       component="span"
@@ -132,9 +102,9 @@ console.log(stage)
         lineHeight: 1.4,
         boxSizing: "border-box",
       }}
-      aria-label={`Box ${label}`}
+      aria-label={`Box ${visibleLabel} — ${stage}`}
     >
-      {label?  label:stage}
+      {visibleLabel}
     </Box>
   )
 }

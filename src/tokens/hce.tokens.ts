@@ -297,7 +297,7 @@ export const hceClinicalColors = {
   border:          '#D0DBF0', // Bordes y divisores
   hoverBg:         '#EEF2F9', // Fondo hover de fila / botón
   rowPriority1Bg:  '#FFF5F5', // Fondo sutil para filas críticas
-  rowPriority: '#E7BCB9',
+  rowPriority:     hceColors.alert.error[100],
 
   // Textos
   textPrimary:     '#1C2B4A',
