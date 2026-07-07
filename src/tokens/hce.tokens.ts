@@ -293,7 +293,7 @@ export const hceClinicalColors = {
   headerBg:        '#1A3A6B', // Azul marino institucional — header principal
   surfaceBg:       '#FFFFFF', // Fondo de superficies / tabla
   tableHeaderBg:   '#2B5BA8', // Azul medio — encabezado de tabla
-  rowAlternate:    '#F4F7FB', // Fila alterna de tabla
+  rowAlternate:    '#e6ecf6', // Fila alterna de tabla
   border:          '#D0DBF0', // Bordes y divisores
   hoverBg:         '#EEF2F9', // Fondo hover de fila / botón
   rowPriority1Bg:  '#FFF5F5', // Fondo sutil para filas críticas

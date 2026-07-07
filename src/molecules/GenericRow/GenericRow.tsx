@@ -35,7 +35,7 @@ const getDefaultRowSx = <T,>(
   return {
     height: 44,
     backgroundColor: baseBg,
-    borderBottom: "1px solid #E2EAF4",
+    
     
     transition: "background-color 0.15s ease",
     cursor: "default",
