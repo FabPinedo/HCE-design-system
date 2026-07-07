@@ -7,7 +7,7 @@ import {
 } from "@mui/material"
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined"
 import ExpandMoreIcon            from "@mui/icons-material/ExpandMore"
-import { hceColors, hceTypography, hceUi, hceShadows } from "../../tokens/hce.tokens"
+import { hceColors, hceTypography, hceUi, hceShadows, hceBorderRadius } from "../../tokens/hce.tokens"
 import { LogoClinicaSanFelipeIcon, LogoutIcon, HceBurgerIcon } from "../../atoms/Icon/SvgIconsHce"
 import {
   CheckedCircleIcon, DangerIcon, HceInfoIcon, WarningIcon,
@@ -127,6 +127,7 @@ export function HceHeader({
 }: HceHeaderProps) {
   const [userAnchor,  setUserAnchor]  = useState<null | HTMLElement>(null)
   const [notifAnchor, setNotifAnchor] = useState<null | HTMLElement>(null)
+  const [sedeSelectOpen, setSedeSelectOpen] = useState(false)
 
   // Estado interno de notificaciones (leídas/no leídas)
   const [notifs, setNotifs] = useState<HceNotificacion[]>(
@@ -186,7 +187,7 @@ const headerTitle = title ??  "Historia Clínica"
       }}
     >
       {/* ── Izquierda ────────────────────────────────────────── */}
-      <Box  sx={{ flex: 1, display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}>
+      <Box  sx={{ flex: 1, display: "flex", alignItems: "center", gap: 3, minWidth: 0 }}>
 
         {/* Hamburguesa — solo visible en pantallas pequeñas (< md = 900px) */}
         {onMenuClick && (
@@ -202,8 +203,8 @@ const headerTitle = title ??  "Historia Clínica"
         <Typography sx={{
           fontFamily: hceTypography.fontFamily,
           color:      "white",
-          fontWeight: 700,
-          fontSize:   "0.95rem",
+          fontWeight: 600,
+          fontSize:   hceTypography.size.xl,
           whiteSpace: "nowrap",
           flexShrink: 0,
           display:    { xs: "none", md: "block" },
@@ -212,36 +213,58 @@ const headerTitle = title ??  "Historia Clínica"
         </Typography>
 
         {sucursales.length > 0 && (
-          <FormControl  size="small" variant="standard" sx={{ minWidth: 110, maxWidth: 200 }}>
+          <FormControl   variant="standard" sx={{ minWidth: 140, maxWidth: 260 }}>
             <Select
               value={selectedSede}
               onChange={e => onSedeCambiada?.(e.target.value)}
               disabled={!multiSede}
               disableUnderline
+              open={sedeSelectOpen}
+              onOpen={() => setSedeSelectOpen(true)}
+              onClose={() => setSedeSelectOpen(false)}
               IconComponent={multiSede ? ExpandMoreIcon : () => null}
+               MenuProps={{
+                PaperProps: {
+                  sx: {
+                    mt: "6px",
+                    display:'flex',
+                    flexDirection: 'column',
+                    gap:'8px'
+                  },
+                },
+              }}
               sx={{
                 fontFamily: hceTypography.fontFamily,
-                color:      "white",
-                fontSize:   "0.8rem",
-                "& .MuiSelect-icon": { color: "rgba(255,255,255,0.7)", fontSize: 18 },
+                fontWeight: hceTypography.weight.regular,
+                color:      hceColors.primary.blue[600],
+                fontSize:   hceTypography.size.md,
+                "& .MuiSelect-icon": { color: hceColors.primary.blue[400], fontSize: 18 , marginLeft:  10},
                 "& .MuiSelect-select": {
                   py:              "4px",
                   px:              "10px !important",
-                  borderRadius:    "6px",
-                  backgroundColor: "rgba(255,255,255,0.15)",
+                  borderRadius:    hceBorderRadius.lg,
+                  backgroundColor: hceColors.neutro.white[50],
+                  border: sedeSelectOpen
+                    ? `2px solid ${hceColors.primary.blue[400]}`
+                    : "2px solid transparent",
+                  boxShadow: sedeSelectOpen
+                    ? `0 0 0 6px ${hceColors.primary.blue[100]}`
+                    : "none",
+                  boxSizing: "border-box",
                   "&.Mui-disabled": {
                     WebkitTextFillColor: "rgba(255,255,255,0.85)",
                     cursor:              "default",
                   },
                 },
-              }}
+               
+               }}
             >
               {sucursales.map(s => (
                 <MenuItem
                
                   key={String(s.id)}
                   value={String(s.id)}
-                  sx={{ fontFamily: hceTypography.fontFamily, fontSize: "0.82rem" }}
+                  sx={{padding: '12px', fontFamily: hceTypography.fontFamily, fontSize: "0.82rem", color: hceColors.primary.blue[600],fontWeight:hceTypography.weight.regular }}
                 >
                   {s.nombre}
                 </MenuItem>
