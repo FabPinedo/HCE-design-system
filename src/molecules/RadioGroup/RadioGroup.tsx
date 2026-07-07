@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { Box, Radio } from "@mui/material";
 import { hceColors, hceTypography } from "../../tokens/hce.tokens";
 
@@ -24,6 +25,7 @@ export const RadioGroup = <T extends string | boolean>({
     { value: "no" as unknown as T, label: "No" },
   ],
 }: Props<T>) => {
+  const groupName = useId();
   return (
     <Box
       component="fieldset"
@@ -77,6 +79,7 @@ export const RadioGroup = <T extends string | boolean>({
             >
               {opt.label}
               <Radio
+                name={groupName}
                 value={opt}
                 checked={value === opt.value}
                 onChange={() => {

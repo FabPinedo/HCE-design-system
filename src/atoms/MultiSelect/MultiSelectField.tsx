@@ -90,6 +90,7 @@ export const MultiSelect = ({
             transition: `color ${hceTransition.fast}`,
           }}
         >
+          {label}
         </Typography>
         <FormControl fullWidth={fullWidth} size="small">
           <Autocomplete
