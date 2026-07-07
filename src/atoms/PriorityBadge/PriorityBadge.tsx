@@ -74,7 +74,7 @@ export const PriorityBadge = ({ priority, tooltipText }: Props) => {
           // Apariencia según estado
           backgroundColor: isNone ? "transparent" : config.color,
           border:          isNone ? `2px solid ${config.color}` : "none",
-          color:           isNone ? config.color : "#FFFFFF",
+          color:           isNone ? config.color : "transparent",
 
           // Tipografía del badge
           fontFamily:  hceTypography.fontFamilyClinical,

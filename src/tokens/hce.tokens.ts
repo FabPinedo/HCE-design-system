@@ -309,7 +309,7 @@ export const hceClinicalColors = {
   priority2:       '#E39922', // Urgente
   priority3:       '#73A876', // Moderado
   priority4:       '#2A722E', // Leve
-  priorityNone:    '#B0BEC5', // Sin prioridad
+  priorityNone:    'transparent', // Sin prioridad
 
   // Estados de Box / Sala
   boxActive:       '#27AE60', // Sala activa
