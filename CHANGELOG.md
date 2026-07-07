@@ -6,6 +6,39 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 Versionado basado en [Semantic Versioning](https://semver.org/).
 
 ---
+
+## [1.3.0] - 2026-07-06
+
+### Agregado
+- **`GenericTable`** (Organismo): nueva tabla genérica reutilizable para renderizar columnas configurables por tipo.
+- **`GenericRow`** (Molécula): nueva fila genérica usada internamente por `GenericTable`.
+- **`GenericCell`** (Molécula): nueva celda genérica con soporte para distintos tipos de columna: `text`, `priority`, `box`, `patient-name`, `clinical-status`, `attention-code`, `info-button`, `waiting-time`, `icon`, `switch` y `tag`.
+- **`GenericTableColumn`**: nuevo tipo público para configurar columnas de `GenericTable`.
+- **`HceBreadcrumb`** (Átomo): nuevo componente de breadcrumb para mostrar la ruta de navegación dentro de las pantallas HCE.
+- **`HceBreadcrumbItem`** y **`HceBreadcrumbProps`**: nuevos tipos públicos para configurar `HceBreadcrumb`.
+- **`HceHeader`** (Organismo): nueva prop `title`  .
+- **`WaitingBadge`** (Átomo): nuevo badge para mostrar tiempos de espera ya formateados, con soporte para colores semáforo.
+- **`getSemaphoreColors`**: helper interno para centralizar los colores semáforo usados por badges clínicos.
+
+### Cambiado
+- **Tablas clínicas de emergencia**: se reemplazó la implementación basada en componentes específicos de paciente por una estructura genérica basada en `GenericTable`, `GenericRow` y `GenericCell`.
+- **`BoxBadge`** (Átomo): refactor de lógica de colores para usar `getSemaphoreColors` en estados semáforo.
+- **`AttentionCode`** (Átomo): se agregó un atributo para permitir mostrar el texto con mayor peso visual.
+- **`MonitoActionBar`** (Molécula): se ajustaron estilos visuales para alinearse con el diseño de Figma, sin cambios en su API pública.
+- **`EmergencyPagination`** (Molécula): se reemplazó la prop `totalItems` por `summary`, permitiendo mostrar totales agrupados.
+- **`hceClinicalColors`**: `rowPriority` ahora reutiliza `hceColors.alert.error[100]`.
+- **`hceClinicalColors`**: `rowAlternate` ahora es equivalente a `#F4F7FB`.
+- **`HceHeader`** (Organismo): nueva prop `variant` con soporte para `"default"` y `"tv"`, permitiendo separar explícitamente el modo de pantalla pública/TV del header estándar.
+- **`src/index.ts`**: se exportan los tipos públicos `HceBreadcrumbItem` y `HceBreadcrumbProps`.
+
+
+### Breaking changes
+- **`BoxBadge`**: la API anterior basada en `status` fue reemplazada por `stage`, `label` y `color`.
+- **`EmergencyPagination`**: la prop `totalItems: number` fue reemplazada por `summary: SummaryContent[]`.
+- Se eliminaron componentes legacy: **`PatientRow`**, **`PatientTable`**
+
+---
+
 ## [1.2.1] - 2026-06-16
 
 ### Agregado
