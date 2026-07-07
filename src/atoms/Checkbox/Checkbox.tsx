@@ -6,11 +6,25 @@ interface Props {
   checked: boolean;
   onChange: (v: boolean) => void;
   disabled?: boolean;
+  sideLabel?: "start" | "end" | "top" | "bottom";
 }
 
-export const Checkbox = ({ label, checked, onChange, disabled }: Props) => {
+export const Checkbox = ({
+  label,
+  checked,
+  onChange,
+  disabled,
+  sideLabel = "end",
+}: Props) => {
   const checkbox = (
     <MuiCheckbox
+      sx={{
+        paddingRight: 0,
+        borderRadius: "8px",
+        "&:hover": {
+          backgroundColor: "transparent"
+        }
+      }}
       disabled={disabled}
       checked={checked}
       onChange={(e) => onChange(e.target.checked)}
@@ -48,7 +62,18 @@ export const Checkbox = ({ label, checked, onChange, disabled }: Props) => {
 
   if (label) {
     return (
-      <FormControlLabel control={checkbox} label={label} disabled={disabled} />
+      <FormControlLabel
+        labelPlacement={sideLabel}
+        control={checkbox}
+        label={label}
+        disabled={disabled}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+          margin: 0
+        }}
+      />
     );
   }
 

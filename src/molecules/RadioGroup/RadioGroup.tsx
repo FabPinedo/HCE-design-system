@@ -1,23 +1,31 @@
+import { useId } from "react";
 import { Box, Radio } from "@mui/material";
 import { hceColors, hceTypography } from "../../tokens/hce.tokens";
 
-interface Props {
-  name: string;
-  legend: string;
-  value: string;
-  onChange: (v: string) => void;
-  options: string[];
+interface Option<T extends string | boolean> {
+  value: T;
+  label: string;
+}
+
+interface Props<T extends string | boolean> {
+  legend?: string;
+  value: T | null | undefined;
+  onChange: (v: T) => void;
+  options: Option<T>[] | readonly Option<T>[];
   disabled?: boolean;
 }
 
-export const RadioGroup = ({
-  legend = "Radio Group",
+export const RadioGroup = <T extends string | boolean>({
+  legend,
   value,
   onChange,
   disabled = false,
-  options = ["Si", "No"],
-  name,
-}: Props) => {
+  options = [
+    { value: "si" as unknown as T, label: "Si" },
+    { value: "no" as unknown as T, label: "No" },
+  ],
+}: Props<T>) => {
+  const groupName = useId();
   return (
     <Box
       component="fieldset"
@@ -25,54 +33,66 @@ export const RadioGroup = ({
         border: `1.5px solid ${disabled ? hceColors.neutro.black[200] : hceColors.primary.green[500]}`,
         borderRadius: "8px",
         px: 2,
-        py: 1,
+        py: 0.2,
         m: 0,
         opacity: disabled ? 0.5 : 1,
+        width: "100%",
       }}
     >
+      {legend && (
+        <Box
+          component="legend"
+          sx={{
+            px: 1,
+            fontFamily: hceTypography.fontFamily,
+            fontSize: "0.72rem",
+            fontWeight: 700,
+            color: disabled
+              ? hceColors.neutro.black[400]
+              : hceColors.primary.blue[600],
+          }}
+        >
+          {legend}
+        </Box>
+      )}
       <Box
-        component="legend"
         sx={{
-          px: 1,
-          fontFamily: hceTypography.fontFamily,
-          fontSize: "0.72rem",
-          fontWeight: 700,
-          color: disabled
-            ? hceColors.neutro.black[400]
-            : hceColors.primary.blue[600],
+          display: "flex",
+          justifyContent: "space-between",
+          gap: 3,
         }}
       >
-        {legend}
-      </Box>
-      <Box sx={{ display: "flex", gap: 3, mt: "2px" }}>
-        {options.map((opt) => (
-          <Box
-            key={opt}
-            component="label"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 0.2,
-              cursor: disabled ? "not-allowed" : "pointer",
-              fontFamily: hceTypography.fontFamily,
-              fontSize: "16px",
-            }}
-          >
-            {opt}
-            <Radio
-              name={name}
-              value={opt}
-              checked={value?.toLocaleLowerCase() === opt.toLocaleLowerCase()}
-              onChange={() => {
-                if (!disabled && typeof onChange === "function") {
-                  onChange(opt);
-                }
+        {options.map((opt) => {
+          const optionKey = String(opt.value);
+          return (
+            <Box
+              key={optionKey}
+              component="label"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0.2,
+                cursor: disabled ? "not-allowed" : "pointer",
+                fontFamily: hceTypography.fontFamily,
+                fontSize: "0.875rem",
               }}
-              disabled={disabled}
-              style={{ accentColor: hceColors.primary.green[500] }}
-            />
-          </Box>
-        ))}
+            >
+              {opt.label}
+              <Radio
+                name={groupName}
+                value={opt}
+                checked={value === opt.value}
+                onChange={() => {
+                  if (!disabled && typeof onChange === "function") {
+                    onChange(opt.value);
+                  }
+                }}
+                disabled={disabled}
+                style={{ accentColor: hceColors.primary.green[500] }}
+              />
+            </Box>
+          );
+        })}
       </Box>
     </Box>
   );

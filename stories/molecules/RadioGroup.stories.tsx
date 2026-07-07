@@ -1,35 +1,68 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { RadioGroup } from '@hce/design-system'
-import { useState } from 'react'
+import type { Meta, StoryObj } from "@storybook/react";
+import { RadioGroup } from "@hce/design-system";
+import { useState } from "react";
 
-const OPCIONES = [
-  "Si",
-  "No"
+const OPCIONESDEFAULT = [
+  { value: true, label: "Verdadero" },
+  { value: false, label: "Falso" },
+];
+
+const OPCIONESSTRING = [
+  { value: "Si", label: "Verdadero" },
+  { value: "No", label: "Falso" },
 ];
 
 const meta: Meta<typeof RadioGroup> = {
-  title: 'Molecules/RadioGroup',
+  title: "Molecules/RadioGroup",
   component: RadioGroup,
-  tags: ['autodocs'],
-}
-export default meta
+  tags: ["autodocs"],
+};
+export default meta;
 
-type Story = StoryObj<typeof RadioGroup>
+type Story = StoryObj<typeof RadioGroup<string | boolean>>;
 
-export const Default: Story = {
+export const ValorBoolean: Story = {
   render: (args) => {
-  const [value, setValue] = useState<string>("No");
-    return <RadioGroup {...args} value={value} onChange={(v) => {
-          setValue(v);          
-          args.onChange?.(v);   
-        }} />;
+    const [value, setValue] = useState<boolean | string>(false);
+    return (
+        <RadioGroup
+          {...args}
+          value={value}
+          onChange={(v) => {
+            setValue(v);
+            args.onChange?.(v);
+          }}
+        />
+    );
   },
   args: {
-    name: "Grupo",
+    legend: "Grupo de Radio",
+    value: false,
+    options: OPCIONESDEFAULT,
+    disabled: false,
+    onChange: (v) => console.log("seleccion radio: ", v),
+  },
+};
+
+export const ValorString: Story = {
+  render: (args) => {
+    const [value, setValue] = useState<boolean | string>("No");
+    return (
+      <RadioGroup
+        {...args}
+        value={value}
+        onChange={(v) => {
+          setValue(v);
+          args.onChange?.(v);
+        }}
+      />
+    );
+  },
+  args: {
     legend: "Grupo de Radio",
     value: "No",
-    options: OPCIONES,
+    options: OPCIONESSTRING,
     disabled: false,
-    onChange: (v) => console.log("seleccion radio: ", v)
-  }
-}
+    onChange: (v) => console.log("seleccion radio: ", v),
+  },
+};
