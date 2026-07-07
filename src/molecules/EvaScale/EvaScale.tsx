@@ -232,40 +232,6 @@ export function EvaScale({
           })}
         </Box>
       </Box>
-
-      {/* Labels de intensidad debajo */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mt: "6px",
-        }}
-      >
-        {STEPS.map((step) => {
-          const LABELS: Record<number, string> = {
-            0: "Sin dolor",
-            5: "Moderado",
-            10: "Insoportable",
-          };
-          return (
-            <Box
-              key={step.value}
-              sx={{
-                width: CIRCLE,
-                textAlign: "center",
-                fontFamily: hceTypography.fontFamily,
-                fontSize: "0.6rem",
-                fontWeight: 500,
-                color: hceColors.neutro.black[400],
-                flexShrink: 0,
-                visibility: LABELS[step.value] ? "visible" : "hidden",
-              }}
-            >
-              {LABELS[step.value] ?? ""}
-            </Box>
-          );
-        })}
-      </Box>
     </Box>
   );
 }

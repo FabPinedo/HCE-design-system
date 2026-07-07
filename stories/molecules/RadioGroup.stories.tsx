@@ -25,14 +25,14 @@ export const ValorBoolean: Story = {
   render: (args) => {
     const [value, setValue] = useState<boolean | string>(false);
     return (
-      <RadioGroup
-        {...args}
-        value={value}
-        onChange={(v) => {
-          setValue(v);
-          args.onChange?.(v);
-        }}
-      />
+        <RadioGroup
+          {...args}
+          value={value}
+          onChange={(v) => {
+            setValue(v);
+            args.onChange?.(v);
+          }}
+        />
     );
   },
   args: {

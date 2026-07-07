@@ -7,14 +7,14 @@ import type { SearchMode, SearchOption } from "@hce/design-system"
 // ─── Mock data para simular respuesta de API ──────────────────────────────────
 
 const MOCK_DIAGNOSTICOS: SearchOption[] = [
-  { value: "J06.9", label: "Infección aguda de las vías respiratorias superiores", secondary: "J06.9" },
-  { value: "J18.9", label: "Neumonía, no especificada",                            secondary: "J18.9" },
-  { value: "A09",   label: "Gastroenteritis y colitis de origen infeccioso",        secondary: "A09"   },
-  { value: "K35.8", label: "Apendicitis aguda, sin mención de peritonitis",         secondary: "K35.8" },
-  { value: "I10",   label: "Hipertensión esencial (primaria)",                      secondary: "I10"   },
-  { value: "E11.9", label: "Diabetes mellitus tipo 2 sin complicaciones",           secondary: "E11.9" },
-  { value: "N39.0", label: "Infección de las vías urinarias, sitio no especificado", secondary: "N39.0" },
-  { value: "R07.9", label: "Dolor de garganta, no especificado",                   secondary: "R07.9" },
+  { value: 1, label: "Infección aguda de las vías respiratorias superiores", secondary: "J06.9" },
+  { value: 2, label: "Neumonía, no especificada",                            secondary: "J18.9" },
+  { value: 3,   label: "Gastroenteritis y colitis de origen infeccioso",        secondary: "A09"   },
+  { value: 4, label: "Apendicitis aguda, sin mención de peritonitis",         secondary: "K35.8" },
+  { value: 5,   label: "Hipertensión esencial (primaria)",                      secondary: "I10"   },
+  { value: 6, label: "Diabetes mellitus tipo 2 sin complicaciones",           secondary: "E11.9" },
+  { value: 7, label: "Infección de las vías urinarias, sitio no especificado", secondary: "N39.0" },
+  { value: 8, label: "Dolor de garganta, no especificado",                   secondary: "R07.9" },
 ]
 
 function filterOptions(query: string, mode: SearchMode): SearchOption[] {

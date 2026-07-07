@@ -8,7 +8,7 @@ import { ChevronDownIcon } from "../../atoms/Icon/Icon"
 export type SearchMode = "cie_description" | "cie_code"
 
 export interface SearchOption {
-  value:      string
+  value:      number
   label:      string
   secondary?: string
 }

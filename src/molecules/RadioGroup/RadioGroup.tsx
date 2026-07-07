@@ -53,7 +53,13 @@ export const RadioGroup = <T extends string | boolean>({
           {legend}
         </Box>
       )}
-      <Box sx={{ display: "flex", gap: 3, mt: "2px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: 3,
+        }}
+      >
         {options.map((opt) => {
           const optionKey = String(opt.value);
           return (
