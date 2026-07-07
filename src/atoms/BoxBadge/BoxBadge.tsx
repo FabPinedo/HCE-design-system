@@ -2,19 +2,23 @@
  * ---------------------------------------------------------
  * Component: BoxBadge
  * Description:
- * Badge en forma de pill que representa el estado de una sala/box
- * asignada al paciente.
+ * Badge en forma de pill que representa el estado funcional
+ * de una sala o box dentro del módulo clínico de emergencia.
  *
- * Variantes de estado:
- *   active  → verde #27AE60  — sala asignada y activa
- *   urgent  → rojo  #E53E3E  — sala con paciente en estado crítico
- *   waiting → gris  #8A9BB0  — en espera, sin sala asignada
- *   tp      → gris oscuro #5A6A85 — sala de tópico
+ * Stages:
+ *   ESPERA        → paciente en espera, sin box asignado
+ *   SALA_D        → paciente en sala de espera diferenciada
+ *   BOX_ASIGNADO  → paciente con box asignado
+ *
+ * Color:
+ *   green   → estado normal
+ *   yellow  → estado de alerta
+ *   red     → estado crítico
  *
  * Uso:
- *   <BoxBadge status="active" label="Box 3" />
- *   <BoxBadge status="waiting" label="Espera" />
- *   <BoxBadge status="tp" label="TP" />
+ *   <BoxBadge stage="ESPERA" label="ESPERA" />
+ *   <BoxBadge stage="SALA_D" label="SALA D" color="yellow" />
+ *   <BoxBadge stage="BOX_ASIGNADO" label="Box 3" />
  * ---------------------------------------------------------
  */
 import { Box } from "@mui/material"
