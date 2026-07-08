@@ -42,6 +42,12 @@ export type { LucideIcon } from "./atoms/Icon/Icon"
 
 // ── Icons — HCE SVG (logo clínica + iconos de layout) ─────
 export { LogoClinicaSanFelipeIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon, HceBurgerIcon } from "./atoms/Icon/SvgIconsHce"
+// Escala de dolor EVA (0-10) — caras que reemplazan a los emojis en EvaScale
+export {
+  EvaScale0Icon, EvaScale1Icon, EvaScale2Icon, EvaScale3Icon, EvaScale4Icon,
+  EvaScale5Icon, EvaScale6Icon, EvaScale7Icon, EvaScale8Icon, EvaScale9Icon,
+  EvaScale10Icon,
+} from "./atoms/Icon/SvgIconsHce"
 
 // ── Icons — HCE Custom SVG ─────────────────────────────────
 export type { HceIconProps } from "./atoms/Icon/Icon"
@@ -94,6 +100,16 @@ export { HceBreadcrumb }       from "./atoms/HceBreadcrumb/HceBreadcrumb"
 export { SkeletonLoader } from "./atoms/SkeletonLoader/SkeletonLoader"
 export { MultiSelect }    from "./atoms/MultiSelect/MultiSelectField"
 export type { SkeletonLoaderProps, SkeletonVariant } from "./atoms/SkeletonLoader/SkeletonLoader"
+export { FieldCol }       from "./atoms/FieldCol/FieldCol"
+export type { FieldColProps } from "./atoms/FieldCol/FieldCol"
+export { Toggle }         from "./atoms/Toggle/Toggle"
+export type { ToggleProps } from "./atoms/Toggle/Toggle"
+export { NumericField }   from "./atoms/NumericField/NumericField"
+export type { NumericFieldProps } from "./atoms/NumericField/NumericField"
+export { TextareaField }  from "./atoms/TextareaField/TextareaField"
+export type { TextareaFieldProps } from "./atoms/TextareaField/TextareaField"
+export { DatePicker }     from "./atoms/DatePicker/DatePicker"
+export type { DatePickerProps } from "./atoms/DatePicker/DatePicker"
 
 // ── Types — Atoms ──────────────────────────────────────────
 export type { PriorityLevel } from "./atoms/PriorityBadge/PriorityBadge"
@@ -136,6 +152,8 @@ export { InfoButton }          from "./molecules/InfoButton/InfoButton"
 
 export { PasswordInput }       from "./molecules/PasswordInput/PasswordInput"
 export { RadioGroup }          from "./molecules/RadioGroup/RadioGroup"
+export { SectionHeader }       from "./molecules/SectionHeader/SectionHeader"
+export type { SectionHeaderProps } from "./molecules/SectionHeader/SectionHeader"
 // ContentCard: molecule Card with title, divider, actions
 export { Card as ContentCard } from "./molecules/Card/Card"
 export { PageHeader }          from "./molecules/PageHeader/PageHeader"
