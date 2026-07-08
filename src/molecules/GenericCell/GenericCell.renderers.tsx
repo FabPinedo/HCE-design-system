@@ -140,9 +140,13 @@ export const cellRenderers: {
         display: "flex",
         justifyContent: "center",
         cursor: canClick ? "pointer" : "default",
+
+          "& *": {
+      cursor: canClick ? "pointer" : "default",
+    },
       }}
     >
-      <PriorityBadge priority={value as any} />
+      <PriorityBadge priority={value as any} cursor={canClick ? "pointer" : "default"} />
     </Box>
   ),
 
@@ -164,12 +168,17 @@ export const cellRenderers: {
           display: "flex",
           justifyContent: "center",
           cursor: canClick ? "pointer" : "default",
+
+            "& *": {
+            cursor: canClick ? "pointer" : "default",
+          },
         }}
       >
         <BoxBadge
           label={boxie.label}
           stage={boxie.stage}
           color={boxie.color}
+          cursor={canClick ? "pointer" : "default"}
         />
       </Box>
     )

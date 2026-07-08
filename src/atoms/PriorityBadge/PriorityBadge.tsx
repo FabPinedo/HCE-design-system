@@ -18,6 +18,7 @@
  */
 import { Box, Tooltip } from "@mui/material"
 import { hceClinicalColors, hceTypography } from "../../tokens/hce.tokens"
+import type { CSSProperties } from "react"
 
 export type PriorityLevel = 1 | 2 | 3 | 4 | "none"
 
@@ -40,6 +41,8 @@ interface Props {
   priority: PriorityLevel
   /** Texto personalizado para el tooltip (opcional) */
   tooltipText?: string
+  /** Cursor visual del badge. Por defecto es informativo. */
+  cursor?: CSSProperties["cursor"]
 }
 
 /**
@@ -49,7 +52,7 @@ interface Props {
  * - Prioridades 1–4: fondo sólido del color de prioridad, número en blanco
  * - "none": círculo vacío con borde gris, sin número
  */
-export const PriorityBadge = ({ priority, tooltipText }: Props) => {
+export const PriorityBadge = ({ priority, tooltipText,cursor='default' }: Props) => {
   const key = String(priority)
   const config = PRIORITY_CONFIG[key]
   const isNone = priority === "none"
@@ -69,7 +72,7 @@ export const PriorityBadge = ({ priority, tooltipText }: Props) => {
           alignItems:      "center",
           justifyContent:  "center",
           flexShrink:      0,
-          cursor:          "default",
+          cursor,
 
           // Apariencia según estado
           backgroundColor: isNone ? "transparent" : config.color,
