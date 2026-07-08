@@ -4,27 +4,35 @@ import {
   hceTypography,
   hceTransition,
 } from "../../tokens/hce.tokens";
+import {
+  EvaScale0Icon, EvaScale1Icon, EvaScale2Icon, EvaScale3Icon, EvaScale4Icon,
+  EvaScale5Icon, EvaScale6Icon, EvaScale7Icon, EvaScale8Icon, EvaScale9Icon,
+  EvaScale10Icon,
+} from "../../atoms/Icon/SvgIconsHce";
 
 // ─── Config por paso ──────────────────────────────────────────────────────────
 // bg/border/text son los colores del círculo cuando está activo (seleccionado o
-// a la izquierda del punto seleccionado). emoji cambia según la intensidad.
+// a la izquierda del punto seleccionado). icon cambia según la intensidad.
 
 const STEPS = [
-  { value: 0, bg: "#B1DAF1", border: "#B1DAF1", text: "#ffffff", emoji: "😊" },
-  { value: 1, bg: "#55AFE0", border: "#55AFE0", text: "#ffffff", emoji: "🙂" },
-  { value: 2, bg: "#0288D1", border: "#0288D1", text: "#ffffff", emoji: "😐" },
-  { value: 3, bg: "#73A876", border: "#73A876", text: "#ffffff", emoji: "😕" },
-  { value: 4, bg: "#2E7D32", border: "#2E7D32", text: "#ffffff", emoji: "😟" },
-  { value: 5, bg: "#FDE4BB", border: "#FDE4BB", text: "#ffffff", emoji: "😣" },
-  { value: 6, bg: "#FBC56D", border: "#FBC56D", text: "#ffffff", emoji: "😖" },
-  { value: 7, bg: "#F9A825", border: "#F9A825", text: "#ffffff", emoji: "😢" },
-  { value: 8, bg: "#E7BCB9", border: "#E7BCB9", text: "#ffffff", emoji: "😭" },
-  { value: 9, bg: "#CC6E68", border: "#CC6E68", text: "#ffffff", emoji: "😱" },
-  { value: 10, bg: "#B3261E", border: "#B3261E", text: "#ffffff", emoji: "😫" },
+  { value: 0, bg: "#B1DAF1", border: "#B1DAF1", text: "#ffffff", icon: EvaScale0Icon },
+  { value: 1, bg: "#55AFE0", border: "#55AFE0", text: "#ffffff", icon: EvaScale1Icon },
+  { value: 2, bg: "#0288D1", border: "#0288D1", text: "#ffffff", icon: EvaScale2Icon },
+  { value: 3, bg: "#73A876", border: "#73A876", text: "#ffffff", icon: EvaScale3Icon },
+  { value: 4, bg: "#2E7D32", border: "#2E7D32", text: "#ffffff", icon: EvaScale4Icon },
+  { value: 5, bg: "#FDE4BB", border: "#FDE4BB", text: "#ffffff", icon: EvaScale5Icon },
+  { value: 6, bg: "#FBC56D", border: "#FBC56D", text: "#ffffff", icon: EvaScale6Icon },
+  { value: 7, bg: "#F9A825", border: "#F9A825", text: "#ffffff", icon: EvaScale7Icon },
+  { value: 8, bg: "#E7BCB9", border: "#E7BCB9", text: "#ffffff", icon: EvaScale8Icon },
+  { value: 9, bg: "#CC6E68", border: "#CC6E68", text: "#ffffff", icon: EvaScale9Icon },
+  { value: 10, bg: "#B3261E", border: "#B3261E", text: "#ffffff", icon: EvaScale10Icon },
 ] as const;
 
 const CIRCLE = 28; // diámetro del círculo en px
-const EMOJI_SIZE = 58; // tamaño del cuadro del emoji en px
+const EMOJI_SIZE = 58; // tamaño del cuadro (círculo) que contiene la cara
+const EMOJI_BORDER = 6; // ancho del borde del círculo
+// El ícono llena el círculo dejando el borde + un margen mínimo visibles.
+const EMOJI_ICON_SIZE = EMOJI_SIZE - EMOJI_BORDER * 2 - 4;
 const ARROW_H = 10; // alto de la flecha conectora
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -68,8 +76,8 @@ export function EvaScale({
       aria-label="Escala de dolor EVA (0-10)"
       sx={{ width: "100%", userSelect: "none" }}
     >
-      {/* Fila de emojis — misma estructura space-between que los círculos
-          así el emoji queda perfectamente centrado sobre su círculo */}
+      {/* Fila de caras — misma estructura space-between que los círculos
+          así el ícono queda perfectamente centrado sobre su círculo */}
       <Box
         sx={{
           display: "flex",
@@ -95,23 +103,21 @@ export function EvaScale({
                 transition: `opacity ${hceTransition.fast}`,
               }}
             >
-              {/* Cuadro del emoji */}
+              {/* Cuadro del ícono de cara */}
               <Box
                 sx={{
                   width: EMOJI_SIZE,
                   height: EMOJI_SIZE,
                   borderRadius: "50%",
                   backgroundColor: "#ffffff",
-                  border: `6px solid ${step.border}`,
+                  border: `${EMOJI_BORDER}px solid ${step.border}`,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "28px",
-                  lineHeight: 1,
                   boxShadow: "0 2px 8px rgba(0,0,0,0.14)",
                 }}
               >
-                {step.emoji}
+                <step.icon size={EMOJI_ICON_SIZE} />
               </Box>
 
               {/* Flecha conectora */}

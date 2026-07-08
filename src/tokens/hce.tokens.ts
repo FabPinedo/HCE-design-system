@@ -325,6 +325,7 @@ export const hceClinicalColors = {
   iconUrgent:      '#A3231B', // Urgente
   iconUrgentBg:    '#FFEBEE',
   iconInactive:    '#B0BEC5', // Inactivo — opacidad 40%
+  iconEvaScale:    '#4D4D4F', // Trazo de las caras de la escala de dolor EVA
 
   // Botón Info
   btnInfoBg:       '#89C93D', // Color base

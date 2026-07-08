@@ -36,6 +36,10 @@ import {
   UiVectorIcon, UiWarningIcon, UiXRaysIcon,
   //hce
   LogoClinicaSanFelipeIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon,
+  // EVA Scale (caras 0-10)
+  EvaScale0Icon, EvaScale1Icon, EvaScale2Icon, EvaScale3Icon, EvaScale4Icon,
+  EvaScale5Icon, EvaScale6Icon, EvaScale7Icon, EvaScale8Icon, EvaScale9Icon,
+  EvaScale10Icon,
 } from "@hce/design-system"
 import type { HceIconProps } from "@hce/design-system"
 import type { LucideIcon } from "@hce/design-system"
@@ -179,6 +183,20 @@ const HCE_NoMapeado: { name: string; icon: React.FC<any> }[] = [
   { name: "HceStarIcon",              icon: HceStarIcon },
   { name: "HceConfigIcon",            icon: HceConfigIcon },
 ]
+
+const HCE_EVA_SCALE: { name: string; icon: React.FC<any> }[] = [
+  { name: "EvaScale0Icon",  icon: EvaScale0Icon },
+  { name: "EvaScale1Icon",  icon: EvaScale1Icon },
+  { name: "EvaScale2Icon",  icon: EvaScale2Icon },
+  { name: "EvaScale3Icon",  icon: EvaScale3Icon },
+  { name: "EvaScale4Icon",  icon: EvaScale4Icon },
+  { name: "EvaScale5Icon",  icon: EvaScale5Icon },
+  { name: "EvaScale6Icon",  icon: EvaScale6Icon },
+  { name: "EvaScale7Icon",  icon: EvaScale7Icon },
+  { name: "EvaScale8Icon",  icon: EvaScale8Icon },
+  { name: "EvaScale9Icon",  icon: EvaScale9Icon },
+  { name: "EvaScale10Icon", icon: EvaScale10Icon },
+]
 // ─── Estilos compartidos ──────────────────────────────────────────────────────
 const SECTION: React.CSSProperties = {
   marginBottom: 40,
@@ -314,7 +332,19 @@ function IconGallery({ iconColor }: { iconColor: string }) {
           ))}
         </div>
       </div>
-      
+
+      {/* Escala de dolor EVA — multicolor, no toman prop color */}
+      <div style={SECTION}>
+        <div style={SECTION_TITLE}>EVA Scale (multicolor) — {HCE_EVA_SCALE.length} íconos</div>
+        <div style={GRID}>
+          {HCE_EVA_SCALE.map(({ name, icon: Icon }) => (
+            <IconCard key={name} name={name} color={iconColor}>
+              <Icon size={40} />
+            </IconCard>
+          ))}
+        </div>
+      </div>
+
 
     </div>
   )
