@@ -69,7 +69,10 @@ export const Checkbox = ({
         disabled={disabled}
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          // "space-between" pegaba el label al checkbox cuando el contenedor no tenía
+          // ancho extra (ej. "No identificado" en triaje, dentro de un Box shrink-to-fit).
+          // Un gap fijo garantiza separación visible sin importar el ancho del contenedor.
+          gap: "6px",
           width: "100%",
           margin: 0
         }}

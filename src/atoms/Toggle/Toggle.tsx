@@ -34,8 +34,10 @@ export function Toggle({ checked, onChange, disabled = false }: ToggleProps) {
         }
         sx={{ display: "none" }}
       />
+      {/* Sin onClick propio: el <label> ya reenvía el click nativamente al <input>
+          oculto de arriba. Agregar un onClick acá duplicaba el toggle (ambos disparan
+          en el mismo click, con el mismo `checked` obsoleto) y podía anular el cambio. */}
       <Box
-        onClick={() => !disabled && onChange(!checked)}
         sx={{
           width: 44,
           height: 24,
