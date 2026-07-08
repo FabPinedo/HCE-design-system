@@ -88,6 +88,7 @@ export function HCEQuickAccess({
 
       {/* Botón Acceder */}
       <Button
+        type="button"
         variant="outlined"
         size="small"
         disabled={disabled}
