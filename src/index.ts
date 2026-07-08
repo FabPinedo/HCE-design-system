@@ -196,12 +196,22 @@ export { DataTable }             from "./organisms/DataTable/DataTable"
 export { Pagination }            from "./organisms/Pagination/Pagination"
 
 export { BedAvailabilityDrawer } from "./organisms/BedAvailability/BedAvailabilityDrawer"
+export { BedAvailabilityDrawerV2 } from "./organisms/BedAvailability/BedAvailabilityDrawerV2"
+export {
+  BED_AVAILABILITY_STATUS_COLORS,
+  BED_AVAILABILITY_STATUS_LABELS,
+}                                 from "./organisms/BedAvailability/BedAvailabilityDrawerV2"
 export { SidebarMenu }           from "./organisms/SidebarMenu/SidebarMenu"
 export { NavTab }                from "./organisms/NavTab/NavTab"
 
 export { GenericTable} from "./organisms/GenericTable/GenericTable"
 
 // ── Types — Organisms ──────────────────────────────────────
+export type {
+  BedAvailabilityItem,
+  BedAvailabilityStatus,
+  BedAvailabilityDrawerV2Props,
+}                               from "./organisms/BedAvailability/BedAvailabilityDrawerV2"
 export type { MenuItem }       from "./organisms/SidebarMenu/types"
 export type {
   HceHeaderProps,

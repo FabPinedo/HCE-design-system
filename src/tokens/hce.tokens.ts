@@ -329,6 +329,12 @@ export const hceClinicalColors = {
 
   // Botón Info
   btnInfoBg:       '#89C93D', // Color base
+
+  // Estados de cama (BedAvailabilityDrawerV2) — housekeeping/mantenimiento no
+  // tenían tokens propios y se agregan de primera clase para evitar que se
+  // vuelvan a hardcodear hex sueltos en otro componente clínico a futuro.
+  bedHousekeeping: '#EC407A', // Rosa — Housekeeping
+  bedMaintenance:  '#9575CD', // Lila — Mantenimiento
 } as const
 
 export function injectHceTokens(): void {
