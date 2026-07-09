@@ -24,6 +24,7 @@ const MOCK_BEDS: BedAvailabilityItem[] = [
   { id: "9",  code: "CX09", status: "altaAdministrativa" },
   { id: "10", code: "CX10", status: "disponible" },
   { id: "11", code: "CX11", status: "ocupado" },
+  
   { id: "12", code: "CX12", status: "reservado", color: "#3369b7" }, // estado futuro, color forzado por props
 ]
 

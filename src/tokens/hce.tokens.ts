@@ -119,6 +119,21 @@ export const hceColors = {
       900: "#000000",
     },
   },
+  extras:{
+    lilac:{
+      50: "#C8A2C8",
+      100: "#C8A2C8",
+      200: "#C8A2C8",
+      300: "#C8A2C8",
+      400: "#C8A2C8",
+      500: "#C8A2C8",
+      600: "#C8A2C8",
+      700: "#C8A2C8",
+      800: "#C8A2C8",
+      900: "#C8A2C8",
+    }
+  }
+
 } as const
 
 export type HceColors = typeof hceColors
