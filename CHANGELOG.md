@@ -30,6 +30,9 @@ Versionado basado en [Semantic Versioning](https://semver.org/).
 - **`hceClinicalColors`**: `rowAlternate` ahora es equivalente a `#F4F7FB`.
 - **`HceHeader`** (Organismo): nueva prop `variant` con soporte para `"default"` y `"tv"`, permitiendo separar explícitamente el modo de pantalla pública/TV del header estándar.
 - **`src/index.ts`**: se exportan los tipos públicos `HceBreadcrumbItem` y `HceBreadcrumbProps`.
+- **`MultiSelectField`** (Atomo): Modificacion del disable para los checkbox y precarga de checks cuando existe data a través del value.
+- **`TextareaField`** (Atomo): Modificacion de disabled
+- **`NumericField`** (Atomo): Modificacion de disabled
 
 
 ### Breaking changes

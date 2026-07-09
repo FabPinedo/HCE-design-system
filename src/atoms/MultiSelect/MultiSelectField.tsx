@@ -94,6 +94,8 @@ export const MultiSelect = ({
         </Typography>
         <FormControl fullWidth={fullWidth} size="small">
           <Autocomplete
+            disableClearable={disabled}
+            isOptionEqualToValue={(option, val) => option.value === val.value}
             sx={{
               "& .MuiAutocomplete-tag": {
                 display: "none",
@@ -103,13 +105,20 @@ export const MultiSelect = ({
             slotProps={{
               paper: {
                 sx: {
-                  width: "max-content",
-                  minWidth: "100%",
+                  // El Popper de MUI Autocomplete ya fija su propio width al
+                  // clientWidth del anchor (el trigger/input). "max-content" +
+                  // "min-width: 100%" anulaba ese comportamiento y dejaba que
+                  // el Paper creciera más allá del ancho del trigger cuando
+                  // una opción tenía un label largo, ensanchando el dropdown.
+                  // Con "width: 100%" el Paper simplemente llena el ancho que
+                  // el Popper ya calculó (= ancho del trigger), así que las
+                  // opciones largas truncan con ellipsis en vez de ensanchar
+                  // el panel o desbordarse sobre el checkbox.
+                  width: "100%",
                 },
               },
             }}
             multiple
-            disabled={disabled}
             disableCloseOnSelect
             onChange={(_, newValue) => {
               const values = newValue.map((item) => item.value);
@@ -147,8 +156,21 @@ export const MultiSelect = ({
             }}
             renderOption={(props, option, { selected }) => {
               const { key, ...restProps } = props;
+              const handleClick = (
+                e: React.MouseEvent<HTMLLIElement, MouseEvent>,
+              ) => {
+                if (disabled) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return;
+                }
+                if (restProps.onClick) {
+                  restProps.onClick(e);
+                }
+              };
               return (
                 <li
+                  onClick={handleClick}
                   key={option.value}
                   {...restProps}
                   style={{
@@ -158,14 +180,39 @@ export const MultiSelect = ({
                     width: "100%",
                     padding: "8px 16px",
                     whiteSpace: "nowrap",
+                    cursor: disabled ? "not-allowed" : "pointer",
+                    pointerEvents: disabled ? "none" : "auto",
                   }}
                 >
+                  {/*
+                    El label se renderiza aparte (no vía la prop `label` de <Checkbox>)
+                    para que el `justifyContent: space-between` del <li> tenga dos hijos
+                    reales entre los que repartir el espacio: texto a la izquierda,
+                    checkbox a la derecha. El átomo <Checkbox> internamente usa un gap
+                    fijo (no space-between) a propósito para otros consumidores
+                    (ver comentario en Checkbox.tsx) — no se toca ese componente.
+                  */}
+                  <Typography
+                    sx={{
+                      fontFamily: hceTypography.fontFamily,
+                      fontSize: "0.875rem",
+                      color: hceColors.neutro.black[400],
+                      textAlign: "left",
+                      flex: 1,
+                      minWidth: 0,
+                      mr: 1,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {option.label}
+                  </Typography>
                   <Checkbox
-                    label={option.label}
+                    ariaLabel={option.label}
                     checked={selected}
-                    disabled={false}
+                    disabled={disabled}
                     onChange={() => {}}
-                    sideLabel="start"
                   />
                 </li>
               );

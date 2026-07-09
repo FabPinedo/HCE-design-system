@@ -29,6 +29,7 @@ import {
 } from "../../tokens/hce.tokens"
 
 import { getSemaphoreColors } from "../../tokens/getSemaphoreColors"
+import type { CSSProperties } from "react"
 
 export type BoxStage = "ESPERA" | "SALA_D" | "BOX_ASIGNADO"
 export type BoxBadgeColor = "green" | "yellow" | "red" | null
@@ -48,6 +49,8 @@ interface Props {
 
   /** Color semáforo usado principalmente para SALA_D. */
   color?: BoxBadgeColor
+
+  cursor?: CSSProperties["cursor"]
 }
 
 const STAGE_COLORS: Partial<Record<BoxStage, BoxBadgeColors>> = {
@@ -76,6 +79,7 @@ export const BoxBadge = ({
   label,
   stage,
   color = null,
+  cursor = "default",
 }: Props) => {
   const colors = getBoxBadgeColors(stage, color)
   const visibleLabel = label ?? stage
@@ -100,7 +104,7 @@ export const BoxBadge = ({
         textDecorationLine: "underline",
         letterSpacing: "0.3px",
         whiteSpace: "nowrap",
-        cursor: "default",
+        cursor,
         userSelect: "none",
         lineHeight: 1.4,
         boxSizing: "border-box",

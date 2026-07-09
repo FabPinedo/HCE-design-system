@@ -7,6 +7,13 @@ interface Props {
   onChange: (v: boolean) => void;
   disabled?: boolean;
   sideLabel?: "start" | "end" | "top" | "bottom";
+  /**
+   * Nombre accesible para el input cuando se usa sin `label` visible (p. ej.
+   * dentro de una fila de lista que ya renderiza el texto por fuera de este
+   * átomo). Sin esto, un checkbox sin `label` queda sin nombre accesible
+   * para lectores de pantalla (WCAG 4.1.2).
+   */
+  ariaLabel?: string;
 }
 
 export const Checkbox = ({
@@ -15,6 +22,7 @@ export const Checkbox = ({
   onChange,
   disabled,
   sideLabel = "end",
+  ariaLabel,
 }: Props) => {
   const checkbox = (
     <MuiCheckbox
@@ -28,6 +36,7 @@ export const Checkbox = ({
       disabled={disabled}
       checked={checked}
       onChange={(e) => onChange(e.target.checked)}
+      inputProps={ariaLabel ? { "aria-label": ariaLabel } : undefined}
       icon={
         <Box
           sx={{

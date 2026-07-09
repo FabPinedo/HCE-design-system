@@ -155,6 +155,7 @@ export const BoxSalaDGreen: Story = {
       field: "box",
       clickable: true,
       align: "center",
+      disabledGetter: () => false,
       onClick: (row, value) => {
         console.log("Abrir modal asignación BOX:", { row, value })
       },
@@ -213,6 +214,7 @@ export const BoxSalaDRed: Story = {
 
 export const BoxAssigned: Story = {
   args: {
+    
     row: {
       ...baseRow,
       box: {

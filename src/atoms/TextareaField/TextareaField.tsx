@@ -8,6 +8,7 @@ export interface TextareaFieldProps {
   onChange: (v: string) => void
   maxLength?: number
   placeholder?: string
+  disabled?: boolean
 }
 
 /** Textarea con label y contador de caracteres. */
@@ -17,6 +18,7 @@ export function TextareaField({
   onChange,
   maxLength = 100,
   placeholder = "Ingrese texto",
+  disabled = false
 }: TextareaFieldProps) {
   const id = useId()
   return (
@@ -43,6 +45,7 @@ export function TextareaField({
       >
         <Box
           id={id}
+          disabled = {disabled}
           component="textarea"
           value={value}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
