@@ -94,6 +94,8 @@ export const MultiSelect = ({
         </Typography>
         <FormControl fullWidth={fullWidth} size="small">
           <Autocomplete
+            disableClearable={disabled}
+            isOptionEqualToValue={(option, val) => option.value === val.value}
             sx={{
               "& .MuiAutocomplete-tag": {
                 display: "none",
@@ -117,7 +119,6 @@ export const MultiSelect = ({
               },
             }}
             multiple
-            disabled={disabled}
             disableCloseOnSelect
             onChange={(_, newValue) => {
               const values = newValue.map((item) => item.value);
@@ -155,8 +156,21 @@ export const MultiSelect = ({
             }}
             renderOption={(props, option, { selected }) => {
               const { key, ...restProps } = props;
+              const handleClick = (
+                e: React.MouseEvent<HTMLLIElement, MouseEvent>,
+              ) => {
+                if (disabled) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return;
+                }
+                if (restProps.onClick) {
+                  restProps.onClick(e);
+                }
+              };
               return (
                 <li
+                  onClick={handleClick}
                   key={option.value}
                   {...restProps}
                   style={{
@@ -166,6 +180,8 @@ export const MultiSelect = ({
                     width: "100%",
                     padding: "8px 16px",
                     whiteSpace: "nowrap",
+                    cursor: disabled ? "not-allowed" : "pointer",
+                    pointerEvents: disabled ? "none" : "auto",
                   }}
                 >
                   {/*
@@ -195,7 +211,7 @@ export const MultiSelect = ({
                   <Checkbox
                     ariaLabel={option.label}
                     checked={selected}
-                    disabled={false}
+                    disabled={disabled}
                     onChange={() => {}}
                   />
                 </li>

@@ -11,6 +11,7 @@ export interface NumericFieldProps {
   /** "decimal" permite coma/punto (ej. peso, temperatura); "natural" solo dígitos enteros. */
   numberType?: "decimal" | "natural"
   readOnly?: boolean
+  disabled?: boolean
 }
 
 /** Campo numérico con label y unidad como placeholder. */
@@ -21,6 +22,7 @@ export function NumericField({
   suffix,
   numberType = "decimal",
   readOnly = false,
+  disabled = false,
 }: NumericFieldProps) {
   return (
     <FieldCol label={label}>
@@ -39,6 +41,7 @@ export function NumericField({
       >
         <Box
           component="input"
+          disabled={disabled}
           type="text"
           inputMode={numberType === "decimal" ? "decimal" : "numeric"}
           value={value}

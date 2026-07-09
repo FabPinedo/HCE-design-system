@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { MultiSelect } from "@hce/design-system";
 import { useState } from "react";
-
+const APIRESPONSE = [
+  {id: "1"}
+]
 const EMPRESAS = [
-  { value: "CENTRAL", label: "Sede Central" },
-  { value: "NORTE", label: "Sede Norte" },
-  { value: "SUR", label: "Sede Sur" },
+  { value: "1", label: "Sede Central" },
+  { value: "2", label: "Sede Norte" },
+  { value: "3", label: "Sede Sur" },
 ];
 
 const EMPRESAS_LABELS_LARGOS = [
@@ -58,6 +60,21 @@ export const LongLabels: Story = {
     options: EMPRESAS_LABELS_LARGOS,
     label: "Empresas",
     disabled: false,
+    fullWidth: true,
+    required: false,
+  },
+};
+
+
+export const ChecksSeleccionados: Story = {
+  render: (args) => {
+    const [value, setValue] = useState<string[]>(["1"]);
+    return <MultiSelect {...args} value={value} onChange={setValue} />;
+  },
+  args: {
+    options: EMPRESAS,
+    label: "Empresas",
+    disabled: true,
     fullWidth: true,
     required: false,
   },
