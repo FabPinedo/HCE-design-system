@@ -10,7 +10,7 @@
  */
 
 import { Box, Drawer, Typography, Button ,Tooltip} from "@mui/material"
-import KingBedOutlinedIcon from "@mui/icons-material/KingBedOutlined"
+
 import {
   hceClinicalColors, hceColors, hceTypography,
   hceBorderRadius, hceSpacing, hceZIndex,
