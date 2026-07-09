@@ -63,9 +63,12 @@ export interface HceFormModalProps {
   /** Si false, el click fuera del modal NO lo cierra. Default true */
   closeOnBackdrop?: boolean
 
+  iconClose?: boolean
+
   // ── Escape hatches ─────────────────────────────────
   className?: string
   style?:     React.CSSProperties
+  borderNone? : boolean 
 }
 
 // ─── Keyframe de entrada ──────────────────────────────────────────────────────
@@ -91,7 +94,9 @@ export function HceFormModal({
   buttonAlign     = "right",
   closeOnBackdrop = true,
   className,
+  iconClose= true,
   style,
+  borderNone=false,
 }: HceFormModalProps) {
 
   const hasButtons = !!(primaryButton || secondaryButton)
@@ -159,6 +164,8 @@ export function HceFormModal({
           {title}
         </Typography>
 
+
+{iconClose && (
         <IconButton
           onClick={onClose}
           aria-label="Cerrar modal"
@@ -196,6 +203,7 @@ export function HceFormModal({
             />
           </svg>
         </IconButton>
+)}
       </Box>
 
       {/* ── Cuerpo ───────────────────────────────────────────────────────── */}
@@ -219,7 +227,7 @@ export function HceFormModal({
             justifyContent: buttonAlign,
             gap:            "12px",
             padding:        "12px 20px",
-            borderTop:      `1px solid ${hceColors.primary.blue[100]}`,
+            borderTop:      borderNone==true? 'none':`1px solid ${hceColors.primary.blue[100]}`,
             flexShrink:     0,
             flexWrap:       "wrap",
           }}
