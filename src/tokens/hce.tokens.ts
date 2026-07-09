@@ -119,6 +119,21 @@ export const hceColors = {
       900: "#000000",
     },
   },
+  extras:{
+    lilac:{
+      50: "#C8A2C8",
+      100: "#C8A2C8",
+      200: "#C8A2C8",
+      300: "#C8A2C8",
+      400: "#C8A2C8",
+      500: "#C8A2C8",
+      600: "#C8A2C8",
+      700: "#C8A2C8",
+      800: "#C8A2C8",
+      900: "#C8A2C8",
+    }
+  }
+
 } as const
 
 export type HceColors = typeof hceColors
@@ -325,9 +340,16 @@ export const hceClinicalColors = {
   iconUrgent:      '#A3231B', // Urgente
   iconUrgentBg:    '#FFEBEE',
   iconInactive:    '#B0BEC5', // Inactivo — opacidad 40%
+  iconEvaScale:    '#4D4D4F', // Trazo de las caras de la escala de dolor EVA
 
   // Botón Info
   btnInfoBg:       '#89C93D', // Color base
+
+  // Estados de cama (BedAvailabilityDrawerV2) — housekeeping/mantenimiento no
+  // tenían tokens propios y se agregan de primera clase para evitar que se
+  // vuelvan a hardcodear hex sueltos en otro componente clínico a futuro.
+  bedHousekeeping: '#EC407A', // Rosa — Housekeeping
+  bedMaintenance:  '#9575CD', // Lila — Mantenimiento
 } as const
 
 export function injectHceTokens(): void {

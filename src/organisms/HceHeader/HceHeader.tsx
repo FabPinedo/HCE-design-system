@@ -152,7 +152,10 @@ export function HceHeader({
     .join("")
 
   const multiSede    = sucursales.length > 1
-  const selectedSede = String(sede ?? (sucursales[0]?.id ?? ""))
+  // sede llega como '' (string vacío) del contexto mientras no hay selección — '??' no
+  // lo detecta porque '' no es null/undefined, así que el fallback a la primera sede
+  // nunca se disparaba. Se usa '||' para cubrir también el caso de string vacío.
+  const selectedSede = String(sede || (sucursales[0]?.id ?? ""))
   const unreadCount  = notifs.filter(n => !n.leida).length
   const isTvVariant = variant === "tv"
 const headerTitle = title ??  "Historia Clínica"
@@ -246,7 +249,7 @@ const headerTitle = title ??  "Historia Clínica"
                   backgroundColor: hceColors.neutro.white[50],
                   border: sedeSelectOpen
                     ? `2px solid ${hceColors.primary.blue[400]}`
-                    : "2px solid transparent",
+                    : `2px solid ${hceColors.neutro.black[50]}`,
                   boxShadow: sedeSelectOpen
                     ? `0 0 0 6px ${hceColors.primary.blue[100]}`
                     : "none",

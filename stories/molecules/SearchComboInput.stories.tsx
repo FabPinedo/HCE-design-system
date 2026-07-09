@@ -7,19 +7,19 @@ import type { SearchMode, SearchOption } from "@hce/design-system"
 // ─── Mock data para simular respuesta de API ──────────────────────────────────
 
 const MOCK_DIAGNOSTICOS: SearchOption[] = [
-  { value: "J06.9", label: "Infección aguda de las vías respiratorias superiores", secondary: "J06.9" },
-  { value: "J18.9", label: "Neumonía, no especificada",                            secondary: "J18.9" },
-  { value: "A09",   label: "Gastroenteritis y colitis de origen infeccioso",        secondary: "A09"   },
-  { value: "K35.8", label: "Apendicitis aguda, sin mención de peritonitis",         secondary: "K35.8" },
-  { value: "I10",   label: "Hipertensión esencial (primaria)",                      secondary: "I10"   },
-  { value: "E11.9", label: "Diabetes mellitus tipo 2 sin complicaciones",           secondary: "E11.9" },
-  { value: "N39.0", label: "Infección de las vías urinarias, sitio no especificado", secondary: "N39.0" },
-  { value: "R07.9", label: "Dolor de garganta, no especificado",                   secondary: "R07.9" },
+  { value: 1, label: "Infección aguda de las vías respiratorias superiores", secondary: "J06.9" },
+  { value: 2, label: "Neumonía, no especificada",                            secondary: "J18.9" },
+  { value: 3,   label: "Gastroenteritis y colitis de origen infeccioso",        secondary: "A09"   },
+  { value: 4, label: "Apendicitis aguda, sin mención de peritonitis",         secondary: "K35.8" },
+  { value: 5,   label: "Hipertensión esencial (primaria)",                      secondary: "I10"   },
+  { value: 6, label: "Diabetes mellitus tipo 2 sin complicaciones",           secondary: "E11.9" },
+  { value: 7, label: "Infección de las vías urinarias, sitio no especificado", secondary: "N39.0" },
+  { value: 8, label: "Dolor de garganta, no especificado",                   secondary: "R07.9" },
 ]
 
 function filterOptions(query: string, mode: SearchMode): SearchOption[] {
   const q = query.toLowerCase()
-  if (mode === "cie10") {
+  if (mode === "cie_code") {
     return MOCK_DIAGNOSTICOS.filter(o => o.secondary?.toLowerCase().startsWith(q))
   }
   return MOCK_DIAGNOSTICOS.filter(o => o.label.toLowerCase().includes(q))
@@ -52,7 +52,7 @@ type Story = StoryObj<typeof SearchComboInput>
 export const Default: Story = {
   name: "Motivo de ingreso",
   render: ({ loading, disabled, debounceMs }) => {
-    const [mode,    setMode]    = useState<SearchMode>("nombre")
+    const [mode,    setMode]    = useState<SearchMode>("cie_description")
     const [value,   setValue]   = useState("")
     const [options, setOptions] = useState<SearchOption[]>([])
     const [selected, setSelected] = useState<SearchOption | null>(null)
@@ -135,7 +135,7 @@ export const Disabled: Story = {
 export const ModoCIE10: Story = {
   name: "Modo CIE-10 por defecto",
   render: () => {
-    const [mode, setMode] = useState<SearchMode>("cie10")
+    const [mode, setMode] = useState<SearchMode>("cie_code")
     const [value, setValue] = useState("")
     const [options, setOptions] = useState<SearchOption[]>([])
 
