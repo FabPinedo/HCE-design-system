@@ -50,6 +50,11 @@ const meta: Meta<typeof HceFormModal> = {
       description: "Si false, el click fuera del modal NO lo cierra",
       table: { defaultValue: { summary: "true" } },
     },
+    iconClose: {
+      control: "boolean",
+      description: "Si es false, el icono de X no se muestra",
+      table: { defaultValue: { summary: "true" } },
+    },
   },
 }
 
@@ -387,6 +392,8 @@ export const Playground: Story = {
     fullWidth:   true,
     buttonAlign: "right",
     closeOnBackdrop: true,
+    iconClose:false,
+    borderNone:true,
     primaryButton: {
       label:     "Guardar",
       onClick:   () => {},
