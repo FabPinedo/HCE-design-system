@@ -74,6 +74,28 @@ export const ChecksSeleccionados: Story = {
   args: {
     options: EMPRESAS,
     label: "Empresas",
+    disabled: false,
+    fullWidth: true,
+    required: false,
+  },
+};
+
+/**
+ * disabled=true ya NO bloquea la apertura del dropdown (a diferencia del
+ * comportamiento anterior, que usaba el `disabled` nativo de Autocomplete):
+ * el panel se puede abrir e inspeccionar, pero cada opción queda inerte
+ * (pointer-events: none, cursor: not-allowed) y no se puede cambiar la
+ * selección. Ver commit 0a9d6ac "fix: correccion de disable en componentes
+ * y multiselectchebox".
+ */
+export const Disabled: Story = {
+  render: (args) => {
+    const [value, setValue] = useState<string[]>(["1"]);
+    return <MultiSelect {...args} value={value} onChange={setValue} />;
+  },
+  args: {
+    options: EMPRESAS,
+    label: "Empresas",
     disabled: true,
     fullWidth: true,
     required: false,

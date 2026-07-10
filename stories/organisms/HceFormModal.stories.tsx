@@ -55,6 +55,11 @@ const meta: Meta<typeof HceFormModal> = {
       description: "Si es false, el icono de X no se muestra",
       table: { defaultValue: { summary: "true" } },
     },
+    borderNone: {
+      control: "boolean",
+      description: "Si es true, el footer no muestra el borde superior separador",
+      table: { defaultValue: { summary: "false" } },
+    },
   },
 }
 
@@ -236,6 +241,66 @@ export const SinCierreBackdrop: Story = {
         children: (
           <p style={{ fontFamily: hceTypography.fontFamily, fontSize: "0.875rem", color: hceColors.neutro.black[300], margin: 0 }}>
             Haga click fuera del modal — no se cerrara. Use el boton X o Cancelar para salir.
+          </p>
+        ),
+        primaryButton: {
+          label:   "Aceptar",
+          onClick: () => alert("Aceptado"),
+        },
+        secondaryButton: {
+          label:   "Cancelar",
+          onClick: () => {},
+        },
+      }}
+    />
+  ),
+}
+
+/**
+ * iconClose=false oculta el icono de X en la cabecera. Util cuando el cierre
+ * debe forzarse a traves de los botones del footer (ej. flujos donde el
+ * usuario no debe poder abandonar el formulario con un solo click accidental).
+ */
+export const SinIconoCerrar: Story = {
+  render: () => (
+    <ModalTrigger
+      label="Abrir — sin icono X"
+      storyArgs={{
+        title:     "Registro obligatorio",
+        iconClose: false,
+        children: (
+          <p style={{ fontFamily: hceTypography.fontFamily, fontSize: "0.875rem", color: hceColors.neutro.black[300], margin: 0 }}>
+            No hay icono de X en la cabecera. El cierre solo esta disponible via los botones del footer.
+          </p>
+        ),
+        primaryButton: {
+          label:   "Guardar",
+          onClick: () => alert("Guardado"),
+        },
+        secondaryButton: {
+          label:   "Cancelar",
+          onClick: () => {},
+        },
+      }}
+    />
+  ),
+}
+
+/**
+ * borderNone=true quita el borde superior del footer. Util cuando el
+ * contenido del modal ya define su propia separacion visual y el borde
+ * por defecto resulta redundante.
+ */
+export const SinBordeFooter: Story = {
+  render: () => (
+    <ModalTrigger
+      label="Abrir — footer sin borde"
+      storyArgs={{
+        title:      "Confirmacion rapida",
+        borderNone: true,
+        children: (
+          <p style={{ fontFamily: hceTypography.fontFamily, fontSize: "0.875rem", color: hceColors.neutro.black[300], margin: 0 }}>
+            El footer no tiene el borde superior separador.
           </p>
         ),
         primaryButton: {
