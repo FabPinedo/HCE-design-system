@@ -206,36 +206,49 @@ export function MonitoActionBar({
 
      </Box>
       
-      {/* Asignar médicos */}
+      {/* Asignar médicos — todo el pill (ícono + texto) es un único botón clickeable */}
      <BubbleTooltip title="Asignar médicos" placement={tooltipPlacement}>
       <span>
         <Box
+          component="button"
+          type="button"
+          onClick={onAsignarMedicos}
+          disabled={disabled.asignarMedicos}
+          aria-label="Asignar médico"
           sx={{
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            gap: "2px",
+            gap: "6px",
             width: '100%',
-            borderRadius:"8px",
+            borderRadius: "8px",
             border: `1.5px solid ${hceColors.primary.blue[600]}`,
-            padding: ' 0 15px'
+            padding: '6px 15px',
+            backgroundColor: "#ffffff",
+            cursor: disabled.asignarMedicos ? "not-allowed" : "pointer",
+            transition: `all ${hceTransition.fast}`,
+            "&:hover:not(:disabled)": {
+              backgroundColor: hceColors.primary.blue[50],
+              borderColor:     hceColors.primary.blue[700],
+            },
+            "&:active:not(:disabled)": {
+              transform:       "scale(0.98)",
+              backgroundColor: hceColors.primary.blue[100],
+            },
+            "&:disabled": {
+              opacity:     0.45,
+              borderColor: hceColors.primary.blue[200],
+            },
           }}
         >
-          <IconButton
-            onClick={onAsignarMedicos}
-            disabled={disabled.asignarMedicos}
-            aria-label="Asignar médicos"
-         
-          >
-            <UiDoctorIcon
-              size={iconSize}
-              color={
-                disabled.asignarMedicos
-                  ? hceColors.primary.blue[300]
-                  : BLUE
-              }
-            />
-          </IconButton>
+          <UiDoctorIcon
+            size={iconSize}
+            color={
+              disabled.asignarMedicos
+                ? hceColors.primary.blue[300]
+                : BLUE
+            }
+          />
 
           <Box
             component="span"
