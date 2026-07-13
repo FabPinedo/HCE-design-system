@@ -233,46 +233,7 @@ export function HceFormModal({
           }}
         >
 
-          {/* Botón secundario — va antes en DOM para orden natural de foco */}
-          {secondaryButton && (
-            <MuiButton
-              variant="outlined"
-              onClick={secondaryButton.onClick}
-              disabled={secondaryButton.disabled}
-              aria-label={secondaryButton.label}
-              startIcon={secondaryButton.icon ?? undefined}
-              sx={{
-                fontFamily:    hceTypography.fontFamily,
-                fontWeight:    600,
-                fontSize:      "0.875rem",
-                textTransform: "none",
-                borderRadius:  "6px",
-                borderColor:   secondaryButton.color ?? hceColors.primary.blue[600],
-                color:         secondaryButton.color ?? hceColors.primary.blue[600],
-                minWidth:      "100px",
-                height:        "36px",
-                gap:           secondaryButton.icon ? "6px" : 0,
-                transition:    `border-color ${hceTransition.fast}, background-color ${hceTransition.fast}`,
-                "&:hover:not(:disabled)": {
-                  borderColor:     secondaryButton.color ?? hceColors.primary.blue[700],
-                  backgroundColor: `${secondaryButton.color ?? hceColors.primary.blue[600]}14`,
-                },
-                "&:focus-visible": {
-                  outline:       `2px solid ${secondaryButton.color ?? hceColors.primary.blue[600]}`,
-                  outlineOffset: "2px",
-                },
-                "&:disabled": {
-                  borderColor: hceColors.neutro.black[100],
-                  color:       hceColors.neutro.black[100],
-                },
-                "& .MuiButton-startIcon": { margin: 0 },
-              }}
-            >
-              {secondaryButton.label}
-            </MuiButton>
-          )}
-
-          {/* Botón primario */}
+          {/* Botón primario — va primero en DOM/orden visual (acción principal destacada) */}
           {primaryButton && (
             <MuiButton
               variant="contained"
@@ -317,6 +278,45 @@ export function HceFormModal({
               ) : (
                 primaryButton.label
               )}
+            </MuiButton>
+          )}
+
+          {/* Botón secundario — va segundo en DOM/orden visual */}
+          {secondaryButton && (
+            <MuiButton
+              variant="outlined"
+              onClick={secondaryButton.onClick}
+              disabled={secondaryButton.disabled}
+              aria-label={secondaryButton.label}
+              startIcon={secondaryButton.icon ?? undefined}
+              sx={{
+                fontFamily:    hceTypography.fontFamily,
+                fontWeight:    600,
+                fontSize:      "0.875rem",
+                textTransform: "none",
+                borderRadius:  "6px",
+                borderColor:   secondaryButton.color ?? hceColors.primary.blue[600],
+                color:         secondaryButton.color ?? hceColors.primary.blue[600],
+                minWidth:      "100px",
+                height:        "36px",
+                gap:           secondaryButton.icon ? "6px" : 0,
+                transition:    `border-color ${hceTransition.fast}, background-color ${hceTransition.fast}`,
+                "&:hover:not(:disabled)": {
+                  borderColor:     secondaryButton.color ?? hceColors.primary.blue[700],
+                  backgroundColor: `${secondaryButton.color ?? hceColors.primary.blue[600]}14`,
+                },
+                "&:focus-visible": {
+                  outline:       `2px solid ${secondaryButton.color ?? hceColors.primary.blue[600]}`,
+                  outlineOffset: "2px",
+                },
+                "&:disabled": {
+                  borderColor: hceColors.neutro.black[100],
+                  color:       hceColors.neutro.black[100],
+                },
+                "& .MuiButton-startIcon": { margin: 0 },
+              }}
+            >
+              {secondaryButton.label}
             </MuiButton>
           )}
 
