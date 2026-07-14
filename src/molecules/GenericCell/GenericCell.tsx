@@ -33,6 +33,12 @@ export interface GenericTableColumn<T> {
   colorGetter?: (row: T) => string | null | undefined
 
   width?: number | string
+  // El ancho declarado sigue siendo un PESO relativo (se estira/encoge
+  // proporcionalmente para llenar el contenedor, como siempre). minWidth /
+  // maxWidth clampean el resultado en px para columnas que no deben inflarse
+  // más allá de cierto punto (íconos/badges) aunque sobre espacio.
+  minWidth?: number
+  maxWidth?: number
   align?: "left" | "center" | "right"
 
   clinicalIcon?: "lab" | "img" | "indication" | "interconsult"
