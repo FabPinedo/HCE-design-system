@@ -41,7 +41,7 @@ export interface HceModalProps {
 
   // ── Contenido ──────────────────────────────────────
   /** Título del modal (requerido) */
-  title?:        string
+  title:        string
   /** Texto descriptivo bajo el título */
   description?: string | ReactNode
   /** Elemento ícono mostrado en el badge superior (ej. <UiCalendarIcon size={28} />) */
@@ -67,32 +67,6 @@ export interface HceModalProps {
   buttonLayout?: "row" | "column"
   /** Ancho máximo del card en px. Default: 420 */
   maxWidth?:     number
-
-   /** Alineación del contenido */
-  contentAlign?: "left" | "center"
-
-  /** Muestra una X en la esquina superior derecha */
-  showCloseButton?: boolean
-
-  /** Padding interno del modal */
-  contentPadding?: number | string
-
-  /** Altura máxima antes de activar scroll */
-  maxHeight?: number | string
-
-  /** Permite ocultar completamente el título */
-  hideHeader?: boolean
-
-  backgroundColor?: string
-
-  /** Color del borde */
-  borderColor?: string
-
-  /** Grosor del borde */
-  borderWidth?: number | string
-
-  /** Radio del borde */
-  borderRadius?: number | string
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -110,15 +84,6 @@ export function HceModal({
   cancelButton,
   buttonLayout = "row",
   maxWidth     = 420,
-  contentAlign = "center",
-  showCloseButton = false,
-  contentPadding = "32px 28px 28px",
-  maxHeight = "90vh",
-  hideHeader = false,
-  backgroundColor = hceColors.neutro.white[50],
-  borderColor = "transparent",
-  borderWidth = 0,
-  borderRadius = "16px",
 }: HceModalProps) {
   const hasButtons = !!(confirmButton || cancelButton)
   const isRow      = buttonLayout === "row"
@@ -135,15 +100,12 @@ export function HceModal({
       }}
       PaperProps={{
         sx: {
-          borderRadius:  borderRadius,
-          padding:       contentPadding? contentPadding: "32px 28px 28px",
+          borderRadius:  "16px",
+          padding:       "32px 28px 28px",
           maxWidth:      maxWidth,
-          maxHeight,
           width:         "100%",
-          textAlign:     contentAlign? contentAlign:'center',
-          backgroundColor,
-          border: `${borderWidth}px solid ${borderColor}`,
-          boxShadow: hceShadows.modal,
+          textAlign:     "center",
+          boxShadow:     hceShadows.modal,
           overflow:      "visible",
           fontFamily:    hceTypography.fontFamily,
           "@keyframes hceSlideUp": {
@@ -153,37 +115,8 @@ export function HceModal({
           animation: "hceSlideUp 200ms cubic-bezier(0.4,0,0.2,1)",
         },
       }}
-      
     >
-      <MuiDialogContent sx={{ p: 0, overflow: "visible" , textAlign:contentAlign}}>
-
-
-          {showCloseButton && onClose && (
-            <MuiButton
-              onClick={onClose}
-              aria-label="Cerrar modal"
-              sx={{
-                position: "absolute",
-                top: 8,
-                right: 8,
-                minWidth: 32,
-                width: 32,
-                height: 32,
-                fontSize:30,
-                borderRadius: "50%",
-                p: 0,
-                color: hceColors.neutro.white[50],
-                backgroundColor: hceColors.primary.blue[500],
-                zIndex: 1,
-                "&:hover": {
-                  backgroundColor: hceColors.primary.blue[700],
-                },
-              }}
-            >
-              ×
-            </MuiButton>
-          )}
-
+      <MuiDialogContent sx={{ p: 0, overflow: "visible" }}>
 
         {/* ── Badge con ícono ─────────────────────────────── */}
         {icon && (
@@ -205,7 +138,6 @@ export function HceModal({
         )}
 
         {/* ── Título ──────────────────────────────────────── */}
-        {!hideHeader && title && (
         <Typography
           id="hce-modal-title"
           sx={{
@@ -217,7 +149,7 @@ export function HceModal({
           }}
         >
           {title}
-        </Typography>)}
+        </Typography>
 
         {/* ── Descripción ─────────────────────────────────── */}
         {description && (
