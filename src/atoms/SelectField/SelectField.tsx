@@ -17,6 +17,7 @@ interface Props {
   disabled?:    boolean
   /** Activa el estado de error: todo cambia a rojo */
   error?:       boolean
+  menuMaxHeight?: number
 }
 
 export function SelectField({
@@ -28,6 +29,7 @@ export function SelectField({
   fullWidth   = true,
   disabled    = false,
   error       = false,
+  menuMaxHeight = 280,
 }: Props) {
   const [open,    setOpen]    = useState(false)
   const [hovered, setHovered] = useState(false)
@@ -67,6 +69,29 @@ export function SelectField({
           disabled={disabled}
           onOpen={() => setOpen(true)}
           onClose={() => setOpen(false)}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                maxHeight: menuMaxHeight,
+                mt: 0.5,
+                borderRadius: "8px",
+                overflowY: "auto",
+              },
+            },
+            MenuListProps: {
+              sx: {
+                py: 0.5,
+              },
+            },
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "left",
+            },
+            transformOrigin: {
+              vertical: "top",
+              horizontal: "left",
+            },
+          }}
           input={<OutlinedInput sx={{
             borderRadius:    "8px",
             backgroundColor: hceColors.neutro.white[50],
