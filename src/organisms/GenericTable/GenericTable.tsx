@@ -2,10 +2,17 @@ import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, 
 import type { SxProps, Theme } from "@mui/material"
 import { GenericRow } from "../../molecules/GenericRow/GenericRow"
 import type {  GenericTableColumn } from "../../molecules/GenericCell/GenericCell"
-import { hceClinicalColors, hceColors, hceTypography, hceUi } from "../../tokens/hce.tokens"
-import { useMemo } from "react"
+import { hceBorderRadius, hceClinicalColors, hceColors, hceTypography, hceUi } from "../../tokens/hce.tokens"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { getColumnWidthPercent, getTableWidthNumber } from "./tableWidth.utils"
 
-const SCROLLBAR_WIDTH = 19
+// El header (TableCell) se pinta con hceUi.textPrimaryTable — mismo token
+// que usa headerCellSx.backgroundColor más abajo. El borde perimetral de la
+// tabla debe coincidir exactamente con ese color, no con hceClinicalColors
+// .tableHeaderBg / .headerBg (tokens de azul "similares" pero no son el que
+// realmente se renderiza en el header de este componente).
+const TABLE_BORDER_COLOR = hceUi.textPrimaryTable
+const TABLE_RADIUS = hceBorderRadius.md
 
 interface GenericTableProps<T> {
   rows: T[]
@@ -30,20 +37,6 @@ interface GenericTableProps<T> {
 }
 
 
-const getColumnWidth = (width?: number | string) => {
-  if (typeof width === "number") return `${width}px`
-  return width ?? "auto"
-}
-
-const   getTableWidthNumber = <T,>(columns: GenericTableColumn<T>[]) => {
-  return columns.reduce((total, column) => {
-    if (typeof column.width === "number") {
-      return total + column.width
-    }
-
-    return total
-  }, 0)
-}
 const headerCellSx = {
   height: 44,
   backgroundColor: hceUi.textPrimaryTable,
@@ -84,7 +77,29 @@ export const GenericTable = <T,>({
 }, [columns])
 
 const tableMinWidth = `${tableWidth}px`
-const tableWrapperWidth = `${tableWidth + SCROLLBAR_WIDTH}px`
+
+// El header y el body son dos <table> independientes (para poder fijar el
+// header mientras el body scrollea). Cuando el body SÍ tiene scrollbar
+// vertical real, hay que restarle ese ancho al header para que las columnas
+// sigan alineadas entre ambos — pero solo cuando existe, en vez de reservar
+// siempre un hueco fijo (eso era lo que dejaba una franja en blanco junto a
+// la última columna cuando el body no llegaba a necesitar scroll).
+const bodyContainerRef = useRef<HTMLDivElement>(null)
+const [bodyScrollbarWidth, setBodyScrollbarWidth] = useState(0)
+
+useEffect(() => {
+  const el = bodyContainerRef.current
+  if (!el) return
+
+  const measure = () => setBodyScrollbarWidth(el.offsetWidth - el.clientWidth)
+
+  measure()
+
+  const resizeObserver = new ResizeObserver(measure)
+  resizeObserver.observe(el)
+
+  return () => resizeObserver.disconnect()
+}, [sortedRows.length, maxHeight])
 
 const renderColGroup = () => (
   <colgroup>
@@ -92,7 +107,7 @@ const renderColGroup = () => (
       <col
         key={column.key}
         style={{
-          width: getColumnWidth(column.width),
+          width: getColumnWidthPercent(column.width, tableWidth),
         }}
       />
     ))}
@@ -104,6 +119,9 @@ const renderColGroup = () => (
       sx={{
         width: "100%",
         maxWidth: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
         overflowX: "auto",
         overflowY: "hidden",
       }}
@@ -111,29 +129,33 @@ const renderColGroup = () => (
       <Box
         sx={{
           width: '100%',
-          minWidth: tableWrapperWidth,
+          minWidth: tableMinWidth,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0,
+          // Borde perimetral de toda la tabla (header + body) del mismo color
+          // que el fondo del header, y el único lugar donde se redondean las
+          // esquinas EXTERNAS (arriba vía este overflow:hidden, abajo vía el
+          // radius propio de la última fila — ver Table del body más abajo).
+          border: `1px solid ${TABLE_BORDER_COLOR}`,
+          borderRadius: TABLE_RADIUS,
+          overflow: "hidden",
         }}
       >
-        {/* HEADER FIJO */}
+        {/* HEADER FIJO — el paddingRight iguala el ancho real del scrollbar
+            del body (medido por ResizeObserver), en vez de reservar siempre
+            un hueco fijo aunque el body no llegue a necesitar scroll. */}
         <Box
           sx={{
             width: "100%",
-            overflowY: "scroll",
-            overflowX: "hidden",
-            scrollbarGutter: "stable",
-            borderTopLeftRadius: "6px",
-            borderTopRightRadius: "6px",
-
-            "&::-webkit-scrollbar": {
-              width: `${SCROLLBAR_WIDTH}px`,
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "transparent",
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "transparent",
-            },
+            flexShrink: 0,
+            overflow: "hidden",
+            boxSizing: "border-box",
+            borderTopLeftRadius: TABLE_RADIUS,
+            borderTopRightRadius: TABLE_RADIUS,
           }}
+          style={{ paddingRight: bodyScrollbarWidth }}
         >
           <Table
             aria-label="generic table header"
@@ -143,6 +165,12 @@ const renderColGroup = () => (
               minWidth: tableMinWidth,
               borderCollapse: "separate",
               borderSpacing: 0,
+              // El theme (MuiTable.styleOverrides.root) fuerza borderRadius: xl
+              // + overflow:hidden en TODO <Table>. Como este componente separa
+              // header y body en dos <Table> independientes, ese radius global
+              // redondeaba también la esquina INTERNA (abajo del header) — se
+              // anula acá; el radius externo (arriba) ya lo da el Box padre.
+              borderRadius: 0,
             }}
           >
             {renderColGroup()}
@@ -155,9 +183,7 @@ const renderColGroup = () => (
                     align={column.align}
                     sx={{
                       ...headerCellSx,
-                      width: column.width,
-                      minWidth: column.width,
-                      maxWidth: column.width,
+                      width: getColumnWidthPercent(column.width, tableWidth),
                     }}
                   >
                     {column.header}
@@ -168,19 +194,32 @@ const renderColGroup = () => (
           </Table>
         </Box>
 
-        {/* BODY CON SCROLL VERTICAL */}
+        {/* BODY CON SCROLL VERTICAL — crece/encoge para llenar el espacio
+            disponible del contenedor padre (flex:1 + minHeight:0); maxHeight
+            sigue funcionando como tope opcional (no como altura forzada).
+            Sin scrollbarGutter:"stable": el scrollbar solo ocupa espacio
+            cuando realmente hay overflow (bodyContainerRef mide ese ancho
+            real y el header se ajusta con paddingRight para seguir alineado,
+            en vez de reservar siempre un hueco fijo). */}
         <TableContainer
+          ref={bodyContainerRef}
           sx={{
             width: "100%",
-            //minWidth: tableWrapperWidth,
-            height: maxHeight,
-            maxHeight,
+            flex: 1,
+            minHeight: 0,
+            maxHeight: maxHeight ?? "none",
             overflowY: "auto",
             overflowX: "hidden",
-            scrollbarGutter: "stable",
 
             "&::-webkit-scrollbar": {
-              width: `${SCROLLBAR_WIDTH}px`,
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: hceClinicalColors.border,
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "transparent",
             },
           }}
         >
@@ -192,6 +231,14 @@ const renderColGroup = () => (
               minWidth: tableMinWidth,
               borderCollapse: "separate",
               borderSpacing: 0,
+              // Igual que en el Table del header: se anula el radius global
+              // del theme en la esquina INTERNA (arriba, límite con el
+              // header) y se conserva SOLO en las esquinas externas de abajo
+              // (última fila), con el mismo radius que el resto de la tabla.
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+              borderBottomLeftRadius: TABLE_RADIUS,
+              borderBottomRightRadius: TABLE_RADIUS,
             }}
           >
             {renderColGroup()}

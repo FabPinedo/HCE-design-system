@@ -1,7 +1,9 @@
 import { TableCell, TableRow } from "@mui/material"
 import type { SxProps, Theme } from "@mui/material"
+import { useMemo } from "react"
 import { GenericCell, type GenericTableColumn } from "../GenericCell/GenericCell"
 import { hceClinicalColors, hceColors } from "../../tokens/hce.tokens"
+import { getColumnWidthPercent, getTableWidthNumber } from "../../organisms/GenericTable/tableWidth.utils"
 
 
 interface GenericRowProps<T> {
@@ -67,8 +69,13 @@ export const GenericRow = <T,>({
   columns,
   rowSx,
   rowAlertGetter,
-  
+
 }: GenericRowProps<T>) => {
+  // Mismo peso relativo (px como ratio -> %) que usa el header, para que
+  // las celdas del body queden alineadas con las columnas del header sin
+  // importar el ancho real del contenedor.
+  const tableWidth = useMemo(() => getTableWidthNumber(columns), [columns])
+
   return (
     <TableRow sx={rowSx ?? getDefaultRowSx(row, index, rowAlertGetter)}>
       {columns.map((column) => (
@@ -76,8 +83,7 @@ export const GenericRow = <T,>({
           key={column.key}
           align={column.align}
          sx={{
-              width: column.width,
-              maxWidth: column.width,
+              width: getColumnWidthPercent(column.width, tableWidth),
               borderBottom: "none",
               padding: "0 12px",
               height: 44,
@@ -89,7 +95,7 @@ export const GenericRow = <T,>({
           <GenericCell
             row={row}
             column={column}
-          
+
           />
         </TableCell>
       ))}
