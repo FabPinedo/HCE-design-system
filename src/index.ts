@@ -113,7 +113,7 @@ export type { DatePickerProps } from "./atoms/DatePicker/DatePicker"
 
 // ── Types — Atoms ──────────────────────────────────────────
 export type { PriorityLevel } from "./atoms/PriorityBadge/PriorityBadge"
-export type { BadgeVariant }  from "./atoms/StatusBadge/StatusBadge"
+
 export type {
   HceBreadcrumbItem,
   HceBreadcrumbProps,
@@ -149,7 +149,7 @@ export { GenericRow }          from "./molecules/GenericRow/GenericRow"
 export { GenericCell }          from "./molecules/GenericCell/GenericCell"
 export type { GenericTableColumn }  from  "./molecules/GenericCell/GenericCell"
 export { InfoButton }          from "./molecules/InfoButton/InfoButton"
-
+export  *  from "./molecules/DataCard/index"
 export { PasswordInput }       from "./molecules/PasswordInput/PasswordInput"
 export { RadioGroup }          from "./molecules/RadioGroup/RadioGroup"
 export { SectionHeader }       from "./molecules/SectionHeader/SectionHeader"
