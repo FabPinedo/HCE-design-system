@@ -59,6 +59,11 @@ export interface HceFormModalProps {
   /** Posición horizontal de los botones. Default "right" */
   buttonAlign?: "left" | "center" | "right"
 
+  /** Si true, primaryButton y secondaryButton se reparten el 100% del ancho del
+   * footer en partes iguales (en vez del minWidth fijo de 100px). Opcional — default
+   * false, no afecta a los usos existentes que no lo envíen. */
+  buttonsFullWidth?: boolean
+
   // ── Comportamiento del backdrop ────────────────────
   /** Si false, el click fuera del modal NO lo cierra. Default true */
   closeOnBackdrop?: boolean
@@ -91,7 +96,8 @@ export function HceFormModal({
   fullWidth       = true,
   primaryButton,
   secondaryButton,
-  buttonAlign     = "right",
+  buttonAlign      = "right",
+  buttonsFullWidth = false,
   closeOnBackdrop = true,
   className,
   iconClose= true,
@@ -250,7 +256,8 @@ export function HceFormModal({
                 borderRadius:    "6px",
                 backgroundColor: primaryButton.color ?? hceColors.primary.blue[600],
                 color:           "#ffffff",
-                minWidth:        "100px",
+                minWidth:        buttonsFullWidth ? 0 : "100px",
+                flex:            buttonsFullWidth ? 1 : undefined,
                 height:          "36px",
                 boxShadow:       "none",
                 gap:             primaryButton.icon ? "6px" : 0,
@@ -297,7 +304,8 @@ export function HceFormModal({
                 borderRadius:  "6px",
                 borderColor:   secondaryButton.color ?? hceColors.primary.blue[600],
                 color:         secondaryButton.color ?? hceColors.primary.blue[600],
-                minWidth:      "100px",
+                minWidth:      buttonsFullWidth ? 0 : "100px",
+                flex:          buttonsFullWidth ? 1 : undefined,
                 height:        "36px",
                 gap:           secondaryButton.icon ? "6px" : 0,
                 transition:    `border-color ${hceTransition.fast}, background-color ${hceTransition.fast}`,
