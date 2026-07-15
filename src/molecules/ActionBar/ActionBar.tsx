@@ -13,7 +13,6 @@ import {
   hceColors,
 } from "../../tokens/hce.tokens";
 import { ActionIconButton } from "../ActionIconButton/ActionIconButton";
-import { Close } from "@mui/icons-material";
 import { CloseIcon, MenuBurgerIcon } from "../../atoms/Icon/SvgIcons";
 import { useState } from "react";
 

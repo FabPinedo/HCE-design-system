@@ -1,6 +1,6 @@
-import { Box } from "@mui/material"
-import { hceColors, hceTypography } from "../../tokens/hce.tokens"
-import { FieldCol } from "../FieldCol/FieldCol"
+import { Box, Typography } from "@mui/material"
+import { hceColors, hceTransition, hceTypography } from "../../tokens/hce.tokens"
+import { useState } from "react"
 
 export interface NumericFieldProps {
   label: string
@@ -24,18 +24,50 @@ export function NumericField({
   readOnly = false,
   disabled = false,
 }: NumericFieldProps) {
+  const [focused, setFocused] = useState(false)
+  const [hovered, setHovered] = useState(false)
+
+  const active = focused || hovered
+
+  // ── Colores reactivos ──────────────────────────────────────
+  // Color principal (borde y placeholder)
+  const mainColor = disabled
+    ? hceColors.neutro.black[300] // Gris si está deshabilitado
+    : hceColors.primary.blue[600] // Azul por defecto
+
+  // Color del texto escrito
+  const inputTextColor = disabled
+    ? hceColors.neutro.black[300] // Gris
+    : active && !readOnly
+      ? hceColors.primary.blue[600] // Azul si interactúa
+      : hceColors.neutro.black[700] // Negro en reposo
   return (
-    <FieldCol label={label}>
+    <Box>
+      {label && (
+        <Typography component="label" sx={{
+          fontFamily: hceTypography.fontFamily,
+          fontSize:   "0.75rem",
+          fontWeight: 600,
+          color:      mainColor,
+          mb:         0.5,
+          display:    "block",
+          transition: `color ${hceTransition.fast}`,
+        }}>
+          {label}
+        </Typography>
+      )}
       <Box
+      onMouseEnter={() => !disabled && !readOnly && setHovered(true)}
+        onMouseLeave={() => !disabled && !readOnly && setHovered(false)}
         sx={{
-          border: `1.5px solid ${hceColors.neutro.black[200]}`,
+          border: `1.5px solid ${mainColor}`,
           borderRadius: "8px",
           width: "100%",
           height: 40,
           display: "flex",
           alignItems: "center",
           boxSizing: "border-box",
-          backgroundColor: readOnly ? hceColors.neutro.black[50] : "#ffffff",
+          backgroundColor: readOnly || disabled ? hceColors.neutro.white[50] : "#ffffff",
           overflow: "hidden",
         }}
       >
@@ -47,6 +79,8 @@ export function NumericField({
           value={value}
           placeholder={suffix || undefined}
           readOnly={readOnly}
+          onFocus={() => !readOnly && setFocused(true)}
+          onBlur={() => !readOnly && setFocused(false)}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             onChange?.(
               numberType === "decimal"
@@ -65,10 +99,16 @@ export function NumericField({
             width: "100%",
             height: "100%",
             boxSizing: "border-box",
-            "&::placeholder": { color: hceColors.neutro.black[300] },
+            WebkitTextFillColor: inputTextColor,
+            "&::placeholder": { 
+              color: mainColor,
+              WebkitTextFillColor: mainColor,
+              opacity: 1,
+              transition: "color 0.2s ease",
+            },
           }}
         />
       </Box>
-    </FieldCol>
+    </Box>
   )
 }
