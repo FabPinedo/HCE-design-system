@@ -54,7 +54,7 @@ export function SelectField({
         fontFamily: hceTypography.fontFamily,
         fontSize:   "0.75rem",
         fontWeight: 600,
-        color:      accentColor,
+        color:      hceColors.primary.blue[600],
         mb:         0.5,
         display:    "block",
         transition: `color ${hceTransition.fast}`,
@@ -63,6 +63,11 @@ export function SelectField({
       </Typography>
       <FormControl fullWidth={fullWidth} size="small">
         <Select
+        sx = {{
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: hceColors.primary.blue[600], 
+          },
+        }}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           displayEmpty
@@ -120,7 +125,7 @@ export function SelectField({
               fontSize:   "0.875rem",
               color:      v
                 ? (error ? hceColors.alert.error[600] : active ? hceColors.primary.blue[600] : hceColors.neutro.black[400])
-                : accentColor,
+                : hceColors.primary.blue[600],
               transition: `color ${hceTransition.fast}`,
             }}>
               {options.find(o => o.value === v)?.label ?? placeholder}

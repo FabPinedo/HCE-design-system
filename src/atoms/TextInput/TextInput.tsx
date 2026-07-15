@@ -36,11 +36,11 @@ export function TextInput({
   const active = focused || hovered
 
   // ── Colores reactivos ──────────────────────────────────────
-  const accentColor = error
-    ? hceColors.alert.error[600]
-    : active
-      ? hceColors.primary.blue[600]
-      : hceColors.neutro.black[200]
+  const mainColor = disabled
+    ? hceColors.neutro.black[300] // Gris si está deshabilitado
+    : error
+      ? hceColors.alert.error[600] // Rojo si hay error
+      : hceColors.primary.blue[600] // Azul por defecto
 
   const inputTextColor = error
     ? hceColors.alert.error[600]
@@ -48,7 +48,6 @@ export function TextInput({
       ? hceColors.primary.blue[600]
       : hceColors.neutro.black[400]
 
-  const borderDefault = error ? hceColors.alert.error[600] : hceColors.neutro.black[50]
   const borderActive  = error ? hceColors.alert.error[600] : hceColors.primary.blue[600]
 
   return (
@@ -61,7 +60,7 @@ export function TextInput({
           fontFamily: hceTypography.fontFamily,
           fontSize:   "0.75rem",
           fontWeight: 600,
-          color:      accentColor,
+          color:      mainColor,
           mb:         0.5,
           display:    "block",
           transition: `color ${hceTransition.fast}`,
@@ -83,7 +82,7 @@ export function TextInput({
         startAdornment={startIcon ? (
           <InputAdornment position="start">
             <Box sx={{
-              color:      accentColor,
+              color:      hceColors.primary.blue[600],
               display:    "flex",
               alignItems: "center",
               transition: `color ${hceTransition.fast}`,
@@ -106,7 +105,7 @@ export function TextInput({
           },
           // Bordes
           "& fieldset":             {
-            borderColor: borderDefault,
+            borderColor: mainColor,
             transition:  `border-color ${hceTransition.fast}`,
           },
           "&:hover fieldset":       { borderColor: borderActive },
@@ -116,8 +115,9 @@ export function TextInput({
             boxShadow: `0 0 0 3px ${hceColors.primary.blue[100]}`,
           },
           // Placeholder
-          "& input::placeholder": {
-            color:      accentColor,
+          "& .MuiInputBase-input::placeholder": {
+            color:      mainColor,
+            WebkitTextFillColor: mainColor,
             opacity:    1,
             transition: `color ${hceTransition.fast}`,
           },
