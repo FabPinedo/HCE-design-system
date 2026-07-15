@@ -959,6 +959,27 @@ export function HceSidebar({
           }} />
         )}
 
+        {/* Etiqueta "Menu" — encabezado del grupo de opciones MAC. Expandido: entre el
+            divisor y la primera opción. Colapsado: se mantiene arriba del ícono de la
+            primera opción (fondo azul, por eso el color blanco translúcido). */}
+        {opciones.length > 0 && (
+          <Typography sx={{
+            fontFamily:    hceTypography.fontFamily,
+            fontSize:      "0.68rem",
+            fontWeight:    700,
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+            textAlign:     collapsed ? "center" : "left",
+            color:         collapsed ? "rgba(255,255,255,0.55)" : hceColors.neutro.black[300],
+            mx:            collapsed ? 0 : 2.5,
+            mt:            collapsed ? 1 : 0.5,
+            mb:            0.5,
+            transition:    `color ${TRANSITION_FAST}`,
+          }}>
+            Menu
+          </Typography>
+        )}
+
         {/* Opciones desde MAC */}
         {opciones.map(op => (
           <FirstLevelItem

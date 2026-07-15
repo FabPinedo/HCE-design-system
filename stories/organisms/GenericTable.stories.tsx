@@ -704,6 +704,7 @@ const monitorDskColumns: GenericTableColumn<MonitorRow>[] = [
     type: "priority",
     field: "priority",
     width: 100,
+    maxWidth: 100,
     align: "center",
     clickable: true,
     disabledGetter: () => !canReadTriage,
@@ -716,7 +717,8 @@ const monitorDskColumns: GenericTableColumn<MonitorRow>[] = [
     header: "Box",
     type: "box",
     field: "box",
-    width: 170,
+    width: 100,
+    maxWidth: 170,
     align: "center",
     clickable: true,
     disabledGetter: () => !canEditBox,
@@ -740,10 +742,11 @@ const monitorDskColumns: GenericTableColumn<MonitorRow>[] = [
     },
   },
   {
+    align: "center",
     key: "document",
     header: "N.Documento",
     type: "text",
-    width: 120,
+    width: 100,
     valueGetter: (row) =>
       row.is_vip ? row.document_number_masked : row.document_number,
     boldGetter: (row) => row.has_discharge,
@@ -771,7 +774,8 @@ const monitorDskColumns: GenericTableColumn<MonitorRow>[] = [
     header: "Edad",
     type: "text",
     field: "age",
-    width: 55,
+    width: 70,
+    maxWidth: 70,
     align: "center",
     boldGetter: (row) => row.has_discharge,
   },
@@ -780,7 +784,8 @@ const monitorDskColumns: GenericTableColumn<MonitorRow>[] = [
     header: "Sexo",
     type: "text",
     field: "sex",
-    width: 55,
+    width: 70,
+    maxWidth: 70,
     align: "center",
     boldGetter: (row) => row.has_discharge,
   },
@@ -799,6 +804,7 @@ const monitorDskColumns: GenericTableColumn<MonitorRow>[] = [
     field: "lab",
     clinicalIcon: "lab",
     width: 60,
+    maxWidth: 60,
     align: "center",
   },
   {
@@ -808,6 +814,7 @@ const monitorDskColumns: GenericTableColumn<MonitorRow>[] = [
     field: "img",
     clinicalIcon: "img",
     width: 60,
+    maxWidth: 60,
     align: "center",
   },
   {
@@ -816,7 +823,8 @@ const monitorDskColumns: GenericTableColumn<MonitorRow>[] = [
     type: "clinical-status",
     field: "indication",
     clinicalIcon: "indication",
-    width: 60,
+    width: 70,
+    maxWidth: 70,
     align: "center",
   },
   {
@@ -825,7 +833,8 @@ const monitorDskColumns: GenericTableColumn<MonitorRow>[] = [
     type: "clinical-status",
     field: "interconsult",
     clinicalIcon: "interconsult",
-    width: 60,
+    width: 80,
+    maxWidth: 80,
     align: "center",
   },
   {
@@ -834,13 +843,15 @@ const monitorDskColumns: GenericTableColumn<MonitorRow>[] = [
     type: "attention-code",
     field: "attention_id",
     width: 90,
+    maxWidth: 90,
      boldGetter: (row) => row.has_discharge,
   },
   {
     key: "info",
     header: "Info",
     type: "info-button",
-    width: 50,
+    width: 60,
+    maxWidth: 60,
     align: "center",
     clickable: true,
     disabledGetter: (row) => !canReadInfo || row.box.stage === "ESPERA",
@@ -857,6 +868,7 @@ const monitorTvColumns: GenericTableColumn<MonitorRow>[] = [
     type: "priority",
     field: "priority",
     width: 100,
+    maxWidth: 100,
     align: "center",
   },
   {
@@ -865,6 +877,7 @@ const monitorTvColumns: GenericTableColumn<MonitorRow>[] = [
     type: "box",
     field: "box",
     width: 160,
+    maxWidth: 160,
     align: "center",
   },
   {
@@ -886,6 +899,7 @@ const monitorTvColumns: GenericTableColumn<MonitorRow>[] = [
     type: "text",
     field: "age",
     width: 55,
+    maxWidth: 55,
     align: "center",
   },
   {
@@ -902,6 +916,7 @@ const monitorTvColumns: GenericTableColumn<MonitorRow>[] = [
     field: "lab",
     clinicalIcon: "lab",
     width: 60,
+    maxWidth: 60,
     align: "center",
   },
   {
@@ -911,6 +926,7 @@ const monitorTvColumns: GenericTableColumn<MonitorRow>[] = [
     field: "img",
     clinicalIcon: "img",
     width: 60,
+    maxWidth: 60,
     align: "center",
   },
   {
@@ -920,6 +936,7 @@ const monitorTvColumns: GenericTableColumn<MonitorRow>[] = [
     field: "indication",
     clinicalIcon: "indication",
     width: 60,
+    maxWidth: 60,
     align: "center",
   },
   {
@@ -929,6 +946,7 @@ const monitorTvColumns: GenericTableColumn<MonitorRow>[] = [
     field: "interconsult",
     clinicalIcon: "interconsult",
     width: 60,
+    maxWidth: 60,
     align: "center",
   },
   {
@@ -937,6 +955,7 @@ const monitorTvColumns: GenericTableColumn<MonitorRow>[] = [
     type: "text",
     field: "attentionDate",
     width: 90,
+    maxWidth: 90,
     align: "center",
   },
   {
@@ -945,6 +964,7 @@ const monitorTvColumns: GenericTableColumn<MonitorRow>[] = [
     type: "text",
     field: "attentionHour",
     width: 90,
+    maxWidth: 90,
     align: "center",
   },
   {
@@ -954,6 +974,7 @@ const monitorTvColumns: GenericTableColumn<MonitorRow>[] = [
     field: "waiting_time_box_minutes",
     colorField: "waiting_time_box_color",
     width: 200,
+    maxWidth: 200,
     align: "center",
   },
 ]
@@ -990,6 +1011,20 @@ const meta: Meta<typeof GenericTable<MonitorRow>> = {
   component: GenericTable<MonitorRow>,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
+  // GenericTable llena el alto de su contenedor (height:100%) y depende de
+  // que el consumidor le dé una altura acotada real, igual que hace
+  // MonitorPage en mf-emergency. El iframe de Storybook NO da eso por
+  // defecto (html/body/#storybook-root quedan con alto automático según el
+  // contenido, sin overflow:hidden) — sin este decorator, el panel "Canvas"
+  // termina scrolleando la página completa en vez de que la tabla scrollee
+  // sola por dentro.
+  decorators: [
+    (Story) => (
+      <div style={{ height: "100vh", overflow: "hidden" }}>
+        <Story />
+      </div>
+    ),
+  ],
 }
 
 export default meta
@@ -1001,7 +1036,7 @@ export const MonitorDsk: Story = {
     rows,
     columns: monitorDskColumns,
     getRowId: (row) => row.id,
-    maxHeight: 320,
+    maxHeight: "100%",
     rowAlertGetter: (row) => row.row_alert_color === "red",
     sortComparator: monitorSortComparator,
   },
@@ -1012,7 +1047,7 @@ export const MonitorTv: Story = {
     rows,
     columns: monitorTvColumns,
     getRowId: (row) => row.id,
-    maxHeight: 320,
+    maxHeight: "100%",
     rowAlertGetter: (row) => row.row_alert_color === "red",
     sortComparator: monitorSortComparator,
   },
@@ -1023,7 +1058,7 @@ export const Empty: Story = {
     rows: [],
     columns: monitorDskColumns,
     getRowId: (row) => row.id,
-    maxHeight: 320,
+    maxHeight: "100%",
   },
 }
 
@@ -1064,7 +1099,7 @@ export const WithoutMacPermission: Story = {
       return column
     }),
     getRowId: (row) => row.id,
-    maxHeight: 520,
+    maxHeight: "100%",
     rowAlertGetter: (row) => row.row_alert_color === "red",
     sortComparator: monitorSortComparator,
   },
