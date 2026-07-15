@@ -205,6 +205,8 @@ export const cellRenderers: {
         fontWeight: boldText
           ? hceTypography.weight.bold
           : hceTypography.weight.regular,
+        justifyContent: "center",
+        textAlign:'center'
       }}
     >
       {String(value ?? "-")}
@@ -459,6 +461,7 @@ export const cellRenderers: {
         cursor: canClick ? "pointer" : "default",
         textDecoration: canClick ? "underline" : "none",
         opacity: disabled ? 0.5 : 1,
+        textAlign:'center'
       }}
     >
       {String(value ?? "-")}
