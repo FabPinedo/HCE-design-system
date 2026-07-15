@@ -9,7 +9,7 @@ import {
   // HCE – Icon1 (Médicos)
   BloodTestIcon, DoctorIcon, DrugsIcon, MedicalRoomIcon,
   PrescriptionIcon, RadiographyIcon, HceStethoscopeIcon,
-  XRaysIcon, AltaMedicaIcon,
+  XRaysIcon, AltaMedicaIcon,ReferenceIcon,MenuBurgerIcon,
   // HCE – Icon2 (UI)
   AddFriendIcon, AddDocumentIcon, AddCircleIcon, SortArrowsIcon,
   BinIcon, HceCalendarIcon, CheckedCircleIcon, ConfigurationIcon,
@@ -84,6 +84,7 @@ const HCE_MEDICAL: { name: string; icon: HceFn }[] = [
   { name: "HceStethoscopeIcon", icon: HceStethoscopeIcon },
   { name: "XRaysIcon",          icon: XRaysIcon },
   { name: "AltaMedicaIcon",     icon: AltaMedicaIcon },
+  { name: "ReferenceIcon",      icon: ReferenceIcon },
 ]
 
 const HCE_UI: { name: string; icon: HceFn }[] = [
@@ -125,6 +126,7 @@ const HCE_UI: { name: string; icon: HceFn }[] = [
   { name: "FilterIcon",         icon: FilterIcon },
   { name: "HceMonitorIcon",     icon: HceMonitorIcon },
   { name: "CloseIcon",          icon: CloseIcon },
+  { name: "MenuBurger",         icon: MenuBurgerIcon}
 ]
 
 const HCE_UIKIT: { name: string; icon: HceFn }[] = [
@@ -174,6 +176,7 @@ const HCE_UIKIT: { name: string; icon: HceFn }[] = [
   { name: "UiVectorIcon",          icon: UiVectorIcon },
   { name: "UiWarningIcon",         icon: UiWarningIcon },
   { name: "UiXRaysIcon",           icon: UiXRaysIcon },
+  // { name: "UiReferenceIcon",       icon: UiReferenceIcon },
 ]
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HCE_NoMapeado: { name: string; icon: React.FC<any> }[] = [

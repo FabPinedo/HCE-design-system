@@ -64,6 +64,8 @@ import WarningSvg         from "../../assets/icons/Warning.svg?react"
 import FilterSvg          from "../../assets/icons/Filter.svg?react"
 import HceMonitorSvg      from "../../assets/icons/HceMonitor.svg?react"
 import CloseSvg           from "../../assets/icons/Close.svg?react"
+import ReferenceSvg       from "../../assets/icons/Reference.svg?react"
+import MenuBurgerSvg       from "../../assets/icons/MenuBurger.svg?react"
 
 // ── Interfaz pública ─────────────────────────────────────────────────────────
 
@@ -103,6 +105,7 @@ export const RadiographyIcon    = makeIcon(RadiographySvg)
 export const HceStethoscopeIcon = makeIcon(HceStethoscopeSvg)
 export const XRaysIcon          = makeIcon(XRaysSvg)
 export const AltaMedicaIcon     = makeIcon(AltaMedicaSvg)
+export const ReferenceIcon      = makeIcon(ReferenceSvg)
 
 // ── Exportaciones — Icon2 (UI) ───────────────────────────────────────────────
 export const AddFriendIcon      = makeIcon(AddFriendSvg)
@@ -143,3 +146,4 @@ export const WarningIcon        = makeIcon(WarningSvg)
 export const FilterIcon         = makeIcon(FilterSvg)
 export const HceMonitorIcon     = makeIcon(HceMonitorSvg)
 export const CloseIcon          = makeIcon(CloseSvg)
+export const MenuBurgerIcon     = makeIcon(MenuBurgerSvg)

@@ -7,32 +7,32 @@
  * Combina MUI IconButton + Tooltip → molecule.
  * ---------------------------------------------------------
  */
-import { IconButton, Tooltip } from "@mui/material"
-import type { SvgIconComponent } from "@mui/icons-material"
-import { hceBorderRadius, hceClinicalColors } from "../../tokens/hce.tokens"
+import { IconButton } from "@mui/material"
+import { hceBorderRadius, hceClinicalColors, hceColors } from "../../tokens/hce.tokens"
+import { HceTooltip } from "../../atoms/Tooltip/HceTooltip"
 
 interface Props {
   /** Componente de ícono MUI */
-  icon:      SvgIconComponent
+  icon:      React.ElementType
   /** Texto descriptivo del botón (requerido para accesibilidad) */
-  tooltip:   string
+  tooltip?:   string
   onClick?:  () => void
   disabled?: boolean
 }
 
 export const ActionIconButton = ({ icon: Icon, tooltip, onClick, disabled = false }: Props) => {
   return (
-    <Tooltip title={disabled ? "" : tooltip} placement="bottom">
+    <HceTooltip title={disabled ? "" : tooltip} placement="top">
       <span>
         <IconButton
           onClick={onClick}
           disabled={disabled}
           size="small"
           sx={{
-            width:           32,
-            height:          32,
-            borderRadius:    hceBorderRadius.sm,
-            border:          `1px solid ${hceClinicalColors.border}`,
+            width:           40,
+            height:          40,
+            borderRadius:    hceBorderRadius.lg,
+            border:          `1.5px solid ${hceColors.primary.blue[600]}`,
             backgroundColor: "#FFFFFF",
             color:           hceClinicalColors.textSecondary,
             padding:         0,
@@ -53,9 +53,9 @@ export const ActionIconButton = ({ icon: Icon, tooltip, onClick, disabled = fals
           }}
           aria-label={tooltip}
         >
-          <Icon sx={{ fontSize: 16 }} />
+          <Icon sx={{ fontSize: 18 }} size={18} color={hceColors.primary.blue[600]} />
         </IconButton>
       </span>
-    </Tooltip>
+    </HceTooltip>
   )
 }
