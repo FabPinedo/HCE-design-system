@@ -113,6 +113,8 @@ export interface MonitoActionBarProps {
   tooltipPlacement?: MonitoPlacement
   /** Orientación de la barra (default: "horizontal") */
   orientation?: "horizontal" | "vertical"
+
+  box?: boolean
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -125,6 +127,7 @@ export function MonitoActionBar({
   disabled         = {},
   tooltipPlacement = "top",
   orientation      = "horizontal",
+  box= false
 }: MonitoActionBarProps) {
   const isVertical = orientation === "vertical"
   const iconSize   = 17
@@ -140,10 +143,10 @@ export function MonitoActionBar({
         justifyContent:  "space-between",
         gap:             "6px",
         padding:         "6px 10px",
-        backgroundColor: "#ffffff",
-        borderRadius:    "10px",
-        boxShadow:       `0 2px 8px rgba(0,29,69,0.08)`,
-        border:          `1px solid ${hceColors.primary.blue[100]}`,
+        backgroundColor: box? "#ffffff": 'transparent',
+        borderRadius:    box? "10px": 'none',
+        boxShadow:       box? `0 2px 8px rgba(0,29,69,0.08)`: 'none',
+        border:          box?`1px solid ${hceColors.primary.blue[100]}`: 'none',
         width:           isVertical ? "fit-content" : "100%",
       }}
     >
@@ -156,7 +159,7 @@ export function MonitoActionBar({
     
         gap:             "35px",
         padding:         "6px 10px",
-        backgroundColor: "#ffffff",
+        backgroundColor: box? "#ffffff": 'transparent',
         width:           isVertical ? "fit-content" : "100%",
       }}
       >
