@@ -5,7 +5,7 @@ import type { GenericTableColumn } from "../../src/molecules/GenericCell/Generic
 import { PriorityBadge, type PriorityLevel } from "../../src/atoms/PriorityBadge/PriorityBadge"
 import { BoxBadge } from "../../src/atoms/BoxBadge/BoxBadge"
 import { Table, TableBody } from "@mui/material"
-import type { ClinicalIconStatus } from "@hce/design-system"
+import { hceColors, UiEditingIcon, type ClinicalIconStatus } from "@hce/design-system"
 
 
 
@@ -204,6 +204,25 @@ const columns: GenericTableColumn<MonitorRow>[] = [
     disabledGetter: (row) => !canReadInfo || row.box.stage === "ESPERA",
     onClick: (row) => {
       console.log("Abrir información adicional:", row)
+    },
+
+    
+  },
+
+  {
+    key: "on_edit",
+    header: "Editar",
+    type: "icon",
+    field: "edit",
+    icon: UiEditingIcon,
+    iconSize: 10,
+    width: 100,
+    align: "center",
+    clickable: true,
+    disabledGetter: () => !canReadInfo,
+    colorGetter: () => (canReadInfo ? hceColors.primary.green[600] : "#A0A0A0"),
+    onClick: (row) => {
+        console.log("Abrir información adicional:", row)
     },
   },
 ]

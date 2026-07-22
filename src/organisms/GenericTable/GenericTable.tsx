@@ -88,10 +88,10 @@ export const GenericTable = <T,>({
   }, [rows, sortComparator])
 
   const tableWidth = useMemo(() => getTableWidthNumber(columns), [columns])
-  const BORDER_EXTRA_WIDTH = 24
+
 
   const tableMinWidth = `${tableWidth}px`
-  const borderMinWidth = `${tableWidth + BORDER_EXTRA_WIDTH}px`
+  
 
   // Scrollbar vertical dibujado a mano, superpuesto sobre la última columna
   // (en vez del nativo, que reserva su propio ancho y deja el borde "después"
@@ -262,15 +262,15 @@ export const GenericTable = <T,>({
           },
         }}
       >
-        <Box sx={{   
-          
+        <Box 
+         sx={{
           border: `1px solid ${TABLE_BORDER_COLOR}`,
           borderRadius: TABLE_RADIUS,
-          paddingBottom: '3px',
-          
           width: "100%",
-          minWidth: borderMinWidth
-         }}>
+          minWidth: tableMinWidth,
+          boxSizing: "border-box",
+          overflow: "hidden",
+        }}>
         <Table
           stickyHeader
           aria-label="generic table"
@@ -306,6 +306,9 @@ export const GenericTable = <T,>({
                   sx={{
                     ...headerCellSx,
                     width: columnWidths[index],
+                    ...(index === 0 && {
+                      borderLeft: "none",
+                    }),
                   }}
                 >
                   {column.header}

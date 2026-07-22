@@ -291,38 +291,44 @@ export const cellRenderers: {
 
     if (!Icon) return null
 
-    const iconColor = disabled
+    const backgroundColor = disabled
       ? hceColors.neutro.white[800]
       : color || hceUi.textPrimaryTable
 
-    const backgroundColor = disabled
-      ? "#F2F2F2"
-      : lightenHexColor(iconColor, 0.9)
+    
 
     return (
       <Box
         onClick={handleColumnClick}
         {...clickableA11yProps}
+        
         sx={{
           width: 28,
           height: 28,
           display: "flex",
+          mx: "auto",
+          boxSizing: "border-box",
           justifyContent: "center",
           alignItems: "center",
+          padding: '7px',
           cursor: canClick ? "pointer" : "default",
-          border: `1.5px solid ${iconColor}`,
+          // border: `1.5px solid ${backgroundColor}`,
           borderRadius: hceBorderRadius.md,
           backgroundColor,
         }}
       >
+       
         <Icon
-          color={iconColor}
-          disable={disabled}
+        size="small"
+          color={hceColors.neutro.white[50]}
+           disable={disabled}
           sx={{
-            fontSize: column.iconSize ?? 20,
-            color: iconColor,
+            fontSize: column.iconSize ?? 10,
+            color: hceColors.neutro.white[50],
           }}
         />
+
+       
       </Box>
     )
   },
