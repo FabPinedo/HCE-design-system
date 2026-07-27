@@ -20,6 +20,8 @@ export type GenericColumnType =
   | "icon"
   | "switch"
   | "tag"
+  | "list"
+
 
 export interface GenericTableColumn<T> {
   key: string

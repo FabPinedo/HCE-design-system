@@ -473,4 +473,45 @@ export const cellRenderers: {
       {String(value ?? "-")}
     </Typography>
   ),
+
+  list: ({ value, boldText }) => {
+    const items = Array.isArray(value)
+      ? value
+      : value
+        ? String(value).split(",").map((item) => item.trim())
+        : []
+
+    if (items.length === 0) return <>-</>
+
+    return (
+      <Box
+        component="ul"
+        sx={{
+          m: 0,
+          pl: "16px",
+          py: "4px",
+          color: hceColors.primary.blue[600],
+          fontFamily: hceTypography.fontFamily,
+          fontSize: hceTypography.size.base,
+          fontWeight: boldText
+            ? hceTypography.weight.bold
+            : hceTypography.weight.regular,
+          lineHeight: 1.3,
+        }}
+      >
+        {items.map((item, index) => (
+          <Box
+            key={`${item}-${index}`}
+            component="li"
+            sx={{
+              m: 0,
+              pl: "2px",
+            }}
+          >
+            {String(item)}
+          </Box>
+        ))}
+      </Box>
+    )
+  },
 }
