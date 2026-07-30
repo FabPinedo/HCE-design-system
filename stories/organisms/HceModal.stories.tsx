@@ -1,14 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import type { LucideIcon } from "@hce/design-system"
 import React, { useState }    from "react"
 import {
   HceModal,
   Button,
   UiCalendarIcon,
   HceInfoIcon,
-  UiDoctorIcon,
-  User,
-  hceColors,
 } from "@hce/design-system"
 import Box from "@mui/material/Box"
 
@@ -231,13 +227,9 @@ export const SinBotones: Story = {
   name: "Solo informativo (sin botones)",
   render: () => (
     <Demo
-      showCloseButton={true}
-      contentPadding="24px"
+      title="Información"
       description="El sistema está procesando tu solicitud. Recibirás una notificación cuando finalice."
-      icon={<User size={30} />}
-      backgroundColor={hceColors.primary.green[50]}
-      borderColor={hceColors.primary.blue[500]}
-      borderWidth={2}
+      icon={<HceInfoIcon size={28} />}
     />
   ),
 }

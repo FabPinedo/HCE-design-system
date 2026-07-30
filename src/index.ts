@@ -55,7 +55,7 @@ export { LogoClinicaSanFelipeIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConf
 export {
   EvaScale0Icon, EvaScale1Icon, EvaScale2Icon, EvaScale3Icon, EvaScale4Icon,
   EvaScale5Icon, EvaScale6Icon, EvaScale7Icon, EvaScale8Icon, EvaScale9Icon,
-  EvaScale10Icon,
+  EvaScale10Icon
 } from "./atoms/Icon/SvgIconsHce"
 
 // ── Icons — HCE Custom SVG ─────────────────────────────────
@@ -64,7 +64,7 @@ export {
   // Icon1 – Medical
   BloodTestIcon, DoctorIcon, DrugsIcon, MedicalRoomIcon,
   PrescriptionIcon, RadiographyIcon, HceStethoscopeIcon,
-  XRaysIcon, AltaMedicaIcon,
+  XRaysIcon, AltaMedicaIcon, ReferenceIcon,
   // Icon2 – UI
   AddFriendIcon, AddDocumentIcon, AddCircleIcon, SortArrowsIcon,
   BinIcon, HceCalendarIcon, CheckedCircleIcon, ConfigurationIcon,
@@ -75,7 +75,7 @@ export {
   OnButtonIcon, PapersIcon, PasteIcon, SolCurrencyIcon,
   PrintingIcon, SendMailUpIcon, SendMailIcon, SendIcon,
   UndoCircleIcon, ClockIcon, WarningIcon, FilterIcon,
-  HceMonitorIcon, CloseIcon,
+  HceMonitorIcon, CloseIcon,MenuBurgerIcon,
   // UIKit
   UiArrowIcon, UiDoctorIcon, UiAddDocsIcon, UiAddFriendIcon,
   UiAddIcon, UiArrowsIcon, UiBloodTestIcon, UiCalendarIcon,
@@ -88,7 +88,7 @@ export {
   UiPasteIcon, UiPrescriptionIcon, UiPrintingIcon, UiRadiographyIcon,
   UiSearchIcon, UiSendMailIcon, UiSendIcon, UiSolSymbolIcon,
   UiStethoscopeIcon, UiTrashIcon, UiUndoIcon, UiUploadDocumentIcon,
-  UiVectorIcon, UiWarningIcon, UiXRaysIcon,
+  UiVectorIcon, UiWarningIcon, UiXRaysIcon,UiMenuBurgerIcon
 } from "./atoms/Icon/Icon"
 
 // ── Atoms ─────────────────────────────────────────────────
@@ -108,6 +108,7 @@ export { Checkbox }       from "./atoms/Checkbox/Checkbox"
 export { HceBreadcrumb }       from "./atoms/HceBreadcrumb/HceBreadcrumb"
 export { SkeletonLoader } from "./atoms/SkeletonLoader/SkeletonLoader"
 export { MultiSelect }    from "./atoms/MultiSelect/MultiSelectField"
+export { HceTooltip } from './atoms/Tooltip/HceTooltip'
 export type { SkeletonLoaderProps, SkeletonVariant } from "./atoms/SkeletonLoader/SkeletonLoader"
 export { FieldCol }       from "./atoms/FieldCol/FieldCol"
 export type { FieldColProps } from "./atoms/FieldCol/FieldCol"
@@ -122,7 +123,7 @@ export type { DatePickerProps } from "./atoms/DatePicker/DatePicker"
 
 // ── Types — Atoms ──────────────────────────────────────────
 export type { PriorityLevel } from "./atoms/PriorityBadge/PriorityBadge"
-export type { BadgeVariant }  from "./atoms/StatusBadge/StatusBadge"
+
 export type {
   HceBreadcrumbItem,
   HceBreadcrumbProps,
@@ -158,7 +159,7 @@ export { GenericRow }          from "./molecules/GenericRow/GenericRow"
 export { GenericCell }          from "./molecules/GenericCell/GenericCell"
 export type { GenericTableColumn }  from  "./molecules/GenericCell/GenericCell"
 export { InfoButton }          from "./molecules/InfoButton/InfoButton"
-
+export  *  from "./molecules/DataCard/index"
 export { PasswordInput }       from "./molecules/PasswordInput/PasswordInput"
 export { RadioGroup }          from "./molecules/RadioGroup/RadioGroup"
 export { SectionHeader }       from "./molecules/SectionHeader/SectionHeader"

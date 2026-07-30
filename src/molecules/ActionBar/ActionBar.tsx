@@ -6,36 +6,31 @@
  * Agrupa botones icon-only con separadores visuales entre grupos.
  * ---------------------------------------------------------
  */
-import { Box, Divider } from "@mui/material"
-import FilterListIcon       from "@mui/icons-material/FilterList"
-import PersonOutlineIcon    from "@mui/icons-material/PersonOutline"
-import PrintOutlinedIcon    from "@mui/icons-material/PrintOutlined"
-import RefreshOutlinedIcon  from "@mui/icons-material/RefreshOutlined"
-import { ActionIconButton } from "../ActionIconButton/ActionIconButton"
-import { hceClinicalColors, hceSpacing }  from "../../tokens/hce.tokens"
-import type { SvgIconComponent } from "@mui/icons-material"
+import { Box, IconButton } from "@mui/material";
+import {
+  hceBorderRadius,
+  hceClinicalColors,
+  hceColors,
+} from "../../tokens/hce.tokens";
+import { ActionIconButton } from "../ActionIconButton/ActionIconButton";
+import { CloseIcon, MenuBurgerIcon } from "../../atoms/Icon/SvgIcons";
+import { useState } from "react";
 
 /** Definición de un botón adicional personalizado */
 export interface ExtraAction {
-  icon:      SvgIconComponent
-  tooltip:   string
-  onClick?:  () => void
-  disabled?: boolean
+  id: string;
+  icon: React.ElementType;
+  onClick?: () => void;
+  disabled?: boolean;
+  labelTooltip: string;
 }
 
 interface Props {
-  onFilter?:    () => void
-  onUser?:      () => void
-  onRefresh?:   () => void
-  onPrint?:     () => void
+  orientation?: "horizontal" | "vertical";
   /** Botones adicionales (aparecen después del separador principal) */
-  extraActions?: ExtraAction[]
-}
-
-const separatorSx = {
-  height:      "20px",
-  mx:          "6px",
-  borderColor: hceClinicalColors.border,
+  actions?: ExtraAction[];
+  /** Boton adicional para ocultar o mostrar barra de botones */
+  closeAction?: boolean;
 }
 
 /**
@@ -44,50 +39,124 @@ const separatorSx = {
  * Barra horizontal con fondo blanco y borde inferior sutil.
  */
 export const ActionBar = ({
-  onFilter,
-  onUser,
-  onRefresh,
-  onPrint,
-  extraActions = [],
+  orientation = "horizontal",
+  actions,
+  closeAction,
 }: Props) => {
+  const isVertical = orientation === "vertical";
+  const [closeBar, setCloseBar] = useState(false);
   return (
     <Box
       sx={{
-        display:         "flex",
-        alignItems:      "center",
-        gap:             "4px",
-        padding:         `${hceSpacing[2]} ${hceSpacing[4]}`,
-        backgroundColor: hceClinicalColors.surfaceBg,
-        borderBottom:    `1px solid ${hceClinicalColors.border}`,
+        display: "flex",
+        flexDirection: isVertical ? "column" : "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: "6px",
+        padding: "6px 10px",
+        backgroundColor: "#ffffff",
+        borderRadius: "10px",
+        boxShadow: `0 2px 8px rgba(0,29,69,0.08)`,
+        border: `1px solid ${hceColors.primary.blue[100]}`,
+        width: isVertical ? "fit-content" : "100%",
       }}
       role="toolbar"
       aria-label="Barra de acciones"
     >
-      {/* Grupo 1: Filtros y usuario */}
-      <ActionIconButton icon={FilterListIcon}    tooltip="Filtrar pacientes" onClick={onFilter} />
-      <ActionIconButton icon={PersonOutlineIcon} tooltip="Gestión de usuario" onClick={onUser} />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: isVertical ? "column" : "row",
+          alignItems: isVertical ? "start" : "center",
+          gap: "0.5rem",
+          padding: "6px 10px",
+          backgroundColor: "#ffffff",
+          width: isVertical ? "fit-content" : "100%",
+        }}
+      >
+        {closeAction && (
+          // <ActionIconButton
+          //   key={0}
+          //   icon={CloseIcon}
+          //   onClick={()=>{console.log("cerrando")}}
+          //   disabled={false}
+          // />
 
-      <Divider orientation="vertical" flexItem sx={separatorSx} />
+          <IconButton
+            onClick={() => {
+              setCloseBar(!closeBar);
+            }}
+            disabled={false}
+            size="small"
+            sx={{
+              width: 40,
+              height: 40,
+              borderRadius: hceBorderRadius.lg,
+              border: `1.5px solid ${hceColors.primary.blue[600]}`,
+              backgroundColor: hceColors.primary.blue[600],
+              color: hceClinicalColors.textSecondary,
+              padding: 0,
 
-      {/* Grupo 2: Utilidades */}
-      <ActionIconButton icon={RefreshOutlinedIcon} tooltip="Actualizar lista" onClick={onRefresh} />
-      <ActionIconButton icon={PrintOutlinedIcon}   tooltip="Imprimir" onClick={onPrint} />
+              "&:hover": {
+                backgroundColor: hceColors.primary.blue[600],
+                borderColor: hceColors.primary.blue[600],
+                color: hceColors.primary.blue[600],
+              },
+              "&:active": {
+                backgroundColor: hceColors.primary.blue[600],
+              },
+              "&.Mui-disabled": {
+                opacity: 0.4,
+                backgroundColor: "#FFFFFF",
+                color: hceClinicalColors.textSecondary,
+              },
+            }}
+          >
+            <Box
+              sx={{
+                position: "relative",
+                width: 18, // Mismo tamaño que tus íconos
+                height: 18,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {/* ÍCONO CERRAR (X) */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  transition: "opacity 0.2s ease-in-out",
+                  opacity: closeBar ? 1 : 0, // Se muestra si closeBar es true
+                }}
+              >
+                <MenuBurgerIcon size={18} color={hceColors.neutro.white[50]} />
+              </Box>
 
-      {/* Botones adicionales opcionales */}
-      {extraActions.length > 0 && (
-        <>
-          <Divider orientation="vertical" flexItem sx={separatorSx} />
-          {extraActions.map((action, idx) => (
+              {/* ÍCONO HAMBURGUESA */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  transition: "opacity 0.2s ease-in-out",
+                  opacity: closeBar ? 0 : 1, // Se muestra si closeBar es false
+                }}
+              >
+                <CloseIcon size={18} color={hceColors.neutro.white[50]} />
+              </Box>
+            </Box>
+          </IconButton>
+        )}
+        {!closeBar &&
+          actions?.map((action) => (
             <ActionIconButton
-              key={idx}
+              key={action.id}
+              tooltip={action.labelTooltip}
               icon={action.icon}
-              tooltip={action.tooltip}
               onClick={action.onClick}
               disabled={action.disabled}
             />
           ))}
-        </>
-      )}
+      </Box>
     </Box>
-  )
-}
+  );
+};

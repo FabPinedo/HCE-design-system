@@ -19,7 +19,7 @@ export function FieldCol({ label, children, flex = 1, minWidth }: FieldColProps)
           fontFamily: hceTypography.fontFamily,
           fontSize: "0.72rem",
           fontWeight: 600,
-          color: hceColors.neutro.black[400],
+          color: hceColors.primary.blue[600],
         }}
       >
         {label}

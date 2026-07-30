@@ -60,6 +60,8 @@ import UploadDocumentSvg   from "../../assets/icons/uikit/UploadDocument.svg?rea
 import VectorSvg           from "../../assets/icons/uikit/Vector.svg?react"
 import WarningSvg          from "../../assets/icons/uikit/Warning.svg?react"
 import XRaysSvg            from "../../assets/icons/uikit/XRays.svg?react"
+import ReferenceSvg        from "../../assets/icons/uikit/Reference.svg?react"
+import MenuBurgerSvg       from "../../assets/icons/uikit/MenuBurger.svg?react"
 
 // Re-exportamos HceIconProps para que los consumidores no importen de dos sitios
 export type { HceIconProps }
@@ -126,3 +128,5 @@ export const UiUploadDocumentIcon   = makeIcon(UploadDocumentSvg)
 export const UiVectorIcon           = makeIcon(VectorSvg)
 export const UiWarningIcon          = makeIcon(WarningSvg)
 export const UiXRaysIcon            = makeIcon(XRaysSvg)
+export const UiReferenceIcon        = makeIcon(ReferenceSvg)
+export const UiMenuBurgerIcon       = makeIcon(MenuBurgerSvg)

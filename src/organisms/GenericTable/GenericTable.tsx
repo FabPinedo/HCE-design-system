@@ -227,8 +227,6 @@ export const GenericTable = <T,>({
         display: "flex",
         flexDirection: "column",
         minHeight: 0,
-        border: `1px solid ${TABLE_BORDER_COLOR}`,
-        borderRadius: TABLE_RADIUS,
         overflow: "hidden",
       }}
     >
@@ -261,6 +259,14 @@ export const GenericTable = <T,>({
           },
         }}
       >
+        <Box sx={{   
+          
+          border: `1px solid ${TABLE_BORDER_COLOR}`,
+          borderRadius: TABLE_RADIUS,
+          paddingBottom: '3px',
+          width: "100%",
+          minWidth: tableMinWidth,
+         }}>
         <Table
           stickyHeader
           aria-label="generic table"
@@ -276,8 +282,10 @@ export const GenericTable = <T,>({
             // entre la celda sticky y el TableContainer con overflow != visible
             // lo desactiva) — se anula acá; el radius/clip visual ya lo da el
             // Box exterior.
-            borderRadius: 0,
+           
             overflow: "visible",
+            //  border: `1px solid ${TABLE_BORDER_COLOR}`,
+            //  borderRadius: TABLE_RADIUS,
           }}
         >
           {renderColGroup()}
@@ -348,6 +356,7 @@ export const GenericTable = <T,>({
             )}
           </TableBody>
         </Table>
+        </Box>
       </TableContainer>
 
       {needsVerticalScroll && (

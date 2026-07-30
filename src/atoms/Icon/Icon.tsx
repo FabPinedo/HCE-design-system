@@ -11,7 +11,7 @@ export {
   // Icon1
   BloodTestIcon, DoctorIcon, DrugsIcon, MedicalRoomIcon,
   PrescriptionIcon, RadiographyIcon, HceStethoscopeIcon,
-  XRaysIcon, AltaMedicaIcon,
+  XRaysIcon, AltaMedicaIcon,ReferenceIcon,
   // Icon2
   AddFriendIcon, AddDocumentIcon, AddCircleIcon, SortArrowsIcon,
   BinIcon, HceCalendarIcon, CheckedCircleIcon, ConfigurationIcon,
@@ -22,7 +22,7 @@ export {
   OnButtonIcon, PapersIcon, PasteIcon, SolCurrencyIcon,
   PrintingIcon, SendMailUpIcon, SendMailIcon, SendIcon,
   UndoCircleIcon, ClockIcon, WarningIcon, FilterIcon,
-  HceMonitorIcon, CloseIcon,
+  HceMonitorIcon, CloseIcon,MenuBurgerIcon
 } from "./SvgIcons"
 
 // ── UIKit HCE SVG icons ───────────────────────────────────
@@ -38,7 +38,7 @@ export {
   UiPasteIcon, UiPrescriptionIcon, UiPrintingIcon, UiRadiographyIcon,
   UiSearchIcon, UiSendMailIcon, UiSendIcon, UiSolSymbolIcon,
   UiStethoscopeIcon, UiTrashIcon, UiUndoIcon, UiUploadDocumentIcon,
-  UiVectorIcon, UiWarningIcon, UiXRaysIcon,
+  UiVectorIcon, UiWarningIcon, UiXRaysIcon,UiReferenceIcon,UiMenuBurgerIcon
 } from "./SvgIconsUiKit"
 
 // ── lucide-react ──────────────────────────────────────────

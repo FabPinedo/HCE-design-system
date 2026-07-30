@@ -269,3 +269,4 @@ export function EvaScale10Icon({ size = 40 }: { size?: number }) {
   )
 }
 
+

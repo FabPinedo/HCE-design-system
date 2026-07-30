@@ -36,25 +36,33 @@ export function SelectField({
 
   const active = open || hovered
 
-  const accentColor = error
-    ? hceColors.alert.error[600]
-    : active
-      ? hceColors.primary.blue[600]
-      : hceColors.neutro.black[200]
+  // ── Colores reactivos ──────────────────────────────────────
+  // 1. Color principal (aplica a label, bordes, ícono de flecha y placeholder)
+  const mainColor = disabled
+    ? hceColors.neutro.black[300] // Gris si está deshabilitado
+    : error
+      ? hceColors.alert.error[600] // Rojo si hay error
+      : hceColors.primary.blue[600] // Azul por defecto
 
-  const borderDefault = error ? hceColors.alert.error[600] : hceColors.neutro.black[50]
-  const borderActive  = error ? hceColors.alert.error[600] : hceColors.primary.blue[600]
+  // 2. Color del texto seleccionado
+  const valueColor = disabled
+    ? hceColors.neutro.black[300] // Gris
+    : error
+      ? hceColors.alert.error[600]
+      : active
+        ? hceColors.primary.blue[600]
+        : hceColors.neutro.black[400]
 
   return (
     <Box
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => !disabled && setHovered(true)}
+      onMouseLeave={() => !disabled && setHovered(false)}
     >
       <Typography component="label" sx={{
         fontFamily: hceTypography.fontFamily,
         fontSize:   "0.75rem",
         fontWeight: 600,
-        color:      accentColor,
+        color:      mainColor, // <--- Aplicamos el color reactivo al label
         mb:         0.5,
         display:    "block",
         transition: `color ${hceTransition.fast}`,
@@ -94,22 +102,24 @@ export function SelectField({
           }}
           input={<OutlinedInput sx={{
             borderRadius:    "8px",
-            backgroundColor: hceColors.neutro.white[50],
+            // Fondo un poco más oscuro si está disabled
+            backgroundColor: disabled ? hceColors.neutro.white[50] : hceColors.neutro.white[50],
             fontSize:        "0.875rem",
             transition:      `box-shadow ${hceTransition.fast}`,
-            // Texto seleccionado
-            "& .MuiSelect-select": {
-              color:      value
-                ? (error ? hceColors.alert.error[600] : active ? hceColors.primary.blue[600] : hceColors.neutro.black[400])
-                : accentColor,
+            
+            // Ícono de la flecha del Select
+            "& .MuiSelect-icon": {
+              color: mainColor,
               transition: `color ${hceTransition.fast}`,
             },
+            
+            // Bordes reactivos
             "& fieldset": {
-              borderColor: borderDefault,
+              borderColor: mainColor,
               transition:  `border-color ${hceTransition.fast}`,
             },
-            "&:hover fieldset":       { borderColor: borderActive },
-            "&.Mui-focused fieldset": { borderColor: borderActive },
+            "&:hover fieldset":       { borderColor: mainColor },
+            "&.Mui-focused fieldset": { borderColor: mainColor },
             "&.Mui-focused": {
               boxShadow: `0 0 0 3px ${hceColors.primary.blue[100]}`,
             },
@@ -118,9 +128,8 @@ export function SelectField({
             <Typography sx={{
               fontFamily: hceTypography.fontFamily,
               fontSize:   "0.875rem",
-              color:      v
-                ? (error ? hceColors.alert.error[600] : active ? hceColors.primary.blue[600] : hceColors.neutro.black[400])
-                : accentColor,
+              // Si hay valor usa valueColor, si está vacío (mostrando placeholder) usa mainColor
+              color:      v ? valueColor : mainColor, 
               transition: `color ${hceTransition.fast}`,
             }}>
               {options.find(o => o.value === v)?.label ?? placeholder}
