@@ -1,6 +1,7 @@
-import { Box, Typography } from "@mui/material"
+import { Box } from "@mui/material"
 import { useId, useState } from "react"
 import { hceColors, hceTypography } from "../../tokens/hce.tokens"
+import { FieldCol } from "../FieldCol/FieldCol"
 
 export interface TextareaFieldProps {
   label: string
@@ -44,20 +45,7 @@ export function TextareaField({
       onMouseEnter={() => !disabled && setHovered(true)}
       onMouseLeave={() => !disabled && setHovered(false)}
     >
-      <Typography
-        component="label"
-        htmlFor={id}
-        sx={{
-          fontFamily: hceTypography.fontFamily,
-          fontSize: "0.72rem",
-          fontWeight: 600,
-          color: mainColor, // <--- Aplicamos el color reactivo
-          transition: "color 0.2s ease",
-        }}
-      >
-        {label}
-      </Typography>
-      
+      <FieldCol label={label} labelColor={mainColor}>
       <Box
         sx={{
           position: "relative",
@@ -122,6 +110,7 @@ export function TextareaField({
           {value.length}/{maxLength}
         </Box>
       </Box>
+      </FieldCol>
     </Box>
   )
 }

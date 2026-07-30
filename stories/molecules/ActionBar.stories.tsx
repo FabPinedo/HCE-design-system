@@ -4,17 +4,15 @@ import {
   AltaMedicaIcon,
   HceHistoryIcon,
   injectHceTokens,
-  ReferenceIcon,
   UiBloodTestIcon,
   UiDrugsIcon,
-  UiHistoryIcon,
   UiMonitorIcon,
   UiPrescriptionIcon,
   UiPrintingIcon,
   UiXRaysIcon,
+  UiReferenceIcon,
   type ExtraAction,
 } from "@hce/design-system";
-import { UiReferenceIcon } from "../../src/atoms/Icon/SvgIconsUiKit";
 
 injectHceTokens();
 

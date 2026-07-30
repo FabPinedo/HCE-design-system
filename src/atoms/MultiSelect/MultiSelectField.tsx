@@ -48,29 +48,62 @@ export const MultiSelect = ({
 
   const active = focused || hovered;
 
-  const accentColor = error
-    ? hceColors.alert.error[600]
-    : active
-      ? hceColors.primary.blue[600]
-      : hceColors.neutro.black[200];
+  const mainColor = disabled
+    ? hceColors.neutro.black[300] // Gris si está deshabilitado
+    : error
+      ? hceColors.alert.error[600] // Rojo si hay error
+      : hceColors.primary.blue[600]; // Azul por defecto
 
-  const inputTextColor = error
-    ? hceColors.alert.error[600]
-    : active
-      ? hceColors.primary.blue[600]
-      : hceColors.neutro.black[400];
+  const inputTextColor = disabled
+    ? hceColors.neutro.black[300] 
+    : error
+      ? hceColors.alert.error[600]
+      : active
+        ? hceColors.primary.blue[600]
+        : hceColors.neutro.black[400];
 
-  const borderDefault = error
-    ? hceColors.alert.error[600]
-    : hceColors.neutro.black[50];
-  const borderActive = error
-    ? hceColors.alert.error[600]
-    : hceColors.primary.blue[600];
+  const borderDefault = disabled
+    ? hceColors.neutro.black[300] 
+    : error
+      ? hceColors.alert.error[600]
+      : active
+        ? hceColors.primary.blue[600]
+        : hceColors.neutro.black[400];
+  const borderActive = disabled
+    ? hceColors.neutro.black[300] 
+    : error
+      ? hceColors.alert.error[600]
+      : active
+        ? hceColors.primary.blue[600]
+        : hceColors.neutro.black[400];
 
   const selectedOptions = options.filter((opt) =>
     (value ?? []).includes(opt.value),
   );
   const [inputValue] = useState("");
+  const isAllSelected =
+    options.length > 0 && selectedOptions.length === options.length;
+  const sortedOptions = [
+    { value: "ALL_OPTIONS", label: "Todos" },
+    ...options,
+  ].sort((a, b) => {
+    // Regla 1: "Todos" siempre debe quedarse en la posición más alta
+    if (a.value === "ALL_OPTIONS") return -1;
+    if (b.value === "ALL_OPTIONS") return 1;
+
+    // Regla 2: Revisamos si están seleccionadas
+    const aSeleccionado = (value ?? []).includes(a.value);
+    const bSeleccionado = (value ?? []).includes(b.value);
+
+    // Si 'a' está seleccionada y 'b' no, 'a' sube
+    if (aSeleccionado && !bSeleccionado) return -1;
+    // Si 'b' está seleccionada y 'a' no, 'b' sube
+    if (!aSeleccionado && bSeleccionado) return 1;
+
+    // Regla 3: Si ambas tienen el mismo estado (ambas marcadas o ambas desmarcadas),
+    // se quedan en el orden en el que venían de la base de datos.
+    return 0;
+  });
 
   if (label) {
     return (
@@ -84,7 +117,7 @@ export const MultiSelect = ({
             fontFamily: hceTypography.fontFamily,
             fontSize: "0.75rem",
             fontWeight: 600,
-            color: accentColor,
+            color: mainColor,
             mb: 0.5,
             display: "block",
             transition: `color ${hceTransition.fast}`,
@@ -96,66 +129,128 @@ export const MultiSelect = ({
           <Autocomplete
             disableClearable={disabled}
             isOptionEqualToValue={(option, val) => option.value === val.value}
-            sx={{
-              "& .MuiAutocomplete-tag": {
-                display: "none",
-              },
-            }}
             fullWidth={fullWidth}
             slotProps={{
               paper: {
                 sx: {
-                  // El Popper de MUI Autocomplete ya fija su propio width al
-                  // clientWidth del anchor (el trigger/input). "max-content" +
-                  // "min-width: 100%" anulaba ese comportamiento y dejaba que
-                  // el Paper creciera más allá del ancho del trigger cuando
-                  // una opción tenía un label largo, ensanchando el dropdown.
-                  // Con "width: 100%" el Paper simplemente llena el ancho que
-                  // el Popper ya calculó (= ancho del trigger), así que las
-                  // opciones largas truncan con ellipsis en vez de ensanchar
-                  // el panel o desbordarse sobre el checkbox.
                   width: "100%",
                 },
               },
             }}
             multiple
             disableCloseOnSelect
-            onChange={(_, newValue) => {
-              const values = newValue.map((item) => item.value);
-              onChange(values);
+           onChange={(_, newValue) => {
+              // 1. Verificamos si la opción "Todos" viene en el nuevo arreglo
+              const hasAllOption = newValue.some((item) => item.value === "ALL_OPTIONS");
+
+              // 2. Si el usuario hizo clic en "Todos"
+              if (hasAllOption) {
+                if (isAllSelected) {
+                  onChange([]); // Si ya estaban marcados, vaciamos el arreglo
+                } else {
+                  onChange(options.map((opt) => opt.value)); // Si no, los marcamos todos
+                }
+              } else {
+                // 3. Si seleccionó o deseleccionó una opción normal, guardamos los valores
+                const values = newValue.map((item) => item.value);
+                onChange(values);
+              }
             }}
-            options={options}
+            options={sortedOptions}
             value={selectedOptions ?? []}
             getOptionLabel={(option) => option.label}
-            renderValue={() => {
-              if (value.length === 0) return null;
+            renderTags={(selectedTags, getTagProps) => {
+              if (selectedTags.length === 0) return null;
+              if (selectedTags.length > 1) {
+                return (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      backgroundColor: hceColors.primary.green[600],
+                      color: "#ffffff",
+                      borderRadius: "8px",
+                      padding: "4px 12px",
+                      fontSize: "0.85rem",
+                      fontWeight: 500,
+                      fontFamily: hceTypography.fontFamily,
+                      mr: 1,
+                      userSelect: "none",
+                    }}
+                  >
+                    <Box
+                      component="span"
+                      sx={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        display: "block",
+                      }}
+                    >
+                      {selectedTags.length} seleccionado
+                      {selectedTags.length > 1 ? "s" : ""}
+                    </Box>
+                    <VisibilityOutlined
+                      sx={{ fontSize: "1rem", opacity: 0.9 }}
+                    />
+                  </Box>
+                );
+              }
+
+              const { key, onDelete } = getTagProps({ index: 0 });
               return (
                 <Box
+                  key={key}
                   sx={{
                     display: "flex",
                     alignItems: "center",
                     gap: "6px",
-                    backgroundColor: hceColors.primary.green[600],
-                    color: "#ffffff",
-                    borderRadius: "8px",
-                    padding: "4px 12px",
-                    fontSize: "0.85rem",
-                    fontWeight: 500,
+                    color: inputTextColor,
                     fontFamily: hceTypography.fontFamily,
+                    fontSize: "0.875rem",
                     mr: 1,
-                    width: "100%",
-                    userSelect: "none",
+                    maxWidth: "100%",
                   }}
                 >
-                  <span>
-                    {value.length} seleccionado{value.length > 1 ? "s" : ""}
-                  </span>
-                  <VisibilityOutlined sx={{ fontSize: "1rem", opacity: 0.9 }} />
+                  <Box
+                    component="span"
+                    sx={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "block",
+                    }}
+                  >
+                    {selectedTags[0].label}
+                  </Box>
+                  <Box
+                    component="span"
+                    onClick={onDelete}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      opacity: 0.5,
+                      fontSize: "0.75rem",
+                      fontWeight: "bold",
+                      flexShrink: 0,
+                      "&:hover": {
+                        opacity: 1,
+                        color: hceColors.alert.error[600],
+                      },
+                    }}
+                    title="Borrar opción"
+                  >
+                    ✕
+                  </Box>
                 </Box>
               );
             }}
             renderOption={(props, option, { selected }) => {
               const { key, ...restProps } = props;
+              const isChecked =
+                option.value === "ALL_OPTIONS" ? isAllSelected : selected;
               const handleClick = (
                 e: React.MouseEvent<HTMLLIElement, MouseEvent>,
               ) => {
@@ -184,14 +279,6 @@ export const MultiSelect = ({
                     pointerEvents: disabled ? "none" : "auto",
                   }}
                 >
-                  {/*
-                    El label se renderiza aparte (no vía la prop `label` de <Checkbox>)
-                    para que el `justifyContent: space-between` del <li> tenga dos hijos
-                    reales entre los que repartir el espacio: texto a la izquierda,
-                    checkbox a la derecha. El átomo <Checkbox> internamente usa un gap
-                    fijo (no space-between) a propósito para otros consumidores
-                    (ver comentario en Checkbox.tsx) — no se toca ese componente.
-                  */}
                   <Typography
                     sx={{
                       fontFamily: hceTypography.fontFamily,
@@ -210,7 +297,7 @@ export const MultiSelect = ({
                   </Typography>
                   <Checkbox
                     ariaLabel={option.label}
-                    checked={selected}
+                    checked={isChecked}
                     disabled={disabled}
                     onChange={() => {}}
                   />
@@ -258,7 +345,7 @@ export const MultiSelect = ({
                         boxShadow: `0 0 0 3px ${hceColors.primary.blue[100]}`,
                       },
                       "& input::placeholder": {
-                        color: accentColor,
+                        color: mainColor,
                         opacity: 1,
                         transition: `color ${hceTransition.fast}`,
                       },
@@ -272,4 +359,5 @@ export const MultiSelect = ({
       </Box>
     );
   }
+  return null;
 };

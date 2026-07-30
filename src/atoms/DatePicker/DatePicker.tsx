@@ -1,6 +1,7 @@
 import { useState } from "react"
-import { Box, Typography, OutlinedInput } from "@mui/material"
-import { hceColors, hceTypography, hceTransition } from "../../tokens/hce.tokens"
+import { Box, OutlinedInput } from "@mui/material"
+import { hceColors, hceTransition } from "../../tokens/hce.tokens"
+import { FieldCol } from "../FieldCol/FieldCol"
 
 export interface DatePickerProps {
   label?: string
@@ -31,75 +32,72 @@ export function DatePicker({
 
   const active = focused || hovered
 
-  const accentColor = error
-    ? hceColors.alert.error[600]
-    : active
-      ? hceColors.primary.blue[600]
-      : hceColors.neutro.black[200]
+    // ── Colores reactivos ──────────────────────────────────────
+  const mainColor = disabled
+    ? hceColors.neutro.black[300] // Gris si está deshabilitado
+    : error
+      ? hceColors.alert.error[600] // Rojo si hay error
+      : hceColors.primary.blue[600]; // Azul por defecto
 
-  const inputTextColor = error
-    ? hceColors.alert.error[600]
-    : active
-      ? hceColors.primary.blue[600]
-      : hceColors.neutro.black[400]
-
-  const borderDefault = error ? hceColors.alert.error[600] : hceColors.neutro.black[50]
-  const borderActive  = error ? hceColors.alert.error[600] : hceColors.primary.blue[600]
+  const inputTextColor = disabled
+    ? hceColors.neutro.black[300] // Gris si está deshabilitado
+    : error
+      ? hceColors.alert.error[600]
+      : active
+        ? hceColors.primary.blue[600] // Azul si interactúa
+        : hceColors.neutro.black[700] // Negro en reposo
 
   return (
     <Box
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      // Bloqueamos el hover si está deshabilitado
+      onMouseEnter={() => !disabled && setHovered(true)}
+      onMouseLeave={() => !disabled && setHovered(false)}
     >
-      {label && (
-        <Typography component="label" sx={{
-          fontFamily: hceTypography.fontFamily,
-          fontSize:   "0.75rem",
-          fontWeight: 600,
-          color:      accentColor,
-          mb:         0.5,
-          display:    "block",
-          transition: `color ${hceTransition.fast}`,
-        }}>
-          {label}
-        </Typography>
-      )}
-      <OutlinedInput
-        fullWidth
-        size="small"
-        type="date"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        required={required}
-        disabled={disabled}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        sx={{
-          borderRadius:    "8px",
-          backgroundColor: hceColors.neutro.white[50],
-          fontSize:        "0.875rem",
-          transition:      `box-shadow ${hceTransition.fast}`,
-          "& .MuiInputBase-input": {
-            color:               inputTextColor,
-            WebkitTextFillColor: inputTextColor,
-            transition:          `color ${hceTransition.fast}, -webkit-text-fill-color ${hceTransition.fast}`,
-            // Icono nativo del calendario — visible incluso con el texto en color de acento
-            "&::-webkit-calendar-picker-indicator": {
-              filter: "opacity(0.6)",
-              cursor: disabled ? "not-allowed" : "pointer",
+      <FieldCol label={label} labelColor={mainColor}>
+        <OutlinedInput
+          fullWidth
+          size="small"
+          type="date"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required={required}
+          disabled={disabled}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          sx={{
+            borderRadius:    "8px",
+            // Fondo ligeramente gris si está deshabilitado
+            backgroundColor: disabled ? hceColors.neutro.white[50] : hceColors.neutro.white[50],
+            fontSize:        "0.875rem",
+            transition:      `box-shadow ${hceTransition.fast}`,
+            
+            "& .MuiInputBase-input": {
+              color:               inputTextColor,
+              WebkitTextFillColor: inputTextColor,
+              transition:          `color ${hceTransition.fast}, -webkit-text-fill-color ${hceTransition.fast}`,
+              
+              // Icono nativo del calendario
+              "&::-webkit-calendar-picker-indicator": {
+                filter: "opacity(0.6)", // Mantiene el ícono visible pero sutil
+                cursor: disabled ? "not-allowed" : "pointer",
+              },
             },
-          },
-          "& fieldset": {
-            borderColor: borderDefault,
-            transition:  `border-color ${hceTransition.fast}`,
-          },
-          "&:hover fieldset":       { borderColor: borderActive },
-          "&.Mui-focused fieldset": { borderColor: borderActive },
-          "&.Mui-focused": {
-            boxShadow: `0 0 0 3px ${hceColors.primary.blue[100]}`,
-          },
-        }}
-      />
+            
+            // Bordes reactivos unificados con `mainColor`
+            "& fieldset": {
+              borderColor: mainColor,
+              transition:  `border-color ${hceTransition.fast}`,
+            },
+            "&:hover fieldset":       { borderColor: mainColor },
+            "&.Mui-focused fieldset": { borderColor: mainColor },
+            
+            // Anillo de enfoque
+            "&.Mui-focused": {
+              boxShadow: `0 0 0 3px ${hceColors.primary.blue[100]}`,
+            },
+          }}
+        />
+      </FieldCol>
     </Box>
   )
 }
