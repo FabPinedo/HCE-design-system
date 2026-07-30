@@ -79,7 +79,7 @@ export {
   UiPasteIcon, UiPrescriptionIcon, UiPrintingIcon, UiRadiographyIcon,
   UiSearchIcon, UiSendMailIcon, UiSendIcon, UiSolSymbolIcon,
   UiStethoscopeIcon, UiTrashIcon, UiUndoIcon, UiUploadDocumentIcon,
-  UiVectorIcon, UiWarningIcon, UiXRaysIcon,UiMenuBurgerIcon
+  UiVectorIcon, UiWarningIcon, UiXRaysIcon,UiMenuBurgerIcon,UiReferenceIcon
 } from "./atoms/Icon/Icon"
 
 // ── Atoms ─────────────────────────────────────────────────
@@ -203,7 +203,7 @@ export {
   BED_AVAILABILITY_STATUS_LABELS,
 }                                 from "./organisms/BedAvailability/BedAvailabilityDrawerV2"
 export { SidebarMenu }           from "./organisms/SidebarMenu/SidebarMenu"
-export { NavTab }                from "./organisms/NavTab/NavTab"
+export { NavTab, NavTabPanel, type NavTabItem }                from "./organisms/NavTab/NavTab"
 
 export { GenericTable} from "./organisms/GenericTable/GenericTable"
 

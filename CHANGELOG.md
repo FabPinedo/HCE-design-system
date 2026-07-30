@@ -7,6 +7,19 @@ Versionado basado en [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.3.6] - 2026-07-21
+
+### Cambiado
+
+- **`DatePicker`** (Atomo): Modificacion de colores para disabled e integración de FieldCol.
+- **`NumericField`** (Atomo): Modificacion de colores para disabled e integración de FieldCol.
+- **`SelectField`** (Atomo): Modificacion de colores para disabled e integración de FieldCol.
+- **`TextareaField`** (Atomo): Modificacion de colores para disabled e integración de FieldCol.
+- **`TextInputField`** (Atomo): Modificacion de colores para disabled e integración de FieldCol.
+- **`SearchComboInput`** (Molécula): Modificacion de lógica para cambio de posicion de selected, implementacion de nuevos props(`modes`, `modePosition`, `readOnlyInput`).
+
+---
+
 ## [1.3.0] - 2026-07-06
 
 ### Agregado
