@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react"
+import type { ComponentProps } from "react"
 import {
   Button,
   SortArrowsIcon, ConfigurationIcon, CheckedCircleIcon,
   DownloadIcon, CloseIcon, AddCircleIcon,
   hceColors,
+  defaultCompanyColors,
+  novaSaludColors,
 } from "@hce/design-system"
 
 const meta: Meta<typeof Button> = {
@@ -184,6 +187,52 @@ export const States: Story = {
     </div>
   )],
   render: () => <></>,
+}
+
+// ── Playground multiempresa (tokens por prop, no theme MUI) ──────
+// Prueba visual de la prop `tenantTheme`: permite pintar SOLO este botón
+// con la paleta de un tenant/empresa distinta, pasando directo el objeto
+// de tokens de src/tokens/<empresa>.tokens.ts (default.tokens.ts /
+// novasalud.tokens.ts) — no un Theme de MUI ni un ThemeProvider anidado.
+// El resto del árbol (y el resto de botones de la página) no se ve afectado.
+
+const TENANT_TOKENS_MAP = {
+  // "Sin tenant" → no se pasa `tenantTheme`, el botón usa su color por
+  // defecto (variant/color de siempre).
+  none:      undefined,
+  // Empresa por defecto/fallback (Clínica San Felipe) — pasada explícita
+  // vía `tenantTheme` para probar el switcheo real entre archivos de
+  // empresa, no solo "con/sin tenant".
+  default:   defaultCompanyColors,
+  novaSalud: novaSaludColors,
+} as const
+
+type TenantTokensKey = keyof typeof TENANT_TOKENS_MAP
+
+interface PlaygroundArgs extends ComponentProps<typeof Button> {
+  /** Selector de tenant — no es una prop real de Button, se resuelve en `render` */
+  companyTheme: TenantTokensKey
+}
+
+export const Playground: StoryObj<PlaygroundArgs> = {
+  argTypes: {
+    companyTheme: {
+      control: "select",
+      options: Object.keys(TENANT_TOKENS_MAP),
+      description:
+        "Tenant/empresa aplicado SOLO a este botón vía la prop `tenantTheme` " +
+        "(objeto de tokens planos, no un Theme de MUI). 'none' deja el botón " +
+        "con su color por defecto según `variant`/`color`.",
+    },
+  },
+  args: {
+    label:        "Botón multiempresa",
+    variant:      "primary",
+    companyTheme: "novaSalud",
+  },
+  render: ({ companyTheme, ...args }) => (
+    <Button {...args} tenantTheme={TENANT_TOKENS_MAP[companyTheme]} />
+  ),
 }
 
 // ── Galería completa ──────────────────────────────────────

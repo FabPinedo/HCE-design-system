@@ -1,6 +1,6 @@
 import { type ReactNode } from "react"
 import MuiButton          from "@mui/material/Button"
-import { hceTransition }  from "../../tokens/hce.tokens"
+import { hceTransition, type HceCompanyColors } from "../../tokens/hce.tokens"
 
 /**
  * Button — átomo del design system HCE
@@ -48,6 +48,34 @@ interface Props {
   endIcon?:    ReactNode
   /** sx de MUI para overrides puntuales */
   sx?:         object
+  /**
+   * Paleta de marca de una empresa/tenant (multiempresa) a aplicar SOLO a
+   * esta instancia del botón. Objeto plano de colores con la forma
+   * `HceCompanyColors` (primary/primaryDark/secondary/secondaryDark/
+   * textOnPrimary/…) — cada empresa vive en su propio archivo
+   * `src/tokens/<empresa>.tokens.ts` (ver tokens/default.tokens.ts,
+   * tokens/novasalud.tokens.ts). NO es un Theme de MUI — este design system
+   * no usa `createTheme`/`useTheme()` a nivel de componente, todo se
+   * resuelve con tokens planos vía `sx`/`style`.
+   *
+   * El Button reusa la misma lógica de `buildColorSx` que ya usa el prop
+   * `color`: internamente toma `tenantTheme.primaryDark` (o `secondaryDark`
+   * si `variant === "secondary"`) — las variantes *Dark, no las claras,
+   * porque son las que cumplen contraste WCAG AA con el texto blanco de un
+   * botón contained (ver el comentario de accesibilidad en HceCompanyColors,
+   * hce.tokens.ts).
+   *
+   * `variant === "danger"` IGNORA `tenantTheme`: el rojo de peligro es
+   * semántico (alerta/destructivo), no de marca — ninguna empresa lo
+   * sobreescribe, para no perder ese significado clínico.
+   *
+   * Prioridad frente a `color`: si el caller pasa ambos, `color` (string CSS
+   * explícito) siempre gana — es una intención más específica que la paleta
+   * genérica de la empresa. `tenantTheme` solo actúa cuando no hay `color`.
+   *
+   * Ej: <Button label="Guardar" tenantTheme={novaSaludColors} />
+   */
+  tenantTheme?: HceCompanyColors
 }
 
 const SIZE_MAP: Record<string, "small" | "medium" | "large"> = {
@@ -108,6 +136,20 @@ function buildColorSx(color: string, muiVariant: "contained" | "outlined" | "tex
   }
 }
 
+/**
+ * Resuelve el color CSS a aplicar cuando el caller pasa `tenantTheme` en vez
+ * de `color`. Usa siempre las variantes *Dark (nunca los tonos "brand"
+ * claros): son las que cumplen WCAG AA con texto blanco encima en un botón
+ * contained — ver la nota de accesibilidad junto a `HceCompanyColors` en
+ * hce.tokens.ts.
+ *
+ * `variant === "danger"` no debe pasar por acá — el rojo de peligro es
+ * semántico, no de marca (ver el guard en `effectiveColor` más abajo).
+ */
+function resolveTenantColor(tenantTheme: HceCompanyColors, variant: Props["variant"]): string {
+  return variant === "secondary" ? tenantTheme.secondaryDark : tenantTheme.primaryDark
+}
+
 export const Button = ({
   label,
   children,
@@ -122,6 +164,7 @@ export const Button = ({
   startIcon,
   endIcon,
   sx,
+  tenantTheme,
 }: Props) => {
   // Mapeo variant → MUI variant
   const muiVariant: "contained" | "outlined" | "text" =
@@ -129,19 +172,26 @@ export const Button = ({
     : variant === "outlined" ? "outlined"
     : "contained"
 
-  // Mapeo variant → MUI color (solo cuando no hay color custom)
+  // Mapeo variant → MUI color (solo cuando no hay color custom ni tenantTheme)
   const muiColor =
     variant === "danger"    ? "error"
     : variant === "secondary" ? "secondary"
     : "primary"
 
-  // Si se pasa un color CSS custom, lo aplicamos vía sx
-  const colorSx = color ? buildColorSx(color, muiVariant) : {}
+  // `color` (string CSS explícito) siempre gana sobre `tenantTheme` — es una
+  // intención más específica del caller que la paleta genérica de la empresa.
+  // `variant === "danger"` ignora `tenantTheme`: el rojo de peligro es
+  // semántico (alerta/destructivo), ninguna empresa lo sobreescribe.
+  const effectiveColor =
+    color ?? (tenantTheme && variant !== "danger" ? resolveTenantColor(tenantTheme, variant) : undefined)
+
+  // Si hay un color efectivo (custom o de tenant), lo aplicamos vía sx
+  const colorSx = effectiveColor ? buildColorSx(effectiveColor, muiVariant) : {}
 
   return (
     <MuiButton
       variant={muiVariant}
-      color={color ? undefined : muiColor}   // MUI no interpreta hex, lo manejamos con sx
+      color={effectiveColor ? undefined : muiColor}   // MUI no interpreta hex, lo manejamos con sx
       onClick={onClick}
       fullWidth={fullWidth}
       size={SIZE_MAP[size] ?? "medium"}

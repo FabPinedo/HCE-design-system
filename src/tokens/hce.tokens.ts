@@ -352,6 +352,47 @@ export const hceClinicalColors = {
   bedMaintenance:  '#9575CD', // Lila — Mantenimiento
 } as const
 
+// ── Multiempresa (multi-tenant) — paleta de marca por empresa ───────────────
+// Convención: cada empresa/tenant tiene su propio archivo de PALETA DE MARCA
+// en src/tokens/<empresa>.tokens.ts (ej. default.tokens.ts, novasalud.tokens.ts)
+// — NUNCA se fragmentan aquí los tokens ESTRUCTURALES/compartidos (hceColors,
+// hceTypography, hceSpacing, hceBorderRadius, hceShadows, hceZIndex,
+// hceTransition, hceUi). Ese fue exactamente el error del incidente que
+// unificó todo en este archivo (ver memoria `ds_token_unification_break`):
+// fragmentar tokens compartidos rompió mf-shell/mf-emergency. La diferencia
+// aquí es que SOLO la paleta de colores de marca (la parte que varía por
+// empresa) vive fuera de este archivo — todo lo demás sigue siendo una única
+// fuente de verdad en hce.tokens.ts.
+//
+// `HceCompanyColors` es la forma compartida que debe tener la paleta de
+// cualquier empresa — se define acá (tipo, estructural) para que todos los
+// archivos `*.tokens.ts` por empresa la implementen igual, y para que
+// componentes como atoms/Button/Button.tsx (prop `tenantTheme`) puedan
+// aceptar la paleta de cualquier empresa sin acoplarse a una en particular.
+// Los valores *Dark existen porque son los que cumplen WCAG AA 4.5:1 con
+// texto blanco encima (ver default.tokens.ts / novasalud.tokens.ts) — los
+// tonos `primary`/`secondary` "brand" claros son para acentos/bordes/íconos,
+// nunca como superficie sólida con texto blanco encima.
+export interface HceCompanyColors {
+  // Marca
+  primary:        string
+  primaryDark:    string
+  primaryLight:   string
+  secondary:      string
+  secondaryDark:  string
+  secondaryLight: string
+
+  // Superficies
+  surfaceBg:      string
+  background:     string
+  border:         string
+
+  // Textos
+  textPrimary:    string
+  textSecondary:  string
+  textOnPrimary:  string
+}
+
 export function injectHceTokens(): void {
   const style = document.documentElement.style
 

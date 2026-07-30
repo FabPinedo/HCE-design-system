@@ -9,7 +9,7 @@ export { emergencyTheme } from "./theme/emergencyTheme"
 // ── Provider ──────────────────────────────────────────────
 export { DSProvider } from "./provider/ThemeProvider"
 
-// ── Design Tokens — HCE (fuente única de verdad) ──────────
+// ── Design Tokens — HCE (fuente única de verdad, estructurales) ──────────
 export {
   hceColors,
   hceTypography,
@@ -24,6 +24,15 @@ export {
   injectHceFonts,
 } from "./tokens/hce.tokens"
 export type { HceColors } from "./tokens/hce.tokens"
+// Forma compartida de la paleta de marca por empresa (multiempresa) — ver
+// tokens/default.tokens.ts y tokens/novasalud.tokens.ts.
+export type { HceCompanyColors } from "./tokens/hce.tokens"
+
+// ── Design Tokens — Multiempresa (paleta de marca por empresa) ───────────
+// Cada empresa/tenant vive en su propio archivo src/tokens/<empresa>.tokens.ts
+// (NUNCA se fragmentan aquí los tokens estructurales de arriba).
+export { defaultCompanyColors } from "./tokens/default.tokens"
+export { novaSaludColors }      from "./tokens/novasalud.tokens"
 
 // ── MUI Primitives re-exported ─────────────────────────────
 export { Box, Typography } from "@mui/material"
