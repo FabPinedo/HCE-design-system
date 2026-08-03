@@ -1,0 +1,58 @@
+.hce-carrusel {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  outline: none;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.hce-carrusel:focus-visible {
+  outline: 2px solid #0043a5;
+  outline-offset: 2px;
+}
+
+.hce-carrusel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px rgba(0, 29, 69, 0.18);
+  z-index: 2;
+  cursor: pointer;
+  color: #003d96;
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-carrusel-arrow:hover {
+  background-color: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 14px rgba(0, 29, 69, 0.22);
+}
+
+.hce-carrusel-dot {
+  height: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 29, 69, 0.2);
+  transition: width 220ms cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 220ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-carrusel-dot:hover {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.hce-carrusel-dot--active:hover {
+  background-color: white !important;
+}

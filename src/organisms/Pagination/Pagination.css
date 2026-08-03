@@ -1,0 +1,68 @@
+/**
+ * Pagination.css — reemplazo de MUI Pagination, calcando los estilos que
+ * theme/theme.ts aplicaba vía styleOverrides de MuiPagination/MuiPaginationItem.
+ */
+
+.hce-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hce-pagination-item,
+.hce-pagination-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 6px;
+  border-radius: 8px;
+  border: none;
+  background-color: transparent;
+  color: #545454;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.hce-pagination-item:hover,
+.hce-pagination-nav:hover:not(:disabled) {
+  background-color: #f5f7fa;
+}
+
+.hce-pagination-nav {
+  border: 1px solid #e6e6e6;
+  background-color: #ffffff;
+}
+
+.hce-pagination-nav:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.hce-pagination-item--selected {
+  background-color: #0043a5;
+  color: #ffffff;
+}
+
+.hce-pagination-item--selected:hover {
+  background-color: #003075;
+}
+
+.hce-pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  color: #545454;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  user-select: none;
+}

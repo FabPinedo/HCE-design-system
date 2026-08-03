@@ -7,8 +7,7 @@
  * panel de disponibilidad de camas.
  * ---------------------------------------------------------
  */
-import { Box, Typography } from "@mui/material"
-import KingBedOutlinedIcon from "@mui/icons-material/KingBedOutlined"
+import "./BedsAvailabilityTab.css"
 import { hceClinicalColors, hceShadows, hceZIndex, hceTypography } from "../../tokens/hce.tokens"
 
 interface Props {
@@ -20,13 +19,28 @@ interface Props {
   isActive?: boolean
 }
 
+/** Ícono de cama (King Bed) — evita depender del sistema de íconos (se
+ *  integra en el paso dedicado a íconos). */
+function KingBedGlyph() {
+  return (
+    <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 9V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4" />
+      <path d="M14 9V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4" />
+      <path d="M2 11h20v6H2z" />
+      <path d="M4 17v3" />
+      <path d="M20 17v3" />
+    </svg>
+  )
+}
+
 export const BedsAvailabilityTab = ({
   onClick,
   label = "Ver disponibilidad de camas",
   isActive = false,
 }: Props) => {
   return (
-    <Box
+    <div
+      className="hce-beds-tab"
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -35,58 +49,22 @@ export const BedsAvailabilityTab = ({
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") onClick?.()
       }}
-      sx={{
-        position:    "fixed",
-        right:       0,
-        top:         0,
-        bottom:      0,
-        height:      "fit-content",
-        margin:      "auto 0",
-
-        // writing-mode vertical + rotate(180deg) = texto de abajo hacia arriba
-        writingMode: "vertical-rl",
-        transform:   "rotate(180deg)",
-
+      style={{
         backgroundColor: isActive
           ? hceClinicalColors.headerBg
           : hceClinicalColors.tableHeaderBg,
-
-        // Con rotate(180deg): "0 8px 8px 0" en DOM → esquinas izq redondeadas visualmente
-        borderRadius: "0 8px 8px 0",
-        boxShadow:    hceShadows.tab,
-
-        padding:    "20px 10px",
-        cursor:     "pointer",
-        zIndex:     hceZIndex.sideTab,
-        userSelect: "none",
-        transition: "background-color 0.15s ease",
-
-        display:     "flex",
-        alignItems:  "center",
-        gap:         "6px",
-
-        "&:hover": {
-          backgroundColor: hceClinicalColors.headerBg,
-        },
-        "&:focus-visible": {
-          outline:      `2px solid ${hceClinicalColors.priority4}`,
-          outlineOffset: "2px",
-        },
+        boxShadow: hceShadows.tab,
+        zIndex:    hceZIndex.sideTab,
       }}
     >
       {/* Ícono: contra-rotado para que no quede invertido */}
-      <KingBedOutlinedIcon
-        sx={{
-          fontSize:  18,
-          color:     "#FFFFFF",
-          transform: "rotate(180deg)",
-          flexShrink: 0,
-        }}
-      />
+      <span style={{ color: "#FFFFFF", transform: "rotate(180deg)", flexShrink: 0, display: "flex" }}>
+        <KingBedGlyph />
+      </span>
 
       {/* Texto vertical de abajo hacia arriba */}
-      <Typography
-        sx={{
+      <span
+        style={{
           fontFamily:    hceTypography.fontFamilyClinical,
           fontSize:      "12px",
           fontWeight:    hceTypography.weight.semibold,
@@ -97,7 +75,7 @@ export const BedsAvailabilityTab = ({
         }}
       >
         {label}
-      </Typography>
-    </Box>
+      </span>
+    </div>
   )
 }
