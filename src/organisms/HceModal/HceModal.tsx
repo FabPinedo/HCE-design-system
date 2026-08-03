@@ -1,10 +1,6 @@
 import { type ReactNode }  from "react"
-import MuiDialog           from "@mui/material/Dialog"
-import MuiDialogContent    from "@mui/material/DialogContent"
-import MuiButton           from "@mui/material/Button"
-import Fade                from "@mui/material/Fade"
-import Box                 from "@mui/material/Box"
-import Typography          from "@mui/material/Typography"
+import { Overlay }         from "../../atoms/Overlay/Overlay"
+import { Button }          from "../../atoms/Button/Button"
 import { TextInput }       from "../../atoms/TextInput/TextInput"
 import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
 
@@ -89,186 +85,133 @@ export function HceModal({
   const isRow      = buttonLayout === "row"
 
   return (
-    <MuiDialog
+    <Overlay
       open={open}
       onClose={onClose}
-      aria-labelledby="hce-modal-title"
-      aria-describedby="hce-modal-description"
-      slots={{ transition: Fade }}
-      slotProps={{
-        transition: { timeout: { enter: 180, exit: 120 } },
-      }}
-      PaperProps={{
-        sx: {
-          borderRadius:  "16px",
-          padding:       "32px 28px 28px",
-          maxWidth:      maxWidth,
-          width:         "100%",
-          textAlign:     "center",
-          boxShadow:     hceShadows.modal,
-          overflow:      "visible",
-          fontFamily:    hceTypography.fontFamily,
-          "@keyframes hceSlideUp": {
-            from: { opacity: 0, transform: "translateY(16px) scale(0.97)" },
-            to:   { opacity: 1, transform: "translateY(0) scale(1)" },
-          },
-          animation: "hceSlideUp 200ms cubic-bezier(0.4,0,0.2,1)",
-        },
+      labelledBy="hce-modal-title"
+      describedBy={description ? "hce-modal-description" : undefined}
+      panelStyle={{
+        borderRadius:  16,
+        padding:       "32px 28px 28px",
+        maxWidth,
+        width:         "100%",
+        textAlign:     "center",
+        boxShadow:     hceShadows.modal,
+        fontFamily:    hceTypography.fontFamily,
+        backgroundColor: "#ffffff",
+        boxSizing:     "border-box",
       }}
     >
-      <MuiDialogContent sx={{ p: 0, overflow: "visible" }}>
+      {/* ── Badge con ícono ─────────────────────────────── */}
+      {icon && (
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+          <div style={{
+            display:         "flex",
+            alignItems:      "center",
+            justifyContent:  "center",
+            width:           56,
+            height:          56,
+            borderRadius:    "12px",
+            backgroundColor: iconBgColor,
+            color:           hceColors.neutro.white[50],
+            flexShrink:      0,
+          }}>
+            {icon}
+          </div>
+        </div>
+      )}
 
-        {/* ── Badge con ícono ─────────────────────────────── */}
-        {icon && (
-          <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-            <Box sx={{
-              display:         "flex",
-              alignItems:      "center",
-              justifyContent:  "center",
-              width:           56,
-              height:          56,
-              borderRadius:    "12px",
-              backgroundColor: iconBgColor,
-              color:           hceColors.neutro.white[50],
-              flexShrink:      0,
-            }}>
-              {icon}
-            </Box>
-          </Box>
-        )}
+      {/* ── Título ──────────────────────────────────────── */}
+      <div
+        id="hce-modal-title"
+        style={{
+          fontFamily: hceTypography.fontFamily,
+          fontWeight: 700,
+          fontSize:   "1.125rem",
+          color:      hceColors.primary.blue[500],
+          marginBottom: description ? 8 : (input || hasButtons) ? 20 : 0,
+        }}
+      >
+        {title}
+      </div>
 
-        {/* ── Título ──────────────────────────────────────── */}
-        <Typography
-          id="hce-modal-title"
-          sx={{
+      {/* ── Descripción ─────────────────────────────────── */}
+      {description && (
+        <div
+          id="hce-modal-description"
+          style={{
             fontFamily: hceTypography.fontFamily,
-            fontWeight: 700,
-            fontSize:   "1.125rem",
-            color:      hceColors.primary.blue[500],
-            mb:         description ? 1 : (input || hasButtons) ? 2.5 : 0,
+            fontSize:   "0.875rem",
+            color:      hceColors.neutro.black[300],
+            lineHeight: 1.65,
+            marginBottom: (input || hasButtons) ? 20 : 0,
           }}
         >
-          {title}
-        </Typography>
+          {description}
+        </div>
+      )}
 
-        {/* ── Descripción ─────────────────────────────────── */}
-        {description && (
-          <Typography
-            id="hce-modal-description"
-            sx={{
-              fontFamily: hceTypography.fontFamily,
-              fontSize:   "0.875rem",
-              color:      hceColors.neutro.black[300],
-              lineHeight: 1.65,
-              mb:         (input || hasButtons) ? 2.5 : 0,
-            }}
-          >
-            {description}
-          </Typography>
-        )}
+      {/* ── Input opcional ──────────────────────────────── */}
+      {input && (
+        <div style={{ marginBottom: (children || hasButtons) ? 20 : 0, textAlign: "left" }}>
+          <TextInput
+            label={input.label}
+            placeholder={input.placeholder ?? "Text"}
+            value={input.value}
+            onChange={input.onChange}
+          />
+        </div>
+      )}
 
-        {/* ── Input opcional ──────────────────────────────── */}
-        {input && (
-          <Box sx={{ mb: (children || hasButtons) ? 2.5 : 0, textAlign: "left" }}>
-            <TextInput
-              label={input.label}
-              placeholder={input.placeholder ?? "Text"}
-              value={input.value}
-              onChange={input.onChange}
-            />
-          </Box>
-        )}
+      {/* ── Contenido libre ──────────────────────────────── */}
+      {children && (
+        <div style={{ marginBottom: hasButtons ? 20 : 0, textAlign: "left" }}>
+          {children}
+        </div>
+      )}
 
-        {/* ── Contenido libre ──────────────────────────────── */}
-        {children && (
-          <Box sx={{ mb: hasButtons ? 2.5 : 0, textAlign: "left" }}>
-            {children}
-          </Box>
-        )}
+      {/* ── Botones ─────────────────────────────────────── */}
+      {hasButtons && (
+        <div style={{
+          display:       "flex",
+          flexDirection: isRow ? "row" : "column",
+          gap:           12,
+        }}>
 
-        {/* ── Botones ─────────────────────────────────────── */}
-        {hasButtons && (
-          <Box sx={{
-            display:       "flex",
-            flexDirection: isRow ? "row" : "column",
-            gap:           1.5,
-          }}>
+          {/* Confirmar (filled — color customizable, default verde) */}
+          {confirmButton && (
+            <div style={{ flex: isRow ? 1 : undefined }}>
+              <Button
+                variant="primary"
+                fullWidth
+                onClick={confirmButton.onClick}
+                disabled={confirmButton.disabled}
+                startIcon={confirmButton.icon}
+                color={confirmButton.color ?? hceColors.primary.green[600]}
+              >
+                {confirmButton.label}
+              </Button>
+            </div>
+          )}
 
-            {/* Confirmar (filled — color customizable, default verde) */}
-            {confirmButton && (
-              <Box sx={{ flex: isRow ? 1 : undefined }}>
-                <MuiButton
-                  variant="contained"
-                  fullWidth
-                  onClick={confirmButton.onClick}
-                  disabled={confirmButton.disabled}
-                  startIcon={confirmButton.icon ?? undefined}
-                  sx={{
-                    backgroundColor: confirmButton.color ?? hceColors.primary.green[600],
-                    color:           "#ffffff",
-                    fontFamily:      hceTypography.fontFamily,
-                    fontWeight:      600,
-                    fontSize:        "0.875rem",
-                    textTransform:   "none",
-                    borderRadius:    "8px",
-                    minHeight:       36,
-                    boxShadow:       "none",
-                    transition:      "background-color 150ms cubic-bezier(0.4,0,0.2,1)",
-                    "&:hover:not(:disabled)": {
-                      backgroundColor: `${confirmButton.color ?? hceColors.primary.green[600]}cc`,
-                      boxShadow:       "none",
-                    },
-                    "&:disabled": {
-                      backgroundColor: hceColors.neutro.black[50],
-                      color:           hceColors.neutro.black[200],
-                    },
-                    "& .MuiButton-startIcon": { margin: 0, mr: confirmButton.icon ? "6px" : 0 },
-                  }}
-                >
-                  {confirmButton.label}
-                </MuiButton>
-              </Box>
-            )}
+          {/* Cancelar (outlined — color customizable, default azul) */}
+          {cancelButton && (
+            <div style={{ flex: isRow ? 1 : undefined }}>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={cancelButton.onClick}
+                disabled={cancelButton.disabled}
+                startIcon={cancelButton.icon}
+                color={cancelButton.color ?? hceColors.primary.blue[500]}
+              >
+                {cancelButton.label}
+              </Button>
+            </div>
+          )}
 
-            {/* Cancelar (outlined — color customizable, default azul) */}
-            {cancelButton && (
-              <Box sx={{ flex: isRow ? 1 : undefined }}>
-                <MuiButton
-                  variant="outlined"
-                  fullWidth
-                  onClick={cancelButton.onClick}
-                  disabled={cancelButton.disabled}
-                  startIcon={cancelButton.icon ?? undefined}
-                  sx={{
-                    borderColor:   cancelButton.color ?? hceColors.primary.blue[500],
-                    color:         cancelButton.color ?? hceColors.primary.blue[500],
-                    fontFamily:    hceTypography.fontFamily,
-                    fontWeight:    600,
-                    fontSize:      "0.875rem",
-                    textTransform: "none",
-                    borderRadius:  "8px",
-                    minHeight:     36,
-                    transition:    "border-color 150ms cubic-bezier(0.4,0,0.2,1), background-color 150ms cubic-bezier(0.4,0,0.2,1)",
-                    "&:hover:not(:disabled)": {
-                      borderColor:     cancelButton.color ?? hceColors.primary.blue[700],
-                      backgroundColor: `${cancelButton.color ?? hceColors.primary.blue[500]}14`,
-                    },
-                    "&:disabled": {
-                      borderColor: hceColors.neutro.black[100],
-                      color:       hceColors.neutro.black[100],
-                    },
-                    "& .MuiButton-startIcon": { margin: 0, mr: cancelButton.icon ? "6px" : 0 },
-                  }}
-                >
-                  {cancelButton.label}
-                </MuiButton>
-              </Box>
-            )}
-
-          </Box>
-        )}
-
-      </MuiDialogContent>
-    </MuiDialog>
+        </div>
+      )}
+    </Overlay>
   )
 }
