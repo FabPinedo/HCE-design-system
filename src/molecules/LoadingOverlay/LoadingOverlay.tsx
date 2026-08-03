@@ -1,7 +1,5 @@
-import { type ReactNode } from "react"
-import Backdrop          from "@mui/material/Backdrop"
-import CircularProgress  from "@mui/material/CircularProgress"
-import Typography        from "@mui/material/Typography"
+import { type CSSProperties, type ReactNode } from "react"
+import "./LoadingOverlay.css"
 import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
 export interface LoadingOverlayProps {
@@ -9,12 +7,11 @@ export interface LoadingOverlayProps {
   open:      boolean
   /** Texto opcional bajo el spinner */
   message?:  string
-  /** Color del spinner. Default: azul corporativo */
   /** Color del spinner. Default: hceColors.primary.blue[600] */
   color?:    string
   /** Opacidad del fondo oscuro (0–1). Default: 0.45 */
   opacity?:  number
-  /** Nodo custom en lugar del CircularProgress (ej. imagen, logo animado) */
+  /** Nodo custom en lugar del spinner (ej. imagen, logo animado) */
   children?: ReactNode
 }
 
@@ -25,28 +22,19 @@ export function LoadingOverlay({
   opacity = 0.45,
   children,
 }: LoadingOverlayProps) {
+  if (!open) return null
+
   return (
-    <Backdrop
-      open={open}
-      sx={{
-        zIndex:          9999,
-        backgroundColor: `rgba(0, 0, 0, ${opacity})`,
-        display:         "flex",
-        flexDirection:   "column",
-        alignItems:      "center",
-        gap:             2,
-      }}
+    <div
+      className="hce-loading-backdrop"
+      style={{ backgroundColor: `rgba(0, 0, 0, ${opacity})` }}
     >
       {children ?? (
-        <CircularProgress
-          size={56}
-          thickness={4}
-          sx={{ color }}
-        />
+        <span className="hce-loading-spinner" style={{ "--spinner-color": color } as CSSProperties} role="progressbar" aria-label={message ?? "Cargando"} />
       )}
 
       {message && (
-        <Typography sx={{
+        <span style={{
           fontFamily:    hceTypography.fontFamily,
           color:         "#fff",
           fontWeight:    600,
@@ -54,8 +42,8 @@ export function LoadingOverlay({
           letterSpacing: "0.02em",
         }}>
           {message}
-        </Typography>
+        </span>
       )}
-    </Backdrop>
+    </div>
   )
 }

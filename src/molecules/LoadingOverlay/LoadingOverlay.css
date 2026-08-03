@@ -1,0 +1,23 @@
+.hce-loading-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.hce-loading-spinner {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, 0.15);
+  border-top-color: var(--spinner-color);
+  animation: hce-loading-spin 800ms linear infinite;
+}
+
+@keyframes hce-loading-spin {
+  to { transform: rotate(360deg); }
+}
