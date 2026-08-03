@@ -2,7 +2,7 @@ import { forwardRef, createElement, type ElementType, type ReactNode, type HTMLA
 import { sxToStyle } from "../../utils/sx"
 
 /**
- * Box — reemplazo propio de `Box` de `@mui/material`, en CSS/HTML puro.
+ * Box — reemplazo propio de `Box` de MUI, en CSS/HTML puro.
  *
  * Mantiene la misma API mínima que este repo consumía de MUI: `component`
  * (elemento HTML a renderizar, default "div"), `sx` (subconjunto propio,

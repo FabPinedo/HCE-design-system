@@ -4,7 +4,7 @@
  * Description:
  * Reemplazo mínimo del motor `sx` de MUI, usado como escape-hatch en los
  * componentes propios del design system (Box, Typography, Button, etc.)
- * ahora que no dependemos de @mui/material ni @emotion.
+ * ahora que no dependemos de MUI ni Emotion.
  *
  * Soporta el subconjunto de `sx` realmente usado en este repo:
  *  - Propiedades CSS camelCase normales (color, display, gap, fontSize…)

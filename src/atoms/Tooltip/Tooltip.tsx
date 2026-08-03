@@ -2,7 +2,7 @@ import type { ReactNode, CSSProperties } from "react"
 import "./Tooltip.css"
 
 /**
- * Tooltip — reemplazo propio de `Tooltip` de `@mui/material`, en CSS puro
+ * Tooltip — reemplazo propio de `Tooltip` de MUI, en CSS puro
  * (sin Popper/portal). Cubre el subconjunto de API realmente usado en este
  * repo: `title`, `placement` ("top" | "bottom" | "left" | "right"), `arrow`,
  * `children` (un único elemento disparador).

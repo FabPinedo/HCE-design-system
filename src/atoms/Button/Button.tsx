@@ -22,7 +22,7 @@ import { hceColors, type HceCompanyColors } from "../../tokens/hce.tokens"
  *     • contained (primary/secondary/danger) → fondo toma ese color
  * ─────────────────────────────────────────────────────────────────────────────
  *
- * NOTA DE PARIDAD (migración fuera de @mui/material): los colores por
+ * NOTA DE PARIDAD (migración fuera de MUI): los colores por
  * defecto (sin `color` ni `tenantTheme`) están hardcodeados acá igual que en
  * el theme BASE (theme/theme.ts: primary=hceColors.primary.blue[500],
  * secondary=hceColors.primary.green[500], danger=rojo default de MUI

@@ -3,7 +3,7 @@ import { sxToStyle } from "../../utils/sx"
 import { hceTypography } from "../../tokens/hce.tokens"
 
 /**
- * Typography — reemplazo propio de `Typography` de `@mui/material`, en
+ * Typography — reemplazo propio de `Typography` de MUI, en
  * CSS/HTML puro. Mantiene el subconjunto de API que este repo consumía:
  * `variant` (mapea a tag HTML + estilos base, igual que los defaults de MUI
  * más los overrides de variant que ya tenía theme/theme.ts para h1/h4),

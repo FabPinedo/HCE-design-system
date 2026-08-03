@@ -36,8 +36,8 @@ export type { CompanyThemeKey } from "./tokens/companies.tokens"
 
 // ── Primitivas propias (reemplazan a Box/Typography de MUI) ──────────────
 // Misma API pública mínima (component/sx/style/className/children) que
-// este repo consumía de @mui/material — los consumidores externos no
-// cambian su import.
+// este repo consumía de MUI — los consumidores externos no cambian su
+// import.
 export { Box }        from "./atoms/Box/Box"
 export { Typography } from "./atoms/Typography/Typography"
 export type { BoxProps }        from "./atoms/Box/Box"
