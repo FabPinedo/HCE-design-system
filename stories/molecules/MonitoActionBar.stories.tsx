@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { Box }                from "@mui/material"
-import { MonitoActionBar }   from "@hce/design-system"
+import { Box, MonitoActionBar } from "@hce/design-system"
 
 const meta: Meta<typeof MonitoActionBar> = {
   title:      "Molecules/MonitoActionBar",

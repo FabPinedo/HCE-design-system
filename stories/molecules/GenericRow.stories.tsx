@@ -1,10 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { Box, Typography } from "@mui/material"
 import { GenericRow } from "../../src/molecules/GenericRow/GenericRow"
 import type { GenericTableColumn } from "../../src/molecules/GenericCell/GenericCell"
 import { PriorityBadge, type PriorityLevel } from "../../src/atoms/PriorityBadge/PriorityBadge"
 import { BoxBadge } from "../../src/atoms/BoxBadge/BoxBadge"
-import { Table, TableBody } from "@mui/material"
 import type { ClinicalIconStatus } from "@hce/design-system"
 
 
@@ -252,11 +250,11 @@ const meta: Meta<typeof GenericRow<MonitorRow>> = {
   tags: ["autodocs"],
   decorators: [
     (Story) => (
-      <Table>
-        <TableBody>
+      <table>
+        <tbody>
           <Story />
-        </TableBody>
-      </Table>
+        </tbody>
+      </table>
     ),
   ],
 }

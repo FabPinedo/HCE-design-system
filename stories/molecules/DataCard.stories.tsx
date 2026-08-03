@@ -1,9 +1,22 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { useState } from "react"
-import { Avatar, Box, Button, Typography } from "@mui/material"
 import { User } from "lucide-react"
 import { DataCard,DataCardModal } from "../../src/molecules/DataCard"
-import { hceColors, hceTypography, InfoButton, StatusBadge } from "@hce/design-system"
+import { Box, Button, Typography, hceColors, hceTypography, InfoButton, StatusBadge } from "@hce/design-system"
+
+/** Reemplazo de MUI Avatar — circulo con children centrados */
+function Avatar({ sx, children }: { sx?: Record<string, unknown>; children: React.ReactNode }) {
+  return (
+    <Box sx={{
+      width: 40, height: 40, borderRadius: "50%",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      color: "#fff", flexShrink: 0,
+      ...sx,
+    }}>
+      {children}
+    </Box>
+  )
+}
 
 const meta: Meta<typeof DataCard> = {
   title: 'Molecules/DataCard',
@@ -173,7 +186,7 @@ export const Modal = {
     return (
       <>
         <Button
-          variant="contained"
+          variant="primary"
           onClick={() => setOpen(true)}
         >
           Abrir modal

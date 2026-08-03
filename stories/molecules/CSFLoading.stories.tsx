@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { useState }            from "react"
-import Box                     from "@mui/material/Box"
-import Button                  from "@mui/material/Button"
-import { CSFLoading }          from "@hce/design-system"
+import { Box, Button, CSFLoading } from "@hce/design-system"
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
@@ -315,7 +313,7 @@ export const ComoOverlay: Story = {
     const totalMs = 14 * (frameDuration ?? 100) + 3000
     return (
       <Box sx={{ p: 3 }}>
-        <Button variant="contained" onClick={() => { setOpen(true); setTimeout(() => setOpen(false), totalMs) }}>
+        <Button variant="primary" onClick={() => { setOpen(true); setTimeout(() => setOpen(false), totalMs) }}>
           Activar overlay (intro + 3s giro)
         </Button>
         <CSFLoading overlay open={open} size={size} duration={duration} frameDuration={frameDuration} message={message} />
@@ -332,7 +330,7 @@ export const OverlaySinMensaje: Story = {
     const totalMs = 14 * (frameDuration ?? 100) + 3000
     return (
       <Box sx={{ p: 3 }}>
-        <Button variant="contained" onClick={() => { setOpen(true); setTimeout(() => setOpen(false), totalMs) }}>
+        <Button variant="primary" onClick={() => { setOpen(true); setTimeout(() => setOpen(false), totalMs) }}>
           Activar overlay (intro + 3s giro)
         </Button>
         <CSFLoading overlay open={open} size={120} frameDuration={frameDuration} />

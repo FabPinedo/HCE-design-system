@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Box, hceColors, HceTooltip, UiDisketteIcon } from "@hce/design-system";
-import { IconButton } from "@mui/material";
+import { Box, hceColors, HceTooltip, UiDisketteIcon, IconButton } from "@hce/design-system";
 
 const meta: Meta<typeof HceTooltip> = {
   title: "Atoms/Tooltip",
@@ -25,9 +24,7 @@ export const Default: Story = {
           fontSize: 13,
         }}
       >
-        <IconButton>
-          <UiDisketteIcon size={16} color="#fff"></UiDisketteIcon>
-        </IconButton>
+        <IconButton icon={<UiDisketteIcon size={16} color="#fff" />} />
       </Box>
     </HceTooltip>
   ),
@@ -52,9 +49,7 @@ export const HceTooltipTop: Story = {
           fontSize: 13,
         }}
       >
-        <IconButton>
-          <UiDisketteIcon size={16} color="#fff"></UiDisketteIcon>
-        </IconButton>
+        <IconButton icon={<UiDisketteIcon size={16} color="#fff" />} />
       </Box>
     </HceTooltip>
   ),
@@ -80,9 +75,7 @@ export const HceTooltipLeft: Story = {
           fontSize: 13,
         }}
       >
-        <IconButton>
-          <UiDisketteIcon size={16} color="#fff"></UiDisketteIcon>
-        </IconButton>
+        <IconButton icon={<UiDisketteIcon size={16} color="#fff" />} />
       </Box>
     </HceTooltip>
   ),
@@ -108,9 +101,7 @@ export const HceTooltipRight: Story = {
           fontSize: 13,
         }}
       >
-        <IconButton>
-          <UiDisketteIcon size={16} color="#fff"></UiDisketteIcon>
-        </IconButton>
+        <IconButton icon={<UiDisketteIcon size={16} color="#fff" />} />
       </Box>
     </HceTooltip>
   ),

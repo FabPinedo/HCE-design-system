@@ -5,8 +5,8 @@ import {
   Button,
   UiCalendarIcon,
   HceInfoIcon,
+  Box,
 } from "@hce/design-system"
-import Box from "@mui/material/Box"
 
 const meta: Meta<typeof HceModal> = {
   title:      "Organisms/HceModal",

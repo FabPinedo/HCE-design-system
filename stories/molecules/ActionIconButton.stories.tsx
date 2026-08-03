@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import FilterListIcon    from "@mui/icons-material/FilterList"
-import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined"
-import { ActionIconButton, injectHceTokens } from "@hce/design-system"
+import { ActionIconButton, injectHceTokens, UiFilterIcon, UiPrintingIcon } from "@hce/design-system"
 
 injectHceTokens()
 
@@ -9,7 +7,7 @@ const meta: Meta<typeof ActionIconButton> = {
   title:     "Molecules/ActionIconButton",
   component: ActionIconButton,
   tags:      ["autodocs"],
-  args: { icon: FilterListIcon, tooltip: "Filtrar pacientes" },
+  args: { icon: UiFilterIcon, tooltip: "Filtrar pacientes" },
 }
 export default meta
 type Story = StoryObj<typeof ActionIconButton>
@@ -17,7 +15,7 @@ type Story = StoryObj<typeof ActionIconButton>
 export const Default: Story = {}
 
 export const Print: Story = {
-  args: { icon: PrintOutlinedIcon, tooltip: "Imprimir" },
+  args: { icon: UiPrintingIcon, tooltip: "Imprimir" },
 }
 
 export const Disabled: Story = {
