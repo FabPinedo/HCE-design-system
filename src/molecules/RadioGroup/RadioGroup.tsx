@@ -30,7 +30,7 @@ export const RadioGroup = <T extends string | boolean>({
       style={{
         border: `1.5px solid ${disabled ? hceColors.neutro.black[200] : hceColors.primary.green[500]}`,
         borderRadius: "8px",
-        padding: "1.6px 16px",
+        padding: "9px 16px",
         margin: 0,
         opacity: disabled ? 0.5 : 1,
         width: "100%",
@@ -67,7 +67,7 @@ export const RadioGroup = <T extends string | boolean>({
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "1.6px",
+                gap: "6px",
                 cursor: disabled ? "not-allowed" : "pointer",
                 fontFamily: hceTypography.fontFamily,
                 fontSize: "0.875rem",
@@ -84,7 +84,7 @@ export const RadioGroup = <T extends string | boolean>({
                   }
                 }}
                 disabled={disabled}
-                style={{ accentColor: hceColors.primary.green[500] }}
+                style={{ accentColor: hceColors.primary.blue[500], width: 18, height: 18 }}
               />
             </label>
           );
