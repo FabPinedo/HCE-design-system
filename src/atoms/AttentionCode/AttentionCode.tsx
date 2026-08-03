@@ -10,7 +10,6 @@
  *   <AttentionCode code="E097382" />
  * ---------------------------------------------------------
  */
-import { Typography } from "@mui/material"
 import { hceTypography, hceUi } from "../../tokens/hce.tokens"
 
 interface Props {
@@ -27,9 +26,8 @@ interface Props {
  */
 export const AttentionCode = ({ code, bold }: Props) => {
   return (
-    <Typography
-      component="span"
-      sx={{
+    <span
+      style={{
         fontFamily:    hceTypography.fontFamilyClinical,
         fontSize:      hceTypography.size.base,
         fontWeight:    bold ? hceTypography.weight.bold : hceTypography.weight.regular,
@@ -40,6 +38,6 @@ export const AttentionCode = ({ code, bold }: Props) => {
       aria-label={`Código de atención: ${code}`}
     >
       {code}
-    </Typography>
+    </span>
   )
 }

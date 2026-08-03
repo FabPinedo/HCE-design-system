@@ -1,9 +1,8 @@
-import Box from "@mui/material/Box"
-import type { SxProps, Theme } from "@mui/material/styles"
+import type { CSSProperties } from "react"
+import "./StatusBadge.css"
 
 import {
   hceColors,
-  hceTypography,
 } from "../../tokens/hce.tokens"
 
 export type StatusBadgeVariant =
@@ -28,7 +27,7 @@ export interface StatusBadgeProps {
   borderColor?: string
   textColor?: string
 
-  sx?: SxProps<Theme>
+  sx?: CSSProperties
 }
 
 const variantStyles: Record<
@@ -79,67 +78,30 @@ export function StatusBadge({
   sx,
 }: StatusBadgeProps) {
   const colors = variantStyles[variant]
-
   const canClick = clickable && !disabled && !!onClick
 
+  const Tag = canClick ? "button" : "span"
+
   return (
-    <Box
-      component={canClick ? "button" : "span"}
+    <Tag
       type={canClick ? "button" : undefined}
       onClick={canClick ? onClick : undefined}
       aria-disabled={disabled || undefined}
-      sx={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-
-        minHeight: size === "small" ? 20 : 26,
-        px: size === "small" ? 1 : 1.5,
-
-        borderRadius: "6px",
-        border: "1px solid",
+      className={[
+        "hce-status-badge",
+        size === "small" ? "hce-status-badge--sm" : "hce-status-badge--md",
+        canClick ? "hce-status-badge--clickable" : "",
+      ].filter(Boolean).join(" ")}
+      style={{
         borderColor: borderColor ?? colors.borderColor,
-
-        backgroundColor:
-          backgroundColor ?? colors.backgroundColor,
-
+        backgroundColor: backgroundColor ?? colors.backgroundColor,
         color: textColor ?? colors.textColor,
-
-        fontFamily: hceTypography.fontFamily,
-        fontSize: size === "small" ? "0.6875rem" : "0.75rem",
-        fontWeight: 700,
-        lineHeight: 1,
-
-        whiteSpace: "nowrap",
-        boxSizing: "border-box",
-
-        appearance: "none",
-        outline: "none",
-
         cursor: canClick ? "pointer" : "default",
-
         opacity: disabled ? 0.55 : 1,
-
-        transition:
-          "background-color 150ms ease, border-color 150ms ease, opacity 150ms ease",
-
-        "&:hover": canClick
-          ? {
-              filter: "brightness(0.96)",
-            }
-          : undefined,
-
-        "&:focus-visible": canClick
-          ? {
-              outline: `2px solid ${hceColors.primary.blue[500]}`,
-              outlineOffset: "2px",
-            }
-          : undefined,
-
         ...sx,
       }}
     >
       {label}
-    </Box>
+    </Tag>
   )
 }

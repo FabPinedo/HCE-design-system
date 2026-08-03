@@ -1,4 +1,3 @@
-import { Box } from "@mui/material"
 import { getSemaphoreColors } from "../../tokens/getSemaphoreColors"
 
 interface Props {
@@ -17,9 +16,8 @@ export const WaitingBadge = ({
   const visibleLabel = label ?? "-"
 
   return (
-    <Box
-      component="span"
-      sx={{
+    <span
+      style={{
         width: 150,
         height: 32,
         borderRadius: "7px",
@@ -37,6 +35,6 @@ export const WaitingBadge = ({
       aria-label={`Tiempo de espera: ${visibleLabel}`}
     >
       {visibleLabel}
-    </Box>
+    </span>
   )
 }

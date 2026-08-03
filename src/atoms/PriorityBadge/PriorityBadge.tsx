@@ -16,7 +16,7 @@
  *   <PriorityBadge priority="none" />
  * ---------------------------------------------------------
  */
-import { Box, Tooltip } from "@mui/material"
+import { Tooltip } from "../Tooltip/Tooltip"
 import { hceClinicalColors, hceTypography } from "../../tokens/hce.tokens"
 import type { CSSProperties } from "react"
 
@@ -63,8 +63,8 @@ export const PriorityBadge = ({ priority, tooltipText,cursor='default' }: Props)
       placement="top"
       arrow
     >
-      <Box
-        sx={{
+      <div
+        style={{
           width:           24,
           height:          24,
           borderRadius:    "6px",
@@ -86,12 +86,13 @@ export const PriorityBadge = ({ priority, tooltipText,cursor='default' }: Props)
           textDecorationLine: "underline",
           lineHeight:  1,
           userSelect:  "none",
+          boxSizing:   "border-box",
         }}
         aria-label={config.description}
         role="img"
       >
         {!isNone && config.label}
-      </Box>
+      </div>
     </Tooltip>
   )
 }
