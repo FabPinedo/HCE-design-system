@@ -1,14 +1,4 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
-  Box,
-} from "@mui/material"
+import "./DataTable.css"
 import type { ReactNode } from "react"
 import { hceTypography } from "../../tokens/hce.tokens"
 
@@ -31,91 +21,92 @@ export const DataTable = <T extends object>({
   emptyMessage = 'No hay datos disponibles.',
 }: Props<T>) => {
   return (
-    <TableContainer
-      component={Paper}
-      sx={{
-        borderRadius: 3,
+    <div
+      style={{
+        borderRadius: 24, // sx borderRadius:3 de MUI -> ×8 (theme.shape.borderRadius)
         border: '1px solid #D0DBF0',
         boxShadow: '0 2px 12px rgba(26,58,107,0.08)',
         overflowX: 'auto',
+        backgroundColor: '#ffffff',
+        boxSizing: 'border-box',
       }}
     >
-      <Table>
-        <TableHead>
-          <TableRow>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr>
             {columns.map((col) => (
-              <TableCell
+              <th
                 key={col.key}
-                width={col.width}
-                sx={{
+                style={{
+                  width: col.width,
                   backgroundColor: '#2B5BA8',
-                  color: '#fff !important',
+                  color: '#fff',
                   fontSize: 12,
                   fontWeight: 700,
                   textTransform: 'uppercase',
                   letterSpacing: 0.5,
                   borderColor: '#2B5BA8',
-                  py: 1.25,
-                  '&.MuiTableCell-stickyHeader': {
-                    backgroundColor: '#2B5BA8',
-                    color: '#fff',
-                  },
+                  borderStyle: 'solid',
+                  borderWidth: '0 0 1px 0',
+                  padding: '10px 16px',
+                  textAlign: 'left',
+                  boxSizing: 'border-box',
                 }}
               >
                 {col.label}
-              </TableCell>
+              </th>
             ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
+          </tr>
+        </thead>
+        <tbody>
           {rows.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={columns.length} sx={{ textAlign: 'center', py: 5 }}>
-                <Typography variant="body2" sx={{ fontFamily: hceTypography.fontFamily, color: '#5A6A85' }}>
+            <tr>
+              <td colSpan={columns.length} style={{ textAlign: 'center', padding: '40px 16px' }}>
+                <span style={{ fontFamily: hceTypography.fontFamily, fontSize: '0.875rem', color: '#5A6A85' }}>
                   {emptyMessage}
-                </Typography>
-              </TableCell>
-            </TableRow>
+                </span>
+              </td>
+            </tr>
           ) : (
             rows.map((row, rowIndex) => (
-              <TableRow
+              <tr
                 key={rowIndex}
-                sx={{
-                  bgcolor: rowIndex % 2 === 1 ? '#F4F7FB' : '#fff',
-                  '&:hover': {
-                    bgcolor: '#EEF2F9',
-                    transition: 'background-color 0.15s',
-                  },
+                className="hce-datatable-row"
+                style={{
+                  backgroundColor: rowIndex % 2 === 1 ? '#F4F7FB' : '#fff',
                   cursor: 'default',
                 }}
               >
                 {columns.map((col) => (
-                  <TableCell
+                  <td
                     key={col.key}
-                    sx={{
+                    style={{
                       fontSize: 13,
                       color: '#1C2B4A',
                       borderColor: '#D0DBF0',
-                      py: 1.25,
+                      borderStyle: 'solid',
+                      borderWidth: '0 0 1px 0',
+                      padding: '10px 16px',
                       verticalAlign: 'middle',
+                      boxSizing: 'border-box',
                     }}
                   >
                     {col.render
                       ? col.render((row as Record<string, unknown>)[col.key], row)
                       : (
-                        <Box component="span">
+                        <span>
                           {(row as Record<string, unknown>)[col.key] !== undefined && (row as Record<string, unknown>)[col.key] !== null
                             ? String((row as Record<string, unknown>)[col.key])
                             : '—'}
-                        </Box>
+                        </span>
                       )}
-                  </TableCell>
+                  </td>
                 ))}
-              </TableRow>
+              </tr>
             ))
           )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+        </tbody>
+      </table>
+    </div>
   )
 }

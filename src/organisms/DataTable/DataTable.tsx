@@ -1,5 +1,4 @@
 // DataTable.tsx (organism)
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@mui/material"
 import type { ReactNode } from "react"
 
 interface Column {
@@ -18,49 +17,54 @@ interface Props {
 
 export const DataTable = ({ columns, rows }: Props) => {
   return (
-    <Paper elevation={0} className="jarvis-table-container" sx={{ borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+    <div
+      className="jarvis-table-container"
+      style={{ borderRadius: '12px', border: '1px solid #E2E8F0', boxShadow: 'none', boxSizing: 'border-box' }}
+    >
       <div className="jarvis-table-wrapper">
-        <Table stickyHeader className="jarvis-table">
-          <TableHead>
-            <TableRow>
+        <table className="jarvis-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
               {columns.map(col => (
-                <TableCell
+                <th
                   key={col.field}
-                  sx={{
+                  style={{
                     backgroundColor: '#2B5BA8',
-                    color: '#fff !important',
+                    color: '#fff',
                     fontSize: 12,
                     fontWeight: 700,
                     textTransform: 'uppercase',
                     letterSpacing: 0.5,
                     borderColor: '#2B5BA8',
-                    py: 1.25,
-                    '&.MuiTableCell-stickyHeader': {
-                      backgroundColor: '#2B5BA8',
-                      color: '#fff',
-                    },
+                    borderStyle: 'solid',
+                    borderWidth: '0 0 1px 0',
+                    padding: '10px 16px',
+                    textAlign: 'left',
+                    position: 'sticky',
+                    top: 0,
+                    boxSizing: 'border-box',
                   }}
                 >
                   {col.header}
-                </TableCell>
+                </th>
               ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
+            </tr>
+          </thead>
+          <tbody>
             {rows.map((row, i) => (
-              <TableRow key={row.id || i}>
+              <tr key={row.id || i}>
                 {columns.map(col => (
-                  <TableCell key={col.field}>
+                  <td key={col.field} style={{ padding: '10px 16px' }}>
                     {col.render
                       ? col.render(row[col.field], row)
                       : row[col.field]}
-                  </TableCell>
+                  </td>
                 ))}
-              </TableRow>
+              </tr>
             ))}
-          </TableBody>
-        </Table>
+          </tbody>
+        </table>
       </div>
-    </Paper>
+    </div>
   )
 }
