@@ -1,13 +1,10 @@
-import { useState, useEffect }                         from "react"
-import {
-  Box, Drawer, Typography, Tooltip,
-  Divider, Accordion, AccordionSummary, AccordionDetails,
-  IconButton, Button,
-}                                                       from "@mui/material"
-import CloseIcon                                        from "@mui/icons-material/Close"
-import KingBedOutlinedIcon                              from "@mui/icons-material/KingBedOutlined"
-import ExpandMoreIcon                                   from "@mui/icons-material/ExpandMore"
-import { hceClinicalColors, hceTypography, hceBorderRadius, hceShadows, hceSpacing } from "../../tokens/hce.tokens"
+import { useState }                                    from "react"
+import "./BedAvailabilityDrawer.css"
+import { Overlay }                                     from "../../atoms/Overlay/Overlay"
+import { Tooltip }                                     from "../../atoms/Tooltip/Tooltip"
+import { Button }                                      from "../../atoms/Button/Button"
+import { CloseIcon, ChevronDownIcon }                   from "../../atoms/Icon/SvgIcons"
+import { hceClinicalColors, hceTypography, hceBorderRadius, hceSpacing } from "../../tokens/hce.tokens"
 import { BedsAvailabilityTab }                          from "../../molecules/BedsAvailabilityTab/BedsAvailabilityTab"
 import { PriorityBadge }                                from "../../atoms/PriorityBadge/PriorityBadge"
 import type { PriorityLevel }                           from "../../atoms/PriorityBadge/PriorityBadge"
@@ -36,6 +33,19 @@ type WaitingPatient = {
   sex:    string
   doctor: string
   type:   "espera" | "tp"
+}
+
+/** Ícono de cama (King Bed) — inline, ver misma nota en BedsAvailabilityTab.tsx */
+function KingBedGlyph({ size = 24, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 9V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4" />
+      <path d="M14 9V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4" />
+      <path d="M2 11h20v6H2z" />
+      <path d="M4 17v3" />
+      <path d="M20 17v3" />
+    </svg>
+  )
 }
 
 // ─── Data ─────────────────────────────────────────────────
@@ -83,8 +93,8 @@ const PRIORITY_LABEL: Record<string, string> = {
 // ─── SummaryChip ──────────────────────────────────────────
 function SummaryChip({ label, count, color }: { label: string; count: number; color: string }) {
   return (
-    <Box sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", py: 1.5 }}>
-      <Typography sx={{
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", padding: "12px 0" }}>
+      <span style={{
         fontFamily: hceTypography.fontFamilyClinical,
         fontSize:   "22px",
         fontWeight: hceTypography.weight.bold,
@@ -92,25 +102,29 @@ function SummaryChip({ label, count, color }: { label: string; count: number; co
         lineHeight: 1,
       }}>
         {count}
-      </Typography>
-      <Typography sx={{
+      </span>
+      <span style={{
         fontFamily: hceTypography.fontFamilyClinical,
         fontSize:   "10px",
         color:      hceClinicalColors.textSecondary,
-        mt:         "4px",
+        marginTop:  "4px",
         textAlign:  "center",
       }}>
         {label}
-      </Typography>
-    </Box>
+      </span>
+    </div>
   )
+}
+
+function VDivider() {
+  return <div style={{ width: 1, alignSelf: "stretch", backgroundColor: hceClinicalColors.border, flexShrink: 0 }} />
 }
 
 // ─── SummaryGroup: grupo de chips con etiqueta superior ───
 function SummaryGroup({ title, flex, children }: { title: string; flex: number; children: ReactNode }) {
   return (
-    <Box sx={{ flex, display: "flex", flexDirection: "column" }}>
-      <Typography sx={{
+    <div style={{ flex, display: "flex", flexDirection: "column" }}>
+      <span style={{
         fontFamily:    hceTypography.fontFamilyClinical,
         fontSize:      "9px",
         fontWeight:    700,
@@ -118,16 +132,16 @@ function SummaryGroup({ title, flex, children }: { title: string; flex: number; 
         letterSpacing: "0.08em",
         color:         hceClinicalColors.textSecondary,
         textAlign:     "center",
-        pt:            "6px",
-        pb:            "2px",
+        paddingTop:    "6px",
+        paddingBottom: "2px",
         opacity:       0.7,
       }}>
         {title}
-      </Typography>
-      <Box sx={{ display: "flex", flex: 1 }}>
+      </span>
+      <div style={{ display: "flex", flex: 1 }}>
         {children}
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }
 
@@ -147,61 +161,64 @@ function BoxCell({ box }: { box: BoxData }) {
       : `${hceClinicalColors.priority2}12`
 
   const tooltipContent = isOccupied ? (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "4px", p: "2px" }}>
-      <Typography sx={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "13px", fontWeight: 700, color: "#fff" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "4px", padding: "2px" }}>
+      <span style={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "13px", fontWeight: 700, color: "#fff" }}>
         {(box as BoxOccupied).patient}
-      </Typography>
-      <Typography sx={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "11px", color: "#d1d5db" }}>
+      </span>
+      <span style={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "11px", color: "#d1d5db" }}>
         {(box as BoxOccupied).age} años · {(box as BoxOccupied).sex}
-      </Typography>
-      <Typography sx={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "11px", color: "#d1d5db" }}>
+      </span>
+      <span style={{ fontFamily: hceTypography.fontFamilyClinical, fontSize: "11px", color: "#d1d5db" }}>
         {(box as BoxOccupied).doctor}
-      </Typography>
-      <Box sx={{
-        mt: "2px", alignSelf: "flex-start",
-        px: "8px", py: "2px",
+      </span>
+      <span style={{
+        marginTop: "2px", alignSelf: "flex-start",
+        padding: "2px 8px",
         borderRadius:    hceBorderRadius.pill,
         backgroundColor: borderColor,
         fontSize: "10px", fontWeight: 700, color: "#fff",
         fontFamily: hceTypography.fontFamilyClinical,
+        display: "inline-block",
       }}>
         P{(box as BoxOccupied).priority} — {PRIORITY_LABEL[String((box as BoxOccupied).priority)]}
-      </Box>
-    </Box>
+      </span>
+    </div>
   ) : isDisponible ? "Disponible — listo para asignar" : "En mantenimiento"
 
   return (
     <Tooltip title={tooltipContent} placement="top" arrow>
-      <Box sx={{
-        display:         "flex",
-        flexDirection:   "column",
-        alignItems:      "center",
-        justifyContent:  "center",
-        gap:             "6px",
-        p:               "12px 8px 10px",
-        borderRadius:    hceBorderRadius.lg,
-        border:          `2px solid ${borderColor}`,
-        borderStyle:     isOccupied ? "solid" : "dashed",
-        backgroundColor: bgColor,
-        minHeight:       "72px",
-        cursor:          "default",
-        opacity:         box.status === "mantenimiento" ? 0.6 : 1,
-        transition:      "transform 0.15s, box-shadow 0.15s",
-        "&:hover":       { transform: "scale(1.03)", boxShadow: hceShadows.card },
-      }}>
-        <Typography sx={{
+      <div
+        className="hce-baddrawer-boxcell"
+        style={{
+          display:         "flex",
+          flexDirection:   "column",
+          alignItems:      "center",
+          justifyContent:  "center",
+          gap:             "6px",
+          padding:         "12px 8px 10px",
+          borderRadius:    hceBorderRadius.lg,
+          border:          `2px solid ${borderColor}`,
+          borderStyle:     isOccupied ? "solid" : "dashed",
+          backgroundColor: bgColor,
+          minHeight:       "72px",
+          cursor:          "default",
+          opacity:         box.status === "mantenimiento" ? 0.6 : 1,
+          boxSizing:       "border-box",
+        }}
+      >
+        <span style={{
           fontFamily: hceTypography.fontFamilyClinical,
           fontSize:   "12px",
           fontWeight: hceTypography.weight.bold,
           color:      hceClinicalColors.textPrimary,
         }}>
           {box.label}
-        </Typography>
+        </span>
 
         {isOccupied && <PriorityBadge priority={(box as BoxOccupied).priority} tooltipText="" />}
 
         {!isOccupied && (
-          <Box sx={{
+          <span style={{
             fontSize:      "9px",
             fontWeight:    700,
             fontFamily:    hceTypography.fontFamilyClinical,
@@ -210,9 +227,9 @@ function BoxCell({ box }: { box: BoxData }) {
             letterSpacing: "0.04em",
           }}>
             {isDisponible ? "Libre" : "Mant."}
-          </Box>
+          </span>
         )}
-      </Box>
+      </div>
     </Tooltip>
   )
 }
@@ -224,19 +241,20 @@ function WaitingRow({ p, onAssign }: { p: WaitingPatient; onAssign: (id: string)
   const typeLabel = isTP ? "Triage" : "En espera"
 
   return (
-    <Box sx={{
+    <div style={{
       display:         "flex",
       alignItems:      "center",
       gap:             hceSpacing[3],
-      p:               `${hceSpacing[2]} ${hceSpacing[3]}`,
+      padding:         `${hceSpacing[2]} ${hceSpacing[3]}`,
       borderRadius:    hceBorderRadius.lg,
       backgroundColor: hceClinicalColors.rowAlternate,
       border:          `1px solid ${hceClinicalColors.border}`,
       borderLeft:      `4px solid ${typeColor}`,
+      boxSizing:       "border-box",
     }}>
       {/* Tipo */}
-      <Box sx={{ minWidth: 60 }}>
-        <Typography sx={{
+      <div style={{ minWidth: 60 }}>
+        <span style={{
           fontFamily:    hceTypography.fontFamilyClinical,
           fontSize:      hceTypography.size.badge,
           fontWeight:    hceTypography.weight.bold,
@@ -245,14 +263,14 @@ function WaitingRow({ p, onAssign }: { p: WaitingPatient; onAssign: (id: string)
           letterSpacing: "0.04em",
         }}>
           {typeLabel}
-        </Typography>
-      </Box>
+        </span>
+      </div>
 
-      <Divider orientation="vertical" flexItem />
+      <VDivider />
 
       {/* Info del paciente */}
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography sx={{
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{
           fontFamily:   hceTypography.fontFamilyClinical,
           fontSize:     hceTypography.size.tableCell,
           fontWeight:   hceTypography.weight.semibold,
@@ -262,43 +280,29 @@ function WaitingRow({ p, onAssign }: { p: WaitingPatient; onAssign: (id: string)
           textOverflow: "ellipsis",
         }}>
           {p.name}
-        </Typography>
-        <Typography sx={{
+        </div>
+        <div style={{
           fontFamily: hceTypography.fontFamilyClinical,
           fontSize:   "11px",
           color:      hceClinicalColors.textSecondary,
-          mt:         "2px",
+          marginTop:  "2px",
         }}>
           {p.age} años · {p.sex} · {p.doctor}
-        </Typography>
-      </Box>
+        </div>
+      </div>
 
       {/* Botón asignar */}
-      <Button
-        size="small"
-        variant="outlined"
-        onClick={() => onAssign(p.id)}
-        sx={{
-          fontSize:    "10px",
-          fontFamily:  hceTypography.fontFamilyClinical,
-          fontWeight:  700,
-          py:          "3px",
-          px:          "10px",
-          minWidth:    "auto",
-          whiteSpace:  "nowrap",
-          borderColor: hceClinicalColors.boxActive,
-          color:       hceClinicalColors.boxActive,
-          borderRadius: hceBorderRadius.md,
-          textTransform: "none",
-          "&:hover": {
-            backgroundColor: `${hceClinicalColors.boxActive}14`,
-            borderColor:     hceClinicalColors.boxActive,
-          },
-        }}
-      >
-        Asignar Box
-      </Button>
-    </Box>
+      <div className="hce-baddrawer-assign-btn" style={{ borderRadius: hceBorderRadius.md }}>
+        <Button
+          size="sm"
+          variant="outlined"
+          onClick={() => onAssign(p.id)}
+          color={hceClinicalColors.boxActive}
+        >
+          Asignar Box
+        </Button>
+      </div>
+    </div>
   )
 }
 
@@ -313,33 +317,35 @@ function PriorityLegend() {
     { label: "Mant.",       color: hceClinicalColors.priority2,  dashed: true, dim: true },
   ]
   return (
-    <Box sx={{ display: "flex", flexWrap: "wrap", gap: "8px 14px", mt: hceSpacing[2] }}>
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px 14px", marginTop: hceSpacing[2] }}>
       {items.map(item => (
-        <Box key={item.label} sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
-          <Box sx={{
+        <div key={item.label} style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <span style={{
             width:           10,
             height:          10,
             borderRadius:    "50%",
             backgroundColor: item.dashed ? "transparent" : item.color,
             border:          item.dashed ? `2px dashed ${item.color}` : "none",
             opacity:         item.dim ? 0.6 : 1,
+            display:         "inline-block",
           }} />
-          <Typography sx={{
+          <span style={{
             fontFamily: hceTypography.fontFamilyClinical,
             fontSize:   "10px",
             color:      hceClinicalColors.textSecondary,
           }}>
             {item.label}
-          </Typography>
-        </Box>
+          </span>
+        </div>
       ))}
-    </Box>
+    </div>
   )
 }
 
 // ─── Componente principal ─────────────────────────────────
 export function BedAvailabilityDrawer() {
   const [open, setOpen] = useState(false)
+  const [waitingExpanded, setWaitingExpanded] = useState(false)
 
   const ocupados      = BOXES.filter(b => b.status === "ocupado").length
   const disponibles   = BOXES.filter(b => b.status === "disponible").length
@@ -356,72 +362,76 @@ export function BedAvailabilityDrawer() {
     }
   }
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false) }
-    if (open) window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [open])
+  // Nota: el cierre por Escape ahora lo maneja internamente Overlay
+  // (useFocusTrap) — el useEffect con addEventListener("keydown") propio
+  // que había acá ya no hace falta.
 
   return (
     <>
       <BedsAvailabilityTab isActive={open} onClick={() => setOpen(true)} />
 
-      <Drawer
-        anchor="right"
+      <Overlay
         open={open}
         onClose={() => setOpen(false)}
-        sx={{
-          "& .MuiDrawer-paper": {
-            width:         { xs: "100vw", sm: 460 },
-            display:       "flex",
-            flexDirection: "column",
-            overflow:      "hidden",
-          },
-        }}
+        variant="drawer-right"
+        panelClassName="hce-baddrawer-panel"
+        labelledBy="hce-baddrawer-title"
       >
         {/* ── Header ── */}
-        <Box sx={{
+        <div style={{
           display:         "flex",
           justifyContent:  "space-between",
           alignItems:      "center",
-          px:              hceSpacing[4],
-          py:              hceSpacing[3],
+          padding:         `${hceSpacing[3]} ${hceSpacing[4]}`,
           backgroundColor: hceClinicalColors.headerBg,
           flexShrink:      0,
+          boxSizing:       "border-box",
         }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: hceSpacing[3] }}>
-            <KingBedOutlinedIcon sx={{ fontSize: 24, color: "#fff" }} />
-            <Box>
-              <Typography sx={{
+          <div style={{ display: "flex", alignItems: "center", gap: hceSpacing[3] }}>
+            <KingBedGlyph size={24} color="#fff" />
+            <div>
+              <div id="hce-baddrawer-title" style={{
                 fontFamily: hceTypography.fontFamilyClinical,
                 fontSize:   "16px",
                 fontWeight: hceTypography.weight.bold,
                 color:      "#fff",
               }}>
                 Disponibilidad de Boxes
-              </Typography>
-              <Typography sx={{
+              </div>
+              <div style={{
                 fontFamily: hceTypography.fontFamilyClinical,
                 fontSize:   "12px",
                 color:      "rgba(255,255,255,0.75)",
-                mt:         "2px",
+                marginTop:  "2px",
               }}>
                 {BOXES.length} boxes · {WAITING.length} pacientes sin box
-              </Typography>
-            </Box>
-          </Box>
-          <IconButton onClick={() => setOpen(false)} size="small" sx={{
-            color:           "#fff",
-            backgroundColor: "rgba(255,255,255,0.12)",
-            borderRadius:    hceBorderRadius.sm,
-            "&:hover":       { backgroundColor: "rgba(255,255,255,0.22)" },
-          }}>
-            <CloseIcon fontSize="small" />
-          </IconButton>
-        </Box>
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="hce-baddrawer-close"
+            onClick={() => setOpen(false)}
+            aria-label="Cerrar"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 28,
+              height: 28,
+              color: "#fff",
+              backgroundColor: "rgba(255,255,255,0.12)",
+              borderRadius: hceBorderRadius.sm,
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            <CloseIcon size={18} color="#fff" />
+          </button>
+        </div>
 
         {/* ── Resumen con grupos etiquetados ── */}
-        <Box sx={{
+        <div style={{
           display:      "flex",
           borderBottom: `1px solid ${hceClinicalColors.border}`,
           flexShrink:   0,
@@ -429,37 +439,38 @@ export function BedAvailabilityDrawer() {
           {/* Grupo Boxes */}
           <SummaryGroup title="Boxes" flex={3}>
             <SummaryChip label="Ocupados"      count={ocupados}      color={hceClinicalColors.priority1}  />
-            <Divider orientation="vertical" flexItem />
+            <VDivider />
             <SummaryChip label="Disponibles"   count={disponibles}   color={hceClinicalColors.boxActive}  />
-            <Divider orientation="vertical" flexItem />
+            <VDivider />
             <SummaryChip label="Mantenimiento" count={mantenimiento} color={hceClinicalColors.priority2}  />
           </SummaryGroup>
 
-          <Divider orientation="vertical" flexItem />
+          <VDivider />
 
           {/* Grupo Pacientes */}
           <SummaryGroup title="Pacientes" flex={2}>
             <SummaryChip label="En espera" count={enEspera} color={hceClinicalColors.boxWaiting} />
-            <Divider orientation="vertical" flexItem />
+            <VDivider />
             <SummaryChip label="Triage"    count={enTriage} color={hceClinicalColors.priority2}  />
           </SummaryGroup>
-        </Box>
+        </div>
 
         {/* ── Contenido scrolleable ── */}
-        <Box sx={{
+        <div style={{
           flex:      1,
-          minHeight: 0,           // ← clave para que el scroll funcione en flex
+          minHeight: 0,
           overflowY: "auto",
-          p:         hceSpacing[4],
+          padding:   hceSpacing[4],
           display:   "flex",
           flexDirection: "column",
           gap:       hceSpacing[5],
+          boxSizing: "border-box",
         }}>
 
           {/* Grilla de boxes */}
-          <Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: hceSpacing[3] }}>
-              <Typography sx={{
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: hceSpacing[3] }}>
+              <span style={{
                 fontFamily:    hceTypography.fontFamilyClinical,
                 fontSize:      hceTypography.size.tableHeader,
                 fontWeight:    hceTypography.weight.bold,
@@ -468,9 +479,9 @@ export function BedAvailabilityDrawer() {
                 color:         hceClinicalColors.textSecondary,
               }}>
                 Boxes de Atención
-              </Typography>
-              <Box sx={{
-                px: "10px", py: "2px",
+              </span>
+              <span style={{
+                padding: "2px 10px",
                 borderRadius:    hceBorderRadius.pill,
                 backgroundColor: hceClinicalColors.rowAlternate,
                 border:          `1px solid ${hceClinicalColors.border}`,
@@ -479,37 +490,39 @@ export function BedAvailabilityDrawer() {
                 fontFamily:      hceTypography.fontFamilyClinical,
               }}>
                 {disponibles} disp. / {BOXES.length}
-              </Box>
-            </Box>
+              </span>
+            </div>
 
-            <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: hceSpacing[2] }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: hceSpacing[2] }}>
               {BOXES.map(box => <BoxCell key={box.label} box={box} />)}
-            </Box>
+            </div>
 
             <PriorityLegend />
-          </Box>
+          </div>
 
-          {/* Acordeón: pacientes sin box */}
+          {/* Acordeón: pacientes sin box (simplificado: toggle sin animación de altura) */}
           {WAITING.length > 0 && (
-            <Accordion
-              disableGutters
-              elevation={0}
-              sx={{
-                border:       `1px solid ${hceClinicalColors.border}`,
-                borderRadius: `${hceBorderRadius.lg} !important`,
-                "&:before":   { display: "none" },
-              }}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon sx={{ color: hceClinicalColors.textSecondary }} />}
-                sx={{
+            <div style={{
+              border:       `1px solid ${hceClinicalColors.border}`,
+              borderRadius: hceBorderRadius.lg,
+              overflow:     "hidden",
+            }}>
+              <button
+                type="button"
+                className="hce-baddrawer-accordion-summary"
+                onClick={() => setWaitingExpanded(v => !v)}
+                aria-expanded={waitingExpanded}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: hceSpacing[2],
                   backgroundColor: hceClinicalColors.rowAlternate,
-                  minHeight:       "48px !important",
-                  px:              hceSpacing[4],
-                  "& .MuiAccordionSummary-content": { alignItems: "center", gap: hceSpacing[2], my: "10px" },
+                  minHeight: "48px",
+                  padding: `10px ${hceSpacing[4]}`,
+                  boxSizing: "border-box",
                 }}
               >
-                <Typography sx={{
+                <span style={{
                   fontFamily:    hceTypography.fontFamilyClinical,
                   fontSize:      hceTypography.size.tableHeader,
                   fontWeight:    hceTypography.weight.bold,
@@ -518,9 +531,9 @@ export function BedAvailabilityDrawer() {
                   color:         hceClinicalColors.textSecondary,
                 }}>
                   Pacientes sin Box
-                </Typography>
-                <Box sx={{
-                  px: "8px", py: "2px",
+                </span>
+                <span style={{
+                  padding: "2px 8px",
                   borderRadius:    hceBorderRadius.pill,
                   backgroundColor: `${hceClinicalColors.boxWaiting}22`,
                   border:          `1px solid ${hceClinicalColors.boxWaiting}`,
@@ -529,9 +542,9 @@ export function BedAvailabilityDrawer() {
                   fontFamily:      hceTypography.fontFamilyClinical,
                 }}>
                   {enEspera} espera
-                </Box>
-                <Box sx={{
-                  px: "8px", py: "2px",
+                </span>
+                <span style={{
+                  padding: "2px 8px",
                   borderRadius:    hceBorderRadius.pill,
                   backgroundColor: `${hceClinicalColors.priority2}22`,
                   border:          `1px solid ${hceClinicalColors.priority2}`,
@@ -540,19 +553,26 @@ export function BedAvailabilityDrawer() {
                   fontFamily:      hceTypography.fontFamilyClinical,
                 }}>
                   {enTriage} triage
-                </Box>
-              </AccordionSummary>
+                </span>
+                <span style={{ marginLeft: "auto", display: "flex", color: hceClinicalColors.textSecondary }}>
+                  <span className={`hce-baddrawer-accordion-chevron${waitingExpanded ? " hce-baddrawer-accordion-chevron--open" : ""}`}>
+                    <ChevronDownIcon size={20} color={hceClinicalColors.textSecondary} />
+                  </span>
+                </span>
+              </button>
 
-              <AccordionDetails sx={{ p: hceSpacing[3], display: "flex", flexDirection: "column", gap: hceSpacing[2] }}>
-                {WAITING.map(p => (
-                  <WaitingRow key={p.id} p={p} onAssign={handleAssign} />
-                ))}
-              </AccordionDetails>
-            </Accordion>
+              {waitingExpanded && (
+                <div style={{ padding: hceSpacing[3], display: "flex", flexDirection: "column", gap: hceSpacing[2] }}>
+                  {WAITING.map(p => (
+                    <WaitingRow key={p.id} p={p} onAssign={handleAssign} />
+                  ))}
+                </div>
+              )}
+            </div>
           )}
 
-        </Box>
-      </Drawer>
+        </div>
+      </Overlay>
     </>
   )
 }
