@@ -1,9 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Card, hceColors, hceTypography, Typography,Box, User } from '@hce/design-system'
+import { ContentCard, hceColors, hceTypography, Typography,Box, User } from '@hce/design-system'
 
-const meta: Meta<typeof Card> = {
+// Nota: este story siempre quiso demostrar `ContentCard` (molecules/Card,
+// con title/actions/noPadding) — antes importaba `Card` (el átomo, sin esas
+// props) por la colisión de nombre en el barrel export. Pasaba el typecheck
+// solo porque atoms/Card tenía props tipadas como `any`; al tipar ese átomo
+// correctamente (sin `title`/`noPadding`) quedó expuesto el mismatch.
+const meta: Meta<typeof ContentCard> = {
   title: 'Molecules/Card',
-  component: Card,
+  component: ContentCard,
   tags: ['autodocs'],
 }
 export default meta
@@ -135,7 +140,7 @@ const SampleFormContent = () => (
 
 
 
-type Story = StoryObj<typeof Card>
+type Story = StoryObj<typeof ContentCard>
 
 export const Default: Story = {
   args: {

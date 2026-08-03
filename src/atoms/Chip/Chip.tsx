@@ -1,15 +1,9 @@
-import MuiChip from "@mui/material/Chip"
+import "./Chip.css"
 
 interface Props {
   label: string
 }
 
 export const Chip = ({ label }: Props) => {
-  return (
-    <MuiChip
-      label={label}
-      variant="outlined"
-      size="small"
-    />
-  )
+  return <span className="hce-chip">{label}</span>
 }

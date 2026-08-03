@@ -1,6 +1,5 @@
-import { Box, FormControlLabel, Checkbox as MuiCheckbox } from "@mui/material";
-import { Check } from "@mui/icons-material";
-import { hceColors } from "../../tokens/hce.tokens";
+import "./Checkbox.css"
+
 interface Props {
   label?: string;
   checked: boolean;
@@ -16,6 +15,13 @@ interface Props {
   ariaLabel?: string;
 }
 
+const PLACEMENT_FLEX_DIRECTION: Record<NonNullable<Props["sideLabel"]>, string> = {
+  end:   "row",
+  start: "row-reverse",
+  top:   "column-reverse",
+  bottom: "column",
+}
+
 export const Checkbox = ({
   label,
   checked,
@@ -24,70 +30,27 @@ export const Checkbox = ({
   sideLabel = "end",
   ariaLabel,
 }: Props) => {
-  const checkbox = (
-    <MuiCheckbox
-      sx={{
-        paddingRight: 0,
-        borderRadius: "8px",
-        "&:hover": {
-          backgroundColor: "transparent"
-        }
-      }}
-      disabled={disabled}
-      checked={checked}
-      onChange={(e) => onChange(e.target.checked)}
-      inputProps={ariaLabel ? { "aria-label": ariaLabel } : undefined}
-      icon={
-        <Box
-          sx={{
-            width: 24,
-            height: 24,
-            borderRadius: "8px",
-            border: `2px solid ${hceColors.primary.green[600]}`,
-            backgroundColor: hceColors.primary.green[50],
-          }}
-        />
-      }
-      checkedIcon={
-        <Box
-          sx={{
-            width: 24,
-            height: 24,
-            borderRadius: "8px",
-            border: `2px solid ${hceColors.primary.green[600]}`,
-            backgroundColor: hceColors.primary.green[600],
-          }}
-        >
-          <Check
-            sx={{
-              color: hceColors.neutro.white[50],
-              fontSize: 20,
-            }}
-          />
-        </Box>
-      }
-    />
-  );
-
-  if (label) {
-    return (
-      <FormControlLabel
-        labelPlacement={sideLabel}
-        control={checkbox}
-        label={label}
+  return (
+    <label
+      className={`hce-checkbox${disabled ? " hce-checkbox--disabled" : ""}`}
+      style={{ flexDirection: PLACEMENT_FLEX_DIRECTION[sideLabel] as React.CSSProperties["flexDirection"] }}
+    >
+      <input
+        type="checkbox"
+        className="hce-checkbox__input"
+        checked={checked}
         disabled={disabled}
-        sx={{
-          display: "flex",
-          // "space-between" pegaba el label al checkbox cuando el contenedor no tenía
-          // ancho extra (ej. "No identificado" en triaje, dentro de un Box shrink-to-fit).
-          // Un gap fijo garantiza separación visible sin importar el ancho del contenedor.
-          gap: "6px",
-          width: "100%",
-          margin: 0
-        }}
+        onChange={(e) => onChange(e.target.checked)}
+        aria-label={!label ? ariaLabel : undefined}
       />
-    );
-  }
-
-  return checkbox;
+      <span className="hce-checkbox__box" aria-hidden="true">
+        {checked && (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="5 13 10 18 19 7" />
+          </svg>
+        )}
+      </span>
+      {label && <span className="hce-checkbox__label">{label}</span>}
+    </label>
+  );
 };

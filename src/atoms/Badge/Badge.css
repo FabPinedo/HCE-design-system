@@ -1,0 +1,17 @@
+/* Badge.css — reemplazo de MUI Badge (badge numérico standalone, sin children) */
+.hce-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background-color: #0043a5;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  box-sizing: border-box;
+}

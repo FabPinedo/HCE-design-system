@@ -1,0 +1,64 @@
+/**
+ * Checkbox.css — reemplazo de MUI Checkbox + FormControlLabel.
+ * El <input type="checkbox"> real queda visualmente oculto pero funcional
+ * (foco por teclado, lectores de pantalla) — la caja visible es el <span>
+ * hermano, que reacciona a :checked y :focus-visible del input via CSS.
+ */
+
+.hce-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.hce-checkbox--disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.hce-checkbox__input {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.hce-checkbox__box {
+  position: relative;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  border: 2px solid #89c93d;
+  background-color: #f5fcec;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.hce-checkbox__input:checked + .hce-checkbox__box {
+  background-color: #89c93d;
+  border-color: #89c93d;
+}
+
+.hce-checkbox__input:focus-visible + .hce-checkbox__box {
+  outline: 2px solid #003d96;
+  outline-offset: 2px;
+}
+
+.hce-checkbox__box svg {
+  width: 20px;
+  height: 20px;
+  color: #ffffff;
+}
+
+.hce-checkbox__label {
+  font-family: 'Poppins', sans-serif;
+}

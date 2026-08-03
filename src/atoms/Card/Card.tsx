@@ -1,6 +1,10 @@
-import { Card as MuiCard } from "@mui/material"
+import type { ReactNode } from "react"
+import "./Card.css"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const Card = ({ children }: any) => {
-  return <MuiCard>{children}</MuiCard>
+interface Props {
+  children?: ReactNode
+}
+
+export const Card = ({ children }: Props) => {
+  return <div className="hce-card">{children}</div>
 }
