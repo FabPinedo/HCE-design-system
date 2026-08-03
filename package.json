@@ -31,18 +31,10 @@
     "publish:docker": "npm publish --registry http://verdaccio:4873"
   },
   "peerDependencies": {
-    "@emotion/react": "^11",
-    "@emotion/styled": "^11",
-    "@mui/icons-material": "^7",
-    "@mui/material": "^7",
     "react": ">=18",
     "react-dom": ">=18"
   },
   "devDependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^7.3.11",
-    "@mui/material": "^7.1.1",
     "@storybook/addon-essentials": "8.6.18",
     "@storybook/addon-interactions": "8.6.18",
     "@storybook/react": "8.6.18",
