@@ -1,0 +1,68 @@
+/**
+ * BedAvailabilityDrawerV2.css — reemplazo de MUI Drawer (paper) + estilos
+ * responsivos (antes objeto sx con breakpoints xs/sm).
+ */
+
+/* margin-left: auto (heredado de .hce-overlay-panel--drawer-right) empuja
+   el panel al borde derecho dentro del backdrop flex — se repite acá
+   explícito para no depender del orden de imports entre hojas de estilo. */
+.hce-bedv2-panel {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #EBF1FA;
+  margin-left: auto;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  border-radius: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Breakpoint "sm" de MUI = 600px */
+@media (min-width: 600px) {
+  .hce-bedv2-panel {
+    width: 400px;
+    margin-top: 12px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    border-radius: 20px;
+    height: calc(100% - 24px);
+  }
+}
+
+.hce-bedv2-card {
+  transition: transform 100ms ease, box-shadow 100ms ease;
+  cursor: pointer;
+}
+
+.hce-bedv2-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hce-bedv2-card:active {
+  transform: scale(0.98);
+}
+
+.hce-bedv2-close-btn {
+  width: 100%;
+  background-color: #70C934;
+  color: #ffffff;
+  font-family: 'IBM Plex Sans', 'Roboto', system-ui, sans-serif;
+  font-weight: 700;
+  border-radius: 50px;
+  border: none;
+  text-transform: none;
+  font-size: 16px;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+  box-sizing: border-box;
+}
+
+.hce-bedv2-close-btn:hover {
+  background-color: #89c93d;
+}
