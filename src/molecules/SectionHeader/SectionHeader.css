@@ -1,0 +1,18 @@
+.hce-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 24px;
+  background-color: #003d96;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.hce-section-header:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: -3px;
+}

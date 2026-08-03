@@ -6,10 +6,9 @@
  * tabla de pacientes del Monitor de Emergencia.
  * ---------------------------------------------------------
  */
-import { Box, Chip, IconButton, Typography } from "@mui/material"
-import ChevronLeftIcon  from "@mui/icons-material/ChevronLeft"
-import ChevronRightIcon from "@mui/icons-material/ChevronRight"
-import { hceClinicalColors, hceSpacing, hceTypography, hceBorderRadius, hceColors } from "../../tokens/hce.tokens"
+import type { CSSProperties } from "react"
+import "./EmergencyPagination.css"
+import { hceClinicalColors, hceSpacing, hceTypography, hceColors } from "../../tokens/hce.tokens"
 
 interface summaryContent{
 
@@ -49,20 +48,19 @@ function buildPageRange(current: number, total: number, siblings: number): (numb
   return pages
 }
 
-const navButtonSx = {
-  width:           28,
-  height:          28,
-  borderRadius:    "4px",
-  border:          `1px solid ${hceColors.primary.blue[600]}`,
-  backgroundColor: "#FFFFFF",
-  color:           hceColors.primary.blue[600],
-  padding:         0,
-  "&:hover:not(.Mui-disabled)": {
-    backgroundColor: hceClinicalColors.hoverBg,
-    borderColor:     hceClinicalColors.tableHeaderBg,
-    color:           hceClinicalColors.tableHeaderBg,
-  },
-  "&.Mui-disabled": { opacity: 0.4 },
+function ChevronLeftGlyph() {
+  return (
+    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="15 6 9 12 15 18" />
+    </svg>
+  )
+}
+function ChevronRightGlyph() {
+  return (
+    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="9 6 15 12 9 18" />
+    </svg>
+  )
 }
 
 export const EmergencyPagination = ({
@@ -75,8 +73,8 @@ export const EmergencyPagination = ({
   const pages = buildPageRange(currentPage, totalPages, siblingCount)
 
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         display:         "flex",
         alignItems:      "center",
         justifyContent:  "flex-end",
@@ -88,51 +86,29 @@ export const EmergencyPagination = ({
     >
       {/* casillas genericas */}
       {summary.map((item) => (
-        <Chip
-          key={item.label}
-         label={
-            <Box component="span" sx={{gap: '5px', display:'flex'}}>
-              <Box component="span" sx={{ fontWeight: hceTypography.weight.bold }}>
-                {item.value}
-              </Box>{" "}
-              {item.label}
-            </Box>
-          }
-          size="small"
-          sx={{
-            backgroundColor: hceColors.neutro.white[100],
-            color: hceColors.primary.blue[600],
-            fontFamily: hceTypography.fontFamilyClinical,
-            fontSize: "12px",
-            fontWeight: hceTypography.weight.medium,
-            height: 26,
-            borderRadius: hceBorderRadius.sm,
-            border: `1px solid ${hceColors.primary.blue[600]}`,
-            marginRight: "8px",
-            "& .MuiChip-label": { padding: "0 10px" },
-          }}
-        />
+        <span key={item.label} className="hce-empag-chip">
+          <span style={{ fontWeight: hceTypography.weight.bold }}>{item.value}</span>{" "}
+          {item.label}
+        </span>
       ))}
-     
-     
 
       {/* Botón anterior */}
-      <IconButton
-        size="small"
+      <button
+        type="button"
+        className="hce-empag-navbtn"
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
-        sx={navButtonSx}
         aria-label="Página anterior"
       >
-        <ChevronLeftIcon sx={{ fontSize: 16, borderRadius: 'none !important' }} />
-      </IconButton>
+        <ChevronLeftGlyph />
+      </button>
 
       {/* Páginas */}
       {pages.map((page, idx) =>
         page === "..." ? (
-          <Typography
+          <span
             key={`ellipsis-${idx}`}
-            sx={{
+            style={{
               fontFamily: hceTypography.fontFamilyClinical,
               fontSize:   "12px",
               color:      hceColors.primary.blue[600],
@@ -141,46 +117,39 @@ export const EmergencyPagination = ({
             }}
           >
             …
-          </Typography>
+          </span>
         ) : (
-          <IconButton
+          <button
+            type="button"
             key={page}
-            size="small"
+            className="hce-empag-pagebtn"
             onClick={() => onPageChange(page)}
-            sx={{
-              width:           28,
-              height:          28,
-              borderRadius:    hceBorderRadius.sm,
-              border:          `1px solid ${page === currentPage ? hceClinicalColors.tableHeaderBg : hceClinicalColors.border}`,
-              backgroundColor: page === currentPage ? hceClinicalColors.tableHeaderBg : "#FFFFFF",
-              color:           page === currentPage ? "#FFFFFF" : hceColors.primary.blue[600],
-              fontFamily:      hceTypography.fontFamilyClinical,
-              fontSize:        "12px",
-              fontWeight:      page === currentPage ? hceTypography.weight.bold : hceTypography.weight.regular,
-              padding:         0,
-              "&:hover": {
-                backgroundColor: page === currentPage ? hceClinicalColors.headerBg : hceClinicalColors.hoverBg,
-                borderColor:     page === currentPage ? hceClinicalColors.headerBg : hceClinicalColors.tableHeaderBg,
-              },
-            }}
+            style={{
+              "--pagebtn-border":       page === currentPage ? hceClinicalColors.tableHeaderBg : hceClinicalColors.border,
+              "--pagebtn-bg":           page === currentPage ? hceClinicalColors.tableHeaderBg : "#FFFFFF",
+              "--pagebtn-color":        page === currentPage ? "#FFFFFF" : hceColors.primary.blue[600],
+              "--pagebtn-weight":       page === currentPage ? hceTypography.weight.bold : hceTypography.weight.regular,
+              "--pagebtn-hover-bg":     page === currentPage ? hceClinicalColors.headerBg : hceClinicalColors.hoverBg,
+              "--pagebtn-hover-border": page === currentPage ? hceClinicalColors.headerBg : hceClinicalColors.tableHeaderBg,
+            } as CSSProperties}
             aria-label={`Página ${page}`}
             aria-current={page === currentPage ? "page" : undefined}
           >
             {page}
-          </IconButton>
+          </button>
         )
       )}
 
       {/* Botón siguiente */}
-      <IconButton
-        size="small"
+      <button
+        type="button"
+        className="hce-empag-navbtn"
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
-        sx={navButtonSx}
         aria-label="Página siguiente"
       >
-        <ChevronRightIcon sx={{ fontSize: 16 }} />
-      </IconButton>
-    </Box>
+        <ChevronRightGlyph />
+      </button>
+    </div>
   )
 }
