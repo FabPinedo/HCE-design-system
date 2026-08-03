@@ -1,7 +1,11 @@
 import { useId, useRef, useState, useEffect } from "react"
-import { Box, Paper, CircularProgress } from "@mui/material"
+import "./SearchComboInput.css"
 import { hceColors, hceTypography, hceTransition } from "../../tokens/hce.tokens"
 import { ChevronDownIcon } from "../../atoms/Icon/Icon"
+
+// Sombra de MUI Paper elevation=4
+const ELEVATION_4_SHADOW =
+  "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -139,65 +143,44 @@ export function SearchComboInput({
     : "Ingrese texto para buscar..."
 
   return (
-    <Box ref={containerRef} sx={{ position: "relative", width: "100%" }}>
+    <div ref={containerRef} style={{ position: "relative", width: "100%" }}>
 
       {/* Label */}
       {label && (
-        <Box
+        <label
           id={labelId}
-          component="label"
           htmlFor={inputId}
-          sx={{
+          style={{
             display:    "block",
             fontFamily: hceTypography.fontFamily,
             fontSize:   "0.72rem",
             fontWeight: 600,
             color:      GRAY,
-            mb:         "4px",
+            marginBottom: "4px",
           }}
         >
-          {label}{required && <Box component="span" sx={{ color: hceColors.alert.error[600], ml: "2px" }}>*</Box>}
-        </Box>
+          {label}{required && <span style={{ color: hceColors.alert.error[600], marginLeft: "2px" }}>*</span>}
+        </label>
       )}
 
       {/* Input row */}
-      <Box sx={{ display: "flex", position: "relative" }}>
+      <div style={{ display: "flex", position: "relative" }}>
 
         {/* Toggle de modo: Por nombre / CIE-10 */}
-        <Box sx={{ position: "relative", flexShrink: 0 }}>
-          <Box
-            component="button"
+        <div style={{ position: "relative", flexShrink: 0 }}>
+          <button
             type="button"
+            className="hce-scombo-mode-btn"
             onClick={() => !disabled && setModeOpen(o => !o)}
             aria-haspopup="listbox"
             aria-expanded={modeOpen}
             aria-label="Tipo de búsqueda"
             disabled={disabled}
-            sx={{
-              display:         "flex",
-              alignItems:      "center",
-              gap:             "6px",
-              height:          40,
-              px:              1.5,
-              py:              0,
-              borderRadius:    "8px 0 0 8px",
-              border:          `1.5px solid ${BLUE}`,
-              borderRight:     "none",
+            style={{
               backgroundColor: BLUE,
-              color:           "#ffffff",
-              fontFamily:      hceTypography.fontFamily,
-              fontWeight:      700,
-              fontSize:        "0.78rem",
+              border:          `1.5px solid ${BLUE}`,
               cursor:          disabled ? "not-allowed" : "pointer",
-              whiteSpace:      "nowrap",
-              outline:         "none",
-              transition:      `background-color ${hceTransition.fast}`,
               opacity:         disabled ? 0.5 : 1,
-              "&:hover":       disabled ? {} : { backgroundColor: hceColors.primary.blue[700] },
-              "&:focus-visible": {
-                outline:       `2px solid #ffffff`,
-                outlineOffset: "-3px",
-              },
             }}
           >
             {currentMode.label}
@@ -209,13 +192,12 @@ export function SearchComboInput({
                 transition: `transform ${hceTransition.fast}`,
               }}
             />
-          </Box>
+          </button>
 
           {/* Dropdown de modos */}
           {modeOpen && (
-            <Paper
-              elevation={4}
-              sx={{
+            <div
+              style={{
                 position:    "absolute",
                 top:         "calc(100% + 4px)",
                 left:        0,
@@ -224,47 +206,35 @@ export function SearchComboInput({
                 borderRadius: "8px",
                 overflow:    "hidden",
                 border:      `1px solid ${hceColors.primary.blue[100]}`,
+                backgroundColor: "#ffffff",
+                boxShadow:   ELEVATION_4_SHADOW,
               }}
             >
               {SEARCH_MODES.map(m => (
-                <Box
+                <button
                   key={m.value}
-                  component="button"
                   type="button"
+                  className="hce-scombo-mode-item"
                   onClick={() => handleModeSelect(m.value)}
-                  sx={{
-                    display:         "flex",
-                    alignItems:      "center",
-                    width:           "100%",
-                    px:              2,
-                    py:              1.25,
-                    fontFamily:      hceTypography.fontFamily,
+                  style={{
                     fontWeight:      m.value === searchMode ? 700 : 400,
-                    fontSize:        "0.82rem",
                     color:           m.value === searchMode ? BLUE : hceColors.neutro.black[700],
                     backgroundColor: m.value === searchMode ? hceColors.primary.blue[50] : "transparent",
-                    border:          "none",
-                    cursor:          "pointer",
-                    transition:      `background-color ${hceTransition.fast}`,
-                    "&:hover": {
-                      backgroundColor: hceColors.primary.blue[50],
-                      color:           BLUE,
-                    },
                   }}
                 >
                   {m.label}
-                </Box>
+                </button>
               ))}
-            </Paper>
+            </div>
           )}
-        </Box>
+        </div>
 
         {/* Input de texto */}
-        <Box sx={{ position: "relative", flex: 1 }}>
-          <Box
+        <div style={{ position: "relative", flex: 1 }}>
+          <input
             id={inputId}
             ref={inputRef}
-            component="input"
+            className="hce-scombo-input"
             type="text"
             value={value}
             onChange={handleInputChange}
@@ -275,52 +245,36 @@ export function SearchComboInput({
             aria-controls={dropOpen ? listId : undefined}
             aria-activedescendant={activeIdx >= 0 ? `${listId}-opt-${activeIdx}` : undefined}
             aria-label={label ?? "Buscar"}
-            sx={{
-              display:         "block",
-              width:           "100%",
-              height:          40,
-              px:              "12px",
-              pr:              loading ? "36px" : "12px",
-              borderRadius:    "0 8px 8px 0",
+            style={{
+              paddingLeft:  "12px",
+              paddingRight: loading ? "36px" : "12px",
               border:          `1.5px solid ${BORDER}`,
-              borderLeft:      "none",
-              fontFamily:      hceTypography.fontFamily,
-              fontSize:        "0.875rem",
               color:           hceColors.neutro.black[700],
               backgroundColor: disabled ? hceColors.neutro.black[50] : "#ffffff",
-              outline:         "none",
-              boxSizing:       "border-box",
-              transition:      `border-color ${hceTransition.fast}, box-shadow ${hceTransition.fast}`,
-              "&::placeholder": { color: GRAY },
-              "&:focus": {
-                borderColor: BLUE,
-                boxShadow:   `0 0 0 3px ${hceColors.primary.blue[100]}`,
-              },
             }}
           />
           {/* Spinner de carga */}
           {loading && (
-            <Box sx={{
+            <span style={{
               position:  "absolute",
               right:     10,
               top:       "50%",
               transform: "translateY(-50%)",
               display:   "flex",
             }}>
-              <CircularProgress size={16} sx={{ color: BLUE }} />
-            </Box>
+              <span className="hce-scombo-spinner" />
+            </span>
           )}
-        </Box>
-      </Box>
+        </div>
+      </div>
 
       {/* Dropdown de resultados */}
       {dropOpen && options.length > 0 && (
-        <Paper
-          elevation={4}
+        <div
           id={listId}
           role="listbox"
           aria-label={`Resultados de búsqueda de ${currentMode.label}`}
-          sx={{
+          style={{
             position:     "absolute",
             top:          "calc(100% + 4px)",
             left:         0,
@@ -330,30 +284,24 @@ export function SearchComboInput({
             overflowY:    "auto",
             borderRadius: "8px",
             border:       `1px solid ${hceColors.primary.blue[100]}`,
+            backgroundColor: "#ffffff",
+            boxShadow:    ELEVATION_4_SHADOW,
           }}
         >
           {options.map((opt, idx) => (
-            <Box
+            <div
               key={opt.value}
               id={`${listId}-opt-${idx}`}
+              className="hce-scombo-option"
               role="option"
               aria-selected={activeIdx === idx}
               onMouseEnter={() => setActiveIdx(idx)}
               onMouseDown={e => { e.preventDefault(); handleSelectOption(opt) }}
-              sx={{
-                display:         "flex",
-                alignItems:      "center",
-                justifyContent:  "space-between",
-                px:              2,
-                py:              1.25,
-                cursor:          "pointer",
+              style={{
                 backgroundColor: activeIdx === idx ? hceColors.primary.blue[50] : "transparent",
-                borderBottom:    `1px solid ${hceColors.neutro.black[100]}`,
-                "&:last-child":  { borderBottom: "none" },
-                transition:      `background-color ${hceTransition.fast}`,
               }}
             >
-              <Box sx={{
+              <span style={{
                 fontFamily: hceTypography.fontFamily,
                 fontSize:   "0.875rem",
                 fontWeight: 500,
@@ -364,24 +312,24 @@ export function SearchComboInput({
                 whiteSpace: "nowrap",
               }}>
                 {opt.label}
-              </Box>
+              </span>
               {opt.secondary && (
-                <Box sx={{
+                <span style={{
                   fontFamily:  hceTypography.fontFamily,
                   fontSize:    "0.72rem",
                   fontWeight:  600,
                   color:       BLUE,
-                  ml:          1.5,
+                  marginLeft:  12,
                   flexShrink:  0,
                   whiteSpace:  "nowrap",
                 }}>
                   {opt.secondary}
-                </Box>
+                </span>
               )}
-            </Box>
+            </div>
           ))}
-        </Paper>
+        </div>
       )}
-    </Box>
+    </div>
   )
 }

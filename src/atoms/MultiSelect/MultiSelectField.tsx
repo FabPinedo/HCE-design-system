@@ -1,18 +1,9 @@
-import {
-  Autocomplete,
-  Box,
-  FormControl,
-  OutlinedInput,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
+import "./MultiSelectField.css"
 import {
   hceColors,
-  hceTransition,
-  hceTypography,
 } from "../../tokens/hce.tokens";
 import { Checkbox } from "../Checkbox/Checkbox";
-import { VisibilityOutlined } from "@mui/icons-material";
 
 interface Option {
   value: string;
@@ -32,6 +23,28 @@ interface Props {
   error?: boolean;
 }
 
+/** Ícono de "ojo" — visibility del resumen de seleccionados */
+function VisibilityGlyph() {
+  return (
+    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.9 }}>
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  )
+}
+
+/**
+ * MultiSelect — reemplazo de MUI Autocomplete (multiple + disableCloseOnSelect
+ * + checkboxes por opción), como listbox custom en CSS/HTML puro siguiendo el
+ * mismo patrón que molecules/SearchComboInput (click-outside cierra, teclado
+ * ArrowUp/Down/Enter/Escape, sin depender de MUI Popper).
+ *
+ * NOTA DE PARIDAD (comportamiento deliberado, ver stories/atoms/MultiSelect.stories.tsx
+ * "Disabled"): `disabled=true` NO bloquea abrir el trigger/dropdown — solo
+ * las opciones quedan inertes (no se puede cambiar la selección). Este
+ * comportamiento ya era así en la versión MUI (Autocomplete nunca recibía
+ * `disabled`, solo `disableClearable`) y se conserva tal cual.
+ */
 export const MultiSelect = ({
   label,
   value,
@@ -43,233 +56,178 @@ export const MultiSelect = ({
   required,
   error,
 }: Props) => {
-  const [focused, setFocused] = useState(false);
-  const [hovered, setHovered] = useState(false);
-
-  const active = focused || hovered;
+  const [open, setOpen] = useState(false)
+  const [activeIdx, setActiveIdx] = useState(-1)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const triggerId = useId()
+  const listId = useId()
 
   const accentColor = error
     ? hceColors.alert.error[600]
-    : active
-      ? hceColors.primary.blue[600]
-      : hceColors.neutro.black[200];
+    : hceColors.neutro.black[200];
 
-  const inputTextColor = error
-    ? hceColors.alert.error[600]
-    : active
-      ? hceColors.primary.blue[600]
-      : hceColors.neutro.black[400];
-
-  const borderDefault = error
-    ? hceColors.alert.error[600]
-    : hceColors.neutro.black[50];
-  const borderActive = error
+  const activeColor = error
     ? hceColors.alert.error[600]
     : hceColors.primary.blue[600];
+
+  const textDefaultColor = error
+    ? hceColors.alert.error[600]
+    : hceColors.neutro.black[400];
 
   const selectedOptions = options.filter((opt) =>
     (value ?? []).includes(opt.value),
   );
-  const [inputValue] = useState("");
 
-  if (label) {
-    return (
-      <Box
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        <Typography
-          component="label"
-          sx={{
-            fontFamily: hceTypography.fontFamily,
-            fontSize: "0.75rem",
-            fontWeight: 600,
-            color: accentColor,
-            mb: 0.5,
-            display: "block",
-            transition: `color ${hceTransition.fast}`,
-          }}
-        >
-          {label}
-        </Typography>
-        <FormControl fullWidth={fullWidth} size="small">
-          <Autocomplete
-            disableClearable={disabled}
-            isOptionEqualToValue={(option, val) => option.value === val.value}
-            sx={{
-              "& .MuiAutocomplete-tag": {
-                display: "none",
-              },
-            }}
-            fullWidth={fullWidth}
-            slotProps={{
-              paper: {
-                sx: {
-                  // El Popper de MUI Autocomplete ya fija su propio width al
-                  // clientWidth del anchor (el trigger/input). "max-content" +
-                  // "min-width: 100%" anulaba ese comportamiento y dejaba que
-                  // el Paper creciera más allá del ancho del trigger cuando
-                  // una opción tenía un label largo, ensanchando el dropdown.
-                  // Con "width: 100%" el Paper simplemente llena el ancho que
-                  // el Popper ya calculó (= ancho del trigger), así que las
-                  // opciones largas truncan con ellipsis en vez de ensanchar
-                  // el panel o desbordarse sobre el checkbox.
-                  width: "100%",
-                },
-              },
-            }}
-            multiple
-            disableCloseOnSelect
-            onChange={(_, newValue) => {
-              const values = newValue.map((item) => item.value);
-              onChange(values);
-            }}
-            options={options}
-            value={selectedOptions ?? []}
-            getOptionLabel={(option) => option.label}
-            renderValue={() => {
-              if (value.length === 0) return null;
-              return (
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    backgroundColor: hceColors.primary.green[600],
-                    color: "#ffffff",
-                    borderRadius: "8px",
-                    padding: "4px 12px",
-                    fontSize: "0.85rem",
-                    fontWeight: 500,
-                    fontFamily: hceTypography.fontFamily,
-                    mr: 1,
-                    width: "100%",
-                    userSelect: "none",
-                  }}
-                >
-                  <span>
-                    {value.length} seleccionado{value.length > 1 ? "s" : ""}
-                  </span>
-                  <VisibilityOutlined sx={{ fontSize: "1rem", opacity: 0.9 }} />
-                </Box>
-              );
-            }}
-            renderOption={(props, option, { selected }) => {
-              const { key, ...restProps } = props;
-              const handleClick = (
-                e: React.MouseEvent<HTMLLIElement, MouseEvent>,
-              ) => {
-                if (disabled) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  return;
-                }
-                if (restProps.onClick) {
-                  restProps.onClick(e);
-                }
-              };
-              return (
-                <li
-                  onClick={handleClick}
-                  key={option.value}
-                  {...restProps}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                    padding: "8px 16px",
-                    whiteSpace: "nowrap",
-                    cursor: disabled ? "not-allowed" : "pointer",
-                    pointerEvents: disabled ? "none" : "auto",
-                  }}
-                >
-                  {/*
-                    El label se renderiza aparte (no vía la prop `label` de <Checkbox>)
-                    para que el `justifyContent: space-between` del <li> tenga dos hijos
-                    reales entre los que repartir el espacio: texto a la izquierda,
-                    checkbox a la derecha. El átomo <Checkbox> internamente usa un gap
-                    fijo (no space-between) a propósito para otros consumidores
-                    (ver comentario en Checkbox.tsx) — no se toca ese componente.
-                  */}
-                  <Typography
-                    sx={{
-                      fontFamily: hceTypography.fontFamily,
-                      fontSize: "0.875rem",
-                      color: hceColors.neutro.black[400],
-                      textAlign: "left",
-                      flex: 1,
-                      minWidth: 0,
-                      mr: 1,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {option.label}
-                  </Typography>
-                  <Checkbox
-                    ariaLabel={option.label}
-                    checked={selected}
-                    disabled={disabled}
-                    onChange={() => {}}
-                  />
-                </li>
-              );
-            }}
-            renderInput={(params) => {
-              return (
-                <FormControl fullWidth={fullWidth}>
-                  <OutlinedInput
-                    ref={params.InputProps.ref}
-                    required={required}
-                    fullWidth={fullWidth}
-                    size="small"
-                    startAdornment={params.InputProps.startAdornment}
-                    inputProps={{
-                      ...params.inputProps,
-                      placeholder: value.length > 0 ? "" : placeholder,
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Backspace" && !inputValue) {
-                        e.stopPropagation();
-                      }
-                    }}
-                    endAdornment={params.InputProps.endAdornment}
-                    onFocus={() => setFocused(true)}
-                    onBlur={() => setFocused(false)}
-                    sx={{
-                      borderRadius: "8px",
-                      backgroundColor: hceColors.neutro.white[50],
-                      fontSize: "0.875rem",
-                      transition: `box-shadow ${hceTransition.fast}`,
-                      "& .MuiInputBase-input": {
-                        color: inputTextColor,
-                        WebkitTextFillColor: inputTextColor,
-                        transition: `color ${hceTransition.fast}, -webkit-text-fill-color ${hceTransition.fast}`,
-                      },
-                      "& fieldset": {
-                        borderColor: borderDefault,
-                        transition: `border-color ${hceTransition.fast}`,
-                      },
-                      "&:hover fieldset": { borderColor: borderActive },
-                      "&.Mui-focused fieldset": { borderColor: borderActive },
-                      "&.Mui-focused": {
-                        boxShadow: `0 0 0 3px ${hceColors.primary.blue[100]}`,
-                      },
-                      "& input::placeholder": {
-                        color: accentColor,
-                        opacity: 1,
-                        transition: `color ${hceTransition.fast}`,
-                      },
-                    }}
-                  />
-                </FormControl>
-              );
-            }}
-          />
-        </FormControl>
-      </Box>
-    );
+  // Cierra el dropdown al hacer click afuera
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+  function toggleOption(optionValue: string) {
+    if (disabled) return
+    const next = value.includes(optionValue)
+      ? value.filter(v => v !== optionValue)
+      : [...value, optionValue]
+    onChange(next)
   }
+
+  function handleTriggerKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+      e.preventDefault()
+      setOpen(true)
+      setActiveIdx(i => (i < 0 ? 0 : i))
+    } else if (e.key === "Escape") {
+      setOpen(false)
+    }
+  }
+
+  function handleListKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "ArrowDown") {
+      e.preventDefault()
+      setActiveIdx(i => Math.min(i + 1, options.length - 1))
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault()
+      setActiveIdx(i => Math.max(i - 1, 0))
+    } else if (e.key === "Enter" && activeIdx >= 0 && !disabled) {
+      e.preventDefault()
+      toggleOption(options[activeIdx].value)
+    } else if (e.key === "Escape") {
+      setOpen(false)
+    }
+  }
+
+  const cssVars = {
+    "--ms-main":   accentColor,
+    "--ms-active": activeColor,
+    "--ms-text":   textDefaultColor,
+    "--ms-focus-ring": hceColors.primary.blue[100],
+    "--ms-summary-bg": hceColors.primary.green[600],
+  } as CSSProperties
+
+  if (!label) return null
+
+  return (
+    <div
+      ref={containerRef}
+      className="hce-multiselect-wrapper"
+      style={{ ...cssVars, position: "relative", width: fullWidth ? "100%" : undefined }}
+    >
+      <label id={triggerId} className="hce-multiselect-label">{label}</label>
+
+      <button
+        type="button"
+        className="hce-multiselect-trigger"
+        disabled={false}
+        onClick={() => setOpen(o => !o)}
+        onKeyDown={handleTriggerKeyDown}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-labelledby={triggerId}
+        aria-required={required}
+      >
+        {value.length > 0 ? (
+          <span className="hce-multiselect-summary">
+            <span>{value.length} seleccionado{value.length > 1 ? "s" : ""}</span>
+            <VisibilityGlyph />
+          </span>
+        ) : (
+          <span style={{ color: accentColor }}>{placeholder}</span>
+        )}
+      </button>
+
+      {open && (
+        <div
+          id={listId}
+          role="listbox"
+          aria-multiselectable="true"
+          aria-label={label}
+          className="hce-multiselect-listbox"
+          style={{ border: `1px solid ${hceColors.primary.blue[100]}`, boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)" }}
+          onKeyDown={handleListKeyDown}
+        >
+          {options.map((opt, idx) => {
+            const selected = selectedOptions.some(o => o.value === opt.value)
+            return (
+              <div
+                key={opt.value}
+                role="option"
+                aria-selected={selected}
+                className={`hce-multiselect-option${activeIdx === idx ? " hce-multiselect-option--active" : ""}`}
+                onMouseEnter={() => setActiveIdx(idx)}
+                onClick={(e) => {
+                  if (disabled) {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    return
+                  }
+                  toggleOption(opt.value)
+                }}
+                style={{
+                  cursor: disabled ? "not-allowed" : "pointer",
+                  pointerEvents: disabled ? "none" : "auto",
+                }}
+              >
+                {/*
+                  El label se renderiza aparte (no vía la prop `label` de <Checkbox>)
+                  para que el `justifyContent: space-between` de la fila tenga dos hijos
+                  reales entre los que repartir el espacio: texto a la izquierda,
+                  checkbox a la derecha. El átomo <Checkbox> internamente usa un gap
+                  fijo (no space-between) a propósito para otros consumidores
+                  (ver comentario en Checkbox.tsx) — no se toca ese componente.
+                */}
+                <span
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: "0.875rem",
+                    color: hceColors.neutro.black[400],
+                    textAlign: "left",
+                    flex: 1,
+                    minWidth: 0,
+                    marginRight: 8,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {opt.label}
+                </span>
+                <Checkbox
+                  ariaLabel={opt.label}
+                  checked={selected}
+                  disabled={disabled}
+                  onChange={() => {}}
+                />
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  );
 };
