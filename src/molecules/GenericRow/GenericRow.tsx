@@ -1,5 +1,5 @@
-import { TableCell, TableRow } from "@mui/material"
-import type { SxProps, Theme } from "@mui/material"
+import "./GenericRow.css"
+import type { CSSProperties } from "react"
 import { useMemo } from "react"
 import { GenericCell, type GenericTableColumn } from "../GenericCell/GenericCell"
 import { hceClinicalColors, hceColors } from "../../tokens/hce.tokens"
@@ -10,7 +10,8 @@ interface GenericRowProps<T> {
   row: T
   index: number
   columns: GenericTableColumn<T>[]
-  rowSx?: SxProps<Theme>
+  /** Estilo puntual de la fila — objeto plano de CSS (antes SxProps<Theme> de MUI). */
+  rowSx?: CSSProperties
    /**
    * Define si la fila debe pintarse como alerta.
    * Ejemplo Monitor: row.row_alert_color === "red"
@@ -19,14 +20,14 @@ interface GenericRowProps<T> {
 
 }
 
-const getDefaultRowSx = <T,>(
+/** Resuelve bg base + bg de hover de la fila según alerta/alternancia. */
+const getDefaultRowColors = <T,>(
   row: T,
   index: number,
   rowAlertGetter?: (row: T) => boolean
-): SxProps<Theme> => {
+): { bg: string; hoverBg: string } => {
   const isRowRed = rowAlertGetter?.(row) ?? false
   const isAlternate = index % 2 === 1
-
 
   const baseBg = isRowRed
     ? hceClinicalColors.rowPriority
@@ -34,32 +35,9 @@ const getDefaultRowSx = <T,>(
       ? hceClinicalColors.rowAlternate
       : hceClinicalColors.surfaceBg
 
-  return {
-    height: 44,
-    backgroundColor: baseBg,
-    
-    
-    transition: "background-color 0.15s ease",
-    cursor: "default",
-   
-    "&:hover": {
-      backgroundColor: isRowRed ? hceColors.alert.error[100] : hceClinicalColors.hoverBg,
-    },
+  const hoverBg = isRowRed ? hceColors.alert.error[100] : hceClinicalColors.hoverBg
 
-    "&.Mui-selected:hover": {
-      backgroundColor: isRowRed ? hceColors.alert.error[100] : hceClinicalColors.hoverBg,
-    },
-
-    "&.Mui-selected": {
-      backgroundColor: baseBg,
-    },
-
-  
-
-    "&:last-child td": {
-      borderBottom: "none",
-    },
-  }
+  return { bg: baseBg, hoverBg }
 }
 
 
@@ -75,20 +53,24 @@ export const GenericRow = <T,>({
   // las celdas del body queden alineadas con las columnas del header sin
   // importar el ancho real del contenedor.
   const tableWidth = useMemo(() => getTableWidthNumber(columns), [columns])
+  const { bg, hoverBg } = getDefaultRowColors(row, index, rowAlertGetter)
 
   return (
-    <TableRow sx={rowSx ?? getDefaultRowSx(row, index, rowAlertGetter)}>
+    <tr
+      className="hce-generic-row"
+      style={{
+        "--row-bg":       bg,
+        "--row-hover-bg": hoverBg,
+        ...rowSx,
+      } as CSSProperties}
+    >
       {columns.map((column) => (
-        <TableCell
+        <td
           key={column.key}
-          align={column.align}
-         sx={{
-              width: getColumnWidthPercent(column.width, tableWidth),
-              borderBottom: "none",
-              padding: "0 12px",
-              height: 44,
-              borderLeft: `1px solid ${hceColors.neutro.white[100]}`,
-              boxSizing: "border-box",
+          className="hce-generic-cell"
+          style={{
+            width: getColumnWidthPercent(column.width, tableWidth),
+            textAlign: column.align,
             ...column.cellSx,
           }}
         >
@@ -97,8 +79,8 @@ export const GenericRow = <T,>({
             column={column}
 
           />
-        </TableCell>
+        </td>
       ))}
-    </TableRow>
+    </tr>
   )
 }

@@ -1,11 +1,10 @@
 import type {
   ComponentType,
+  CSSProperties,
   HTMLAttributes,
   KeyboardEvent,
   MouseEvent,
 } from "react"
-import type { Theme } from "@mui/material"
-import type { SystemStyleObject } from "@mui/system"
 import { cellRenderers, type CellRenderer } from "./GenericCell.renderers"
 
 export type GenericColumnType =
@@ -57,7 +56,8 @@ export interface GenericTableColumn<T> {
 
   boldGetter?: (row: T) => boolean
 
-  cellSx?: SystemStyleObject<Theme>
+  /** Estilo puntual de la celda — objeto plano de CSS (antes SystemStyleObject<Theme> de MUI). */
+  cellSx?: CSSProperties
 }
 
 interface GenericCellProps<T> {
