@@ -217,12 +217,23 @@ export const MultiSelect = ({
                 >
                   {opt.label}
                 </span>
-                <Checkbox
-                  ariaLabel={opt.label}
-                  checked={selected}
-                  disabled={disabled}
-                  onChange={() => {}}
-                />
+                {/*
+                  Wrapper con flex:none + width:fit-content: el átomo
+                  <Checkbox> tiene `width: 100%` en su CSS (pensado para
+                  cuando es el único hijo de su fila, ver Checkbox.css) --
+                  sin este wrapper, dentro de esta fila flex ese 100% se
+                  come casi todo el ancho y aplasta el <span> del label a
+                  0px. fit-content fuerza a resolver el 100% del Checkbox
+                  contra su propio contenido en vez de contra la fila.
+                */}
+                <div style={{ flex: "0 0 auto", width: "fit-content" }}>
+                  <Checkbox
+                    ariaLabel={opt.label}
+                    checked={selected}
+                    disabled={disabled}
+                    onChange={() => {}}
+                  />
+                </div>
               </div>
             )
           })}
