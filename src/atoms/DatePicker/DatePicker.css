@@ -1,0 +1,62 @@
+.hce-datepicker-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--dp-accent-default);
+  margin-bottom: 4px;
+  display: block;
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-datepicker-wrapper:hover .hce-datepicker-label,
+.hce-datepicker-wrapper:focus-within .hce-datepicker-label {
+  color: var(--dp-accent-active);
+}
+
+.hce-datepicker-box {
+  width: 100%;
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid var(--dp-border-default);
+  border-radius: 8px;
+  background-color: #ffffff;
+  transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-datepicker-box:hover,
+.hce-datepicker-box:focus-within {
+  border-color: var(--dp-border-active);
+}
+
+.hce-datepicker-box:focus-within {
+  box-shadow: 0 0 0 3px var(--dp-focus-ring);
+}
+
+.hce-datepicker-field {
+  width: 100%;
+  height: 100%;
+  padding: 0 14px;
+  border: none;
+  outline: none;
+  background: transparent;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  color: var(--dp-text-default);
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-datepicker-box:hover .hce-datepicker-field,
+.hce-datepicker-box:focus-within .hce-datepicker-field {
+  color: var(--dp-text-active);
+}
+
+.hce-datepicker-field::-webkit-calendar-picker-indicator {
+  filter: opacity(0.6);
+  cursor: pointer;
+}
+
+.hce-datepicker-field:disabled::-webkit-calendar-picker-indicator {
+  cursor: not-allowed;
+}
