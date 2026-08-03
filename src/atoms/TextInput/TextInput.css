@@ -1,0 +1,89 @@
+/**
+ * TextInput.css — reemplazo de MUI OutlinedInput.
+ * Los colores dependientes de props (error/disabled) se inyectan como
+ * variables CSS por instancia (--ti-*) desde TextInput.tsx; el hover/focus
+ * queda como CSS real (antes eran selectores anidados de sx).
+ */
+
+.hce-textinput-wrapper {
+  width: 100%;
+}
+
+.hce-textinput-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ti-main);
+  margin-bottom: 4px;
+  display: block;
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-textinput {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border: 1px solid var(--ti-main);
+  border-radius: 8px;
+  background-color: #ffffff;
+  transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-textinput:hover,
+.hce-textinput:focus-within {
+  border-color: var(--ti-active);
+}
+
+.hce-textinput:focus-within {
+  box-shadow: 0 0 0 3px var(--ti-focus-ring);
+}
+
+.hce-textinput--disabled {
+  opacity: 0.6;
+}
+
+.hce-textinput--disabled:hover {
+  border-color: var(--ti-main);
+}
+
+.hce-textinput--full-width {
+  width: 100%;
+}
+
+.hce-textinput__icon {
+  display: flex;
+  align-items: center;
+  color: var(--ti-active);
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  flex: none;
+}
+
+.hce-textinput__field {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  color: var(--ti-text-default);
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-textinput:hover .hce-textinput__field,
+.hce-textinput:focus-within .hce-textinput__field {
+  color: var(--ti-text-active);
+}
+
+.hce-textinput__field::placeholder {
+  color: var(--ti-main);
+  opacity: 1;
+}
+
+.hce-textinput__field:disabled {
+  cursor: not-allowed;
+}

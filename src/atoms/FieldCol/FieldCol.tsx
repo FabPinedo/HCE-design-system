@@ -1,4 +1,3 @@
-import { Box, Typography } from "@mui/material"
 import type { ReactNode } from "react"
 import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
@@ -13,9 +12,9 @@ export interface FieldColProps {
 /** Columna label + control, usada como wrapper de campos de formulario (ej. NumericField). */
 export function FieldCol({ label, children, flex = 1, minWidth }: FieldColProps) {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "4px", flex, minWidth }}>
-      <Typography
-        sx={{
+    <div style={{ display: "flex", flexDirection: "column", gap: "4px", flex, minWidth }}>
+      <span
+        style={{
           fontFamily: hceTypography.fontFamily,
           fontSize: "0.72rem",
           fontWeight: 600,
@@ -23,8 +22,8 @@ export function FieldCol({ label, children, flex = 1, minWidth }: FieldColProps)
         }}
       >
         {label}
-      </Typography>
+      </span>
       {children}
-    </Box>
+    </div>
   )
 }
