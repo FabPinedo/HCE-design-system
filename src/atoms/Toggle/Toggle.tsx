@@ -1,4 +1,3 @@
-import { Box } from "@mui/material"
 import { useId } from "react"
 import { hceColors } from "../../tokens/hce.tokens"
 
@@ -12,33 +11,29 @@ export interface ToggleProps {
 export function Toggle({ checked, onChange, disabled = false }: ToggleProps) {
   const id = useId()
   return (
-    <Box
-      component="label"
+    <label
       htmlFor={id}
-      sx={{
+      style={{
         display: "flex",
         alignItems: "center",
-        gap: 1.5,
+        gap: 12,
         cursor: disabled ? "not-allowed" : "pointer",
         opacity: disabled ? 0.5 : 1,
       }}
     >
-      <Box
-        component="input"
+      <input
         id={id}
         type="checkbox"
         checked={checked}
         disabled={disabled}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          onChange(e.target.checked)
-        }
-        sx={{ display: "none" }}
+        onChange={(e) => onChange(e.target.checked)}
+        style={{ display: "none" }}
       />
       {/* Sin onClick propio: el <label> ya reenvía el click nativamente al <input>
           oculto de arriba. Agregar un onClick acá duplicaba el toggle (ambos disparan
           en el mismo click, con el mismo `checked` obsoleto) y podía anular el cambio. */}
-      <Box
-        sx={{
+      <span
+        style={{
           width: 44,
           height: 24,
           borderRadius: "12px",
@@ -49,10 +44,11 @@ export function Toggle({ checked, onChange, disabled = false }: ToggleProps) {
           cursor: disabled ? "not-allowed" : "pointer",
           transition: "background-color 220ms",
           flexShrink: 0,
+          display: "inline-block",
         }}
       >
-        <Box
-          sx={{
+        <span
+          style={{
             position: "absolute",
             top: 2,
             left: checked ? 20 : 2,
@@ -62,9 +58,10 @@ export function Toggle({ checked, onChange, disabled = false }: ToggleProps) {
             backgroundColor: "#ffffff",
             transition: "left 220ms",
             boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+            display: "block",
           }}
         />
-      </Box>
-    </Box>
+      </span>
+    </label>
   )
 }
