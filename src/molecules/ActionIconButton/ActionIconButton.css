@@ -1,0 +1,31 @@
+.hce-action-iconbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1.5px solid #0043a5;
+  background-color: #ffffff;
+  color: var(--aib-color);
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.hce-action-iconbtn:hover {
+  background-color: var(--aib-hover-bg);
+  border-color: var(--aib-hover-border);
+  color: var(--aib-hover-border);
+}
+
+.hce-action-iconbtn:active {
+  background-color: var(--aib-active-bg);
+}
+
+.hce-action-iconbtn:disabled {
+  opacity: 0.4;
+  background-color: #ffffff;
+  color: var(--aib-color);
+  cursor: default;
+}
