@@ -1,10 +1,6 @@
-import React, { useState, type ComponentType } from "react"
-import {
-  Box, Collapse, Tooltip, Typography,
-} from "@mui/material"
-import HomeOutlinedIcon    from "@mui/icons-material/HomeOutlined"
-import ExpandMoreIcon      from "@mui/icons-material/ExpandMore"
-import ChevronLeftIcon     from "@mui/icons-material/ChevronLeft"
+import { useState, type ComponentType, type CSSProperties, type KeyboardEvent, type MouseEvent } from "react"
+import "./HceSidebar.css"
+import { Tooltip } from "../../atoms/Tooltip/Tooltip"
 import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
 import { LogoClinicaSanFelipeIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon } from "../../atoms/Icon/SvgIconsHce"
 
@@ -49,9 +45,32 @@ import {
 
 type IconComponent = ComponentType<{ size?: number; color?: string }>
 
+// ─── Glifos inline (se integran al sistema de íconos en el paso dedicado) ─────
+function ExpandMoreGlyph({ size = 14, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  )
+}
+function ChevronLeftGlyph({ size = 18, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  )
+}
+function HomeGlyph({ size = 22, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <polyline points="9 22 9 12 15 12 15 22" />
+    </svg>
+  )
+}
+
 // ─── Constantes de animación ──────────────────────────────────────────────────
 
-const TRANSITION_FAST = "150ms cubic-bezier(0.4, 0, 0.2, 1)"
 const TRANSITION_BASE = "220ms cubic-bezier(0.4, 0, 0.2, 1)"
 
 /**
@@ -187,7 +206,7 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
 
   if (visibleKids.length === 0) return null
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault()
       setOpen(prev => !prev)
@@ -195,42 +214,33 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
   }
 
   return (
-    <Box>
-      <Box
+    <div>
+      <div
         role="button"
         tabIndex={0}
         aria-label={`${item.titulo}, grupo expandible`}
         aria-expanded={open}
         onClick={() => setOpen(prev => !prev)}
         onKeyDown={handleKeyDown}
-        sx={{
+        className="hce-sidebar-row"
+        style={{
           display:         "flex",
           alignItems:      "center",
-          pr:              1.5,
-          py:              "7px",
+          paddingRight:    12,
+          paddingTop:      "7px",
+          paddingBottom:   "7px",
           borderRadius:    "0 8px 8px 0",
-          cursor:          "pointer",
           backgroundColor: grandActive || open ? hceColors.primary.blue[50] : "transparent",
-          transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
-          "&:hover": {
-            backgroundColor: hceColors.primary.blue[50],
-            transform:       "translateX(2px)",
-          },
-          "&:focus-visible": {
-            outline:      `2px solid ${hceColors.primary.blue[500]}`,
-            outlineOffset: "2px",
-          },
-          userSelect: "none",
         }}
       >
-        <Box sx={{
+        <span style={{
           width:           14,
           height:          1,
           flexShrink:      0,
           backgroundColor: hceColors.primary.blue[200],
-          mr:              1,
+          marginRight:     8,
         }} />
-        <Typography sx={{
+        <span style={{
           fontFamily:   hceTypography.fontFamily,
           fontSize:     "0.78rem",
           fontWeight:   grandActive || open ? 700 : 500,
@@ -242,22 +252,18 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
           whiteSpace:   "nowrap",
         }}>
           {item.titulo}
-        </Typography>
-        <ExpandMoreIcon sx={{
-          fontSize:   14,
-          color:      open ? hceColors.primary.blue[500] : hceColors.neutro.black[100],
-          transform:  open ? "rotate(180deg)" : "rotate(0deg)",
-          transition: `transform ${TRANSITION_FAST}`,
-          flexShrink: 0,
-        }} />
-      </Box>
+        </span>
+        <span className={`hce-sidebar-chevron${open ? " hce-sidebar-chevron--open" : ""}`} style={{ display: "flex", flexShrink: 0 }}>
+          <ExpandMoreGlyph size={14} color={open ? hceColors.primary.blue[500] : hceColors.neutro.black[100]} />
+        </span>
+      </div>
 
-      <Collapse in={open} unmountOnExit>
-        <Box sx={{ ml: 2, borderLeft: `2px solid ${hceColors.primary.blue[50]}` }}>
+      {open && (
+        <div style={{ marginLeft: 16, borderLeft: `2px solid ${hceColors.primary.blue[50]}` }}>
           {visibleKids.map(gc => {
             const isGcActive = currentPath === gc.vista
 
-            const handleGcKeyDown = (e: React.KeyboardEvent) => {
+            const handleGcKeyDown = (e: KeyboardEvent) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault()
                 onNavigate(gc.vista!)
@@ -265,7 +271,7 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
             }
 
             return (
-              <Box
+              <div
                 key={gc.idMenu ?? gc.codigo}
                 role="button"
                 tabIndex={0}
@@ -273,37 +279,28 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
                 aria-current={isGcActive ? "page" : undefined}
                 onClick={() => onNavigate(gc.vista!)}
                 onKeyDown={handleGcKeyDown}
-                sx={{
+                className="hce-sidebar-row"
+                style={{
                   display:         "flex",
                   alignItems:      "center",
-                  pr:              1,
-                  py:              "6px",
+                  paddingRight:    8,
+                  paddingTop:      "6px",
+                  paddingBottom:   "6px",
                   borderRadius:    "0 8px 8px 0",
-                  cursor:          "pointer",
                   backgroundColor: isGcActive ? hceColors.primary.blue[50] : "transparent",
                   borderLeft:      isGcActive
                     ? `3px solid ${hceColors.primary.blue[600]}`
                     : "3px solid transparent",
-                  transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
-                  "&:hover": {
-                    backgroundColor: hceColors.primary.blue[50],
-                    transform:       "translateX(2px)",
-                  },
-                  "&:focus-visible": {
-                    outline:       `2px solid ${hceColors.primary.blue[500]}`,
-                    outlineOffset: "2px",
-                  },
-                  userSelect: "none",
                 }}
               >
-                <Box sx={{
+                <span style={{
                   width:           10,
                   height:          1,
                   flexShrink:      0,
                   backgroundColor: isGcActive ? hceColors.primary.blue[400] : hceColors.primary.blue[100],
-                  mr:              0.75,
+                  marginRight:     6,
                 }} />
-                <Typography sx={{
+                <span style={{
                   fontFamily:   hceTypography.fontFamily,
                   fontSize:     "0.73rem",
                   fontWeight:   isGcActive ? 700 : 400,
@@ -314,13 +311,13 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
                   whiteSpace:   "nowrap",
                 }}>
                   {gc.titulo}
-                </Typography>
-              </Box>
+                </span>
+              </div>
             )
           })}
-        </Box>
-      </Collapse>
-    </Box>
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -347,7 +344,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
 
   const IconComp: IconComponent | null = item.icono ? (ICON_REGISTRY[item.icono] ?? null) : null
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = (e: MouseEvent) => {
     if (collapsed) return
     e.stopPropagation()
     if (hasChildren) {
@@ -357,7 +354,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (collapsed) return
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault()
@@ -373,38 +370,32 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
   if (collapsed) {
     return (
       <Tooltip title={item.titulo} placement="right" arrow>
-        <Box
+        <div
           role="button"
           tabIndex={0}
           aria-label={item.titulo}
           aria-current={isActive ? "page" : undefined}
-          sx={{
+          className="hce-sidebar-icon-btn"
+          style={{
+            "--row-hover-bg": "rgba(255,255,255,0.15)",
+            "--row-focus-color": hceColors.neutro.white[50],
             display:         "flex",
             alignItems:      "center",
             justifyContent:  "center",
             height:          44,
-            mx:              1,
-            mb:              0.5,
+            marginLeft:      8,
+            marginRight:     8,
+            marginBottom:    4,
             borderRadius:    "8px",
-            cursor:          "pointer",
             backgroundColor: isActive || childActive
               ? "rgba(255,255,255,0.2)"
               : "transparent",
-            transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
-            "&:hover": {
-              backgroundColor: "rgba(255,255,255,0.15)",
-              transform:       "translateX(2px)",
-            },
-            "&:focus-visible": {
-              outline:       `2px solid ${hceColors.neutro.white[50]}`,
-              outlineOffset: "2px",
-            },
-          }}
+          } as CSSProperties}
         >
           {IconComp ? (
             <IconComp size={22} color="white" />
           ) : (
-            <Box sx={{
+            <span style={{
               width:           30,
               height:          30,
               borderRadius:    "50%",
@@ -413,7 +404,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
               alignItems:      "center",
               justifyContent:  "center",
             }}>
-              <Typography sx={{
+              <span style={{
                 fontFamily: hceTypography.fontFamily,
                 color:      hceColors.neutro.white[50],
                 fontSize:   "0.65rem",
@@ -421,10 +412,10 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                 lineHeight: 1,
               }}>
                 {abbr(item.titulo)}
-              </Typography>
-            </Box>
+              </span>
+            </span>
           )}
-        </Box>
+        </div>
       </Tooltip>
     )
   }
@@ -437,8 +428,8 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
       : "transparent"
 
   return (
-    <Box>
-      <Box
+    <div>
+      <div
         role="button"
         tabIndex={0}
         aria-label={item.titulo}
@@ -446,36 +437,27 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
         aria-current={isActive ? "page" : undefined}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
-        sx={{
+        className="hce-sidebar-row"
+        style={{
+          "--row-hover-bg": isActive ? hceColors.primary.blue[100] : hceColors.primary.blue[50],
           display:         "flex",
           alignItems:      "center",
-          gap:             1,
-          mx:              1,
-          px:              1.5,
-          py:              "10px",
+          gap:             8,
+          marginLeft:      8,
+          marginRight:     8,
+          paddingTop:      "10px",
+          paddingBottom:   "10px",
           borderRadius:    "8px",
-          cursor:          "pointer",
           backgroundColor: parentBg,
           borderLeft:      isActive
             ? `3px solid ${hceColors.primary.blue[600]}`
             : "3px solid transparent",
           paddingLeft:     isActive ? "9px" : "12px",
-          transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
-          "&:hover": {
-            backgroundColor: isActive
-              ? hceColors.primary.blue[100]
-              : hceColors.primary.blue[50],
-            transform: "translateX(2px)",
-          },
-          "&:focus-visible": {
-            outline:       `2px solid ${hceColors.primary.blue[500]}`,
-            outlineOffset: "2px",
-          },
-          userSelect: "none",
-        }}
+          paddingRight:    "12px",
+        } as CSSProperties}
       >
         {/* Icono o avatar abreviatura */}
-        <Box sx={{
+        <span style={{
           width:           26,
           height:          26,
           borderRadius:    IconComp ? "6px" : "50%",
@@ -488,18 +470,18 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
           {IconComp ? (
             <IconComp size={15} color={hceColors.primary.blue[600]} />
           ) : (
-            <Typography sx={{
+            <span style={{
               fontFamily: hceTypography.fontFamily,
               color:      hceColors.primary.blue[700],
               fontSize:   "0.6rem",
               fontWeight: 700,
             }}>
               {abbr(item.titulo)}
-            </Typography>
+            </span>
           )}
-        </Box>
+        </span>
 
-        <Typography sx={{
+        <span style={{
           fontFamily:   hceTypography.fontFamily,
           fontSize:     "0.82rem",
           fontWeight:   isActive || childActive || open ? 700 : 500,
@@ -511,199 +493,174 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
           overflow:     "hidden",
           textOverflow: "ellipsis",
           whiteSpace:   "nowrap",
-          opacity:      1,
-          transform:    "translateX(0)",
-          transition:   `opacity ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
         }}>
           {item.titulo}
-        </Typography>
+        </span>
 
         {hasChildren && (
-          <ExpandMoreIcon sx={{
-            fontSize:   16,
-            color:      open ? hceColors.primary.blue[500] : hceColors.neutro.black[100],
-            transform:  open ? "rotate(180deg)" : "rotate(0deg)",
-            transition: `transform ${TRANSITION_FAST}`,
-            flexShrink: 0,
-          }} />
+          <span className={`hce-sidebar-chevron${open ? " hce-sidebar-chevron--open" : ""}`} style={{ display: "flex", flexShrink: 0 }}>
+            <ExpandMoreGlyph size={16} color={open ? hceColors.primary.blue[500] : hceColors.neutro.black[100]} />
+          </span>
         )}
-      </Box>
+      </div>
 
       {/* Submenú nivel 2 */}
-      {hasChildren && (
-        <Collapse in={open} unmountOnExit>
-          <Box sx={{
-            ml:         3.5,
-            mr:         1,
-            mb:         0.5,
-            pl:         0,
-            borderLeft: `2px solid ${hceColors.primary.blue[100]}`,
-          }}>
-            {item.opciones!.map(child => {
-              const childCanNav  = !!child.vista
-              const childHasKids = (child.opciones?.length ?? 0) > 0
+      {hasChildren && open && (
+        <div style={{
+          marginLeft:  28,
+          marginRight: 8,
+          marginBottom: 4,
+          borderLeft: `2px solid ${hceColors.primary.blue[100]}`,
+        }}>
+          {item.opciones!.map(child => {
+            const childCanNav  = !!child.vista
+            const childHasKids = (child.opciones?.length ?? 0) > 0
 
-              if (!childCanNav && (!multiLevel || !childHasKids)) return null
+            if (!childCanNav && (!multiLevel || !childHasKids)) return null
 
-              if (!childCanNav) {
-                return (
-                  <SecondLevelGroup
-                    key={child.idMenu ?? child.codigo}
-                    item={child}
-                    currentPath={currentPath}
-                    onNavigate={onNavigate}
-                  />
-                )
-              }
-
-              const isChildActive      = currentPath === child.vista
-              const grandkidsWithVista = multiLevel
-                ? (child.opciones ?? []).filter(gc => !!gc.vista)
-                : []
-
-              const handleChildKeyDown = (e: React.KeyboardEvent) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault()
-                  onNavigate(child.vista!)
-                }
-              }
-
+            if (!childCanNav) {
               return (
-                <Box key={child.idMenu ?? child.codigo}>
-                  <Box
-                    role="button"
-                    tabIndex={0}
-                    aria-label={child.titulo}
-                    aria-current={isChildActive ? "page" : undefined}
-                    onClick={() => onNavigate(child.vista!)}
-                    onKeyDown={handleChildKeyDown}
-                    sx={{
-                      display:         "flex",
-                      alignItems:      "center",
-                      pr:              1.5,
-                      py:              "7px",
-                      borderRadius:    "0 8px 8px 0",
-                      cursor:          "pointer",
-                      backgroundColor: isChildActive ? hceColors.primary.blue[50] : "transparent",
-                      borderLeft:      isChildActive
-                        ? `3px solid ${hceColors.primary.blue[600]}`
-                        : "3px solid transparent",
-                      transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
-                      "&:hover": {
-                        backgroundColor: hceColors.primary.blue[50],
-                        transform:       "translateX(2px)",
-                      },
-                      "&:focus-visible": {
-                        outline:       `2px solid ${hceColors.primary.blue[500]}`,
-                        outlineOffset: "2px",
-                      },
-                      userSelect: "none",
-                    }}
-                  >
-                    {/* Conector horizontal */}
-                    <Box sx={{
-                      width:           14,
-                      height:          1,
-                      flexShrink:      0,
-                      backgroundColor: isChildActive
-                        ? hceColors.primary.blue[400]
-                        : hceColors.primary.blue[200],
-                      mr:              1,
-                    }} />
-                    <Typography sx={{
-                      fontFamily:   hceTypography.fontFamily,
-                      fontSize:     "0.78rem",
-                      fontWeight:   isChildActive ? 700 : 400,
-                      color:        isChildActive ? hceColors.primary.blue[700] : hceColors.neutro.black[400],
-                      lineHeight:   1.3,
-                      overflow:     "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace:   "nowrap",
-                      flex:         1,
-                    }}>
-                      {child.titulo}
-                    </Typography>
-                  </Box>
-
-                  {grandkidsWithVista.length > 0 && (
-                    <Box sx={{ ml: 2, borderLeft: `2px solid ${hceColors.primary.blue[50]}` }}>
-                      {grandkidsWithVista.map(gc => {
-                        const isGcActive = currentPath === gc.vista
-
-                        const handleGcKeyDown = (e: React.KeyboardEvent) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault()
-                            onNavigate(gc.vista!)
-                          }
-                        }
-
-                        return (
-                          <Box
-                            key={gc.idMenu ?? gc.codigo}
-                            role="button"
-                            tabIndex={0}
-                            aria-label={gc.titulo}
-                            aria-current={isGcActive ? "page" : undefined}
-                            onClick={() => onNavigate(gc.vista!)}
-                            onKeyDown={handleGcKeyDown}
-                            sx={{
-                              display:         "flex",
-                              alignItems:      "center",
-                              pr:              1,
-                              py:              "6px",
-                              borderRadius:    "0 8px 8px 0",
-                              cursor:          "pointer",
-                              backgroundColor: isGcActive ? hceColors.primary.blue[50] : "transparent",
-                              borderLeft:      isGcActive
-                                ? `3px solid ${hceColors.primary.blue[600]}`
-                                : "3px solid transparent",
-                              transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
-                              "&:hover": {
-                                backgroundColor: hceColors.primary.blue[50],
-                                transform:       "translateX(2px)",
-                              },
-                              "&:focus-visible": {
-                                outline:       `2px solid ${hceColors.primary.blue[500]}`,
-                                outlineOffset: "2px",
-                              },
-                              userSelect: "none",
-                            }}
-                          >
-                            <Box sx={{
-                              width:           10,
-                              height:          1,
-                              flexShrink:      0,
-                              backgroundColor: isGcActive
-                                ? hceColors.primary.blue[400]
-                                : hceColors.primary.blue[100],
-                              mr:              0.75,
-                            }} />
-                            <Typography sx={{
-                              fontFamily:   hceTypography.fontFamily,
-                              fontSize:     "0.73rem",
-                              fontWeight:   isGcActive ? 700 : 400,
-                              color:        isGcActive ? hceColors.primary.blue[700] : hceColors.neutro.black[300],
-                              lineHeight:   1.3,
-                              overflow:     "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace:   "nowrap",
-                            }}>
-                              {gc.titulo}
-                            </Typography>
-                          </Box>
-                        )
-                      })}
-                    </Box>
-                  )}
-                </Box>
+                <SecondLevelGroup
+                  key={child.idMenu ?? child.codigo}
+                  item={child}
+                  currentPath={currentPath}
+                  onNavigate={onNavigate}
+                />
               )
-            })}
-          </Box>
-        </Collapse>
+            }
+
+            const isChildActive      = currentPath === child.vista
+            const grandkidsWithVista = multiLevel
+              ? (child.opciones ?? []).filter(gc => !!gc.vista)
+              : []
+
+            const handleChildKeyDown = (e: KeyboardEvent) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                onNavigate(child.vista!)
+              }
+            }
+
+            return (
+              <div key={child.idMenu ?? child.codigo}>
+                <div
+                  role="button"
+                  tabIndex={0}
+                  aria-label={child.titulo}
+                  aria-current={isChildActive ? "page" : undefined}
+                  onClick={() => onNavigate(child.vista!)}
+                  onKeyDown={handleChildKeyDown}
+                  className="hce-sidebar-row"
+                  style={{
+                    display:         "flex",
+                    alignItems:      "center",
+                    paddingRight:    12,
+                    paddingTop:      "7px",
+                    paddingBottom:   "7px",
+                    borderRadius:    "0 8px 8px 0",
+                    backgroundColor: isChildActive ? hceColors.primary.blue[50] : "transparent",
+                    borderLeft:      isChildActive
+                      ? `3px solid ${hceColors.primary.blue[600]}`
+                      : "3px solid transparent",
+                  }}
+                >
+                  {/* Conector horizontal */}
+                  <span style={{
+                    width:           14,
+                    height:          1,
+                    flexShrink:      0,
+                    backgroundColor: isChildActive
+                      ? hceColors.primary.blue[400]
+                      : hceColors.primary.blue[200],
+                    marginRight:     8,
+                  }} />
+                  <span style={{
+                    fontFamily:   hceTypography.fontFamily,
+                    fontSize:     "0.78rem",
+                    fontWeight:   isChildActive ? 700 : 400,
+                    color:        isChildActive ? hceColors.primary.blue[700] : hceColors.neutro.black[400],
+                    lineHeight:   1.3,
+                    overflow:     "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace:   "nowrap",
+                    flex:         1,
+                  }}>
+                    {child.titulo}
+                  </span>
+                </div>
+
+                {grandkidsWithVista.length > 0 && (
+                  <div style={{ marginLeft: 16, borderLeft: `2px solid ${hceColors.primary.blue[50]}` }}>
+                    {grandkidsWithVista.map(gc => {
+                      const isGcActive = currentPath === gc.vista
+
+                      const handleGcKeyDown = (e: KeyboardEvent) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault()
+                          onNavigate(gc.vista!)
+                        }
+                      }
+
+                      return (
+                        <div
+                          key={gc.idMenu ?? gc.codigo}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={gc.titulo}
+                          aria-current={isGcActive ? "page" : undefined}
+                          onClick={() => onNavigate(gc.vista!)}
+                          onKeyDown={handleGcKeyDown}
+                          className="hce-sidebar-row"
+                          style={{
+                            display:         "flex",
+                            alignItems:      "center",
+                            paddingRight:    8,
+                            paddingTop:      "6px",
+                            paddingBottom:   "6px",
+                            borderRadius:    "0 8px 8px 0",
+                            backgroundColor: isGcActive ? hceColors.primary.blue[50] : "transparent",
+                            borderLeft:      isGcActive
+                              ? `3px solid ${hceColors.primary.blue[600]}`
+                              : "3px solid transparent",
+                          }}
+                        >
+                          <span style={{
+                            width:           10,
+                            height:          1,
+                            flexShrink:      0,
+                            backgroundColor: isGcActive
+                              ? hceColors.primary.blue[400]
+                              : hceColors.primary.blue[100],
+                            marginRight:     6,
+                          }} />
+                          <span style={{
+                            fontFamily:   hceTypography.fontFamily,
+                            fontSize:     "0.73rem",
+                            fontWeight:   isGcActive ? 700 : 400,
+                            color:        isGcActive ? hceColors.primary.blue[700] : hceColors.neutro.black[300],
+                            lineHeight:   1.3,
+                            overflow:     "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace:   "nowrap",
+                          }}>
+                            {gc.titulo}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
       )}
-    </Box>
+    </div>
   )
 }
+
+// Valor literal para evitar dependencia circular en el mismo módulo
+const TRANSITION_WIDTH = "width 220ms cubic-bezier(0.4, 0, 0.2, 1), min-width 220ms cubic-bezier(0.4, 0, 0.2, 1)"
 
 // ─── Componente principal ──────────────────────────────────────────────────────
 
@@ -718,19 +675,19 @@ export function HceSidebar({
   multiLevel  = false,
 }: HceSidebarProps) {
 
-  const handleToggleKeyDown = (e: React.KeyboardEvent) => {
+  const handleToggleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault()
       onToggle()
     }
   }
 
-  const containerSx = floating
+  const containerStyle: CSSProperties = floating
     ? {
         width:           collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH,
         height:          "100%",
         display:         "flex",
-        flexDirection:   "column" as const,
+        flexDirection:   "column",
         flexShrink:      0,
         overflow:        "hidden",
         transition:      `width ${TRANSITION_BASE}`,
@@ -743,9 +700,9 @@ export function HceSidebar({
         minWidth:        collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH,
         height:          "100%",
         display:         "flex",
-        flexDirection:   "column" as const,
+        flexDirection:   "column",
         flexShrink:      0,
-        transition:      hceTransition_width,
+        transition:      TRANSITION_WIDTH,
         overflow:        "hidden",
         backgroundColor: collapsed ? hceColors.primary.blue[600] : "white",
         boxShadow:       hceShadows.sidebar,
@@ -753,8 +710,8 @@ export function HceSidebar({
       }
 
   return (
-    <Box
-      sx={{ ...containerSx, cursor: collapsed ? "pointer" : "default" }}
+    <div
+      style={{ ...containerStyle, cursor: collapsed ? "pointer" : "default", boxSizing: "border-box" }}
       onClick={collapsed ? onToggle : undefined}
       onKeyDown={collapsed ? handleToggleKeyDown : undefined}
       tabIndex={collapsed ? 0 : undefined}
@@ -763,17 +720,18 @@ export function HceSidebar({
     >
 
       {/* ── Cabecera ─────────────────────────────────────────── */}
-      <Box sx={{
+      <div style={{
         height:          64,
         backgroundColor: hceColors.primary.blue[600],
         display:         "flex",
         alignItems:      "center",
         justifyContent:  collapsed ? "center" : "space-between",
-        px:              collapsed ? 0 : 2,
+        padding:         collapsed ? 0 : "0 16px",
         flexShrink:      0,
+        boxSizing:       "border-box",
       }}>
         {collapsed ? (
-          <Box
+          <div
             role="button"
             tabIndex={0}
             aria-label="Expandir menú lateral"
@@ -785,28 +743,23 @@ export function HceSidebar({
                 onToggle()
               }
             }}
-            sx={{
+            className="hce-sidebar-icon-btn"
+            style={{
+              "--row-focus-color": hceColors.neutro.white[50],
               width:      40,
               height:     40,
               display:    "flex",
               alignItems: "center",
               justifyContent: "center",
               borderRadius:   "50%",
-              cursor:         "pointer",
-              transition:     `background-color ${TRANSITION_FAST}`,
-              "&:hover":      { backgroundColor: "rgba(255,255,255,0.15)" },
-              "&:focus-visible": {
-                outline:       `2px solid ${hceColors.neutro.white[50]}`,
-                outlineOffset: "2px",
-              },
-            }}
+            } as CSSProperties}
           >
             <UiIsotipoClinicaIcon size={28} color="white" />
-          </Box>
+          </div>
         ) : (
           <>
             <LogoClinicaSanFelipeIcon width={110} />
-            <Box
+            <div
               role="button"
               tabIndex={0}
               aria-label="Colapsar menú lateral"
@@ -818,55 +771,40 @@ export function HceSidebar({
                   onToggle()
                 }
               }}
-              sx={{
+              className="hce-sidebar-icon-btn"
+              style={{
+                "--row-hover-bg": "rgba(255,255,255,0.25)",
+                "--row-focus-color": hceColors.neutro.white[50],
                 width:           30,
                 height:          30,
                 display:         "flex",
                 alignItems:      "center",
                 justifyContent:  "center",
                 borderRadius:    "50%",
-                cursor:          "pointer",
                 backgroundColor: "rgba(255,255,255,0.15)",
                 flexShrink:      0,
-                transition:      `background-color ${TRANSITION_FAST}`,
-                "&:hover":       { backgroundColor: "rgba(255,255,255,0.25)" },
-                "&:focus-visible": {
-                  outline:       `2px solid ${hceColors.neutro.white[50]}`,
-                  outlineOffset: "2px",
-                },
-              }}
+              } as CSSProperties}
             >
-              <ChevronLeftIcon sx={{ color: "white", fontSize: 18 }} />
-            </Box>
+              <ChevronLeftGlyph size={18} color="white" />
+            </div>
           </>
         )}
-      </Box>
+      </div>
 
       {/* ── Contenido del menú ───────────────────────────────── */}
-      <Box sx={{
+      <div className={`hce-sidebar-scroll${collapsed ? " hce-sidebar-scroll--collapsed" : " hce-sidebar-scroll--expanded"}`} style={{
         flex:       1,
         overflowY:  "auto",
         overflowX:  "hidden",
-        py:         1,
+        padding:    "8px 0",
         backgroundColor: collapsed ? hceColors.primary.blue[600] : "white",
-        "&::-webkit-scrollbar": { width: 4 },
-        "&::-webkit-scrollbar-track": {
-          backgroundColor: collapsed
-            ? hceColors.primary.blue[700]
-            : hceColors.primary.blue[50],
-        },
-        "&::-webkit-scrollbar-thumb": {
-          backgroundColor: collapsed
-            ? "rgba(255,255,255,0.3)"
-            : hceColors.primary.blue[200],
-          borderRadius: 4,
-        },
+        boxSizing:  "border-box",
       }}>
 
         {/* Item Home */}
         {collapsed ? (
           <Tooltip title="Inicio" placement="right" arrow>
-            <Box
+            <div
               role="button"
               tabIndex={0}
               aria-label="Inicio"
@@ -878,32 +816,25 @@ export function HceSidebar({
                   onHome?.()
                 }
               }}
-              sx={{
+              className="hce-sidebar-icon-btn"
+              style={{
+                "--row-focus-color": hceColors.neutro.white[50],
                 display:         "flex",
                 alignItems:      "center",
                 justifyContent:  "center",
                 height:          44,
-                mx:              1,
-                mb:              0.5,
+                marginLeft:      8,
+                marginRight:     8,
+                marginBottom:    4,
                 borderRadius:    "8px",
-                cursor:          "pointer",
                 backgroundColor: "transparent",
-                transition:      `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
-                "&:hover": {
-                  backgroundColor: "rgba(255,255,255,0.15)",
-                  transform:       "translateX(2px)",
-                },
-                "&:focus-visible": {
-                  outline:       `2px solid ${hceColors.neutro.white[50]}`,
-                  outlineOffset: "2px",
-                },
-              }}
+              } as CSSProperties}
             >
-              <HomeOutlinedIcon sx={{ color: "white", fontSize: 22 }} />
-            </Box>
+              <HomeGlyph size={22} color="white" />
+            </div>
           </Tooltip>
         ) : (
-          <Box
+          <div
             role="button"
             tabIndex={0}
             aria-label="Inicio"
@@ -914,47 +845,40 @@ export function HceSidebar({
                 onHome?.()
               }
             }}
-            sx={{
+            className="hce-sidebar-row"
+            style={{
+              "--row-hover-bg": hceColors.primary.blue[50],
               display:    "flex",
               alignItems: "center",
-              gap:        1,
-              mx:         1,
-              px:         1.5,
-              py:         "10px",
+              gap:        8,
+              marginLeft: 8,
+              marginRight: 8,
+              paddingTop:  "10px",
+              paddingBottom: "10px",
+              paddingLeft: 12,
+              paddingRight: 12,
               borderRadius: "8px",
-              cursor:       "pointer",
-              transition:   `background-color ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
-              "&:hover": {
-                backgroundColor: hceColors.primary.blue[50],
-                transform:       "translateX(2px)",
-              },
-              "&:focus-visible": {
-                outline:       `2px solid ${hceColors.primary.blue[500]}`,
-                outlineOffset: "2px",
-              },
-              userSelect: "none",
-            }}
+            } as CSSProperties}
           >
-            <HomeOutlinedIcon sx={{ color: hceColors.primary.blue[600], fontSize: 20 }} />
-            <Typography sx={{
+            <HomeGlyph size={20} color={hceColors.primary.blue[600]} />
+            <span style={{
               fontFamily: hceTypography.fontFamily,
               fontSize:   "0.85rem",
               fontWeight: 600,
               color:      hceColors.primary.blue[600],
-              opacity:    collapsed ? 0 : 1,
-              transform:  collapsed ? "translateX(-6px)" : "translateX(0)",
-              transition: `opacity ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
             }}>
               Inicio
-            </Typography>
-          </Box>
+            </span>
+          </div>
         )}
 
         {/* Divisor */}
         {!collapsed && opciones.length > 0 && (
-          <Box sx={{
-            mx:        2,
-            my:        0.5,
+          <div style={{
+            marginLeft: 16,
+            marginRight: 16,
+            marginTop: 4,
+            marginBottom: 4,
             borderTop: `1px solid ${hceColors.primary.blue[100]}`,
           }} />
         )}
@@ -963,7 +887,7 @@ export function HceSidebar({
             divisor y la primera opción. Colapsado: se mantiene arriba del ícono de la
             primera opción (fondo azul, por eso el color blanco translúcido). */}
         {opciones.length > 0 && (
-          <Typography sx={{
+          <div style={{
             fontFamily:    hceTypography.fontFamily,
             fontSize:      "0.68rem",
             fontWeight:    700,
@@ -971,13 +895,13 @@ export function HceSidebar({
             letterSpacing: "0.06em",
             textAlign:     collapsed ? "center" : "left",
             color:         collapsed ? "rgba(255,255,255,0.55)" : hceColors.neutro.black[300],
-            mx:            collapsed ? 0 : 2.5,
-            mt:            collapsed ? 1 : 0.5,
-            mb:            0.5,
-            transition:    `color ${TRANSITION_FAST}`,
+            marginLeft:    collapsed ? 0 : 20,
+            marginRight:   collapsed ? 0 : 20,
+            marginTop:     collapsed ? 8 : 4,
+            marginBottom:  4,
           }}>
             Menu
-          </Typography>
+          </div>
         )}
 
         {/* Opciones desde MAC */}
@@ -991,10 +915,7 @@ export function HceSidebar({
             multiLevel={multiLevel}
           />
         ))}
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }
-
-// Valor literal para evitar dependencia circular en el mismo módulo
-const hceTransition_width = "width 220ms cubic-bezier(0.4, 0, 0.2, 1), min-width 220ms cubic-bezier(0.4, 0, 0.2, 1)"
