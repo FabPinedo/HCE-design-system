@@ -1,6 +1,6 @@
-import { type ReactNode } from "react"
-import MuiButton          from "@mui/material/Button"
-import { hceTransition, type HceCompanyColors } from "../../tokens/hce.tokens"
+import { type ReactNode, type CSSProperties } from "react"
+import "./Button.css"
+import { hceColors, type HceCompanyColors } from "../../tokens/hce.tokens"
 
 /**
  * Button — átomo del design system HCE
@@ -21,6 +21,21 @@ import { hceTransition, type HceCompanyColors } from "../../tokens/hce.tokens"
  *     • ghost     → texto toma ese color
  *     • contained (primary/secondary/danger) → fondo toma ese color
  * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * NOTA DE PARIDAD (migración fuera de @mui/material): los colores por
+ * defecto (sin `color` ni `tenantTheme`) están hardcodeados acá igual que en
+ * el theme BASE (theme/theme.ts: primary=hceColors.primary.blue[500],
+ * secondary=hceColors.primary.green[500], danger=rojo default de MUI
+ * '#d32f2f', nunca tematizado en theme.ts). Antes, este Button heredaba el
+ * theme activo vía contexto de MUI (`DSProvider`/`ThemeProvider`), por lo que
+ * dentro del módulo de Emergencia (`emergencyTheme`) un botón sin `color` ni
+ * `tenantTheme` tomaba colores clínicos distintos (tableHeaderBg/priority1/
+ * etc.). Ese enganche con el theme "de módulo" (Axis A) todavía no está
+ * portado — se resuelve cuando se rediseñe DSProvider/theme.ts a variables
+ * CSS (paso pendiente del refactor). Hasta entonces, este Button SIEMPRE
+ * muestra los colores del theme base, incluso dentro de un DSProvider con
+ * emergencyTheme. `tenantTheme` (Axis B) sí funciona igual que antes, es
+ * completamente independiente de este mecanismo.
  */
 
 interface Props {
@@ -41,13 +56,13 @@ interface Props {
   size?:       "sm" | "md" | "lg"
   type?:       "button" | "submit" | "reset"
   disabled?:   boolean
-  style?:      React.CSSProperties
+  style?:      CSSProperties
   /** Icono al inicio — acepta cualquier ReactNode (Lucide, HceIcon, SVG…) */
   startIcon?:  ReactNode
   /** Icono al final — acepta cualquier ReactNode (Lucide, HceIcon, SVG…) */
   endIcon?:    ReactNode
-  /** sx de MUI para overrides puntuales */
-  sx?:         object
+  /** Estilo puntual (equivalente al escape-hatch `sx` de MUI — objeto plano de CSS) */
+  sx?:         CSSProperties
   /**
    * Paleta de marca de una empresa/tenant (multiempresa) a aplicar SOLO a
    * esta instancia del botón. Objeto plano de colores con la forma
@@ -56,14 +71,14 @@ interface Props {
    * `src/tokens/companies.tokens.ts` (`defaultCompanyColors`,
    * `sannaCompanyColors`, `companyThemes`). NO es un Theme de MUI — este
    * design system no usa `createTheme`/`useTheme()` a nivel de componente,
-   * todo se resuelve con tokens planos vía `sx`/`style`.
+   * todo se resuelve con tokens planos vía variables CSS por instancia.
    *
-   * El Button reusa la misma lógica de `buildColorSx` que ya usa el prop
-   * `color`: internamente toma `tenantTheme.primaryDark` (o `secondaryDark`
-   * si `variant === "secondary"`) — las variantes *Dark, no las claras,
-   * porque son las que cumplen contraste WCAG AA con el texto blanco de un
-   * botón contained (ver el comentario de accesibilidad en HceCompanyColors,
-   * hce.tokens.ts).
+   * El Button reusa la misma lógica de `resolveTenantColor` que ya usa el
+   * prop `color`: internamente toma `tenantTheme.primaryDark` (o
+   * `secondaryDark` si `variant === "secondary"`) — las variantes *Dark, no
+   * las claras, porque son las que cumplen contraste WCAG AA con el texto
+   * blanco de un botón contained (ver el comentario de accesibilidad en
+   * HceCompanyColors, hce.tokens.ts).
    *
    * `variant === "danger"` IGNORA `tenantTheme`: el rojo de peligro es
    * semántico (alerta/destructivo), no de marca — ninguna empresa lo
@@ -78,62 +93,23 @@ interface Props {
   tenantTheme?: HceCompanyColors
 }
 
-const SIZE_MAP: Record<string, "small" | "medium" | "large"> = {
-  sm: "small",
-  md: "medium",
-  lg: "large",
+const SIZE_CLASS: Record<string, string> = {
+  sm: "hce-btn--sm",
+  md: "hce-btn--md",
+  lg: "hce-btn--lg",
 }
 
-/** Genera el bloque sx para aplicar un color CSS arbitrario según el tipo de botón */
-function buildColorSx(color: string, muiVariant: "contained" | "outlined" | "text"): object {
-  switch (muiVariant) {
-    case "outlined":
-      return {
-        borderColor: color,
-        color,
-        transition: `border-color ${hceTransition.fast}, background-color ${hceTransition.fast}, transform ${hceTransition.fast}`,
-        "&:hover": {
-          borderColor:     color,
-          backgroundColor: `${color}18`,  // ~10 % opacidad
-          transform:       "translateY(-1px)",
-          boxShadow:       `0 4px 12px ${color}30`,
-        },
-        "&:active": {
-          backgroundColor: `${color}28`,
-          transform:       "scale(0.97)",
-          boxShadow:       "none",
-        },
-      }
-    case "text":
-      return {
-        color,
-        transition: `background-color ${hceTransition.fast}, transform ${hceTransition.fast}`,
-        "&:hover": {
-          backgroundColor: `${color}18`,
-          transform:       "translateY(-1px)",
-        },
-        "&:active": {
-          backgroundColor: `${color}28`,
-          transform:       "scale(0.97)",
-        },
-      }
-    default: // contained
-      return {
-        backgroundColor: color,
-        transition: `filter ${hceTransition.fast}, transform ${hceTransition.fast}, box-shadow ${hceTransition.fast}`,
-        "&:hover": {
-          backgroundColor: color,
-          filter:          "brightness(0.88)",
-          transform:       "translateY(-1px)",
-          boxShadow:       `0 4px 12px ${color}40`,
-        },
-        "&:active": {
-          filter:    "brightness(0.78)",
-          transform: "scale(0.97)",
-          boxShadow: "none",
-        },
-      }
-  }
+const VARIANT_CLASS: Record<string, string> = {
+  outlined: "hce-btn--outlined",
+  ghost:    "hce-btn--text",
+}
+
+// Colores semánticos por defecto (sin `color` ni `tenantTheme`) — calcados
+// del theme BASE (theme/theme.ts). Ver nota de paridad arriba.
+const DEFAULT_VARIANT_COLOR: Record<string, string> = {
+  primary:   hceColors.primary.blue[500],
+  secondary: hceColors.primary.green[500],
+  danger:    "#d32f2f", // rojo default de MUI (theme.ts nunca sobreescribe `error`)
 }
 
 /**
@@ -155,7 +131,7 @@ export const Button = ({
   children,
   onClick,
   fullWidth  = false,
-  variant,
+  variant    = "primary",
   color,
   size       = "md",
   type       = "button",
@@ -166,17 +142,10 @@ export const Button = ({
   sx,
   tenantTheme,
 }: Props) => {
-  // Mapeo variant → MUI variant
   const muiVariant: "contained" | "outlined" | "text" =
     variant === "ghost"    ? "text"
     : variant === "outlined" ? "outlined"
     : "contained"
-
-  // Mapeo variant → MUI color (solo cuando no hay color custom ni tenantTheme)
-  const muiColor =
-    variant === "danger"    ? "error"
-    : variant === "secondary" ? "secondary"
-    : "primary"
 
   // `color` (string CSS explícito) siempre gana sobre `tenantTheme` — es una
   // intención más específica del caller que la paleta genérica de la empresa.
@@ -185,36 +154,33 @@ export const Button = ({
   const effectiveColor =
     color ?? (tenantTheme && variant !== "danger" ? resolveTenantColor(tenantTheme, variant) : undefined)
 
-  // Si hay un color efectivo (custom o de tenant), lo aplicamos vía sx
-  const colorSx = effectiveColor ? buildColorSx(effectiveColor, muiVariant) : {}
+  const baseColor = effectiveColor ?? DEFAULT_VARIANT_COLOR[variant] ?? DEFAULT_VARIANT_COLOR.primary
+
+  const cssVars: CSSProperties = {
+    "--hce-btn-bg":        baseColor,
+    "--hce-btn-hover-bg":  muiVariant === "contained" ? undefined : `${baseColor}18`, // ~10% opacidad
+    "--hce-btn-active-bg": muiVariant === "contained" ? undefined : `${baseColor}28`,
+    "--hce-btn-hover-shadow": muiVariant === "contained" ? `0 4px 12px ${baseColor}40` : undefined,
+  } as CSSProperties
+
+  const className = [
+    "hce-btn",
+    VARIANT_CLASS[variant] ?? "hce-btn--contained",
+    SIZE_CLASS[size] ?? "hce-btn--md",
+    fullWidth ? "hce-btn--full-width" : "",
+  ].filter(Boolean).join(" ")
 
   return (
-    <MuiButton
-      variant={muiVariant}
-      color={effectiveColor ? undefined : muiColor}   // MUI no interpreta hex, lo manejamos con sx
-      onClick={onClick}
-      fullWidth={fullWidth}
-      size={SIZE_MAP[size] ?? "medium"}
+    <button
       type={type}
+      className={className}
+      onClick={onClick}
       disabled={disabled}
-      style={style}
-      startIcon={startIcon}
-      endIcon={endIcon}
-      sx={{
-        textTransform: "none",
-        fontWeight:    600,
-        transition:    `transform ${hceTransition.fast}, box-shadow ${hceTransition.fast}, filter ${hceTransition.fast}`,
-        "&:hover": {
-          transform: "translateY(-1px)",
-        },
-        "&:active": {
-          transform: "scale(0.97)",
-        },
-        ...colorSx,
-        ...sx,          // overrides del caller (mayor prioridad)
-      }}
+      style={{ ...cssVars, ...style, ...sx }}
     >
+      {startIcon}
       {children ?? label}
-    </MuiButton>
+      {endIcon}
+    </button>
   )
 }
