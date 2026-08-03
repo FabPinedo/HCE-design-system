@@ -14,6 +14,10 @@ export interface OverlayProps {
   labelledBy?: string
   describedBy?: string
   panelClassName?: string
+  /** Bloquea el cierre al hacer click en el backdrop (equivalente a `disableOutsideClose`) */
+  disableBackdropClose?: boolean
+  /** Bloquea el cierre al presionar Escape (equivalente a `disableEscapeClose`) */
+  disableEscapeClose?: boolean
 }
 
 /**
@@ -35,10 +39,12 @@ export function Overlay({
   labelledBy,
   describedBy,
   panelClassName,
+  disableBackdropClose = false,
+  disableEscapeClose = false,
 }: OverlayProps) {
   const panelRef = useRef<HTMLDivElement>(null)
 
-  useFocusTrap(panelRef, open, onClose)
+  useFocusTrap(panelRef, open, disableEscapeClose ? undefined : onClose)
 
   if (!open || typeof document === "undefined") return null
 
@@ -46,7 +52,7 @@ export function Overlay({
     <div
       className="hce-overlay-backdrop"
       onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose?.()
+        if (e.target === e.currentTarget && !disableBackdropClose) onClose?.()
       }}
     >
       <div

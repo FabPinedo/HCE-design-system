@@ -1,5 +1,4 @@
-import { Tabs, Tab } from "@mui/material"
-import { hceColors } from "../../tokens/hce.tokens";
+import "./NavTab.css"
 
 export interface NavTabItem {
     label: string;
@@ -15,31 +14,20 @@ interface Props {
 
 export const NavTab = ({tabs, value, onChange}: Props) => {
   return (
-    <Tabs
-    sx={{
-      
-        "& .MuiTab-root": {
-            borderRadius: "8px 8px 0 0",
-            color: hceColors.primary.blue[100],
-            backgroundColor:  hceColors.primary.blue[50],
-        },
-        "& .MuiTab-root.Mui-selected": {
-            color: hceColors.neutro.white[50],
-            backgroundColor: hceColors.primary.blue[600],
-            fontWeight: 600
-        },
-    }}
-    value={value}
-    onChange={(_, newValue) => onChange(newValue)}>
+    <div className="hce-navtab-list" role="tablist">
         {tabs.map((tab)=>(
-            <Tab
-            sx={{color:"#ffffff"}}
+            <button
+            type="button"
+            role="tab"
+            className={`hce-navtab-item${value === tab.value ? " hce-navtab-item--selected" : ""}`}
             key={tab.value}
-            value={tab.value}
-            label={tab.value}
+            aria-selected={value === tab.value}
             disabled={tab.disabled}
-            />
+            onClick={() => onChange(tab.value)}
+            >
+                {tab.value}
+            </button>
         ))}
-    </Tabs>
+    </div>
   )
 }
