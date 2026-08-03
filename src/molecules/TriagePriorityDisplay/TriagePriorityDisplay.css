@@ -1,0 +1,10 @@
+.hce-triage-pill--interactive:hover {
+  background-color: var(--triage-bg-active) !important;
+  transform: scale(1.04) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+}
+
+.hce-triage-pill:focus-visible {
+  outline: 2px solid var(--triage-border);
+  outline-offset: 2px;
+}

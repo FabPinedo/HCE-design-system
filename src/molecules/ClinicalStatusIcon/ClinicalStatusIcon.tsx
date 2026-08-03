@@ -3,7 +3,7 @@
  * Component: ClinicalStatusIcon
  * Description:
  * Ícono de estado para columnas clínicas de la tabla de pacientes.
- * Combina MUI Box + Tooltip + SvgIcon → molecule.
+ * Combina un div + Tooltip + SvgIcon → molecule.
  *
  * Estados disponibles:
  *   alert   → fondo naranja claro, ícono naranja — pendiente/alerta
@@ -12,8 +12,8 @@
  *   empty   → sin fondo, sin ícono               — sin registro
  * ---------------------------------------------------------
  */
-import { Box, Tooltip } from "@mui/material"
 import { hceClinicalColors, hceBorderRadius } from "../../tokens/hce.tokens"
+import { Tooltip } from "../../atoms/Tooltip/Tooltip"
 import type { ComponentType } from "react"
 
 export type ClinicalIconStatus = "alert" | "ok" | "urgent" | "empty"
@@ -55,7 +55,7 @@ type CustomIconProps = {
 interface Props {
   /** Estado clínico del estudio */
   status: ClinicalIconStatus
-  /** Componente de ícono MUI (SvgIconComponent) e iconos svg del uiKit*/
+  /** Componente de ícono (HceIcon custom o cualquier ComponentType compatible con size/color) */
   icon: ComponentType<CustomIconProps>
   /** Texto descriptivo para el tooltip (opcional, sobreescribe el label por defecto) */
   tooltipLabel?: string
@@ -65,7 +65,7 @@ export const ClinicalStatusIcon = ({ status, icon: Icon, tooltipLabel }: Props) 
   const config = STATUS_CONFIG[status]
 
   if (status === "empty") {
-    return <Box sx={{ width: 28, height: 28, flexShrink: 0 }} aria-hidden="true" />
+    return <div style={{ width: 28, height: 28, flexShrink: 0 }} aria-hidden="true" />
   }
 
   return (
@@ -73,8 +73,8 @@ export const ClinicalStatusIcon = ({ status, icon: Icon, tooltipLabel }: Props) 
       title={tooltipLabel ?? config.label}
       placement="top"
     >
-      <Box
-        sx={{
+      <div
+        style={{
           width:           28,
           height:          28,
           border:          `1.5px solid ${config.color}` ,
@@ -85,12 +85,13 @@ export const ClinicalStatusIcon = ({ status, icon: Icon, tooltipLabel }: Props) 
           justifyContent:  "center",
           flexShrink:      0,
           cursor:          "default",
+          boxSizing:       "border-box",
         }}
         role="img"
         aria-label={tooltipLabel ?? config.label}
       >
         <Icon size= {16} color= {config.color} />
-      </Box>
+      </div>
     </Tooltip>
   )
 }

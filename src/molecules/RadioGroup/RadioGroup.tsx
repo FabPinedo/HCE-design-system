@@ -1,5 +1,4 @@
 import { useId } from "react";
-import { Box, Radio } from "@mui/material";
 import { hceColors, hceTypography } from "../../tokens/hce.tokens";
 
 interface Option<T extends string | boolean> {
@@ -27,23 +26,21 @@ export const RadioGroup = <T extends string | boolean>({
 }: Props<T>) => {
   const groupName = useId();
   return (
-    <Box
-      component="fieldset"
-      sx={{
+    <fieldset
+      style={{
         border: `1.5px solid ${disabled ? hceColors.neutro.black[200] : hceColors.primary.green[500]}`,
         borderRadius: "8px",
-        px: 2,
-        py: 0.2,
-        m: 0,
+        padding: "1.6px 16px",
+        margin: 0,
         opacity: disabled ? 0.5 : 1,
         width: "100%",
+        boxSizing: "border-box",
       }}
     >
       {legend && (
-        <Box
-          component="legend"
-          sx={{
-            px: 1,
+        <legend
+          style={{
+            padding: "0 8px",
             fontFamily: hceTypography.fontFamily,
             fontSize: "0.72rem",
             fontWeight: 700,
@@ -53,34 +50,33 @@ export const RadioGroup = <T extends string | boolean>({
           }}
         >
           {legend}
-        </Box>
+        </legend>
       )}
-      <Box
-        sx={{
+      <div
+        style={{
           display: "flex",
           justifyContent: "space-between",
-          gap: 3,
+          gap: 24,
         }}
       >
         {options.map((opt) => {
           const optionKey = String(opt.value);
           return (
-            <Box
+            <label
               key={optionKey}
-              component="label"
-              sx={{
+              style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 0.2,
+                gap: "1.6px",
                 cursor: disabled ? "not-allowed" : "pointer",
                 fontFamily: hceTypography.fontFamily,
                 fontSize: "0.875rem",
               }}
             >
               {opt.label}
-              <Radio
+              <input
+                type="radio"
                 name={groupName}
-                value={opt}
                 checked={value === opt.value}
                 onChange={() => {
                   if (!disabled && typeof onChange === "function") {
@@ -90,10 +86,10 @@ export const RadioGroup = <T extends string | boolean>({
                 disabled={disabled}
                 style={{ accentColor: hceColors.primary.green[500] }}
               />
-            </Box>
+            </label>
           );
         })}
-      </Box>
-    </Box>
+      </div>
+    </fieldset>
   );
 };
