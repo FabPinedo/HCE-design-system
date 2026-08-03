@@ -25,14 +25,14 @@ export {
 } from "./tokens/hce.tokens"
 export type { HceColors } from "./tokens/hce.tokens"
 // Forma compartida de la paleta de marca por empresa (multiempresa) — ver
-// tokens/default.tokens.ts y tokens/novasalud.tokens.ts.
+// tokens/companies.tokens.ts.
 export type { HceCompanyColors } from "./tokens/hce.tokens"
 
 // ── Design Tokens — Multiempresa (paleta de marca por empresa) ───────────
-// Cada empresa/tenant vive en su propio archivo src/tokens/<empresa>.tokens.ts
-// (NUNCA se fragmentan aquí los tokens estructurales de arriba).
-export { defaultCompanyColors } from "./tokens/default.tokens"
-export { novaSaludColors }      from "./tokens/novasalud.tokens"
+// Todas las empresas/tenants viven en src/tokens/companies.tokens.ts (NUNCA
+// se fragmentan aquí los tokens estructurales de arriba).
+export { defaultCompanyColors, sannaCompanyColors, companyThemes } from "./tokens/companies.tokens"
+export type { CompanyThemeKey } from "./tokens/companies.tokens"
 
 // ── MUI Primitives re-exported ─────────────────────────────
 export { Box, Typography } from "@mui/material"

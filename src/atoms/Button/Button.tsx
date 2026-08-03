@@ -52,11 +52,11 @@ interface Props {
    * Paleta de marca de una empresa/tenant (multiempresa) a aplicar SOLO a
    * esta instancia del botón. Objeto plano de colores con la forma
    * `HceCompanyColors` (primary/primaryDark/secondary/secondaryDark/
-   * textOnPrimary/…) — cada empresa vive en su propio archivo
-   * `src/tokens/<empresa>.tokens.ts` (ver tokens/default.tokens.ts,
-   * tokens/novasalud.tokens.ts). NO es un Theme de MUI — este design system
-   * no usa `createTheme`/`useTheme()` a nivel de componente, todo se
-   * resuelve con tokens planos vía `sx`/`style`.
+   * textOnPrimary/…) — todas las empresas viven en
+   * `src/tokens/companies.tokens.ts` (`defaultCompanyColors`,
+   * `sannaCompanyColors`, `companyThemes`). NO es un Theme de MUI — este
+   * design system no usa `createTheme`/`useTheme()` a nivel de componente,
+   * todo se resuelve con tokens planos vía `sx`/`style`.
    *
    * El Button reusa la misma lógica de `buildColorSx` que ya usa el prop
    * `color`: internamente toma `tenantTheme.primaryDark` (o `secondaryDark`
@@ -73,7 +73,7 @@ interface Props {
    * explícito) siempre gana — es una intención más específica que la paleta
    * genérica de la empresa. `tenantTheme` solo actúa cuando no hay `color`.
    *
-   * Ej: <Button label="Guardar" tenantTheme={novaSaludColors} />
+   * Ej: <Button label="Guardar" tenantTheme={sannaCompanyColors} />
    */
   tenantTheme?: HceCompanyColors
 }
