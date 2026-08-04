@@ -374,7 +374,10 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
   // ── Modo colapsado ──
   if (collapsed) {
     return (
-      <Tooltip title={item.titulo} placement="right" arrow>
+      /* Tooltip.hce-tooltip-wrapper es inline-flex (shrink-to-fit) por defecto
+         — sin este override queda anclado al borde izquierdo del riel en vez
+         de centrado, ver el mismo override en el Tooltip de "Inicio". */
+      <Tooltip title={item.titulo} placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
         <div
           role="button"
           tabIndex={0}
@@ -696,6 +699,11 @@ export function HceSidebar({
   const IsotipoIcon = tenant === "sanna" ? LogoSannaIsotipoIcon : UiIsotipoClinicaIcon
   const LockupIcon  = tenant === "sanna" ? LogoSannaIcon        : LogoClinicaSanFelipeIcon
 
+  // Fondo sólido de cabecera + riel colapsado — blue[600] == --ds-color-interactive
+  // exactamente en CSF, reactivo al tema activo de DSProvider (verde en Sanna, ver
+  // companies.tokens.ts); mismo hex de siempre como fallback fuera de un DSProvider.
+  const brandSolidBg = `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+
   const handleToggleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault()
@@ -712,7 +720,7 @@ export function HceSidebar({
         flexShrink:      0,
         overflow:        "hidden",
         transition:      `width ${TRANSITION_BASE}`,
-        backgroundColor: collapsed ? hceColors.primary.blue[600] : "white",
+        backgroundColor: collapsed ? brandSolidBg : "white",
         borderRadius:    "16px",
         boxShadow:       hceShadows.float,
       }
@@ -725,7 +733,7 @@ export function HceSidebar({
         flexShrink:      0,
         transition:      TRANSITION_WIDTH,
         overflow:        "hidden",
-        backgroundColor: collapsed ? hceColors.primary.blue[600] : "white",
+        backgroundColor: collapsed ? brandSolidBg : "white",
         boxShadow:       hceShadows.sidebar,
         borderRight:     `1px solid ${hceColors.primary.blue[100]}`,
       }
@@ -743,7 +751,7 @@ export function HceSidebar({
       {/* ── Cabecera ─────────────────────────────────────────── */}
       <div style={{
         height:          64,
-        backgroundColor: hceColors.primary.blue[600],
+        backgroundColor: brandSolidBg,
         display:         "flex",
         alignItems:      "center",
         justifyContent:  collapsed ? "center" : "space-between",
@@ -818,13 +826,16 @@ export function HceSidebar({
         overflowY:  "auto",
         overflowX:  "hidden",
         padding:    "8px 0",
-        backgroundColor: collapsed ? hceColors.primary.blue[600] : "white",
+        backgroundColor: collapsed ? brandSolidBg : "white",
         boxSizing:  "border-box",
       }}>
 
         {/* Item Home */}
         {collapsed ? (
-          <Tooltip title="Inicio" placement="right" arrow>
+          /* Tooltip.hce-tooltip-wrapper es inline-flex (shrink-to-fit) por
+             defecto — sin este override queda anclado al borde izquierdo
+             del riel en vez de centrado, igual que en FirstLevelItem. */
+          <Tooltip title="Inicio" placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
             <div
               role="button"
               tabIndex={0}
