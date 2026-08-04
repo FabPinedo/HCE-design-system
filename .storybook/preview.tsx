@@ -1,34 +1,42 @@
 import type { Preview } from "@storybook/react"
 import React from "react"
 import { DSProvider }      from "../src/provider/ThemeProvider"
-import { theme }           from "../src/theme/theme"
-import { emergencyTheme }  from "../src/theme/emergencyTheme"
+import { dsThemes, type DsTheme } from "../src/theme/themes"
 import { injectHceTokens } from "../src/tokens/hce.tokens"
 injectHceTokens()
 
-const themes = { base: theme, emergency: emergencyTheme }
+// Toolbar de tenant/empresa — un solo eje de theming (ver theme/themes.ts).
+// "default" y "csf" apuntan al mismo DsTheme (CSF es la empresa por
+// defecto de este deployment), así que se muestra solo una vez en el
+// toolbar bajo el nombre "csf" para no listar dos entradas idénticas; el
+// tema exportado `default` sigue existiendo y es el que usa `DSProvider`
+// cuando no se pasa `theme` explícito.
+const storybookThemes: Record<string, DsTheme> = {
+  csf:   dsThemes.csf,
+  sanna: dsThemes.sanna,
+}
 
 const preview: Preview = {
   globalTypes: {
     theme: {
-      description: "Theme del Design System",
+      description: "Empresa/tenant del Design System",
       toolbar: {
         title: "Theme",
         icon: "paintbrush",
         items: [
-          { value: "base",      title: "Base" },
-          { value: "emergency", title: "Emergencia" },
+          { value: "csf",   title: "Clínica San Felipe" },
+          { value: "sanna", title: "Sanna" },
         ],
         dynamicTitle: true,
       },
     },
   },
   initialGlobals: {
-    theme: "base",
+    theme: "csf",
   },
   decorators: [
     (Story, context) => (
-      <DSProvider theme={themes[context.globals.theme as keyof typeof themes]}>
+      <DSProvider theme={storybookThemes[context.globals.theme as keyof typeof storybookThemes]}>
         <Story />
       </DSProvider>
     ),
