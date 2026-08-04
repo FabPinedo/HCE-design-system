@@ -112,6 +112,21 @@ const DEFAULT_VARIANT_COLOR: Record<string, string> = {
   danger:    "#d32f2f", // rojo default de MUI (theme.ts nunca sobreescribe `error`)
 }
 
+// Shade ".dark" curado por variant, para el hover del botón contained
+// SOLO cuando no hay `color`/`tenantTheme` explícito — es el mismo shade que
+// usaba MUI (`theme.palette.{primary,secondary,error}.dark`) para el hover
+// de un botón sin color custom. Cuando sí hay `color`/`tenantTheme` (un CSS
+// arbitrario sin shade ".dark" predefinido) seguimos usando
+// `filter: brightness(0.88)` como única opción razonable — eso NO cambia.
+// Hallazgo de hce-code-reviewer: antes de este fix, el hover usaba el filter
+// para TODOS los botones contained (incluido el default), dando un azul
+// visiblemente distinto (#003b91) al shade real que mostraba MUI (#003075).
+const HOVER_VARIANT_COLOR: Record<string, string> = {
+  primary:   hceColors.primary.blue[700],
+  secondary: hceColors.primary.green[700],
+  danger:    "#c62828", // theme.palette.error.dark default de MUI
+}
+
 /**
  * Resuelve el color CSS a aplicar cuando el caller pasa `tenantTheme` en vez
  * de `color`. Usa siempre las variantes *Dark (nunca los tonos "brand"
@@ -156,11 +171,19 @@ export const Button = ({
 
   const baseColor = effectiveColor ?? DEFAULT_VARIANT_COLOR[variant] ?? DEFAULT_VARIANT_COLOR.primary
 
+  // Hover del botón contained: shade ".dark" curado cuando no hay color
+  // custom (matching MUI), filter de brillo cuando sí lo hay (ver
+  // HOVER_VARIANT_COLOR arriba).
+  const containedHoverBg = effectiveColor ? baseColor : (HOVER_VARIANT_COLOR[variant] ?? baseColor)
+  const containedHoverFilter = effectiveColor ? "brightness(0.88)" : "none"
+
   const cssVars: CSSProperties = {
     "--hce-btn-bg":        baseColor,
     "--hce-btn-hover-bg":  muiVariant === "contained" ? undefined : `${baseColor}18`, // ~10% opacidad
     "--hce-btn-active-bg": muiVariant === "contained" ? undefined : `${baseColor}28`,
     "--hce-btn-hover-shadow": muiVariant === "contained" ? `0 4px 12px ${baseColor}40` : undefined,
+    "--hce-btn-contained-hover-bg":     muiVariant === "contained" ? containedHoverBg : undefined,
+    "--hce-btn-contained-hover-filter": muiVariant === "contained" ? containedHoverFilter : undefined,
   } as CSSProperties
 
   const className = [
