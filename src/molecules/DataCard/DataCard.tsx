@@ -86,7 +86,9 @@ export function DataCard({
             fontFamily: hceTypography.fontFamily,
             fontWeight: 700,
             fontSize: "1.125rem",
-            color: hceColors.primary.blue[500],
+            // blue[500] == --ds-color-primary (csf) exactamente — reactivo al
+            // tema activo de DSProvider, mismo hex de siempre como fallback.
+            color: `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
             marginBottom: description ? 6 : 0,
           }}
         >
