@@ -1,6 +1,8 @@
 /**
  * Pagination.css — reemplazo de MUI Pagination, calcando los estilos que
- * theme/theme.ts aplicaba vía styleOverrides de MuiPagination/MuiPaginationItem.
+ * el theme MUI original aplicaba vía styleOverrides de
+ * MuiPagination/MuiPaginationItem (ver ahora theme/themes.ts, bloque
+ * `--ds-pagination-*`).
  */
 
 .hce-pagination {

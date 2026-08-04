@@ -6,7 +6,7 @@ import { hceTypography } from "../../tokens/hce.tokens"
  * Typography — reemplazo propio de `Typography` de MUI, en
  * CSS/HTML puro. Mantiene el subconjunto de API que este repo consumía:
  * `variant` (mapea a tag HTML + estilos base, igual que los defaults de MUI
- * más los overrides de variant que ya tenía theme/theme.ts para h1/h4),
+ * más los overrides de variant que ya tenía el theme MUI original para h1/h4),
  * `component` (fuerza un tag distinto al del variant), `sx`, `style`,
  * `className`, `gutterBottom`, `noWrap`, `children`.
  *
@@ -28,7 +28,7 @@ interface VariantStyle {
 }
 
 // Defaults estándar de MUI (Material Design) — este repo solo customizó
-// h1/h4/button en theme/theme.ts, el resto usa los valores de fábrica.
+// h1/h4/button en el theme MUI original, el resto usa los valores de fábrica.
 const VARIANTS: Record<TypographyVariant, VariantStyle> = {
   h1: {
     tag: "h1",

@@ -22,20 +22,20 @@ import { hceColors, type HceCompanyColors } from "../../tokens/hce.tokens"
  *     • contained (primary/secondary/danger) → fondo toma ese color
  * ─────────────────────────────────────────────────────────────────────────────
  *
- * NOTA DE PARIDAD (migración fuera de MUI): los colores por
- * defecto (sin `color` ni `tenantTheme`) están hardcodeados acá igual que en
- * el theme BASE (theme/theme.ts: primary=hceColors.primary.blue[500],
+ * NOTA DE PARIDAD (migración fuera de MUI): los colores por defecto (sin
+ * `color` ni `tenantTheme`) están hardcodeados acá igual que el tema
+ * "default" (theme/themes.ts: primary=hceColors.primary.blue[500],
  * secondary=hceColors.primary.green[500], danger=rojo default de MUI
- * '#d32f2f', nunca tematizado en theme.ts). Antes, este Button heredaba el
- * theme activo vía contexto de MUI (`DSProvider`/`ThemeProvider`), por lo que
- * dentro del módulo de Emergencia (`emergencyTheme`) un botón sin `color` ni
- * `tenantTheme` tomaba colores clínicos distintos (tableHeaderBg/priority1/
- * etc.). Ese enganche con el theme "de módulo" (Axis A) todavía no está
- * portado — se resuelve cuando se rediseñe DSProvider/theme.ts a variables
- * CSS (paso pendiente del refactor). Hasta entonces, este Button SIEMPRE
- * muestra los colores del theme base, incluso dentro de un DSProvider con
- * emergencyTheme. `tenantTheme` (Axis B) sí funciona igual que antes, es
- * completamente independiente de este mecanismo.
+ * '#d32f2f', semántico y nunca tematizado). Antes, este Button heredaba el
+ * theme activo vía contexto de MUI (`DSProvider`/`ThemeProvider`). Ese
+ * enganche con el tema activo de `DSProvider` (empresa/tenant — ver
+ * theme/themes.ts) todavía no está portado — se resuelve conectando este
+ * Button a `var(--ds-color-primary, ...)` etc. (paso pendiente del
+ * refactor, ver PENDIENTE en theme/themes.ts). Hasta entonces, este Button
+ * SIEMPRE muestra estos colores por defecto, sin importar qué tema tenga
+ * activo el `DSProvider` que lo envuelve. `tenantTheme` sí funciona igual
+ * que antes — es un override explícito por instancia, completamente
+ * independiente de `DSProvider`.
  */
 
 interface Props {
@@ -105,7 +105,7 @@ const VARIANT_CLASS: Record<string, string> = {
 }
 
 // Colores semánticos por defecto (sin `color` ni `tenantTheme`) — calcados
-// del theme BASE (theme/theme.ts). Ver nota de paridad arriba.
+// del tema "default" (theme/themes.ts). Ver nota de paridad arriba.
 const DEFAULT_VARIANT_COLOR: Record<string, string> = {
   primary:   hceColors.primary.blue[500],
   secondary: hceColors.primary.green[500],

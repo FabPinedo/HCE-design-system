@@ -20,11 +20,11 @@ const SCROLLBAR_THUMB_MIN_HEIGHT = 24
 // lineHeight se achica a propósito (16px, headerCellStyle) para que un
 // header de 2 líneas (ej. "Indc."/"Med.") no fuerce una fila mucho más alta
 // que una de 1 línea (2×16=32px de contenido, cómodo).
-// El alto REAL final dependía antes del theme MUI del consumidor (ej.
-// emergencyTheme.ts forzaba height:44px en toda fila) — ahora que el theme
-// ya no envuelve la tabla vía MUI, el thumb sigue midiendo el header de
-// verdad con un ResizeObserver (ver headerRef) y usa este valor solo como
-// fallback antes de la primera medición.
+// El alto REAL final dependía antes del theme MUI del consumidor (ej. el
+// tema clínico de Emergencia forzaba height:44px en toda fila) — ahora que
+// el theme ya no envuelve la tabla vía MUI, el thumb sigue midiendo el
+// header de verdad con un ResizeObserver (ver headerRef) y usa este valor
+// solo como fallback antes de la primera medición.
 const HEADER_HEIGHT_FALLBACK = 44
 
 interface GenericTableProps<T> {
@@ -60,9 +60,9 @@ const headerCellStyle: CSSProperties = {
   // el theme (MuiTableHead + MuiTableCell.styleOverrides.head) definía sus
   // propios tokens hce específicos para headers (ej. weight.bold,
   // size.tableHeader). Ahora que el theme ya no envuelve la tabla vía MUI,
-  // esto queda pendiente de reconectar en el rediseño de DSProvider/theme.ts
-  // a variables CSS (Axis A) — ver nota en atoms/Button/Button.tsx sobre el
-  // mismo pendiente.
+  // esto queda pendiente de reconectar a las variables `--ds-table-head-*`
+  // que expone el tema activo de `DSProvider` (ver theme/themes.ts) — ver
+  // nota en atoms/Button/Button.tsx sobre el mismo pendiente.
   // Interlineado angosto a propósito — ver HEADER_HEIGHT_FALLBACK más arriba.
   lineHeight: "16px",
   whiteSpace: "normal",
