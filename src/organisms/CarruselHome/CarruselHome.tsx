@@ -114,7 +114,9 @@ export function CarruselHome({
         width:           "100%",
         height,
         borderRadius,
-        backgroundColor: hceColors.primary.blue[50],
+        // blue[50] == --ds-color-primary-light (csf) exactamente — reactivo al
+        // tema activo de DSProvider, mismo hex de siempre como fallback.
+        backgroundColor: `var(--ds-color-primary-light, ${hceColors.primary.blue[50]})`,
       }}
     >
       <style>{KEYFRAMES}</style>
