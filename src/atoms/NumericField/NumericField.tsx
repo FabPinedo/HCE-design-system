@@ -40,15 +40,17 @@ export function NumericField({
 
   const cssVars = {
     "--nf-main":         mainColor,
+    "--nf-active":       disabled ? hceColors.neutro.black[300] : hceColors.primary.blue[600],
+    "--nf-focus-ring":   hceColors.primary.blue[100],
     "--nf-text-default": textDefaultColor,
     "--nf-text-active":  textActiveColor,
     "--nf-bg":           readOnly || disabled ? hceColors.neutro.white[50] : "#ffffff",
   } as CSSProperties
 
   return (
-    <div>
+    <div style={cssVars}>
       {label && <label className="hce-numeric-label">{label}</label>}
-      <div className="hce-numeric-box" style={cssVars}>
+      <div className="hce-numeric-box">
         <input
           disabled={disabled}
           type="text"
