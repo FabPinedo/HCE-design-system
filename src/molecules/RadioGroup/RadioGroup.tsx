@@ -28,7 +28,9 @@ export const RadioGroup = <T extends string | boolean>({
   return (
     <fieldset
       style={{
-        border: `1.5px solid ${disabled ? hceColors.neutro.black[200] : hceColors.primary.green[500]}`,
+        // green[500] == --ds-color-secondary (csf) exactamente — reactivo al
+        // tema activo de DSProvider, mismo hex de siempre como fallback.
+        border: `1.5px solid ${disabled ? hceColors.neutro.black[200] : `var(--ds-color-secondary, ${hceColors.primary.green[500]})`}`,
         borderRadius: "8px",
         padding: "9px 16px",
         margin: 0,
@@ -84,7 +86,9 @@ export const RadioGroup = <T extends string | boolean>({
                   }
                 }}
                 disabled={disabled}
-                style={{ accentColor: hceColors.primary.blue[500], width: 18, height: 18 }}
+                // blue[500] == --ds-color-primary (csf) exactamente — reactivo al
+                // tema activo de DSProvider, mismo hex de siempre como fallback.
+                style={{ accentColor: `var(--ds-color-primary, ${hceColors.primary.blue[500]})`, width: 18, height: 18 }}
               />
             </label>
           );
