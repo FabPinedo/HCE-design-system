@@ -33,15 +33,17 @@ export function TextInput({
   // ── Colores reactivos ──────────────────────────────────────
   // El hover/focus ahora es CSS real (:hover/:focus-within), así que estos
   // ya no necesitan estado de React — solo dependen de error/disabled.
+  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
+  // de DSProvider, mismo hex de siempre como fallback.
   const mainColor = disabled
     ? hceColors.neutro.black[300] // Gris si está deshabilitado
     : error
       ? hceColors.alert.error[600] // Rojo si hay error
-      : hceColors.primary.blue[600] // Azul por defecto
+      : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})` // Azul por defecto
 
   const textDefaultColor = error ? hceColors.alert.error[600] : hceColors.neutro.black[400]
-  const textActiveColor  = error ? hceColors.alert.error[600] : hceColors.primary.blue[600]
-  const borderActive     = error ? hceColors.alert.error[600] : hceColors.primary.blue[600]
+  const textActiveColor  = error ? hceColors.alert.error[600] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+  const borderActive     = error ? hceColors.alert.error[600] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
   const cssVars = {
     "--ti-main":       mainColor,

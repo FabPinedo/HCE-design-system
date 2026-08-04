@@ -28,12 +28,14 @@ export function DatePicker({
 }: DatePickerProps) {
   // El hover/focus ahora es CSS real (:hover/:focus-within en el wrapper),
   // ya no necesita useState(focused/hovered).
+  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
+  // de DSProvider, mismo hex de siempre como fallback.
   const accentDefault = error ? hceColors.alert.error[600] : hceColors.neutro.black[200]
-  const accentActive  = error ? hceColors.alert.error[600] : hceColors.primary.blue[600]
+  const accentActive  = error ? hceColors.alert.error[600] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
   const textDefault   = error ? hceColors.alert.error[600] : hceColors.neutro.black[400]
-  const textActive    = error ? hceColors.alert.error[600] : hceColors.primary.blue[600]
+  const textActive    = error ? hceColors.alert.error[600] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
   const borderDefault = error ? hceColors.alert.error[600] : hceColors.neutro.black[50]
-  const borderActive  = error ? hceColors.alert.error[600] : hceColors.primary.blue[600]
+  const borderActive  = error ? hceColors.alert.error[600] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
   const cssVars = {
     "--dp-accent-default": accentDefault,

@@ -37,8 +37,10 @@ export function Toggle({ checked, onChange, disabled = false }: ToggleProps) {
           width: 44,
           height: 24,
           borderRadius: "12px",
+          // blue[600] == --ds-color-interactive exactamente — reactivo al
+          // tema activo de DSProvider, mismo hex de siempre como fallback.
           backgroundColor: checked
-            ? hceColors.primary.blue[600]
+            ? `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
             : hceColors.neutro.black[300],
           position: "relative",
           cursor: disabled ? "not-allowed" : "pointer",

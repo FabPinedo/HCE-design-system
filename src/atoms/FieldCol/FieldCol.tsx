@@ -18,7 +18,9 @@ export function FieldCol({ label, children, flex = 1, minWidth }: FieldColProps)
           fontFamily: hceTypography.fontFamily,
           fontSize: "0.72rem",
           fontWeight: 600,
-          color: hceColors.primary.blue[600],
+          // blue[600] == --ds-color-interactive exactamente — reactivo al
+          // tema activo de DSProvider, mismo hex de siempre como fallback.
+          color: `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`,
         }}
       >
         {label}

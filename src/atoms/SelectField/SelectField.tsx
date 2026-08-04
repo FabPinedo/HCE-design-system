@@ -38,11 +38,13 @@ export function SelectField({
 }: Props) {
   // ── Colores reactivos ──────────────────────────────────────
   // 1. Color principal (aplica a label, borde, ícono de flecha y placeholder)
+  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
+  // de DSProvider, mismo hex de siempre como fallback.
   const mainColor = disabled
     ? hceColors.neutro.black[300]
     : error
       ? hceColors.alert.error[600]
-      : hceColors.primary.blue[600]
+      : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
   // 2. Color del texto seleccionado — reactivo a hover/focus vía CSS, salvo
   // cuando no hay valor (se muestra el placeholder con mainColor siempre).
@@ -60,7 +62,7 @@ export function SelectField({
       ? hceColors.neutro.black[300]
       : error
         ? hceColors.alert.error[600]
-        : hceColors.primary.blue[600]
+        : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
   const cssVars = {
     "--sf-main":          mainColor,

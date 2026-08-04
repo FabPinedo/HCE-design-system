@@ -23,12 +23,14 @@ export function TextareaField({
   const id = useId()
 
   // ── Colores reactivos (ahora vía :hover/:focus-within en CSS) ──────────
+  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
+  // de DSProvider, mismo hex de siempre como fallback.
   const mainColor = disabled
     ? hceColors.neutro.black[300]
-    : hceColors.primary.blue[600]
+    : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
   const textDefaultColor = disabled ? hceColors.neutro.black[300] : hceColors.neutro.black[700]
-  const textActiveColor  = disabled ? hceColors.neutro.black[300] : hceColors.primary.blue[600]
+  const textActiveColor  = disabled ? hceColors.neutro.black[300] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
   const cssVars = {
     "--ta-main":         mainColor,

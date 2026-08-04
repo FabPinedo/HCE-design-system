@@ -25,9 +25,11 @@ export function NumericField({
   disabled = false,
 }: NumericFieldProps) {
   // ── Colores reactivos (ahora vía :hover/:focus-within en CSS) ──────────
+  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
+  // de DSProvider, mismo hex de siempre como fallback.
   const mainColor = disabled
     ? hceColors.neutro.black[300]
-    : hceColors.primary.blue[600]
+    : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
   // Si es readOnly, el texto nunca "reacciona" (antes el listener de
   // hover/focus estaba deshabilitado) — mismo valor en default y active.
@@ -36,11 +38,11 @@ export function NumericField({
     ? hceColors.neutro.black[300]
     : readOnly
       ? hceColors.neutro.black[700]
-      : hceColors.primary.blue[600]
+      : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
   const cssVars = {
     "--nf-main":         mainColor,
-    "--nf-active":       disabled ? hceColors.neutro.black[300] : hceColors.primary.blue[600],
+    "--nf-active":       disabled ? hceColors.neutro.black[300] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`,
     "--nf-focus-ring":   hceColors.primary.blue[100],
     "--nf-text-default": textDefaultColor,
     "--nf-text-active":  textActiveColor,

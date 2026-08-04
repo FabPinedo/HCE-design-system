@@ -79,17 +79,19 @@ export const MultiSelect = ({
   // defecto, gris solo cuando está disabled, rojo en error — antes el border
   // por defecto era gris (black[200]) sin importar el estado, distinto del
   // resto de los campos del design system.
+  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
+  // de DSProvider, mismo hex de siempre como fallback.
   const accentColor = disabled
     ? hceColors.neutro.black[300]
     : error
       ? hceColors.alert.error[600]
-      : hceColors.primary.blue[600];
+      : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`;
 
   const activeColor = disabled
     ? hceColors.neutro.black[300]
     : error
       ? hceColors.alert.error[600]
-      : hceColors.primary.blue[600];
+      : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`;
 
   const textDefaultColor = disabled
     ? hceColors.neutro.black[300]
