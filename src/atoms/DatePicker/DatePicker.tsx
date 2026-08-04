@@ -30,12 +30,18 @@ export function DatePicker({
   // ya no necesita useState(focused/hovered).
   // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
   // de DSProvider, mismo hex de siempre como fallback.
-  const accentDefault = error ? hceColors.alert.error[600] : hceColors.neutro.black[200]
-  const accentActive  = error ? hceColors.alert.error[600] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+  // Label y borde van coloreados por el tema DESDE EL INICIO (igual que
+  // TextInput/NumericField) -- antes quedaban en gris neutro hasta el
+  // hover, lo que hacía parecer el campo deshabilitado/apagado en reposo.
+  // Solo el texto ingresado (textDefault) se mantiene neutro en reposo y
+  // pasa a color de tema en hover/focus, igual que en TextInput.
+  const themeColor    = `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+  const accentDefault = error ? hceColors.alert.error[600] : themeColor
+  const accentActive  = error ? hceColors.alert.error[600] : themeColor
   const textDefault   = error ? hceColors.alert.error[600] : hceColors.neutro.black[400]
-  const textActive    = error ? hceColors.alert.error[600] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
-  const borderDefault = error ? hceColors.alert.error[600] : hceColors.neutro.black[50]
-  const borderActive  = error ? hceColors.alert.error[600] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+  const textActive    = error ? hceColors.alert.error[600] : themeColor
+  const borderDefault = error ? hceColors.alert.error[600] : themeColor
+  const borderActive  = error ? hceColors.alert.error[600] : themeColor
 
   const cssVars = {
     "--dp-accent-default": accentDefault,
