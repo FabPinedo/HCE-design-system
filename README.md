@@ -1,6 +1,6 @@
 # HCE Design System
 
-Librería de componentes compartida para los proyectos HCE. Construida con React, MUI y Vite. Incluye Storybook para documentación visual y Verdaccio como registry npm privado.
+Librería de componentes compartida para los proyectos HCE. Construida con React, CSS puro y Vite. Incluye Storybook para documentación visual y Verdaccio como registry npm privado.
 
 ---
 
@@ -29,8 +29,8 @@ HCE-design-system/
 │   ├── molecules/      # Combinaciones de átomos (Card, PageHeader, DataTable...)
 │   ├── organisms/      # Secciones complejas (Header, SideNav, DataTable...)
 │   ├── provider/       # ThemeProvider (DSProvider)
-│   ├── theme/          # Temas MUI (base + emergency)
-│   ├── tokens/         # Design tokens (colores, tipografía, espaciado)
+│   ├── theme/          # Temas por empresa/tenant (default/csf/sanna)
+│   ├── tokens/         # Design tokens (colores, tipografía, espaciado, paletas por empresa)
 │   └── index.ts        # Punto de entrada público del paquete
 ├── stories/
 │   ├── atoms/          # Stories de átomos
@@ -425,10 +425,9 @@ npm update @hce/design-system
 ```tsx
 import { DSProvider } from '@hce/design-system'
 import { Button, TextInput, DataTable } from '@hce/design-system'
-import { theme, emergencyTheme } from '@hce/design-system'
-import { baseTokens, emergencyTokens } from '@hce/design-system'
 
-// Envolver la app con el provider
+// Envolver la app con el provider — por defecto usa el tema de la empresa
+// "default" (Clínica San Felipe, alias de "csf")
 function App() {
   return (
     <DSProvider>
@@ -436,7 +435,18 @@ function App() {
     </DSProvider>
   )
 }
+
+// Empresa/tenant explícito, por clave ("default" | "csf" | "sanna")
+function SannaApp() {
+  return (
+    <DSProvider theme="sanna">
+      <Button label="Guardar" onClick={handleSave} />
+    </DSProvider>
+  )
+}
 ```
+
+El Design System tiene un único eje de theming: empresa/tenant. Las paletas de marca (`csfCompanyColors`, `sannaCompanyColors`) viven en `src/tokens/companies.tokens.ts`; `src/theme/themes.ts` las expande a temas estructurales completos (`csfTheme`, `sannaTheme`, `defaultTheme`) que `DSProvider` inyecta como variables CSS `--ds-*`.
 
 ---
 
