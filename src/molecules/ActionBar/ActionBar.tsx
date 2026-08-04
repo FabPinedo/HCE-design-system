@@ -11,7 +11,7 @@ import {
   hceColors,
 } from "../../tokens/hce.tokens";
 import { ActionIconButton } from "../ActionIconButton/ActionIconButton";
-import { CloseIcon, MenuBurgerIcon } from "../../atoms/Icon/SvgIcons";
+import { CloseIcon, MenuBurgerIcon } from "../../atoms/Icon/SvgIconsHce";
 import { useState } from "react";
 
 /** Definición de un botón adicional personalizado */

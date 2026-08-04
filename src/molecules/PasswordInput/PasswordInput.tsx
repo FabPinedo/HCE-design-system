@@ -1,7 +1,7 @@
 import { useState, type CSSProperties, type ReactNode } from "react"
 import "./PasswordInput.css"
 import { TextInput }             from "../../atoms/TextInput/TextInput"
-import { UiEyeIcon }             from "../../atoms/Icon/SvgIconsUiKit"
+import { UiEyeIcon }             from "../../atoms/Icon/SvgIconsHce"
 import { hceColors } from "../../tokens/hce.tokens"
 
 interface Props {

@@ -6,7 +6,7 @@
  */
 
 // ── Custom HCE SVG icons ──────────────────────────────────
-export type { HceIconProps } from "./SvgIcons"
+export type { HceIconProps } from "./SvgIconsHce"
 export {
   // Icon1
   BloodTestIcon, DoctorIcon, DrugsIcon, MedicalRoomIcon,
@@ -23,7 +23,7 @@ export {
   PrintingIcon, SendMailUpIcon, SendMailIcon, SendIcon,
   UndoCircleIcon, ClockIcon, WarningIcon, FilterIcon,
   HceMonitorIcon, CloseIcon,MenuBurgerIcon
-} from "./SvgIcons"
+} from "./SvgIconsHce"
 
 // ── UIKit HCE SVG icons ───────────────────────────────────
 export {
@@ -39,9 +39,9 @@ export {
   UiSearchIcon, UiSendMailIcon, UiSendIcon, UiSolSymbolIcon,
   UiStethoscopeIcon, UiTrashIcon, UiUndoIcon, UiUploadDocumentIcon,
   UiVectorIcon, UiWarningIcon, UiXRaysIcon,UiReferenceIcon,UiMenuBurgerIcon
-} from "./SvgIconsUiKit"
+} from "./SvgIconsHce"
 
-// ── lucide-react ──────────────────────────────────────────
+// ── SVG locales de trazo (geometrías Lucide, licencia ISC) ──
 export {
   // Navegación / MenuConfig
   Monitor,
@@ -71,6 +71,6 @@ export {
   // Login — campos de formulario
   User,
   Lock,
-} from "lucide-react"
+} from "./SvgIconsHce"
 
-export type { LucideIcon } from "lucide-react"
+export type { LucideIcon } from "./SvgIconsHce"

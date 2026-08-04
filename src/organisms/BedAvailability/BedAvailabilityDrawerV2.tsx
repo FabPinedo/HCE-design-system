@@ -17,7 +17,7 @@ import {
   hceClinicalColors, hceColors, hceTypography,
   hceBorderRadius, hceSpacing,
 } from "../../tokens/hce.tokens"
-import { UiMedicalRoomIcon } from "../../atoms/Icon/SvgIconsUiKit"
+import { UiMedicalRoomIcon } from "../../atoms/Icon/SvgIconsHce"
 
 // ─── Estados de negocio ─────────────────────────────────────
 export type BedAvailabilityStatus =

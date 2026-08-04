@@ -4,7 +4,7 @@ import { hceColors, hceTypography, hceUi, hceShadows } from "../../tokens/hce.to
 import { LogoClinicaSanFelipeIcon, LogoutIcon, HceBurgerIcon } from "../../atoms/Icon/SvgIconsHce"
 import {
   CheckedCircleIcon, DangerIcon, HceInfoIcon, WarningIcon,
-} from "../../atoms/Icon/SvgIcons"
+} from "../../atoms/Icon/SvgIconsHce"
 
 import { useEffect, useRef, useState } from "react"
 // ─── Tipos públicos ───────────────────────────────────────────────────────────

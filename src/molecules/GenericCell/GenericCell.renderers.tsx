@@ -12,7 +12,7 @@ import {
   UiConversationIcon,
   UiPrescriptionIcon,
   UiXRaysIcon,
-} from "../../atoms/Icon/SvgIconsUiKit"
+} from "../../atoms/Icon/SvgIconsHce"
 
 import {
   hceBorderRadius,

@@ -26,7 +26,7 @@ import {
   OnButtonIcon, PapersIcon, PasteIcon, PrintingIcon,
   SendMailIcon, SendIcon, UndoCircleIcon, ClockIcon,
   WarningIcon, FilterIcon, HceMonitorIcon, CloseIcon,
-} from "../../atoms/Icon/SvgIcons"
+} from "../../atoms/Icon/SvgIconsHce"
 
 // UIKit icons
 import {
@@ -42,7 +42,7 @@ import {
   UiSearchIcon, UiSendMailIcon, UiSendIcon, UiSolSymbolIcon,
   UiStethoscopeIcon, UiTrashIcon, UiUndoIcon, UiUploadDocumentIcon,
   UiWarningIcon, UiXRaysIcon,
-} from "../../atoms/Icon/SvgIconsUiKit"
+} from "../../atoms/Icon/SvgIconsHce"
 
 type IconComponent = ComponentType<{ size?: number; color?: string }>
 

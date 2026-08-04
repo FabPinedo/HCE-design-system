@@ -9,7 +9,7 @@
 import type { CSSProperties } from "react"
 import "./InfoButton.css"
 import { Tooltip } from "../../atoms/Tooltip/Tooltip"
-import { HceEyeIcon } from "../../atoms/Icon/SvgIcons"
+import { HceEyeIcon } from "../../atoms/Icon/SvgIconsHce"
 import { hceClinicalColors } from "../../tokens/hce.tokens"
 
 interface Props {

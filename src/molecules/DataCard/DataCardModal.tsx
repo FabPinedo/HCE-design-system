@@ -1,5 +1,5 @@
 import { Overlay } from "../../atoms/Overlay/Overlay"
-import { CloseIcon } from "../../atoms/Icon/SvgIcons"
+import { CloseIcon } from "../../atoms/Icon/SvgIconsHce"
 import { useId } from "react"
 import "./DataCardModal.css"
 

@@ -14,7 +14,7 @@ import {
   UiXRaysIcon,
   type ExtraAction,
 } from "@hce/design-system";
-import { UiReferenceIcon } from "../../src/atoms/Icon/SvgIconsUiKit";
+import { UiReferenceIcon } from "../../src/atoms/Icon/SvgIconsHce";
 
 injectHceTokens();
 

@@ -1,7 +1,7 @@
 import { useRef, useState }                from "react"
 import "./Header.css"
 import { Menu } from "../../atoms/Menu/Menu"
-import { CheckedCircleIcon, HceInfoIcon, WarningIcon, MenuBurgerIcon } from "../../atoms/Icon/SvgIcons"
+import { CheckedCircleIcon, HceInfoIcon, WarningIcon, MenuBurgerIcon } from "../../atoms/Icon/SvgIconsHce"
 import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
 
 // ─── Tipos de notificación ────────────────────────────────
