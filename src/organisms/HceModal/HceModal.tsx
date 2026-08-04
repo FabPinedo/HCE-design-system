@@ -73,7 +73,9 @@ export function HceModal({
   title,
   description,
   icon,
-  iconBgColor  = hceColors.primary.blue[500],
+  // blue[500] == --ds-color-primary (csf) exactamente — reactivo al tema activo
+  // de DSProvider, con el mismo hex de siempre como fallback fuera de él.
+  iconBgColor  = `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
   input,
   children,
   confirmButton,
@@ -128,7 +130,7 @@ export function HceModal({
           fontFamily: hceTypography.fontFamily,
           fontWeight: 700,
           fontSize:   "1.125rem",
-          color:      hceColors.primary.blue[500],
+          color:      `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
           marginBottom: description ? 8 : (input || hasButtons) ? 20 : 0,
         }}
       >
@@ -203,7 +205,7 @@ export function HceModal({
                 onClick={cancelButton.onClick}
                 disabled={cancelButton.disabled}
                 startIcon={cancelButton.icon}
-                color={cancelButton.color ?? hceColors.primary.blue[500]}
+                color={cancelButton.color ?? `var(--ds-color-primary, ${hceColors.primary.blue[500]})`}
               >
                 {cancelButton.label}
               </Button>
