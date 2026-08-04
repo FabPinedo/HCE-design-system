@@ -1,6 +1,6 @@
-import { Box, Typography } from "@mui/material"
-import { hceColors, hceTransition, hceTypography } from "../../tokens/hce.tokens"
-import { useState } from "react"
+import type { CSSProperties } from "react"
+import "./NumericField.css"
+import { hceColors } from "../../tokens/hce.tokens"
 
 export interface NumericFieldProps {
   label: string
@@ -12,6 +12,8 @@ export interface NumericFieldProps {
   numberType?: "decimal" | "natural"
   readOnly?: boolean
   disabled?: boolean
+  /** Activa el estado de error: label, borde y texto cambian a rojo, igual que TextInput/DatePicker. */
+  error?: boolean
 }
 
 /** Campo numérico con label y unidad como placeholder. */
@@ -23,92 +25,69 @@ export function NumericField({
   numberType = "decimal",
   readOnly = false,
   disabled = false,
+  error = false,
 }: NumericFieldProps) {
-  const [focused, setFocused] = useState(false)
-  const [hovered, setHovered] = useState(false)
-
-  const active = focused || hovered
-
-  // ── Colores reactivos ──────────────────────────────────────
-  // Color principal (borde y placeholder)
+  // ── Colores reactivos (ahora vía :hover/:focus-within en CSS) ──────────
+  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
+  // de DSProvider, mismo hex de siempre como fallback. Rojo si error, mismo
+  // criterio que TextInput/DatePicker (error pisa disabled/readOnly).
   const mainColor = disabled
-    ? hceColors.neutro.black[300] // Gris si está deshabilitado
-    : hceColors.primary.blue[600] // Azul por defecto
+    ? hceColors.neutro.black[300]
+    : error
+      ? hceColors.alert.error[600]
+      : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
-  // Color del texto escrito
-  const inputTextColor = disabled
-    ? hceColors.neutro.black[300] // Gris
-    : active && !readOnly
-      ? hceColors.primary.blue[600] // Azul si interactúa
-      : hceColors.neutro.black[700] // Negro en reposo
+  const activeColor = disabled
+    ? hceColors.neutro.black[300]
+    : error
+      ? hceColors.alert.error[600]
+      : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+
+  // Si es readOnly, el texto nunca "reacciona" (antes el listener de
+  // hover/focus estaba deshabilitado) — mismo valor en default y active.
+  const textDefaultColor = disabled
+    ? hceColors.neutro.black[300]
+    : error
+      ? hceColors.alert.error[600]
+      : hceColors.neutro.black[700]
+  const textActiveColor  = disabled
+    ? hceColors.neutro.black[300]
+    : error
+      ? hceColors.alert.error[600]
+      : readOnly
+        ? hceColors.neutro.black[700]
+        : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+
+  const cssVars = {
+    "--nf-main":         mainColor,
+    "--nf-active":       activeColor,
+    "--nf-focus-ring":   hceColors.primary.blue[100],
+    "--nf-text-default": textDefaultColor,
+    "--nf-text-active":  textActiveColor,
+    "--nf-bg":           readOnly || disabled ? hceColors.neutro.white[50] : "#ffffff",
+  } as CSSProperties
+
   return (
-    <Box>
-      {label && (
-        <Typography component="label" sx={{
-          fontFamily: hceTypography.fontFamily,
-          fontSize:   "0.75rem",
-          fontWeight: 600,
-          color:      mainColor,
-          mb:         0.5,
-          display:    "block",
-          transition: `color ${hceTransition.fast}`,
-        }}>
-          {label}
-        </Typography>
-      )}
-      <Box
-      onMouseEnter={() => !disabled && !readOnly && setHovered(true)}
-        onMouseLeave={() => !disabled && !readOnly && setHovered(false)}
-        sx={{
-          border: `1.5px solid ${mainColor}`,
-          borderRadius: "8px",
-          width: "100%",
-          height: 40,
-          display: "flex",
-          alignItems: "center",
-          boxSizing: "border-box",
-          backgroundColor: readOnly || disabled ? hceColors.neutro.white[50] : "#ffffff",
-          overflow: "hidden",
-        }}
-      >
-        <Box
-          component="input"
+    <div style={cssVars}>
+      {label && <label className="hce-numeric-label">{label}</label>}
+      <div className="hce-numeric-box">
+        <input
           disabled={disabled}
           type="text"
           inputMode={numberType === "decimal" ? "decimal" : "numeric"}
           value={value}
           placeholder={suffix || undefined}
           readOnly={readOnly}
-          onFocus={() => !readOnly && setFocused(true)}
-          onBlur={() => !readOnly && setFocused(false)}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          className="hce-numeric-field"
+          onChange={(e) =>
             onChange?.(
               numberType === "decimal"
                 ? e.target.value.replace(/[^\d.,]/g, "")
                 : e.target.value.replace(/[^\d]/g, ""),
             )
           }
-          sx={{
-            px: 1.5,
-            border: "none",
-            outline: "none",
-            fontFamily: hceTypography.fontFamily,
-            fontSize: "0.875rem",
-            backgroundColor: "transparent",
-            color: hceColors.neutro.black[700],
-            width: "100%",
-            height: "100%",
-            boxSizing: "border-box",
-            WebkitTextFillColor: inputTextColor,
-            "&::placeholder": { 
-              color: mainColor,
-              WebkitTextFillColor: mainColor,
-              opacity: 1,
-              transition: "color 0.2s ease",
-            },
-          }}
         />
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }

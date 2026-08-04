@@ -9,11 +9,13 @@
  * ---------------------------------------------------------
  */
 
-import { Box, Drawer, Typography, Button ,Tooltip} from "@mui/material"
+import "./BedAvailabilityDrawerV2.css"
+import { Overlay } from "../../atoms/Overlay/Overlay"
+import { Tooltip } from "../../atoms/Tooltip/Tooltip"
 
 import {
   hceClinicalColors, hceColors, hceTypography,
-  hceBorderRadius, hceSpacing, hceZIndex,
+  hceBorderRadius, hceSpacing,
 } from "../../tokens/hce.tokens"
 import { UiMedicalRoomIcon } from "../../atoms/Icon/SvgIconsUiKit"
 
@@ -71,71 +73,58 @@ function resolveBedColor(bed: BedAvailabilityItem): string {
 function BedCard({ bed }: { bed: BedAvailabilityItem }) {
   const bgColor       = resolveBedColor(bed)
   const isOutlined    = bed.status === "disponible" || bgColor === hceColors.neutro.white[50]
- 
+
   const statusLabel   = bed.status ? (BED_AVAILABILITY_STATUS_LABELS[bed.status] ?? bed.status) : undefined
   const accessibleLbl = bed.ariaLabel ?? [bed.code, statusLabel].filter(Boolean).join(" — ")
 
   return (
-    <Tooltip 
-      title={accessibleLbl} 
-      arrow // Añade una pequeña flecha apuntando a la celda
-      placement="top" // Lo posiciona siempre arriba de la celda
-      enterDelay={200} // Aparece rápido al acercar el cursor
-      leaveDelay={0}
-      componentsProps={{
-        tooltip: {
-          sx: {
-            backgroundColor: hceColors.primary.blue[600], // Fondo a tono con tu header corporativo
-            fontFamily: hceTypography.fontFamilyClinical,
-            fontSize: "12px",
-            fontWeight: hceTypography.weight.bold,
-            padding: "6px 12px",
-            borderRadius: hceBorderRadius.md,
-            boxShadow: "0px 4px 12px rgba(0,0,0,0.15)"
-          },
-        },
-        arrow: {
-          sx: {
-            color: hceColors.primary.blue[600],
-          },
-        },
+    <Tooltip
+      title={accessibleLbl}
+      arrow
+      placement="top"
+      bubbleStyle={{
+        backgroundColor: hceColors.primary.blue[600],
+        fontFamily: hceTypography.fontFamilyClinical,
+        fontSize: "12px",
+        fontWeight: hceTypography.weight.bold,
+        padding: "6px 12px",
+        borderRadius: hceBorderRadius.md,
+        boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+        color: "#ffffff",
       }}
     >
-      <Box
+      <div
         role="listitem"
         aria-label={accessibleLbl}
-        // Eliminamos el atributo title nativo del Box para que NO se duplique con el tooltip de MUI
-        sx={{
+        className="hce-bedv2-card"
+        style={{
           display:         "flex",
+          width:           "100%",
           flexDirection:   "column",
           alignItems:      "center",
           justifyContent:  "center",
           gap:             hceSpacing[1],
-          p:               `${hceSpacing[3]} ${hceSpacing[2]}`,
+          padding:         `${hceSpacing[3]} ${hceSpacing[2]}`,
           borderRadius:    hceBorderRadius.lg,
-          border:          isOutlined ? `2px solid ${hceColors.primary.blue[500]}` : `2px solid ${bgColor}`,
+          // blue[500] == --ds-color-primary (csf) exactamente — reactivo al tema
+          // activo de DSProvider, mismo hex de siempre como fallback.
+          border:          isOutlined ? `2px solid var(--ds-color-primary, ${hceColors.primary.blue[500]})` : `2px solid ${bgColor}`,
           backgroundColor: isOutlined ? "#FFFFFF" : bgColor,
           minHeight:       "72px",
           boxShadow:       "0px 1px 3px rgba(0, 0, 0, 0.05)",
-          cursor:          "pointer", // Añade el cursor de mano para dar feedback de interactividad
-          transition:      "transform 0.1s ease, box-shadow 0.1s ease",
-          "&:hover": {
-            transform: "scale(1.02)", // Un sutil crecimiento al pasar el mouse
-            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-          },
-          "&:active":      { transform: "scale(0.98)" }
+          boxSizing:       "border-box",
         }}
       >
-        <UiMedicalRoomIcon size={17} color={ isOutlined ? hceColors.primary.blue[500] : "#FFFFFF"} />
-        <Typography sx={{
+        <UiMedicalRoomIcon size={17} color={ isOutlined ? `var(--ds-color-primary, ${hceColors.primary.blue[500]})` : "#FFFFFF"} />
+        <span style={{
           fontFamily: hceTypography.fontFamilyClinical,
           fontSize:   hceTypography.size.tableCell,
           fontWeight: hceTypography.weight.bold,
-          color:      isOutlined ? hceColors.primary.blue[500] : "#FFFFFF",
+          color:      isOutlined ? `var(--ds-color-primary, ${hceColors.primary.blue[500]})` : "#FFFFFF",
         }}>
           {bed.code}
-        </Typography>
-      </Box>
+        </span>
+      </div>
     </Tooltip>
   )
 }
@@ -145,45 +134,46 @@ function BedCard({ bed }: { bed: BedAvailabilityItem }) {
 function StatusLegend() {
   const entries = Object.keys(BED_AVAILABILITY_STATUS_LABELS)
   return (
-    <Box
+    <div
       role="list"
       aria-label="Leyenda de estados de cama"
-      sx={{ 
-        display: "flex", 
-        flexWrap: "wrap", 
-        gap: hceSpacing[3], 
-        mb: hceSpacing[3], // Añadimos margen inferior para separarlo del botón
-        justifyContent: "center" 
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: hceSpacing[3],
+        marginBottom: hceSpacing[3],
+        justifyContent: "center",
       }}
     >
       {entries.map((status) => {
         const color   = BED_AVAILABILITY_STATUS_COLORS[status]
         const label   = BED_AVAILABILITY_STATUS_LABELS[status]
-        
+
         // Si el estado es disponible (blanco), el chip de la leyenda debe reflejar el azul del borde para que se entienda
         const bulletColor = color
 
         return (
-          <Box key={status} role="listitem" sx={{ display: "flex", alignItems: "center", gap: hceSpacing[1] }}>
-            <Box sx={{
+          <div key={status} role="listitem" style={{ display: "flex", alignItems: "center", gap: hceSpacing[1] }}>
+            <span style={{
               width:           12,
               height:          12,
               borderRadius:    hceBorderRadius.circle,
               backgroundColor: bulletColor,
               border:          `1px solid ${bulletColor}`,
               flexShrink:      0,
+              display:         "inline-block",
             }} />
-            <Typography sx={{
+            <span style={{
               fontFamily: hceTypography.fontFamilyClinical,
               fontSize:   "11px",
               color:      hceClinicalColors.textSecondary,
             }}>
               {label}
-            </Typography>
-          </Box>
+            </span>
+          </div>
         )
       })}
-    </Box>
+    </div>
   )
 }
 
@@ -194,37 +184,21 @@ export function BedAvailabilityDrawerV2({
   title = "Disponibilidad de camas",
 }: BedAvailabilityDrawerV2Props) {
   return (
-    <Drawer
-      anchor="right"
+    <Overlay
       open={open}
       onClose={onClose}
-      PaperProps={{
-        role:          "dialog",
-        "aria-modal":  true,
-        "aria-label":  title,
-      }}
-      sx={{
-        zIndex: hceZIndex.drawer,
-        "& .MuiDrawer-paper": {
-          width:         { xs: "100vw", sm: 400 },
-          display:       "flex",
-          flexDirection: "column",
-          overflow:      "hidden",
-          backgroundColor: "#EBF1FA", 
-          margin:        { sm: "12px", xs: 0 }, 
-          borderRadius:  { sm: "20px", xs: 0 },
-          height:        { sm: "calc(100% - 24px)", xs: "100%" }
-        },
-      }}
+      variant="drawer-right"
+      panelClassName="hce-bedv2-panel"
+      labelledBy="hce-bedv2-title"
     >
       {/* ── Header (Fijo arriba) ── */}
-      <Box sx={{
+      <div style={{
         flexShrink:      0,
-        backgroundColor: hceColors.primary.blue[600], 
-        py:              hceSpacing[4],
-        px:              hceSpacing[4],
+        backgroundColor: hceColors.primary.blue[600],
+        padding:         `${hceSpacing[4]} ${hceSpacing[4]}`,
       }}>
-        <Typography sx={{
+        <span id="hce-bedv2-title" style={{
+          display: "block",
           fontFamily: hceTypography.fontFamilyClinical,
           fontSize:   hceTypography.size.headerTitle,
           fontWeight: hceTypography.weight.bold,
@@ -232,70 +206,56 @@ export function BedAvailabilityDrawerV2({
           textAlign:  "center",
         }}>
           {title}
-        </Typography>
-      </Box>
+        </span>
+      </div>
 
       {/* ── Body (Única sección con Scroll) ── */}
-      <Box sx={{
+      <div style={{
         flex:            1,
         minHeight:       0,
         overflowY:       "auto",
-        p:               hceSpacing[4],
+        padding:         hceSpacing[4],
       }}>
         {beds.length === 0 ? (
-          <Typography sx={{
+          <p style={{
             fontFamily: hceTypography.fontFamilyClinical,
             fontSize:   hceTypography.size.tableCell,
             color:      hceClinicalColors.textSecondary,
             textAlign:  "center",
-            mt:         hceSpacing[6],
+            marginTop:  hceSpacing[6],
           }}>
             No hay camas para mostrar.
-          </Typography>
+          </p>
         ) : (
-          <Box
+          <div
             role="list"
             aria-label="Listado de camas"
-            sx={{
+            style={{
               display:             "grid",
               gridTemplateColumns: "repeat(3, 1fr)",
               gap:                 hceSpacing[3],
             }}
           >
             {beds.map((bed) => <BedCard key={bed.id} bed={bed} />)}
-          </Box>
+          </div>
         )}
-      </Box>
+      </div>
 
       {/* ── Footer (Fijo abajo: Contiene Leyenda + Botón Cerrar) ── */}
-      <Box sx={{ 
-        flexShrink: 0, 
-        p: hceSpacing[4], 
-        backgroundColor: "#EBF1FA", // Mantiene el color sutil del fondo
-        borderTop: "1px solid rgba(0, 0, 0, 0.05)" // Línea divisoria muy sutil opcional
+      <div style={{
+        flexShrink: 0,
+        padding: hceSpacing[4],
+        backgroundColor: "#EBF1FA",
+        borderTop: "1px solid rgba(0, 0, 0, 0.05)",
       }}>
         {/* Leyenda fija */}
         <StatusLegend />
 
         {/* Botón Cerrar */}
-        <Button
-          fullWidth
-          onClick={onClose}
-          sx={{
-            backgroundColor: "#70C934", 
-            color:           "#FFFFFF",  
-            fontFamily:      hceTypography.fontFamilyClinical,
-            fontWeight:      hceTypography.weight.bold,
-            borderRadius:    hceBorderRadius.pill,
-            textTransform:   "none",
-            fontSize:        "16px",
-            py:              hceSpacing[2],
-            "&:hover": { backgroundColor: hceColors.primary.green[600] },
-          }}
-        >
+        <button type="button" className="hce-bedv2-close-btn" onClick={onClose}>
           Cerrar
-        </Button>
-      </Box>
-    </Drawer>
+        </button>
+      </div>
+    </Overlay>
   )
 }

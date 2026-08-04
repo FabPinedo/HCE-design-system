@@ -1,7 +1,6 @@
 import { useState }      from "react"
 import type { Meta, StoryObj } from "@storybook/react"
-import { Box }           from "@mui/material"
-import { SearchComboInput } from "@hce/design-system"
+import { Box, SearchComboInput } from "@hce/design-system"
 import type { SearchMode, SearchOption } from "@hce/design-system"
 
 // ─── Mock data para simular respuesta de API ──────────────────────────────────

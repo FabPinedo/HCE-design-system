@@ -1,0 +1,94 @@
+/**
+ * Tooltip.css — reemplazo en CSS puro de MUI Tooltip (sin Popper/portal).
+ * Estrategia: el bubble es un hijo posicionado en absolute dentro de un
+ * wrapper `position: relative`, mostrado por CSS puro en :hover/:focus-within
+ * del wrapper (funciona con mouse Y con teclado). No reposiciona
+ * dinámicamente para evitar el borde del viewport (MUI/Popper sí lo hace) —
+ * ver nota de paridad en Tooltip.tsx.
+ */
+
+.hce-tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.hce-tooltip-bubble {
+  position: absolute;
+  z-index: 1500;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 100ms ease 0ms, visibility 0ms linear 250ms;
+  background-color: rgba(97, 97, 97, 0.92);
+  color: #ffffff;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 4px 8px;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.hce-tooltip-wrapper:hover .hce-tooltip-bubble,
+.hce-tooltip-wrapper:focus-within .hce-tooltip-bubble {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 150ms, 0ms;
+}
+
+.hce-tooltip-bubble__arrow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: inherit;
+  transform: rotate(45deg);
+}
+
+/* ── Placement: top (default) ─────────────────────────────────────────── */
+.hce-tooltip-bubble--top {
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, -8px);
+}
+.hce-tooltip-bubble--top .hce-tooltip-bubble__arrow {
+  bottom: -4px;
+  left: 50%;
+  margin-left: -5px;
+}
+
+/* ── Placement: bottom ─────────────────────────────────────────────────── */
+.hce-tooltip-bubble--bottom {
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 8px);
+}
+.hce-tooltip-bubble--bottom .hce-tooltip-bubble__arrow {
+  top: -4px;
+  left: 50%;
+  margin-left: -5px;
+}
+
+/* ── Placement: left ───────────────────────────────────────────────────── */
+.hce-tooltip-bubble--left {
+  right: 100%;
+  top: 50%;
+  transform: translate(-8px, -50%);
+}
+.hce-tooltip-bubble--left .hce-tooltip-bubble__arrow {
+  right: -4px;
+  top: 50%;
+  margin-top: -5px;
+}
+
+/* ── Placement: right ──────────────────────────────────────────────────── */
+.hce-tooltip-bubble--right {
+  left: 100%;
+  top: 50%;
+  transform: translate(8px, -50%);
+}
+.hce-tooltip-bubble--right .hce-tooltip-bubble__arrow {
+  left: -4px;
+  top: 50%;
+  margin-top: -5px;
+}

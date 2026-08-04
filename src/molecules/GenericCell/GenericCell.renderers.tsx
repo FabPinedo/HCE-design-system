@@ -1,5 +1,5 @@
 import type { HTMLAttributes, MouseEvent, ReactNode } from "react"
-import { Box, styled, Switch, Typography } from "@mui/material"
+import { AntSwitch } from "./AntSwitch"
 import { PriorityBadge } from "../../atoms/PriorityBadge/PriorityBadge"
 import { BoxBadge } from "../../atoms/BoxBadge/BoxBadge"
 import { AttentionCode } from "../../atoms/AttentionCode/AttentionCode"
@@ -40,61 +40,6 @@ export interface CellRenderContext<T> {
 
 export type CellRenderer<T> = (context: CellRenderContext<T>) => ReactNode
 
-const AntSwitch = styled(Switch)(({ theme }) => ({
-  width: 28,
-  height: 16,
-  padding: 0,
-  display: "flex",
-
-  "&:active": {
-    "& .MuiSwitch-thumb": {
-      width: 15,
-    },
-    "& .MuiSwitch-switchBase.Mui-checked": {
-      transform: "translateX(9px)",
-    },
-  },
-
-  "& .MuiSwitch-switchBase": {
-    padding: 2,
-
-    "&.Mui-checked": {
-      transform: "translateX(12px)",
-      color: "#fff",
-
-      "& + .MuiSwitch-track": {
-        opacity: 1,
-        backgroundColor: "#003D96",
-
-        ...theme.applyStyles("dark", {
-          backgroundColor: "#003D96",
-        }),
-      },
-    },
-  },
-
-  "& .MuiSwitch-thumb": {
-    boxShadow: "0 2px 4px 0 rgb(0 35 11 / 20%)",
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    transition: theme.transitions.create(["width"], {
-      duration: 200,
-    }),
-  },
-
-  "& .MuiSwitch-track": {
-    borderRadius: 16 / 2,
-    opacity: 1,
-    backgroundColor: "rgba(0,0,0,.25)",
-    boxSizing: "border-box",
-
-    ...theme.applyStyles("dark", {
-      backgroundColor: "rgba(255,255,255,.35)",
-    }),
-  },
-}))
-
 const clinicalIcons = {
   lab: UiBloodTestIcon,
   img: UiXRaysIcon,
@@ -133,21 +78,17 @@ export const cellRenderers: {
     handleColumnClick,
     clickableA11yProps,
   }) => (
-    <Box
+    <div
       onClick={handleColumnClick}
       {...clickableA11yProps}
-      sx={{
+      style={{
         display: "flex",
         justifyContent: "center",
         cursor: canClick ? "pointer" : "default",
-
-          "& *": {
-      cursor: canClick ? "pointer" : "default",
-    },
       }}
     >
       <PriorityBadge priority={value as any} cursor={canClick ? "pointer" : "default"} />
-    </Box>
+    </div>
   ),
 
   box: ({
@@ -161,17 +102,13 @@ export const cellRenderers: {
     if (!boxie) return <>-</>
 
     return (
-      <Box
+      <div
         onClick={handleColumnClick}
         {...clickableA11yProps}
-        sx={{
+        style={{
           display: "flex",
           justifyContent: "center",
           cursor: canClick ? "pointer" : "default",
-
-            "& *": {
-            cursor: canClick ? "pointer" : "default",
-          },
         }}
       >
         <BoxBadge
@@ -180,7 +117,7 @@ export const cellRenderers: {
           color={boxie.color}
           cursor={canClick ? "pointer" : "default"}
         />
-      </Box>
+      </div>
     )
   },
 
@@ -191,10 +128,10 @@ export const cellRenderers: {
     handleColumnClick,
     clickableA11yProps,
   }) => (
-    <Typography
+    <span
       onClick={handleColumnClick}
       {...clickableA11yProps}
-      sx={{
+      style={{
         cursor: canClick ? "pointer" : "default",
         textDecoration: canClick ? "underline" : "none",
         whiteSpace: "nowrap",
@@ -205,12 +142,13 @@ export const cellRenderers: {
         fontWeight: boldText
           ? hceTypography.weight.bold
           : hceTypography.weight.regular,
+        display: "flex",
         justifyContent: "center",
-        textAlign:'center'
+        textAlign: 'center',
       }}
     >
       {String(value ?? "-")}
-    </Typography>
+    </span>
   ),
 
   "clinical-status": ({
@@ -226,17 +164,17 @@ export const cellRenderers: {
     const status = value ?? "empty"
 
     return (
-      <Box
+      <div
         onClick={handleColumnClick}
         {...clickableA11yProps}
-        sx={{ display: "flex", justifyContent: "center" }}
+        style={{ display: "flex", justifyContent: "center" }}
       >
         <ClinicalStatusIcon
           status={status as any}
           icon={icon}
           tooltipLabel={`${column.header}: ${String(status)}`}
         />
-      </Box>
+      </div>
     )
   },
 
@@ -253,7 +191,7 @@ export const cellRenderers: {
     disabled,
     canClick,
   }) => (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
+    <div style={{ display: "flex", justifyContent: "center" }}>
       <InfoButton
         onClick={() => {
           if (!canClick) return
@@ -262,12 +200,12 @@ export const cellRenderers: {
         }}
         disabled={disabled}
       />
-    </Box>
+    </div>
   ),
 
   "waiting-time": ({ value, color }) => (
-    <Box
-      sx={{
+    <div
+      style={{
         display: "flex",
         justifyContent: "center",
       }}
@@ -276,7 +214,7 @@ export const cellRenderers: {
         color={color}
         label={String(value ?? "-")}
       />
-    </Box>
+    </div>
   ),
 
   icon: ({
@@ -300,10 +238,10 @@ export const cellRenderers: {
       : lightenHexColor(iconColor, 0.9)
 
     return (
-      <Box
+      <div
         onClick={handleColumnClick}
         {...clickableA11yProps}
-        sx={{
+        style={{
           width: 28,
           height: 28,
           display: "flex",
@@ -313,6 +251,7 @@ export const cellRenderers: {
           border: `1.5px solid ${iconColor}`,
           borderRadius: hceBorderRadius.md,
           backgroundColor,
+          boxSizing: "border-box",
         }}
       >
         <Icon
@@ -323,7 +262,7 @@ export const cellRenderers: {
             color: iconColor,
           }}
         />
-      </Box>
+      </div>
     )
   },
 
@@ -346,8 +285,8 @@ export const cellRenderers: {
         : "No"
 
     return (
-      <Box
-        sx={{
+      <div
+        style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -371,8 +310,8 @@ export const cellRenderers: {
         />
 
         {showLabel && (
-          <Typography
-            sx={{
+          <span
+            style={{
               whiteSpace: "nowrap",
               color: hceUi.textPrimaryTable,
               fontSize: hceTypography.size.base,
@@ -382,9 +321,9 @@ export const cellRenderers: {
             }}
           >
             {label}
-          </Typography>
+          </span>
         )}
-      </Box>
+      </div>
     )
   },
 
@@ -401,10 +340,10 @@ export const cellRenderers: {
     const backgroundColor = lightenHexColor(tagColor, 0.9)
 
     return (
-      <Box
+      <div
         onClick={handleColumnClick}
         {...clickableA11yProps}
-        sx={{
+        style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -412,15 +351,14 @@ export const cellRenderers: {
           opacity: disabled ? 0.5 : 1,
         }}
       >
-        <Box
-          component="span"
-          sx={{
+        <span
+          style={{
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
             minWidth: 72,
             height: 20,
-            px: "8px",
+            padding: "0 8px",
             borderRadius: "999px",
             border: `1px solid ${tagColor}`,
             backgroundColor,
@@ -430,11 +368,12 @@ export const cellRenderers: {
             fontWeight: hceTypography.weight.medium,
             lineHeight: 1,
             whiteSpace: "nowrap",
+            boxSizing: "border-box",
           }}
         >
           {label}
-        </Box>
-      </Box>
+        </span>
+      </div>
     )
   },
 
@@ -446,10 +385,10 @@ export const cellRenderers: {
     handleColumnClick,
     clickableA11yProps,
   }) => (
-    <Typography
+    <span
       onClick={handleColumnClick}
       {...clickableA11yProps}
-      sx={{
+      style={{
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis",
@@ -461,10 +400,11 @@ export const cellRenderers: {
         cursor: canClick ? "pointer" : "default",
         textDecoration: canClick ? "underline" : "none",
         opacity: disabled ? 0.5 : 1,
-        textAlign:'center'
+        textAlign: 'center',
+        display: "block",
       }}
     >
       {String(value ?? "-")}
-    </Typography>
+    </span>
   ),
 }

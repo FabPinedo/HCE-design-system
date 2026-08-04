@@ -6,7 +6,8 @@ import {
   DownloadIcon, CloseIcon, AddCircleIcon,
   hceColors,
   defaultCompanyColors,
-  novaSaludColors,
+  csfCompanyColors,
+  sannaCompanyColors,
 } from "@hce/design-system"
 
 const meta: Meta<typeof Button> = {
@@ -192,19 +193,22 @@ export const States: Story = {
 // ── Playground multiempresa (tokens por prop, no theme MUI) ──────
 // Prueba visual de la prop `tenantTheme`: permite pintar SOLO este botón
 // con la paleta de un tenant/empresa distinta, pasando directo el objeto
-// de tokens de src/tokens/<empresa>.tokens.ts (default.tokens.ts /
-// novasalud.tokens.ts) — no un Theme de MUI ni un ThemeProvider anidado.
-// El resto del árbol (y el resto de botones de la página) no se ve afectado.
+// de tokens de src/tokens/companies.tokens.ts — no un Theme de MUI ni un
+// ThemeProvider anidado. El resto del árbol (y el resto de botones de la
+// página) no se ve afectado.
 
 const TENANT_TOKENS_MAP = {
   // "Sin tenant" → no se pasa `tenantTheme`, el botón usa su color por
   // defecto (variant/color de siempre).
-  none:      undefined,
+  none:    undefined,
   // Empresa por defecto/fallback (Clínica San Felipe) — pasada explícita
   // vía `tenantTheme` para probar el switcheo real entre archivos de
-  // empresa, no solo "con/sin tenant".
-  default:   defaultCompanyColors,
-  novaSalud: novaSaludColors,
+  // empresa, no solo "con/sin tenant". `default` y `csf` son el mismo
+  // objeto (CSF es la empresa por defecto de este deployment); se listan
+  // ambos nombres acá para que los dos sean descubribles.
+  default: defaultCompanyColors,
+  csf:     csfCompanyColors,
+  sanna:   sannaCompanyColors,
 } as const
 
 type TenantTokensKey = keyof typeof TENANT_TOKENS_MAP
@@ -228,7 +232,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
   args: {
     label:        "Botón multiempresa",
     variant:      "primary",
-    companyTheme: "novaSalud",
+    companyTheme: "sanna",
   },
   render: ({ companyTheme, ...args }) => (
     <Button {...args} tenantTheme={TENANT_TOKENS_MAP[companyTheme]} />

@@ -1,4 +1,5 @@
-import { Box } from "@mui/material"
+import type { CSSProperties } from "react"
+import "./TriagePriorityDisplay.css"
 import { hceTypography, hceTransition } from "../../tokens/hce.tokens"
 
 // ─── Configuración de prioridades ─────────────────────────────────────────────
@@ -39,29 +40,32 @@ export function TriagePriorityDisplay({
   const interactive = !readOnly && Boolean(onSelect)
 
   return (
-    <Box
+    <div
       role="radiogroup"
       aria-label="Clasificación de triaje"
-      sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}
+      style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}
     >
       {PRIORITY_ORDER.map(priority => {
         const cfg      = PRIORITY_CONFIG[priority]
         const isActive = selected === priority
+        const Tag = interactive ? "button" : "div"
 
         return (
-          <Box
+          <Tag
             key={priority}
-            component={interactive ? "button" : "div"}
+            type={interactive ? "button" : undefined}
             onClick={interactive ? () => onSelect!(priority) : undefined}
             role={interactive ? undefined : "radio"}
             aria-checked={isActive}
             aria-label={`Prioridad ${priority}`}
-            sx={{
+            className={`hce-triage-pill${interactive ? " hce-triage-pill--interactive" : ""}`}
+            style={{
+              "--triage-bg-active": cfg.bg,
+              "--triage-border":    cfg.border,
               display:         "flex",
               alignItems:      "center",
-              gap:             1,
-              px:              1.5,
-              py:              0.75,
+              gap:             8,
+              padding:         "6px 12px",
               borderRadius:    "10px",
               border:          `1.5px solid ${cfg.border}`,
               backgroundColor: isActive ? cfg.bg : "#ffffff",
@@ -70,19 +74,11 @@ export function TriagePriorityDisplay({
               outline:         "none",
               boxShadow:       isActive ? `0 2px 8px rgba(0,0,0,0.14)` : "none",
               transform:       isActive ? "scale(1.04)" : "scale(1)",
-              "&:hover":       interactive ? {
-                backgroundColor: cfg.bg,
-                transform:       "scale(1.04)",
-                boxShadow:       "0 2px 8px rgba(0,0,0,0.12)",
-              } : {},
-              "&:focus-visible": {
-                outline:       `2px solid ${cfg.border}`,
-                outlineOffset: "2px",
-              },
-            }}
+              boxSizing:       "border-box",
+            } as CSSProperties}
           >
             {/* Label "Prioridad" */}
-            <Box sx={{
+            <span style={{
               fontFamily: hceTypography.fontFamily,
               fontWeight: 600,
               fontSize:   "0.8rem",
@@ -91,16 +87,15 @@ export function TriagePriorityDisplay({
               userSelect: "none",
             }}>
               Prioridad
-            </Box>
+            </span>
 
             {/* Badge con numeral romano */}
-            <Box sx={{
+            <span style={{
               display:         "flex",
               alignItems:      "center",
               justifyContent:  "center",
               minWidth:        32,
-              px:              0.75,
-              py:              0.5,
+              padding:         "4px 6px",
               borderRadius:    "6px",
               backgroundColor: cfg.badge,
               color:           "#ffffff",
@@ -109,12 +104,13 @@ export function TriagePriorityDisplay({
               fontSize:        "0.75rem",
               lineHeight:      1,
               userSelect:      "none",
+              boxSizing:       "border-box",
             }}>
               {priority}
-            </Box>
-          </Box>
+            </span>
+          </Tag>
         )
       })}
-    </Box>
+    </div>
   )
 }

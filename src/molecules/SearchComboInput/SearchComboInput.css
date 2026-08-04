@@ -1,0 +1,93 @@
+.hce-scombo-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px 0 0 8px;
+  border-right: none;
+  color: #ffffff;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
+  font-weight: 700;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  outline: none;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+.hce-scombo-mode-btn:hover:not(:disabled) {
+  background-color: #003075;
+}
+
+.hce-scombo-mode-btn:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: -3px;
+}
+
+.hce-scombo-mode-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 16px;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
+  font-size: 0.82rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+.hce-scombo-mode-item:hover {
+  background-color: #e6ecf6;
+  color: #003d96;
+}
+
+.hce-scombo-input {
+  display: block;
+  width: 100%;
+  height: 40px;
+  border-radius: 0 8px 8px 0;
+  border-left: none;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
+  font-size: 0.875rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-scombo-input::placeholder {
+  color: #8c8c8c;
+}
+
+.hce-scombo-input:focus {
+  border-color: #0043a5;
+  box-shadow: 0 0 0 3px #b0c5e3;
+}
+
+.hce-scombo-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #e6e6e6;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-scombo-option:last-child {
+  border-bottom: none;
+}
+
+.hce-scombo-spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 67, 165, 0.25);
+  border-top-color: #0043a5;
+  animation: hce-scombo-spin 800ms linear infinite;
+}
+
+@keyframes hce-scombo-spin {
+  to { transform: rotate(360deg); }
+}

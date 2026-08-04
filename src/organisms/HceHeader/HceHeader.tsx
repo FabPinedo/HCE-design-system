@@ -1,19 +1,12 @@
-import {
-  Box, Typography, Badge, Avatar,
-  Menu, IconButton,
-  Select, FormControl, MenuItem,
-  Divider, Popover,
-  TextField,
-} from "@mui/material"
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined"
-import ExpandMoreIcon            from "@mui/icons-material/ExpandMore"
-import { hceColors, hceTypography, hceUi, hceShadows, hceBorderRadius } from "../../tokens/hce.tokens"
+import "./HceHeader.css"
+import { Menu } from "../../atoms/Menu/Menu"
+import { hceColors, hceTypography, hceUi, hceShadows } from "../../tokens/hce.tokens"
 import { LogoClinicaSanFelipeIcon, LogoutIcon, HceBurgerIcon } from "../../atoms/Icon/SvgIconsHce"
 import {
   CheckedCircleIcon, DangerIcon, HceInfoIcon, WarningIcon,
 } from "../../atoms/Icon/SvgIcons"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 // ─── Tipos públicos ───────────────────────────────────────────────────────────
 
 export type Sucursal = {
@@ -44,8 +37,10 @@ const TIPO_CONFIG: Record<HceNotificacion["tipo"], {
   Icon:    React.FC<{ color?: string; size?: number }>
 }> = {
   info: {
-    color:   hceColors.primary.blue[500],
-    bgLight: hceColors.primary.blue[50],
+    // blue[500]/blue[50] == --ds-color-primary/-light (csf) exactamente —
+    // reactivo al tema activo de DSProvider, mismos hex de siempre como fallback.
+    color:   `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
+    bgLight: `var(--ds-color-primary-light, ${hceColors.primary.blue[50]})`,
     Icon:    HceInfoIcon,
   },
   warning: {
@@ -85,10 +80,28 @@ const NOTIF_EJEMPLO: HceNotificacion[] = [
   },
 ]
 
+/** Ícono de campana — inline (se integra al sistema de íconos en el paso dedicado) */
+function BellGlyph() {
+  return (
+    <svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    </svg>
+  )
+}
+/** Chevron abajo — inline */
+function ChevronDownGlyph({ color = "currentColor", size = 18 }: { color?: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  )
+}
+
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 export type HceHeaderProps = {
-  title?: string 
+  title?: string
   variant?: HceHeaderVariant
   sede?:             string | number
   sucursales?:       Sucursal[]
@@ -125,25 +138,25 @@ export function HceHeader({
   floating        = false,
   onMenuClick,
 }: HceHeaderProps) {
-  const [userAnchor,  setUserAnchor]  = useState<null | HTMLElement>(null)
-  const [notifAnchor, setNotifAnchor] = useState<null | HTMLElement>(null)
-  const [sedeSelectOpen, setSedeSelectOpen] = useState(false)
+  const notifTriggerRef = useRef<HTMLButtonElement>(null)
+  const userTriggerRef  = useRef<HTMLButtonElement>(null)
+  const [userOpen,  setUserOpen]  = useState(false)
+  const [notifOpen, setNotifOpen] = useState(false)
 
   // Estado interno de notificaciones (leídas/no leídas)
   const [notifs, setNotifs] = useState<HceNotificacion[]>(
     notifications ?? NOTIF_EJEMPLO
   )
 
-  const handleUserOpen   = (e: React.MouseEvent<HTMLElement>) => setUserAnchor(e.currentTarget)
-  const handleUserClose  = () => setUserAnchor(null)
+  const handleUserClose  = () => setUserOpen(false)
   const handleLogout     = () => { handleUserClose(); onLogout?.() }
 
-  const handleNotifOpen  = (e: React.MouseEvent<HTMLElement>) => {
-    setNotifAnchor(e.currentTarget)
+  const handleNotifOpen  = () => {
+    setNotifOpen(true)
     // Marca todas como leídas al abrir el panel (mismo comportamiento que Header.tsx)
     setNotifs(prev => prev.map(n => ({ ...n, leida: true })))
   }
-  const handleNotifClose = () => setNotifAnchor(null)
+  const handleNotifClose = () => setNotifOpen(false)
 
   const initials = userName
     .split(" ")
@@ -158,31 +171,30 @@ export function HceHeader({
   const selectedSede = String(sede || (sucursales[0]?.id ?? ""))
   const unreadCount  = notifs.filter(n => !n.leida).length
   const isTvVariant = variant === "tv"
-const headerTitle = title ??  "Historia Clínica"
+  const headerTitle = title ??  "Historia Clínica"
   const [fechaHora, setFechaHora] = useState(new Date())
 
   useEffect(() => {
-  const interval = setInterval(() => {
-    setFechaHora(new Date())
-  }, 60000)
+    const interval = setInterval(() => {
+      setFechaHora(new Date())
+    }, 60000)
 
-  return () => clearInterval(interval)
-}, [])
+    return () => clearInterval(interval)
+  }, [])
 
   return (
-    <Box
-      component="header"
-      
-      sx={{
+    <header
+      style={{
         height:          64,
         backgroundColor: hceColors.primary.blue[600],
         display:         "flex",
         alignItems:      "center",
-        px:              2,
+        padding:         "0 16px",
         width:           "100%",
         flexShrink:      0,
         position:        "relative",
         zIndex:          10,
+        boxSizing:       "border-box",
         ...(floating && {
           borderRadius: "12px",
           boxShadow:    hceShadows.float,
@@ -190,95 +202,48 @@ const headerTitle = title ??  "Historia Clínica"
       }}
     >
       {/* ── Izquierda ────────────────────────────────────────── */}
-      <Box  sx={{ flex: 1, display: "flex", alignItems: "center", gap: 3, minWidth: 0 }}>
+      <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 24, minWidth: 0 }}>
 
         {/* Hamburguesa — solo visible en pantallas pequeñas (< md = 900px) */}
         {onMenuClick && (
-          <IconButton
+          <button
+            type="button"
+            className="hce-hceheader-iconbtn hce-hceheader-hamburger"
             onClick={onMenuClick}
-            size="small"
-            sx={{ color: "white", p: 0.5, flexShrink: 0, display: { xs: "flex", md: "none" } }}
           >
             <HceBurgerIcon size={20} color="white" />
-          </IconButton>
+          </button>
         )}
 
-        <Typography sx={{
+        <span className="hce-hceheader-title" style={{
           fontFamily: hceTypography.fontFamily,
           color:      "white",
           fontWeight: 600,
           fontSize:   hceTypography.size.xl,
           whiteSpace: "nowrap",
           flexShrink: 0,
-          display:    { xs: "none", md: "block" },
         }}>
          {headerTitle}
-        </Typography>
+        </span>
 
         {sucursales.length > 0 && (
-          <FormControl   variant="standard" sx={{ minWidth: 140, maxWidth: 260 }}>
-            <Select
-              value={selectedSede}
-              onChange={e => onSedeCambiada?.(e.target.value)}
-              disabled={!multiSede}
-              disableUnderline
-              open={sedeSelectOpen}
-              onOpen={() => setSedeSelectOpen(true)}
-              onClose={() => setSedeSelectOpen(false)}
-              IconComponent={multiSede ? ExpandMoreIcon : () => null}
-               MenuProps={{
-                PaperProps: {
-                  sx: {
-                    mt: "6px",
-                    display:'flex',
-                    flexDirection: 'column',
-                    gap:'8px'
-                  },
-                },
-              }}
-              sx={{
-                fontFamily: hceTypography.fontFamily,
-                fontWeight: hceTypography.weight.regular,
-                color:      hceColors.primary.blue[600],
-                fontSize:   hceTypography.size.md,
-                "& .MuiSelect-icon": { color: hceColors.primary.blue[400], fontSize: 18 , marginLeft:  10},
-                "& .MuiSelect-select": {
-                  py:              "4px",
-                  px:              "10px !important",
-                  borderRadius:    hceBorderRadius.lg,
-                  backgroundColor: hceColors.neutro.white[50],
-                  border: sedeSelectOpen
-                    ? `2px solid ${hceColors.primary.blue[400]}`
-                    : `2px solid ${hceColors.neutro.black[50]}`,
-                  boxShadow: sedeSelectOpen
-                    ? `0 0 0 6px ${hceColors.primary.blue[100]}`
-                    : "none",
-                  boxSizing: "border-box",
-                  "&.Mui-disabled": {
-                    WebkitTextFillColor: "rgba(255,255,255,0.85)",
-                    cursor:              "default",
-                  },
-                },
-               
-               }}
-            >
-              {sucursales.map(s => (
-                <MenuItem
-               
-                  key={String(s.id)}
-                  value={String(s.id)}
-                  sx={{padding: '12px', fontFamily: hceTypography.fontFamily, fontSize: "0.82rem", color: hceColors.primary.blue[600],fontWeight:hceTypography.weight.regular }}
-                >
-                  {s.nombre}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <select
+            className="hce-hceheader-sede-select"
+            value={selectedSede}
+            onChange={e => onSedeCambiada?.(e.target.value)}
+            disabled={!multiSede}
+          >
+            {sucursales.map(s => (
+              <option key={String(s.id)} value={String(s.id)}>
+                {s.nombre}
+              </option>
+            ))}
+          </select>
         )}
-      </Box>
+      </div>
 
       {/* ── Centro: logo ─────────────────────────────────────── */}
-      <Box sx={{
+      <div style={{
         position:      "absolute",
         left:          "50%",
         transform:     "translateX(-50%)",
@@ -287,44 +252,42 @@ const headerTitle = title ??  "Historia Clínica"
         pointerEvents: "none",
       }}>
         <LogoClinicaSanFelipeIcon width={123} />
-      </Box>
+      </div>
 
       {/* ── Derecha ──────────────────────────────────────────── */}
-      <Box sx={{
+      <div style={{
         flex:           1,
         display:        "flex",
         alignItems:     "center",
         justifyContent: "flex-end",
-        gap:            1,
+        gap:            8,
         minWidth:       0,
       }}>
 
       {isTvVariant  && (
   <>
-          <TextField
+          <input
             name="sede"
+            readOnly
             value={`Sede ${sede ?? ""}`}
-            InputProps={{
-              readOnly: true,
-            }}
-            sx={{
+            style={{
               fontFamily: hceTypography.fontFamily,
-              "& .MuiInputBase-input": {
-                py: "4px",
-                width: "150px",
-                maxWidth: "150px",
-                textAlign: "center",
-                color: hceColors.primary.blue[600],
-                backgroundColor: hceColors.neutro.white[100],
-                fontWeight: hceTypography.weight.bold,
-                borderRadius: "6px",
-               
-              },
+              padding: "4px 0",
+              width: "150px",
+              maxWidth: "150px",
+              textAlign: "center",
+              color: hceColors.primary.blue[600],
+              backgroundColor: hceColors.neutro.white[100],
+              fontWeight: hceTypography.weight.bold,
+              borderRadius: "6px",
+              border: "none",
+              boxSizing: "border-box",
             }}
           />
 
-          <TextField
+          <input
             name="fechaHora"
+            readOnly
             value={`${fechaHora.toLocaleDateString("es-PE", {
             day: "2-digit",
             month: "2-digit",
@@ -334,135 +297,139 @@ const headerTitle = title ??  "Historia Clínica"
               minute: "2-digit",
               hour12: false,
             })}`}
-            InputProps={{
-              readOnly: true,
-            }}
-            sx={{
+            style={{
               fontFamily: hceTypography.fontFamily,
-              "& .MuiInputBase-input": {
-                py: "4px",
-                width: "160px",
-                maxWidth: "160px",
-                textAlign: "center",
-                color: hceColors.primary.blue[600],
-                backgroundColor: hceColors.neutro.white[100],
-                fontWeight: hceTypography.weight.bold,
-                borderRadius: "6px",
-               
-              },
+              padding: "4px 0",
+              width: "160px",
+              maxWidth: "160px",
+              textAlign: "center",
+              color: hceColors.primary.blue[600],
+              backgroundColor: hceColors.neutro.white[100],
+              fontWeight: hceTypography.weight.bold,
+              borderRadius: "6px",
+              border: "none",
+              boxSizing: "border-box",
             }}
           />
         </>
       )}
 
-
-
-
-
-
-
         {/* Campana */}
       {!isTvVariant  && (
-          <IconButton
+          <button
+            ref={notifTriggerRef}
+            type="button"
+            className="hce-hceheader-iconbtn"
             onClick={handleNotifOpen}
-            size="small"
-            sx={{ color: "white", p: 0.5, flexShrink: 0 }}
+            aria-label="Notificaciones"
           >
-            <Badge
-              badgeContent={unreadCount}
-              color="error"
-              sx={{ "& .MuiBadge-badge": { fontSize: "0.58rem", minWidth: 15, height: 15 } }}
-            >
-              <NotificationsOutlinedIcon sx={{ fontSize: 22 }} />
-            </Badge>
-          </IconButton>
+            <span style={{ position: "relative", display: "flex" }}>
+              <BellGlyph />
+              {unreadCount > 0 && (
+                <span style={{
+                  position: "absolute",
+                  top: -4,
+                  right: -4,
+                  minWidth: 15,
+                  height: 15,
+                  padding: "0 3px",
+                  borderRadius: 8,
+                  backgroundColor: hceColors.alert.error[500],
+                  color: "#fff",
+                  fontSize: "0.58rem",
+                  fontWeight: 700,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  lineHeight: 1,
+                }}>
+                  {unreadCount}
+                </span>
+              )}
+            </span>
+          </button>
         )}
 
         {/* ── Panel de notificaciones ──────────────────────────── */}
-        <Popover
-          open={!isTvVariant  && Boolean(notifAnchor)}
-          anchorEl={notifAnchor}
+        <Menu
+          open={!isTvVariant && notifOpen}
           onClose={handleNotifClose}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-          PaperProps={{
-            elevation: 0,
-            sx: {
-              mt:           1.5,
-              width:        360,
-              borderRadius: "16px",
-              boxShadow:    hceShadows.modal,
-              overflow:     "hidden",
-              border:       `1px solid ${hceColors.primary.blue[100]}`,
-            },
+          anchorRef={notifTriggerRef}
+          align="right"
+          aria-label="Notificaciones"
+          panelStyle={{
+            width:        360,
+            borderRadius: "16px",
+            boxShadow:    hceShadows.modal,
+            overflow:     "hidden",
+            border:       `1px solid ${hceColors.primary.blue[100]}`,
           }}
         >
           {/* Cabecera del panel */}
-          <Box sx={{
-            px:              2,
-            py:              1.5,
+          <div style={{
+            padding:         "12px 16px",
             display:         "flex",
             alignItems:      "center",
             justifyContent:  "space-between",
             backgroundColor: hceColors.primary.blue[600],
           }}>
-            <Typography sx={{
+            <span style={{
               fontFamily: hceTypography.fontFamily,
               color:      "white",
               fontWeight: 700,
               fontSize:   "0.85rem",
             }}>
               Notificaciones
-            </Typography>
-            <Typography sx={{
+            </span>
+            <span style={{
               fontFamily:      hceTypography.fontFamily,
               color:           "white",
               fontSize:        "0.7rem",
               backgroundColor: "rgba(255,255,255,0.2)",
-              px:              1,
-              py:              "2px",
+              padding:         "2px 8px",
               borderRadius:    "10px",
             }}>
               {notifs.length} nuevas
-            </Typography>
-          </Box>
+            </span>
+          </div>
 
           {/* Lista de notificaciones */}
-          <Box sx={{ maxHeight: 360, overflowY: "auto" }}>
+          <div style={{ maxHeight: 360, overflowY: "auto" }}>
             {notifs.length === 0 ? (
-              <Box sx={{ py: 4, textAlign: "center" }}>
-                <NotificationsOutlinedIcon sx={{ fontSize: 36, color: hceColors.primary.blue[200], mb: 1 }} />
-                <Typography sx={{
+              <div style={{ padding: "32px 0", textAlign: "center" }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 8, color: hceColors.primary.blue[200] }}>
+                  <BellGlyph />
+                </div>
+                <span style={{
                   fontFamily: hceTypography.fontFamily,
                   fontSize:   "0.82rem",
                   color:      hceColors.neutro.white[900],
                 }}>
                   Sin notificaciones
-                </Typography>
-              </Box>
+                </span>
+              </div>
             ) : (
               notifs.map((n, idx) => {
                 const cfg = TIPO_CONFIG[n.tipo]
                 return (
-                  <Box key={n.id}>
-                    <Box sx={{
+                  <div key={n.id}>
+                    <div className="hce-hceheader-notif-row" style={{
                       display:         "flex",
-                      gap:             1.5,
-                      px:              2,
-                      py:              1.5,
+                      gap:             12,
+                      padding:         "12px 16px",
                       alignItems:      "flex-start",
                       backgroundColor: hceUi.surface,
-                      "&:hover":       { backgroundColor: hceUi.background },
                       cursor:          "default",
+                      boxSizing:       "border-box",
                     }}>
                       {/* Ícono del tipo */}
-                      <Box sx={{ mt: "2px", flexShrink: 0 }}>
+                      <div style={{ marginTop: "2px", flexShrink: 0 }}>
                         <cfg.Icon color={cfg.color} size={18} />
-                      </Box>
+                      </div>
 
                       {/* Contenido */}
-                      <Box sx={{ flex: 1, minWidth: 0 }}>
-                        <Typography sx={{
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{
                           fontFamily: hceTypography.fontFamily,
                           fontSize:   "0.8rem",
                           fontWeight: 700,
@@ -470,154 +437,150 @@ const headerTitle = title ??  "Historia Clínica"
                           lineHeight: 1.3,
                         }}>
                           {n.titulo}
-                        </Typography>
-                        <Typography sx={{
+                        </div>
+                        <div style={{
                           fontFamily: hceTypography.fontFamily,
                           fontSize:   "0.75rem",
                           color:      hceUi.textSecondary,
-                          mt:         "2px",
+                          marginTop:  "2px",
                           lineHeight: 1.4,
                         }}>
                           {n.descripcion}
-                        </Typography>
+                        </div>
                         {n.fecha && (
-                          <Typography sx={{
+                          <div style={{
                             fontFamily: hceTypography.fontFamily,
                             fontSize:   "0.68rem",
                             color:      hceUi.textSubtle,
-                            mt:         "4px",
+                            marginTop:  "4px",
                             opacity:    0.8,
                           }}>
                             {n.fecha}
-                          </Typography>
+                          </div>
                         )}
-                      </Box>
-                    </Box>
-                    {idx < notifs.length - 1 && <Divider />}
-                  </Box>
+                      </div>
+                    </div>
+                    {idx < notifs.length - 1 && <div style={{ height: 1, backgroundColor: "rgba(0,0,0,0.12)" }} />}
+                  </div>
                 )
               })
             )}
-          </Box>
+          </div>
 
           {/* Footer */}
-          <Box sx={{
-            px:              2,
-            py:              1,
+          <div style={{
+            padding:         "8px 16px",
             borderTop:       `1px solid ${hceColors.primary.blue[100]}`,
             backgroundColor: hceUi.background,
           }}>
-            <Typography
+            <div
+              className="hce-hceheader-notif-footer"
               onClick={() => { handleNotifClose(); onVerTodas?.() }}
-              sx={{
+              style={{
                 fontFamily: hceTypography.fontFamily,
                 fontSize:   "0.75rem",
                 color:      hceColors.primary.blue[600],
                 textAlign:  "center",
                 cursor:     "pointer",
                 fontWeight: 600,
-                "&:hover":  { opacity: 0.8 },
               }}
             >
               Ver todas las notificaciones
-            </Typography>
-          </Box>
-        </Popover>
-
-
+            </div>
+          </div>
+        </Menu>
 
         {/* Avatar + nombre */}
-       {!isTvVariant  && ( 
-            <Box
-          onClick={handleUserOpen}
-         
-          sx={{
-            display:    "flex",
-            alignItems: "center",
-            gap:        0.75,
-            cursor:     "pointer",
-            minWidth:   0,
-            flexShrink: 1,
-          }}
-        >
-          <Avatar
-            src={userPhotoUrl}
-            sx={{
+       {!isTvVariant  && (
+          <button
+            ref={userTriggerRef}
+            type="button"
+            className="hce-hceheader-user-trigger"
+            onClick={() => setUserOpen(o => !o)}
+          >
+            <span style={{
+              display:         "flex",
+              alignItems:      "center",
+              justifyContent:  "center",
               width:           34,
               height:          34,
+              borderRadius:    "50%",
               backgroundColor: "rgba(255,255,255,0.25)",
               fontSize:        "0.75rem",
               fontWeight:      700,
               color:           "white",
               flexShrink:      0,
-            }}
-          >
-            {initials}
-          </Avatar>
-
-          <Box sx={{ minWidth: 0, maxWidth: 220, display: { xs: "none", sm: "block" } }}>
-            <Typography sx={{
-              fontFamily:   hceTypography.fontFamily,
-              color:        "white",
-              fontWeight:   700,
-              fontSize:     "0.82rem",
-              lineHeight:   1.2,
-              overflow:     "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace:   "nowrap",
+              overflow:        "hidden",
+              fontFamily:      hceTypography.fontFamily,
             }}>
-              {userName}
-            </Typography>
-            {userRole && (
-              <Typography sx={{
+              {userPhotoUrl ? <img src={userPhotoUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : initials}
+            </span>
+
+            <span className="hce-hceheader-user-info" style={{ minWidth: 0, maxWidth: 220 }}>
+              <span style={{
+                display: "block",
                 fontFamily:   hceTypography.fontFamily,
-                color:        "rgba(255,255,255,0.75)",
-                fontSize:     "0.7rem",
+                color:        "white",
+                fontWeight:   700,
+                fontSize:     "0.82rem",
                 lineHeight:   1.2,
                 overflow:     "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace:   "nowrap",
               }}>
-                {userRole}
-              </Typography>
-            )}
-          </Box>
+                {userName}
+              </span>
+              {userRole && (
+                <span style={{
+                  display: "block",
+                  fontFamily:   hceTypography.fontFamily,
+                  color:        "rgba(255,255,255,0.75)",
+                  fontSize:     "0.7rem",
+                  lineHeight:   1.2,
+                  overflow:     "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace:   "nowrap",
+                }}>
+                  {userRole}
+                </span>
+              )}
+            </span>
 
-          <ExpandMoreIcon sx={{ color: "rgba(255,255,255,0.8)", fontSize: 18, flexShrink: 0 }} />
-        </Box>
-
+            <ChevronDownGlyph color="rgba(255,255,255,0.8)" />
+          </button>
         )}
 
         {/* Menú usuario */}
         <Menu
-          anchorEl={userAnchor}
-          open={Boolean(userAnchor)}
+          open={userOpen}
           onClose={handleUserClose}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-          PaperProps={{ sx: {
-            mt:           1,
+          anchorRef={userTriggerRef}
+          align="right"
+          aria-label="Menú de usuario"
+          panelStyle={{
             minWidth:     180,
             boxShadow:    hceShadows.float,
             borderRadius: "10px",
-          }}}
+          }}
         >
-          <MenuItem
+          <button
+            type="button"
+            className="hce-menu-item"
             onClick={handleLogout}
-            sx={{ display: "flex", alignItems: "center", gap: 1.5, py: 1.25 }}
+            style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px" }}
           >
             <LogoutIcon color={hceColors.alert.error[500]} size={14} />
-            <Typography sx={{
+            <span style={{
               fontFamily: hceTypography.fontFamily,
               fontSize:   "0.85rem",
-              color:      "error.main",
+              color:      hceColors.alert.error[500],
               fontWeight: 500,
             }}>
               Cerrar sesión
-            </Typography>
-          </MenuItem>
+            </span>
+          </button>
         </Menu>
-      </Box>
-    </Box>
+      </div>
+    </header>
   )
 }

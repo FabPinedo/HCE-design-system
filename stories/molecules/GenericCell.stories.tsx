@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { GenericCell, UiCloseIcon, type ClinicalIconStatus, type PriorityLevel } from '@hce/design-system'
-import { Box } from "@mui/material"
+import { GenericCell, UiCloseIcon, Box, type ClinicalIconStatus, type PriorityLevel } from '@hce/design-system'
 import { useState } from 'react'
 
 

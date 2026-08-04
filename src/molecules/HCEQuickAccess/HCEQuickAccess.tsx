@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import { Box, Typography, Button } from "@mui/material"
+import "./HCEQuickAccess.css"
 import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
 export type HCEQuickAccessProps = {
@@ -23,49 +23,40 @@ export function HCEQuickAccess({
   disabled = false,
 }: HCEQuickAccessProps) {
   return (
-    <Box
-      sx={{
-        display:       "flex",
-        flexDirection: "column",
-        gap:           1.5,
-        p:             2,
-        borderRadius:  "12px",
-        border:        `1px solid ${disabled ? "#e0e0e0" : hceColors.primary.blue[100]}`,
+    <div
+      className={`hce-quickaccess${!disabled ? " hce-quickaccess--enabled" : ""}`}
+      style={{
+        border:          `1px solid ${disabled ? "#e0e0e0" : hceColors.primary.blue[100]}`,
         backgroundColor: disabled ? "#fafafa" : "white",
-        opacity:       disabled ? 0.6 : 1,
-        transition:    "box-shadow 0.18s ease, transform 0.18s ease",
-        cursor:        disabled ? "not-allowed" : "default",
-        ...(!disabled && {
-          "&:hover": {
-            boxShadow: "0 4px 16px rgba(0,61,150,0.1)",
-            transform: "translateY(-2px)",
-          },
-        }),
+        opacity:         disabled ? 0.6 : 1,
+        cursor:          disabled ? "not-allowed" : "default",
       }}
     >
       {/* Icono en cuadro azul */}
-      <Box sx={{
-        width:           48,
-        height:          48,
-        borderRadius:    "10px",
-        backgroundColor: hceColors.primary.blue[50],
-        display:         "flex",
-        alignItems:      "center",
-        justifyContent:  "center",
-        flexShrink:      0,
-      }}>
-        <Box sx={{
+      <div
+        className="hce-quickaccess-icon-box"
+        style={{
+          width:           48,
+          height:          48,
+          borderRadius:    "10px",
+          backgroundColor: hceColors.primary.blue[50],
+          display:         "flex",
+          alignItems:      "center",
+          justifyContent:  "center",
+          flexShrink:      0,
+        }}
+      >
+        <div style={{
           color:    hceColors.primary.blue[600],
           display:  "flex",
           fontSize: 24,
-          "& svg": { width: 24, height: 24 },
         }}>
           {icon}
-        </Box>
-      </Box>
+        </div>
+      </div>
 
       {/* Título */}
-      <Typography sx={{
+      <span style={{
         fontFamily: hceTypography.fontFamily,
         fontWeight: 700,
         fontSize:   "0.92rem",
@@ -73,10 +64,10 @@ export function HCEQuickAccess({
         lineHeight: 1.3,
       }}>
         {title}
-      </Typography>
+      </span>
 
       {/* Descripción */}
-      <Typography sx={{
+      <span style={{
         fontFamily: hceTypography.fontFamily,
         fontSize:   "0.78rem",
         color:      "#666",
@@ -84,32 +75,17 @@ export function HCEQuickAccess({
         flex:       1,
       }}>
         {description}
-      </Typography>
+      </span>
 
       {/* Botón Acceder */}
-      <Button
+      <button
         type="button"
-        variant="outlined"
-        size="small"
+        className="hce-quickaccess-btn"
         disabled={disabled}
         onClick={disabled ? undefined : onAcceder}
-        sx={{
-          fontFamily:    hceTypography.fontFamily,
-          fontWeight:    600,
-          fontSize:      "0.8rem",
-          textTransform: "none",
-          borderColor:   hceColors.primary.blue[600],
-          color:         hceColors.primary.blue[600],
-          borderRadius:  "8px",
-          mt:            "auto",
-          "&:hover": {
-            backgroundColor: hceColors.primary.blue[50],
-            borderColor:     hceColors.primary.blue[700],
-          },
-        }}
       >
         Acceder
-      </Button>
-    </Box>
+      </button>
+    </div>
   )
 }

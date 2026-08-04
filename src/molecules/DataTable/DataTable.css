@@ -1,0 +1,4 @@
+.hce-datatable-row:hover {
+  background-color: #EEF2F9;
+  transition: background-color 150ms ease;
+}

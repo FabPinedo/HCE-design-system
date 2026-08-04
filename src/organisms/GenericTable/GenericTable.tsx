@@ -1,13 +1,13 @@
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
-import type { SxProps, Theme } from "@mui/material"
+import type { CSSProperties } from "react"
+import "./GenericTable.css"
 import { GenericRow } from "../../molecules/GenericRow/GenericRow"
 import type {  GenericTableColumn } from "../../molecules/GenericCell/GenericCell"
 import { hceBorderRadius, hceClinicalColors, hceColors, hceTypography, hceUi } from "../../tokens/hce.tokens"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { getColumnWidths, getTableWidthNumber } from "./tableWidth.utils"
 
-// El header (TableCell) se pinta con hceUi.textPrimaryTable — mismo token
-// que usa headerCellSx.backgroundColor más abajo. El borde perimetral de la
+// El header (th) se pinta con hceUi.textPrimaryTable — mismo token que usa
+// headerCellStyle.backgroundColor más abajo. El borde perimetral de la
 // tabla debe coincidir exactamente con ese color, no con hceClinicalColors
 // .tableHeaderBg / .headerBg (tokens de azul "similares" pero no son el que
 // realmente se renderiza en el header de este componente).
@@ -17,14 +17,14 @@ const SCROLLBAR_THUMB_MIN_HEIGHT = 24
 
 // En <td>/<th>, "height" es un MÍNIMO: si el contenido necesita más (ej. 2
 // líneas de texto), el navegador IGNORA el valor y agranda la fila igual.
-// lineHeight se achica a propósito (16px, headerCellSx) para que un header de
-// 2 líneas (ej. "Indc."/"Med.") no fuerce una fila mucho más alta que una de
-// 1 línea (2×16=32px de contenido, cómodo).
-// El alto REAL final depende del theme del consumidor (ej. emergencyTheme.ts
-// fuerza height:44px en TODO MuiTableRow, un piso que le gana a lo puesto
-// acá) — por eso no se puede asumir un número fijo: el thumb mide el header
-// de verdad con un ResizeObserver (ver headerRef) y usa este valor solo como
-// fallback antes de la primera medición.
+// lineHeight se achica a propósito (16px, headerCellStyle) para que un
+// header de 2 líneas (ej. "Indc."/"Med.") no fuerce una fila mucho más alta
+// que una de 1 línea (2×16=32px de contenido, cómodo).
+// El alto REAL final dependía antes del theme MUI del consumidor (ej. el
+// tema clínico de Emergencia forzaba height:44px en toda fila) — ahora que
+// el theme ya no envuelve la tabla vía MUI, el thumb sigue midiendo el
+// header de verdad con un ResizeObserver (ver headerRef) y usa este valor
+// solo como fallback antes de la primera medición.
 const HEADER_HEIGHT_FALLBACK = 44
 
 interface GenericTableProps<T> {
@@ -33,7 +33,8 @@ interface GenericTableProps<T> {
   getRowId: (row: T) => string
   maxHeight?: number | string
 
-  getRowSx?: (row: T, index: number) => SxProps<Theme>
+  /** Estilo puntual por fila — objeto plano de CSS (antes SxProps<Theme> de MUI). */
+  getRowSx?: (row: T, index: number) => CSSProperties
     /**
   * Permite marcar una fila como alerta sin amarrar la tabla
    * a un campo específico como row_alert_color.
@@ -50,24 +51,25 @@ interface GenericTableProps<T> {
 }
 
 
-const headerCellSx = {
+const headerCellStyle: CSSProperties = {
   height: HEADER_HEIGHT_FALLBACK,
   backgroundColor: hceUi.textPrimaryTable,
-  color: `${hceColors.neutro.white[100]} !important`,
+  color: hceColors.neutro.white[100],
   borderLeft: "1px solid #ffff",
-  // fontSize / fontWeight / fontFamily NO se fuerzan acá a propósito: el
-  // theme (MuiTableHead + MuiTableCell.styleOverrides.head) ya define sus
+  // fontSize / fontWeight / fontFamily NO se fuerzan acá a propósito: antes
+  // el theme (MuiTableHead + MuiTableCell.styleOverrides.head) definía sus
   // propios tokens hce específicos para headers (ej. weight.bold,
-  // size.tableHeader) con selectores de mayor especificidad que este sx —
-  // ponerlos acá con tokens genéricos (md/medium) no los reemplaza, solo
-  // queda "muerto" y además fontFamily sí ganaba, dejando el header en Poppins
-  // (token de plataforma) mientras el body usa fontFamilyClinical (IBM Plex,
-  // vía emergencyTheme) — desparejo. Dejar que el theme lo resuelva.
+  // size.tableHeader). Ahora que el theme ya no envuelve la tabla vía MUI,
+  // esto queda pendiente de reconectar a las variables `--ds-table-head-*`
+  // que expone el tema activo de `DSProvider` (ver theme/themes.ts) — ver
+  // nota en atoms/Button/Button.tsx sobre el mismo pendiente.
   // Interlineado angosto a propósito — ver HEADER_HEIGHT_FALLBACK más arriba.
   lineHeight: "16px",
   whiteSpace: "normal",
   overflow: "hidden",
-  textTransform: "none !important",
+  textTransform: "none",
+  textAlign: "center",
+  boxSizing: "border-box",
 }
 
 
@@ -93,9 +95,9 @@ export const GenericTable = <T,>({
   // Scrollbar vertical dibujado a mano, superpuesto sobre la última columna
   // (en vez del nativo, que reserva su propio ancho y deja el borde "después"
   // del scroll — se veía como una franja/columna en blanco). Se oculta el
-  // scrollbar nativo solo en el eje vertical (ver "&::-webkit-scrollbar" del
-  // Table más abajo) y este thumb lo reemplaza visualmente, sincronizado con
-  // el scroll real del TableContainer.
+  // scrollbar nativo solo en el eje vertical (ver GenericTable.css) y este
+  // thumb lo reemplaza visualmente, sincronizado con el scroll real del
+  // contenedor.
   const containerRef = useRef<HTMLDivElement>(null)
   const headerRowRef = useRef<HTMLTableRowElement>(null)
   const [scrollMetrics, setScrollMetrics] = useState({ scrollTop: 0, clientHeight: 0, scrollHeight: 0, clientWidth: 0 })
@@ -211,15 +213,16 @@ export const GenericTable = <T,>({
   )
 
   return (
-    // Una sola tabla (header + body) dentro de un único TableContainer con
-    // scroll — el header queda fijo vía <Table stickyHeader> (posicionamiento
-    // nativo de MUI) en vez de separar header/body en dos <table> con medición
-    // manual del ancho del scrollbar. Con un solo elemento scrolleable, el
-    // scroll (horizontal y vertical) siempre queda contenido acá adentro: no
-    // hay forma de que "se escape" a un ancestro, sin importar cómo el
-    // consumidor arme su propio layout alrededor de este componente.
-    <Box
-      sx={{
+    // Una sola tabla (header + body) dentro de un único contenedor con
+    // scroll — el header queda fijo vía position:sticky nativo (ver
+    // GenericTable.css) en vez de separar header/body en dos <table> con
+    // medición manual del ancho del scrollbar. Con un solo elemento
+    // scrolleable, el scroll (horizontal y vertical) siempre queda
+    // contenido acá adentro: no hay forma de que "se escape" a un
+    // ancestro, sin importar cómo el consumidor arme su propio layout
+    // alrededor de este componente.
+    <div
+      style={{
         position: "relative",
         width: "100%",
         maxWidth: "100%",
@@ -230,99 +233,72 @@ export const GenericTable = <T,>({
         overflow: "hidden",
       }}
     >
-      <TableContainer
+      <div
         ref={containerRef}
-        sx={{
+        className="hce-table-container"
+        style={{
           width: "100%",
           flex: 1,
           minHeight: 0,
           maxHeight: maxHeight ?? "none",
           overflow: "auto",
-
-          // El scrollbar vertical nativo se oculta (width:0) porque lo
-          // reemplaza el thumb dibujado a mano de acá abajo, superpuesto
-          // sobre el contenido en vez de reservar su propio ancho. El
-          // horizontal se deja nativo (height sí definido) — no hubo queja
-          // sobre ese eje y así se conserva el indicador visual al scrollear
-          // a los costados.
-          scrollbarWidth: "none",
-          "&::-webkit-scrollbar": {
-            width: 0,
-            height: "8px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: hceClinicalColors.border,
-            borderRadius: "4px",
-          },
-          "&::-webkit-scrollbar-track": {
-            backgroundColor: hceClinicalColors.rowAlternate,
-          },
         }}
       >
-        <Box sx={{   
-          
+        <div style={{
           border: `1px solid ${TABLE_BORDER_COLOR}`,
           borderRadius: TABLE_RADIUS,
           paddingBottom: '3px',
           width: "100%",
           minWidth: tableMinWidth,
          }}>
-        <Table
-          stickyHeader
+        <table
+          className="hce-generic-table"
           aria-label="generic table"
-          sx={{
-            tableLayout: "fixed",
-            width: "100%",
+          style={{
             minWidth: tableMinWidth,
-            borderCollapse: "separate",
-            borderSpacing: 0,
-            // El theme (MuiTable.styleOverrides.root) fuerza borderRadius: xl
-            // + overflow:hidden en TODO <Table>. overflow:hidden en el propio
-            // <table> rompe el position:sticky del header (cualquier ancestro
-            // entre la celda sticky y el TableContainer con overflow != visible
-            // lo desactiva) — se anula acá; el radius/clip visual ya lo da el
-            // Box exterior.
-           
+            // El theme (antes MuiTable.styleOverrides.root) forzaba
+            // borderRadius: xl + overflow:hidden en TODO <Table>.
+            // overflow:hidden en el propio <table> rompe el position:sticky
+            // del header (cualquier ancestro entre la celda sticky y el
+            // contenedor con overflow != visible lo desactiva) — se deja
+            // visible acá; el radius/clip visual ya lo da el div exterior.
             overflow: "visible",
-            //  border: `1px solid ${TABLE_BORDER_COLOR}`,
-            //  borderRadius: TABLE_RADIUS,
           }}
         >
           {renderColGroup()}
 
-          <TableHead>
-            <TableRow ref={headerRowRef}>
+          <thead>
+            <tr ref={headerRowRef}>
               {columns.map((column, index) => (
                 // El header siempre centrado, independiente del align de la
                 // columna (ese align es para el contenido del body, no
                 // necesariamente para su etiqueta).
-                <TableCell
+                <th
                   key={column.key}
-                  align="center"
-                  sx={{
-                    ...headerCellSx,
+                  style={{
+                    ...headerCellStyle,
                     width: columnWidths[index],
                   }}
                 >
                   {column.header}
-                </TableCell>
+                </th>
               ))}
-            </TableRow>
-          </TableHead>
+            </tr>
+          </thead>
 
-          <TableBody>
+          <tbody>
             {sortedRows.length === 0 ? (
-              <TableRow>
-                <TableCell
+              <tr>
+                <td
                   colSpan={columns.length}
-                  sx={{
+                  style={{
                     textAlign: "center",
                     height: 120,
                     borderBottom: "none",
                   }}
                 >
-                  <Box
-                    sx={{
+                  <div
+                    style={{
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
@@ -330,18 +306,18 @@ export const GenericTable = <T,>({
                       color: hceClinicalColors.textSecondary,
                     }}
                   >
-                    <Typography
-                      sx={{
+                    <span
+                      style={{
                         fontFamily: hceTypography.fontFamilyClinical,
                         fontSize: "14px",
                         color: hceClinicalColors.textSecondary,
                       }}
                     >
                       No hay pacientes en el Monitor de Emergencia
-                    </Typography>
-                  </Box>
-                </TableCell>
-              </TableRow>
+                    </span>
+                  </div>
+                </td>
+              </tr>
             ) : (
               sortedRows.map((row, index) => (
                 <GenericRow
@@ -354,15 +330,15 @@ export const GenericTable = <T,>({
                 />
               ))
             )}
-          </TableBody>
-        </Table>
-        </Box>
-      </TableContainer>
+          </tbody>
+        </table>
+        </div>
+      </div>
 
       {needsVerticalScroll && (
-        <Box
+        <div
           onMouseDown={handleThumbMouseDown}
-          sx={{
+          style={{
             position: "absolute",
             top: 0,
             right: 2,
@@ -371,13 +347,11 @@ export const GenericTable = <T,>({
             backgroundColor: hceClinicalColors.border,
             cursor: "pointer",
             zIndex: 2,
-          }}
-          style={{
             height: thumbHeight,
             transform: `translateY(${thumbTop}px)`,
           }}
         />
       )}
-    </Box>
+    </div>
   )
 }

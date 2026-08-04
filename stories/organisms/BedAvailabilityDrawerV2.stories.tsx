@@ -1,7 +1,7 @@
 import { useState }             from "react"
 import type { Meta, StoryObj }  from "@storybook/react"
-import { Button }               from "@mui/material"
 import {
+  Button,
   BedAvailabilityDrawerV2,
   injectHceTokens,
 }                                from "@hce/design-system"
@@ -32,7 +32,7 @@ function ControlledDemo({ beds = MOCK_BEDS, title }: { beds?: BedAvailabilityIte
   const [open, setOpen] = useState(true)
   return (
     <div style={{ padding: 24 }}>
-      <Button variant="contained" onClick={() => setOpen(true)}>
+      <Button variant="primary" onClick={() => setOpen(true)}>
         Ver disponibilidad de camas
       </Button>
       <BedAvailabilityDrawerV2
@@ -66,7 +66,7 @@ export const OcultoPorDefecto: Story = {
       const [open, setOpen] = useState(false)
       return (
         <div style={{ padding: 24 }}>
-          <Button variant="contained" onClick={() => setOpen(true)}>
+          <Button variant="primary" onClick={() => setOpen(true)}>
             Disponibilidad
           </Button>
           <BedAvailabilityDrawerV2 open={open} onClose={() => setOpen(false)} beds={MOCK_BEDS} />

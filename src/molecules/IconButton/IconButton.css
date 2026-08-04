@@ -1,0 +1,31 @@
+.hce-iconbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: rgba(0, 0, 0, 0.54);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+  box-sizing: border-box;
+}
+
+.hce-iconbtn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.hce-iconbtn:focus-visible {
+  outline: 2px solid #0043a5;
+  outline-offset: 2px;
+}
+
+.hce-iconbtn:disabled {
+  color: rgba(0, 0, 0, 0.26);
+  cursor: default;
+  background-color: transparent;
+}
+
+.hce-iconbtn--small  { padding: 5px; }
+.hce-iconbtn--medium { padding: 8px; }
+.hce-iconbtn--large  { padding: 12px; }

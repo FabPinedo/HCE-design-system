@@ -3,12 +3,13 @@
  * Component: InfoButton
  * Description:
  * Botón circular de acción que abre el panel de información
- * detallada del paciente. Combina MUI IconButton + Tooltip +
- * VisibilityIcon → molecule.
+ * detallada del paciente. Combina Tooltip + ícono de ojo → molecule.
  * ---------------------------------------------------------
  */
-import { IconButton, Tooltip } from "@mui/material"
-import VisibilityIcon from "@mui/icons-material/Visibility"
+import type { CSSProperties } from "react"
+import "./InfoButton.css"
+import { Tooltip } from "../../atoms/Tooltip/Tooltip"
+import { HceEyeIcon } from "../../atoms/Icon/SvgIcons"
 import { hceClinicalColors } from "../../tokens/hce.tokens"
 
 interface Props {
@@ -18,40 +19,24 @@ interface Props {
 }
 
 export const InfoButton = ({ onClick, tooltip = "Ver información del paciente", disabled = false }: Props) => {
+  const cssVars = {
+    "--infobtn-bg":          hceClinicalColors.btnInfoBg,
+    "--infobtn-hover-bg":    hceClinicalColors.headerBg,
+    "--infobtn-disabled-bg": hceClinicalColors.tableHeaderBg,
+  } as CSSProperties
+
   return (
     <Tooltip title={disabled ? "" : tooltip} placement="top">
-      <span>
-        <IconButton
-          onClick={onClick}
-          disabled={disabled}
-          size="small"
-          sx={{
-            width:           28,
-            height:          28,
-            borderRadius:    "4px",
-            padding:         0,
-            backgroundColor: hceClinicalColors.btnInfoBg,
-            color:           "#FFFFFF",
-            flexShrink:      0,
-
-            "&:hover": {
-              backgroundColor: hceClinicalColors.headerBg,
-            },
-            "&:active": {
-              backgroundColor: hceClinicalColors.headerBg,
-              transform:       "scale(0.95)",
-            },
-            "&.Mui-disabled": {
-              backgroundColor: hceClinicalColors.tableHeaderBg,
-              opacity:         0.4,
-              color:           "#FFFFFF",
-            },
-          }}
-          aria-label={tooltip}
-        >
-          <VisibilityIcon sx={{ fontSize: 14 }} />
-        </IconButton>
-      </span>
+      <button
+        type="button"
+        className="hce-infobtn"
+        style={cssVars}
+        onClick={onClick}
+        disabled={disabled}
+        aria-label={tooltip}
+      >
+        <HceEyeIcon size={14} color="#FFFFFF" />
+      </button>
     </Tooltip>
   )
 }

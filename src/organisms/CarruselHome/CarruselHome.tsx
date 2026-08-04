@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react"
-import { Box, IconButton }                           from "@mui/material"
-import ChevronLeftIcon  from "@mui/icons-material/ChevronLeft"
-import ChevronRightIcon from "@mui/icons-material/ChevronRight"
-import { hceColors, hceTransition } from "../../tokens/hce.tokens"
+import "./CarruselHome.css"
+import { hceColors } from "../../tokens/hce.tokens"
 
 // ─── Keyframes de slide ───────────────────────────────────────────────────────
 // Cuatro variantes: entra desde derecha/izquierda, sale hacia izquierda/derecha.
@@ -15,6 +13,21 @@ const KEYFRAMES = `
   @keyframes hce-slide-in-left   { from { transform: translateX(-100%); opacity: .85; } to { transform: translateX(0);    opacity: 1; } }
   @keyframes hce-slide-out-right { from { transform: translateX(0);    opacity: 1;   } to { transform: translateX(100%);  opacity: .85; } }
 `
+
+function ChevronLeftGlyph() {
+  return (
+    <svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="15 6 9 12 15 18" />
+    </svg>
+  )
+}
+function ChevronRightGlyph() {
+  return (
+    <svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="9 6 15 12 9 18" />
+    </svg>
+  )
+}
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -83,7 +96,8 @@ export function CarruselHome({
   const animOut = direction === "next" ? "hce-slide-out-left"  : "hce-slide-out-right"
 
   return (
-    <Box
+    <div
+      className="hce-carrusel"
       role="region"
       aria-label="Carrusel de imágenes"
       tabIndex={0}
@@ -96,32 +110,24 @@ export function CarruselHome({
         if (Math.abs(dx) > 40) dx < 0 ? next() : prev()
         touchStartX.current = null
       }}
-      sx={{
-        position:        "relative",
+      style={{
         width:           "100%",
         height,
         borderRadius,
-        overflow:        "hidden",
-        backgroundColor: hceColors.primary.blue[50],
-        flexShrink:      0,
-        outline:         "none",
-        userSelect:      "none",
-        "&:focus-visible": {
-          outline:       `2px solid ${hceColors.primary.blue[500]}`,
-          outlineOffset: "2px",
-        },
+        // blue[50] == --ds-color-primary-light (csf) exactamente — reactivo al
+        // tema activo de DSProvider, mismo hex de siempre como fallback.
+        backgroundColor: `var(--ds-color-primary-light, ${hceColors.primary.blue[50]})`,
       }}
     >
       <style>{KEYFRAMES}</style>
 
       {/* Imagen saliente — se superpone durante la animación */}
       {previous !== null && (
-        <Box
-          component="img"
+        <img
           src={images[previous]}
           alt=""
           aria-hidden="true"
-          sx={{
+          style={{
             position:  "absolute",
             inset:     0,
             width:     "100%",
@@ -134,11 +140,10 @@ export function CarruselHome({
       )}
 
       {/* Imagen entrante / visible */}
-      <Box
-        component="img"
+      <img
         src={images[current]}
         alt={`Slide ${current + 1} de ${total}`}
-        sx={{
+        style={{
           position:  "absolute",
           inset:     0,
           width:     "100%",
@@ -151,62 +156,36 @@ export function CarruselHome({
 
       {/* Flecha izquierda */}
       {total > 1 && (
-        <IconButton
+        <button
+          type="button"
+          className="hce-carrusel-arrow"
           onClick={prev}
           aria-label="Imagen anterior"
-          size="small"
-          sx={{
-            position:        "absolute",
-            left:            12,
-            top:             "50%",
-            transform:       "translateY(-50%)",
-            backgroundColor: "rgba(255,255,255,0.85)",
-            boxShadow:       `0 2px 8px rgba(0,29,69,0.18)`,
-            zIndex:          2,
-            transition:      `all ${hceTransition.fast}`,
-            "&:hover": {
-              backgroundColor: "white",
-              transform:       "translateY(-50%) scale(1.1)",
-              boxShadow:       `0 4px 14px rgba(0,29,69,0.22)`,
-            },
-          }}
+          style={{ left: 12 }}
         >
-          <ChevronLeftIcon sx={{ color: hceColors.primary.blue[600], fontSize: 22 }} />
-        </IconButton>
+          <ChevronLeftGlyph />
+        </button>
       )}
 
       {/* Flecha derecha */}
       {total > 1 && (
-        <IconButton
+        <button
+          type="button"
+          className="hce-carrusel-arrow"
           onClick={next}
           aria-label="Siguiente imagen"
-          size="small"
-          sx={{
-            position:        "absolute",
-            right:           12,
-            top:             "50%",
-            transform:       "translateY(-50%)",
-            backgroundColor: "rgba(255,255,255,0.85)",
-            boxShadow:       `0 2px 8px rgba(0,29,69,0.18)`,
-            zIndex:          2,
-            transition:      `all ${hceTransition.fast}`,
-            "&:hover": {
-              backgroundColor: "white",
-              transform:       "translateY(-50%) scale(1.1)",
-              boxShadow:       `0 4px 14px rgba(0,29,69,0.22)`,
-            },
-          }}
+          style={{ right: 12 }}
         >
-          <ChevronRightIcon sx={{ color: hceColors.primary.blue[600], fontSize: 22 }} />
-        </IconButton>
+          <ChevronRightGlyph />
+        </button>
       )}
 
       {/* Dots de navegación */}
       {total > 1 && (
-        <Box
+        <div
           role="tablist"
           aria-label="Navegación de slides"
-          sx={{
+          style={{
             position:  "absolute",
             bottom:    10,
             left:      "50%",
@@ -217,32 +196,25 @@ export function CarruselHome({
           }}
         >
           {images.map((_, i) => (
-            <Box
+            <div
               key={i}
+              className={`hce-carrusel-dot${i === current ? " hce-carrusel-dot--active" : ""}`}
               role="tab"
               aria-selected={i === current}
               aria-label={`Ir al slide ${i + 1}`}
               onClick={() => { if (i !== current) goTo(i, i > current ? "next" : "prev") }}
-              sx={{
+              style={{
                 width:           i === current ? 20 : 8,
-                height:          8,
-                borderRadius:    4,
                 backgroundColor: i === current ? "white" : "rgba(255,255,255,0.55)",
-                cursor:          "pointer",
-                transition:      `width ${hceTransition.base}, background-color ${hceTransition.base}, box-shadow ${hceTransition.fast}`,
-                boxShadow:       `0 1px 4px rgba(0,29,69,0.2)`,
-                "&:hover": {
-                  backgroundColor: i === current ? "white" : "rgba(255,255,255,0.8)",
-                },
               }}
             />
           ))}
-        </Box>
+        </div>
       )}
 
       {/* Indicador de pausa — punto en esquina superior derecha */}
       {paused && autoPlaySeconds > 0 && total > 1 && (
-        <Box sx={{
+        <div style={{
           position:        "absolute",
           top:             10,
           right:           10,
@@ -255,6 +227,6 @@ export function CarruselHome({
           pointerEvents:   "none",
         }} />
       )}
-    </Box>
+    </div>
   )
 }

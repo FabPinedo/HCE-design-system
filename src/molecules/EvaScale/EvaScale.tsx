@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import "./EvaScale.css";
 import {
   hceColors,
   hceTypography,
@@ -71,28 +71,28 @@ export function EvaScale({
   }
 
   return (
-    <Box
+    <div
       role="group"
       aria-label="Escala de dolor EVA (0-10)"
-      sx={{ width: "100%", userSelect: "none" }}
+      style={{ width: "100%", userSelect: "none" }}
     >
       {/* Fila de caras — misma estructura space-between que los círculos
           así el ícono queda perfectamente centrado sobre su círculo */}
-      <Box
-        sx={{
+      <div
+        style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-end",
-          mb: "6px",
+          marginBottom: "6px",
           minHeight: EMOJI_SIZE + ARROW_H,
         }}
       >
         {STEPS.map((step) => {
           const show = value === step.value;
           return (
-            <Box
+            <div
               key={step.value}
-              sx={{
+              style={{
                 width: CIRCLE,
                 flexShrink: 0,
                 display: "flex",
@@ -104,8 +104,8 @@ export function EvaScale({
               }}
             >
               {/* Cuadro del ícono de cara */}
-              <Box
-                sx={{
+              <div
+                style={{
                   width: EMOJI_SIZE,
                   height: EMOJI_SIZE,
                   borderRadius: "50%",
@@ -115,14 +115,15 @@ export function EvaScale({
                   alignItems: "center",
                   justifyContent: "center",
                   boxShadow: "0 2px 8px rgba(0,0,0,0.14)",
+                  boxSizing: "border-box",
                 }}
               >
                 <step.icon size={EMOJI_ICON_SIZE} />
-              </Box>
+              </div>
 
               {/* Flecha conectora */}
-              <Box
-                sx={{
+              <div
+                style={{
                   width: 0,
                   height: 0,
                   borderLeft: `${ARROW_H * 0.6}px solid transparent`,
@@ -130,16 +131,16 @@ export function EvaScale({
                   borderTop: `${ARROW_H}px solid ${step.border}`,
                 }}
               />
-            </Box>
+            </div>
           );
         })}
-      </Box>
+      </div>
 
       {/* Fila principal: track + círculos */}
-      <Box sx={{ position: "relative", height: CIRCLE + 4 }}>
+      <div style={{ position: "relative", height: CIRCLE + 4 }}>
         {/* Track completo (fondo verde claro) */}
-        <Box
-          sx={{
+        <div
+          style={{
             position: "absolute",
             top: "50%",
             left: `${CIRCLE / 2}px`,
@@ -154,8 +155,8 @@ export function EvaScale({
 
         {/* Track filled (color del punto seleccionado, de 0 al punto N) */}
         {selected && value !== null && (
-          <Box
-            sx={{
+          <div
+            style={{
               position: "absolute",
               top: "50%",
               left: `${CIRCLE / 2}px`,
@@ -171,8 +172,8 @@ export function EvaScale({
         )}
 
         {/* Círculos */}
-        <Box
-          sx={{
+        <div
+          style={{
             position: "relative",
             display: "flex",
             justifyContent: "space-between",
@@ -185,16 +186,17 @@ export function EvaScale({
             const { border } = circleStyle(step.value);
             const isSelected = value === step.value;
             const isBefore = value !== null && step.value <= value;
+            const Tag = readOnly ? "div" : "button";
 
             return (
-              <Box
+              <Tag
                 key={step.value}
-                component={readOnly ? "div" : "button"}
                 type={readOnly ? undefined : "button"}
                 onClick={readOnly ? undefined : () => onChange?.(step.value)}
                 aria-label={`Dolor ${step.value}`}
                 aria-pressed={isSelected}
-                sx={{
+                className={readOnly ? undefined : "hce-evascale-circle--interactive"}
+                style={{
                   width: CIRCLE,
                   height: CIRCLE,
                   minWidth: CIRCLE,
@@ -215,29 +217,20 @@ export function EvaScale({
                   padding: 0,
                   outline: "none",
                   flexShrink: 0,
+                  boxSizing: "border-box",
                   transition: `background-color ${hceTransition.base}, border-color ${hceTransition.base}, transform ${hceTransition.fast}, box-shadow ${hceTransition.fast}`,
                   transform: isSelected ? "scale(1.2)" : "scale(1)",
                   boxShadow: isSelected
                     ? `0 0 0 3px ${border}40, 0 2px 8px rgba(0,0,0,0.18)`
                     : "none",
-                  "&:hover": readOnly
-                    ? {}
-                    : {
-                        transform: "scale(1.12)",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.16)",
-                      },
-                  "&:focus-visible": {
-                    outline: `2px solid ${hceColors.primary.blue[500]}`,
-                    outlineOffset: "2px",
-                  },
                 }}
               >
                 {step.value}
-              </Box>
+              </Tag>
             );
           })}
-        </Box>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 }

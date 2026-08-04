@@ -1,12 +1,8 @@
 import { type ReactNode } from "react"
-import MuiDialog          from "@mui/material/Dialog"
-import MuiDialogContent   from "@mui/material/DialogContent"
-import MuiButton          from "@mui/material/Button"
-import Box                from "@mui/material/Box"
-import Typography         from "@mui/material/Typography"
-import CircularProgress   from "@mui/material/CircularProgress"
-import IconButton         from "@mui/material/IconButton"
-import { hceColors, hceTypography, hceShadows, hceTransition } from "../../tokens/hce.tokens"
+import "./HceFormModal.css"
+import { Overlay } from "../../atoms/Overlay/Overlay"
+import { Button } from "../../atoms/Button/Button"
+import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
 // ─── Tipos auxiliares ─────────────────────────────────────────────────────────
 
@@ -44,9 +40,9 @@ export interface HceFormModalProps {
   children: ReactNode
 
   // ── Tamaño ─────────────────────────────────────────
-  /** Breakpoint MUI o número en px para ancho personalizado. Default "sm" */
+  /** Breakpoint (mismos anchos que usaba MUI) o número en px para ancho personalizado. Default "sm" */
   maxWidth?:  "xs" | "sm" | "md" | "lg" | "xl" | number
-  /** Si true, el modal ocupa todo el ancho del breakpoint. Default true */
+  /** Si true, el modal ocupa todo el ancho disponible hasta maxWidth. Default true */
   fullWidth?: boolean
 
   // ── Botón primario (confirmar / guardar) ───────────
@@ -73,16 +69,16 @@ export interface HceFormModalProps {
   // ── Escape hatches ─────────────────────────────────
   className?: string
   style?:     React.CSSProperties
-  borderNone? : boolean 
+  borderNone? : boolean
 }
 
-// ─── Keyframe de entrada ──────────────────────────────────────────────────────
-
-const SLIDE_FROM_TOP_KEYFRAME = {
-  "@keyframes hceFormModalSlideDown": {
-    from: { opacity: 0, transform: "translateY(-20px)" },
-    to:   { opacity: 1, transform: "translateY(0)" },
-  },
+// Mismos anchos de breakpoint que usaba MUI Dialog maxWidth
+const BREAKPOINT_PX: Record<string, number> = {
+  xs: 444,
+  sm: 600,
+  md: 900,
+  lg: 1200,
+  xl: 1536,
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -107,44 +103,25 @@ export function HceFormModal({
 
   const hasButtons = !!(primaryButton || secondaryButton)
 
-  // MUI maxWidth solo acepta los breakpoints predefinidos o false.
-  // Cuando se pasa un número usamos false y sobreescribimos via sx.
-  const muiMaxWidth = typeof maxWidth === "number" ? false : maxWidth
-
-  const handleBackdropClick = () => {
-    if (closeOnBackdrop) onClose()
-  }
+  const maxWidthPx = typeof maxWidth === "number" ? maxWidth : BREAKPOINT_PX[maxWidth]
 
   return (
-    <MuiDialog
+    <Overlay
       open={open}
-      onClose={handleBackdropClick}
-      maxWidth={muiMaxWidth}
-      fullWidth={fullWidth}
-      aria-labelledby="hce-form-modal-title"
-      className={className}
-      PaperProps={{
-        style,
-        sx: {
-          ...SLIDE_FROM_TOP_KEYFRAME,
-          borderRadius:  "8px",
-          boxShadow:     hceShadows.modal,
-          overflow:      "hidden",
-          fontFamily:    hceTypography.fontFamily,
-          animation:     `hceFormModalSlideDown ${hceTransition.base}`,
-          // Ancho personalizado cuando maxWidth es número (px)
-          ...(typeof maxWidth === "number" && {
-            maxWidth: `${maxWidth}px`,
-            width:    "100%",
-          }),
-        },
+      onClose={onClose}
+      disableBackdropClose={!closeOnBackdrop}
+      labelledBy="hce-form-modal-title"
+      panelClassName={`hce-formmodal-panel${className ? ` ${className}` : ""}`}
+      panelStyle={{
+        ...style,
+        width: fullWidth ? "100%" : undefined,
+        maxWidth: maxWidthPx,
       }}
     >
 
       {/* ── Cabecera ─────────────────────────────────────────────────────── */}
-      <Box
-        component="header"
-        sx={{
+      <header
+        style={{
           display:         "flex",
           alignItems:      "center",
           justifyContent:  "space-between",
@@ -154,10 +131,9 @@ export function HceFormModal({
           flexShrink:      0,
         }}
       >
-        <Typography
+        <h2
           id="hce-form-modal-title"
-          component="h2"
-          sx={{
+          style={{
             fontFamily:  hceTypography.fontFamily,
             fontWeight:  600,
             fontSize:    "1rem",
@@ -168,28 +144,15 @@ export function HceFormModal({
           }}
         >
           {title}
-        </Typography>
+        </h2>
 
 
 {iconClose && (
-        <IconButton
+        <button
+          type="button"
+          className="hce-formmodal-close"
           onClick={onClose}
           aria-label="Cerrar modal"
-          size="small"
-          sx={{
-            color:         hceColors.neutro.white[50],
-            borderRadius:  "4px",
-            padding:       "4px",
-            transition:    `background-color ${hceTransition.fast}`,
-            "&:hover": {
-              backgroundColor: "rgba(255,255,255,0.15)",
-            },
-            "&:focus-visible": {
-              outline:         `2px solid ${hceColors.neutro.white[50]}`,
-              outlineOffset:   "2px",
-              backgroundColor: "rgba(255,255,255,0.10)",
-            },
-          }}
         >
           {/* Icono X en SVG inline — sin dependencia de ningún paquete de iconos */}
           <svg
@@ -208,26 +171,25 @@ export function HceFormModal({
               strokeLinecap="round"
             />
           </svg>
-        </IconButton>
+        </button>
 )}
-      </Box>
+      </header>
 
       {/* ── Cuerpo ───────────────────────────────────────────────────────── */}
-      <MuiDialogContent
-        sx={{
+      <div
+        style={{
           padding:    "20px",
           overflowY:  "auto",
           fontFamily: hceTypography.fontFamily,
         }}
       >
         {children}
-      </MuiDialogContent>
+      </div>
 
       {/* ── Footer ───────────────────────────────────────────────────────── */}
       {hasButtons && (
-        <Box
-          component="footer"
-          sx={{
+        <footer
+          style={{
             display:        "flex",
             alignItems:     "center",
             justifyContent: buttonAlign,
@@ -241,96 +203,46 @@ export function HceFormModal({
 
           {/* Botón primario — va primero en DOM/orden visual (acción principal destacada) */}
           {primaryButton && (
-            <MuiButton
-              variant="contained"
-              onClick={primaryButton.onClick}
-              disabled={primaryButton.disabled || primaryButton.loading}
-              aria-label={primaryButton.label}
-              aria-busy={primaryButton.loading}
-              startIcon={(!primaryButton.loading && primaryButton.icon) ? primaryButton.icon : undefined}
-              sx={{
-                fontFamily:      hceTypography.fontFamily,
-                fontWeight:      600,
-                fontSize:        "0.875rem",
-                textTransform:   "none",
-                borderRadius:    "6px",
-                backgroundColor: primaryButton.color ?? hceColors.primary.blue[600],
-                color:           "#ffffff",
-                minWidth:        buttonsFullWidth ? 0 : "100px",
-                flex:            buttonsFullWidth ? 1 : undefined,
-                height:          "36px",
-                boxShadow:       "none",
-                gap:             primaryButton.icon ? "6px" : 0,
-                transition:      `background-color ${hceTransition.fast}`,
-                "&:hover:not(:disabled)": {
-                  backgroundColor: `${primaryButton.color ?? hceColors.primary.blue[600]}cc`,
-                  boxShadow:       "none",
-                },
-                "&:focus-visible": {
-                  outline:       `2px solid ${primaryButton.color ?? hceColors.primary.blue[600]}`,
-                  outlineOffset: "2px",
-                },
-                "&:disabled": {
-                  backgroundColor: hceColors.neutro.black[50],
-                  color:           hceColors.neutro.black[200],
-                },
-                "& .MuiButton-startIcon": { margin: 0 },
-              }}
-            >
-              {primaryButton.loading ? (
-                <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <CircularProgress size={14} thickness={5} sx={{ color: "#ffffff" }} aria-hidden="true" />
-                  {primaryButton.label}
-                </Box>
-              ) : (
-                primaryButton.label
-              )}
-            </MuiButton>
+            <div style={{ minWidth: buttonsFullWidth ? 0 : "100px", flex: buttonsFullWidth ? 1 : undefined }}>
+              <Button
+                variant="primary"
+                fullWidth
+                onClick={primaryButton.onClick}
+                disabled={primaryButton.disabled || primaryButton.loading}
+                startIcon={(!primaryButton.loading && primaryButton.icon) ? primaryButton.icon : undefined}
+                color={primaryButton.color ?? hceColors.primary.blue[600]}
+              >
+                {primaryButton.loading ? (
+                  <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span className="hce-formmodal-spinner" aria-hidden="true" />
+                    {primaryButton.label}
+                  </span>
+                ) : (
+                  primaryButton.label
+                )}
+              </Button>
+            </div>
           )}
 
           {/* Botón secundario — va segundo en DOM/orden visual */}
           {secondaryButton && (
-            <MuiButton
-              variant="outlined"
-              onClick={secondaryButton.onClick}
-              disabled={secondaryButton.disabled}
-              aria-label={secondaryButton.label}
-              startIcon={secondaryButton.icon ?? undefined}
-              sx={{
-                fontFamily:    hceTypography.fontFamily,
-                fontWeight:    600,
-                fontSize:      "0.875rem",
-                textTransform: "none",
-                borderRadius:  "6px",
-                borderColor:   secondaryButton.color ?? hceColors.primary.blue[600],
-                color:         secondaryButton.color ?? hceColors.primary.blue[600],
-                minWidth:      buttonsFullWidth ? 0 : "100px",
-                flex:          buttonsFullWidth ? 1 : undefined,
-                height:        "36px",
-                gap:           secondaryButton.icon ? "6px" : 0,
-                transition:    `border-color ${hceTransition.fast}, background-color ${hceTransition.fast}`,
-                "&:hover:not(:disabled)": {
-                  borderColor:     secondaryButton.color ?? hceColors.primary.blue[700],
-                  backgroundColor: `${secondaryButton.color ?? hceColors.primary.blue[600]}14`,
-                },
-                "&:focus-visible": {
-                  outline:       `2px solid ${secondaryButton.color ?? hceColors.primary.blue[600]}`,
-                  outlineOffset: "2px",
-                },
-                "&:disabled": {
-                  borderColor: hceColors.neutro.black[100],
-                  color:       hceColors.neutro.black[100],
-                },
-                "& .MuiButton-startIcon": { margin: 0 },
-              }}
-            >
-              {secondaryButton.label}
-            </MuiButton>
+            <div style={{ minWidth: buttonsFullWidth ? 0 : "100px", flex: buttonsFullWidth ? 1 : undefined }}>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={secondaryButton.onClick}
+                disabled={secondaryButton.disabled}
+                startIcon={secondaryButton.icon}
+                color={secondaryButton.color ?? hceColors.primary.blue[600]}
+              >
+                {secondaryButton.label}
+              </Button>
+            </div>
           )}
 
-        </Box>
+        </footer>
       )}
 
-    </MuiDialog>
+    </Overlay>
   )
 }

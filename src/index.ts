@@ -3,8 +3,10 @@
 // ─────────────────────────────────────────────────────────
 
 // ── Themes ────────────────────────────────────────────────
-export { theme }          from "./theme/theme"
-export { emergencyTheme } from "./theme/emergencyTheme"
+// Un solo eje de theming: empresa/tenant (default/csf/sanna). Ver
+// theme/themes.ts y tokens/companies.tokens.ts.
+export { defaultTheme, csfTheme, sannaTheme, dsThemes } from "./theme/themes"
+export type { DsTheme } from "./theme/themes"
 
 // ── Provider ──────────────────────────────────────────────
 export { DSProvider } from "./provider/ThemeProvider"
@@ -25,17 +27,23 @@ export {
 } from "./tokens/hce.tokens"
 export type { HceColors } from "./tokens/hce.tokens"
 // Forma compartida de la paleta de marca por empresa (multiempresa) — ver
-// tokens/default.tokens.ts y tokens/novasalud.tokens.ts.
+// tokens/companies.tokens.ts.
 export type { HceCompanyColors } from "./tokens/hce.tokens"
 
 // ── Design Tokens — Multiempresa (paleta de marca por empresa) ───────────
-// Cada empresa/tenant vive en su propio archivo src/tokens/<empresa>.tokens.ts
-// (NUNCA se fragmentan aquí los tokens estructurales de arriba).
-export { defaultCompanyColors } from "./tokens/default.tokens"
-export { novaSaludColors }      from "./tokens/novasalud.tokens"
+// Todas las empresas/tenants viven en src/tokens/companies.tokens.ts (NUNCA
+// se fragmentan aquí los tokens estructurales de arriba).
+export { defaultCompanyColors, csfCompanyColors, sannaCompanyColors, companyThemes } from "./tokens/companies.tokens"
+export type { CompanyThemeKey } from "./tokens/companies.tokens"
 
-// ── MUI Primitives re-exported ─────────────────────────────
-export { Box, Typography } from "@mui/material"
+// ── Primitivas propias (reemplazan a Box/Typography de MUI) ──────────────
+// Misma API pública mínima (component/sx/style/className/children) que
+// este repo consumía de MUI — los consumidores externos no cambian su
+// import.
+export { Box }        from "./atoms/Box/Box"
+export { Typography } from "./atoms/Typography/Typography"
+export type { BoxProps }        from "./atoms/Box/Box"
+export type { TypographyProps, TypographyVariant } from "./atoms/Typography/Typography"
 
 
 // ── Icons — Lucide ─────────────────────────────────────────
@@ -50,7 +58,7 @@ export {
 export type { LucideIcon } from "./atoms/Icon/Icon"
 
 // ── Icons — HCE SVG (logo clínica + iconos de layout) ─────
-export { LogoClinicaSanFelipeIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon, HceBurgerIcon } from "./atoms/Icon/SvgIconsHce"
+export { LogoClinicaSanFelipeIcon, LogoSannaIcon, LogoSannaIsotipoIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon, HceBurgerIcon } from "./atoms/Icon/SvgIconsHce"
 // Escala de dolor EVA (0-10) — caras que reemplazan a los emojis en EvaScale
 export {
   EvaScale0Icon, EvaScale1Icon, EvaScale2Icon, EvaScale3Icon, EvaScale4Icon,

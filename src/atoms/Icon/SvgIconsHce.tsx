@@ -36,6 +36,48 @@ export function LogoClinicaSanFelipeIcon({ width = 123 }: { width?: number }) {
   )
 }
 
+// ── Logo completo Sanna (red de clínicas) ─────────────────────────────────────
+// Mismo lockup (icono + wordmark, 123×40) que LogoClinicaSanFelipeIcon, para
+// el tenant "sanna" — isotipo cruz+bracket + wordmark "SANNA". Reconstruido
+// a mano en SVG a partir del logo real que compartió el usuario (no es un
+// asset descargado ni una traza vectorial exacta) — se omite el sufijo de
+// sede ("\ Clínica Belén" en el original) porque acá representa a la red
+// Sanna en general, igual que este mismo logo representa a Clínica San
+// Felipe en general y no una sede puntual.
+// Acepta `color` (por defecto el verde corporativo #2aad3d, ver
+// tokens/companies.tokens.ts) para poder forzarlo a blanco sobre el fondo
+// sólido verde de la cabecera del sidebar — mismo motivo/patrón que
+// `color` en LogoSannaIsotipoIcon.
+export function LogoSannaIcon({ width = 123, color = "#2aad3d" }: { width?: number; color?: string }) {
+  const height = Math.round((40 / 123) * width)
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 123 40" fill="none">
+      <g stroke={color} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none">
+        <path d="M15 8V18H5" />
+        <path d="M15 32V22H5" />
+        <path d="M19 8C26.5 8 31 13.5 31 20C31 26.5 26.5 32 19 32" />
+      </g>
+      <text x="40" y="27" fontFamily="'Poppins', sans-serif" fontWeight="700" fontSize="19" letterSpacing="0.5" fill={color}>SANNA</text>
+    </svg>
+  )
+}
+
+// ── Isotipo Sanna (solo icono, para el sidebar colapsado) ─────────────────────
+// Mismo rol que UiIsotipoClinicaIcon (SvgIconsUiKit.tsx) pero para el tenant
+// "sanna" — acepta `color` para poder forzarlo a blanco sobre el fondo
+// oscuro del sidebar, igual que `<UiIsotipoClinicaIcon color="white" />`.
+export function LogoSannaIsotipoIcon({ size = 28, color = "#2aad3d" }: { size?: number; color?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 40 40" fill="none">
+      <g stroke={color} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none">
+        <path d="M16 6V17H5" />
+        <path d="M16 34V23H5" />
+        <path d="M20 6C28.5 6 34 12.5 34 20C34 27.5 28.5 34 20 34" />
+      </g>
+    </svg>
+  )
+}
+
 // ── Icono logout (flecha de salida 12×12) ─────────────────────────────────────
 export function LogoutIcon({ color = "#003d96", size = 12 }: { color?: string; size?: number }) {
   return (

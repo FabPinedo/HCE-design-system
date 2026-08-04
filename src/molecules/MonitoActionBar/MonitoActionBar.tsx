@@ -1,6 +1,6 @@
-import { Box, IconButton, Tooltip } from "@mui/material"
-import type { TooltipProps }        from "@mui/material"
-import { hceColors, hceTypography, hceTransition } from "../../tokens/hce.tokens"
+import "./MonitoActionBar.css"
+import { HceTooltip } from "../../atoms/Tooltip/HceTooltip"
+import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 import {
   UiStethoscopeIcon,
   UiDoctorIcon,
@@ -8,78 +8,9 @@ import {
   UiMedicalRoomIcon,
 } from "../../atoms/Icon/Icon"
 
-// ─── Tooltip burbuja de diálogo ───────────────────────────────────────────────
-// Fondo verde HCE, texto blanco, flecha grande tipo cómic.
-// La dirección de la flecha (arriba/abajo/izquierda/derecha) se adapta
-// automáticamente según el prop `placement` que recibe MUI Tooltip.
-
-function BubbleTooltip({ children, ...props }: TooltipProps) {
-  return (
-    <Tooltip
-      arrow
-      enterDelay={150}
-      enterNextDelay={80}
-      {...props}
-      slotProps={{
-        tooltip: {
-          sx: {
-            bgcolor:       hceColors.primary.green[600],
-            color:         "#ffffff",
-            fontSize:      "0.72rem",
-            fontWeight:    700,
-            fontFamily:    hceTypography.fontFamily,
-            borderRadius:  "8px",
-            padding:       "6px 12px",
-            boxShadow:     "0 4px 14px rgba(0,0,0,0.20)",
-            letterSpacing: "0.02em",
-            whiteSpace:    "nowrap",
-          },
-        },
-        arrow: {
-          sx: {
-            color:    hceColors.primary.green[600],
-            fontSize: "18px",  // flecha más grande = más estilo cómic
-          },
-        },
-      }}
-    >
-      {children}
-    </Tooltip>
-  )
-}
-
 // ─── Estilos del botón ────────────────────────────────────────────────────────
 
 const BLUE = hceColors.primary.blue[600]
-
-const btnSx = {
-  width:           34,
-  height:          34,
-  borderRadius:    "8px",
-  border:          `1.5px solid ${BLUE}`,
-  backgroundColor: "#ffffff",
-  color:           BLUE,
-  padding:         0,
-  flexShrink:      0,
-  transition:      `all ${hceTransition.fast}`,
-  "&:hover": {
-    backgroundColor: hceColors.primary.blue[50],
-    borderColor:     hceColors.primary.blue[700],
-    color:           hceColors.primary.blue[700],
-    transform:       "translateY(-1px)",
-    boxShadow:       `0 3px 8px rgba(0,61,150,0.16)`,
-  },
-  "&:active": {
-    transform:       "scale(0.95)",
-    backgroundColor: hceColors.primary.blue[100],
-  },
-  "&.Mui-disabled": {
-    opacity:         0.45,
-    backgroundColor: "#ffffff",
-    border:          `1.5px solid ${hceColors.primary.blue[200]}`,
-    color:           hceColors.primary.blue[300],
-  },
-}
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -133,10 +64,10 @@ export function MonitoActionBar({
   const iconSize   = 17
 
   return (
-    <Box
+    <div
       role="toolbar"
       aria-label="Barra de acciones de monitoreo"
-      sx={{
+      style={{
         display:         "flex",
         flexDirection:   isVertical ? "column" : "row",
         alignItems:      "center",
@@ -148,101 +79,74 @@ export function MonitoActionBar({
         boxShadow:       box? `0 2px 8px rgba(0,29,69,0.08)`: 'none',
         border:          box?`1px solid ${hceColors.primary.blue[100]}`: 'none',
         width:           isVertical ? "fit-content" : "100%",
+        boxSizing:       "border-box",
       }}
     >
 
-      <Box
-      sx={{
+      <div
+      style={{
         display:         "flex",
         flexDirection:   isVertical ? "column" : "row",
         alignItems:       isVertical ? "start": "center",
-    
+
         gap:             "35px",
         padding:         "6px 10px",
         backgroundColor: box? "#ffffff": 'transparent',
         width:           isVertical ? "fit-content" : "100%",
+        boxSizing:       "border-box",
       }}
       >
       {/* Triaje */}
-      <BubbleTooltip title="Triaje" placement={tooltipPlacement}>
-        <span>
-          <IconButton
-            onClick={onTriaje}
-            disabled={disabled.triaje}
-            aria-label="Triaje"
-            sx={btnSx}
-          >
-            <UiStethoscopeIcon size={iconSize} color={disabled.triaje ? hceColors.primary.blue[300] : BLUE} />
-          </IconButton>
-        </span>
-      </BubbleTooltip>
+      <HceTooltip title="Triaje" placement={tooltipPlacement}>
+        <button
+          type="button"
+          className="hce-monito-btn"
+          onClick={onTriaje}
+          disabled={disabled.triaje}
+          aria-label="Triaje"
+        >
+          <UiStethoscopeIcon size={iconSize} color={disabled.triaje ? hceColors.primary.blue[300] : BLUE} />
+        </button>
+      </HceTooltip>
 
 
       {/* Reportes */}
-      <BubbleTooltip title="Reportes" placement={tooltipPlacement}>
-        <span>
-          <IconButton
-            onClick={onReportes}
-            disabled={disabled.reportes}
-            aria-label="Reportes"
-            sx={btnSx}
-          >
-            <UiPrintingIcon size={iconSize} color={disabled.reportes ? hceColors.primary.blue[300] : BLUE} />
-          </IconButton>
-        </span>
-      </BubbleTooltip>
+      <HceTooltip title="Reportes" placement={tooltipPlacement}>
+        <button
+          type="button"
+          className="hce-monito-btn"
+          onClick={onReportes}
+          disabled={disabled.reportes}
+          aria-label="Reportes"
+        >
+          <UiPrintingIcon size={iconSize} color={disabled.reportes ? hceColors.primary.blue[300] : BLUE} />
+        </button>
+      </HceTooltip>
 
       {/* Disponibilidad de camas */}
-      <BubbleTooltip title="Disponibilidad de camas" placement={tooltipPlacement}>
-        <span>
-          <IconButton
-            onClick={onDisponibilidad}
-            disabled={disabled.disponibilidad}
-            aria-label="Disponibilidad de camas"
-            sx={btnSx}
-          >
-            <UiMedicalRoomIcon size={iconSize} color={disabled.disponibilidad ? hceColors.primary.blue[300] : BLUE} />
-          </IconButton>
-        </span>
-      </BubbleTooltip>
-
-
-     </Box>
-      
-      {/* Asignar médicos — todo el pill (ícono + texto) es un único botón clickeable */}
-     <BubbleTooltip title="Asignar médicos" placement={tooltipPlacement}>
-      <span>
-        <Box
-          component="button"
+      <HceTooltip title="Disponibilidad de camas" placement={tooltipPlacement}>
+        <button
           type="button"
+          className="hce-monito-btn"
+          onClick={onDisponibilidad}
+          disabled={disabled.disponibilidad}
+          aria-label="Disponibilidad de camas"
+        >
+          <UiMedicalRoomIcon size={iconSize} color={disabled.disponibilidad ? hceColors.primary.blue[300] : BLUE} />
+        </button>
+      </HceTooltip>
+
+
+     </div>
+
+      {/* Asignar médicos — todo el pill (ícono + texto) es un único botón clickeable */}
+     <HceTooltip title="Asignar médicos" placement={tooltipPlacement}>
+        <button
+          type="button"
+          className="hce-monito-pill"
           onClick={onAsignarMedicos}
           disabled={disabled.asignarMedicos}
           aria-label="Asignar médico"
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: "6px",
-            width: '100%',
-            borderRadius: "8px",
-            border: `1.5px solid ${hceColors.primary.blue[600]}`,
-            padding: '6px 15px',
-            backgroundColor: "#ffffff",
-            cursor: disabled.asignarMedicos ? "not-allowed" : "pointer",
-            transition: `all ${hceTransition.fast}`,
-            "&:hover:not(:disabled)": {
-              backgroundColor: hceColors.primary.blue[50],
-              borderColor:     hceColors.primary.blue[700],
-            },
-            "&:active:not(:disabled)": {
-              transform:       "scale(0.98)",
-              backgroundColor: hceColors.primary.blue[100],
-            },
-            "&:disabled": {
-              opacity:     0.45,
-              borderColor: hceColors.primary.blue[200],
-            },
-          }}
         >
           <UiDoctorIcon
             size={iconSize}
@@ -253,9 +157,8 @@ export function MonitoActionBar({
             }
           />
 
-          <Box
-            component="span"
-            sx={{
+          <span
+            style={{
               fontSize: hceTypography.size.md,
               fontWeight: hceTypography.weight.semibold,
               fontFamily: hceTypography.fontFamilyClinical,
@@ -267,10 +170,9 @@ export function MonitoActionBar({
             }}
           >
             Asignar médico
-          </Box>
-        </Box>
-      </span>
-    </BubbleTooltip>
-    </Box>
+          </span>
+        </button>
+    </HceTooltip>
+    </div>
   )
 }

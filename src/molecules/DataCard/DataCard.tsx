@@ -1,6 +1,4 @@
 import type { ReactNode } from "react"
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
 
 import {
   hceColors,
@@ -47,15 +45,15 @@ export function DataCard({
       : borderWidth
 
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         width: "100%",
         maxWidth,
         maxHeight,
         boxSizing: "border-box",
         overflowY: maxHeight ? "auto" : "visible",
 
-        p: contentPadding,
+        padding: contentPadding,
         textAlign: contentAlign,
 
         backgroundColor,
@@ -66,8 +64,8 @@ export function DataCard({
       }}
     >
       {headerContent && (
-        <Box
-          sx={{
+        <div
+          style={{
             display: "flex",
             justifyContent:
               contentAlign === "center"
@@ -75,32 +73,32 @@ export function DataCard({
                 : contentAlign === "right"
                   ? "flex-end"
                   : "flex-start",
-            mb: title || description ? 1.5 : 0,
+            marginBottom: title || description ? 12 : 0,
           }}
         >
           {headerContent}
-        </Box>
+        </div>
       )}
 
       {title && (
-        <Typography
-          component="div"
-          sx={{
+        <div
+          style={{
             fontFamily: hceTypography.fontFamily,
             fontWeight: 700,
             fontSize: "1.125rem",
-            color: hceColors.primary.blue[500],
-            mb: description ? 0.75 : 0,
+            // blue[500] == --ds-color-primary (csf) exactamente — reactivo al
+            // tema activo de DSProvider, mismo hex de siempre como fallback.
+            color: `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
+            marginBottom: description ? 6 : 0,
           }}
         >
           {title}
-        </Typography>
+        </div>
       )}
 
       {description && (
-        <Typography
-          component="div"
-          sx={{
+        <div
+          style={{
             fontFamily: hceTypography.fontFamily,
             fontSize: "0.875rem",
             color: hceColors.neutro.black[300],
@@ -108,22 +106,22 @@ export function DataCard({
           }}
         >
           {description}
-        </Typography>
+        </div>
       )}
 
       {children && (
-        <Box
-          sx={{
-            mt:
+        <div
+          style={{
+            marginTop:
               headerContent || title || description
-                ? 2
+                ? 16
                 : 0,
             textAlign: "left",
           }}
         >
           {children}
-        </Box>
+        </div>
       )}
-    </Box>
+    </div>
   )
 }

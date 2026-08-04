@@ -48,7 +48,14 @@ export const Default: Story = {
     label:    "Empresa",
     value:    "",
     options:  EMPRESAS,
-    onChange: () => {},
+  },
+  // Conectado a estado real (no un onChange no-op) para que se pueda probar
+  // la selección desde los Controls de Storybook — un `onChange: () => {}`
+  // hacía que el <select> nativo volviera siempre al mismo `value` en el
+  // siguiente render, dando la impresión de que no respondía al click.
+  render: (args) => {
+    const [v, setV] = useState(args.value)
+    return <SelectField {...args} value={v} onChange={setV} />
   },
 }
 

@@ -1,8 +1,5 @@
 import { useState, useEffect, type ReactNode } from "react"
-import Box                from "@mui/material/Box"
-import Backdrop           from "@mui/material/Backdrop"
-import Portal             from "@mui/material/Portal"
-import Typography         from "@mui/material/Typography"
+import { createPortal } from "react-dom"
 import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
 // ─── Paths del logo CSF ───────────────────────────────────────────────────────
@@ -316,10 +313,10 @@ export function CSFLoading({
 }: CSFLoadingProps) {
 
   const content = (
-    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {children ?? <CSFSpinner size={size} duration={duration} frameDuration={frameDuration} />}
       {message && (
-        <Typography sx={{
+        <span style={{
           fontFamily:    hceTypography.fontFamily,
           color:         overlay ? "#fff" : hceColors.primary.blue[600],
           fontWeight:    600,
@@ -329,32 +326,34 @@ export function CSFLoading({
           maxWidth:      280,
         }}>
           {message}
-        </Typography>
+        </span>
       )}
-    </Box>
+    </div>
   )
 
-  // ── Overlay — renderiza en document.body via Portal ───────────────────────
-  // Portal evita que el stacking context del padre restrinja el Backdrop.
+  // ── Overlay — renderiza en document.body via createPortal ─────────────────
+  // El portal evita que el stacking context del padre restrinja el overlay.
   // El spinner solo se monta cuando open=true para que la animación de intro
   // arranque siempre desde el frame 1 (no consume frames mientras está oculto).
   if (overlay) {
-    return (
-      <Portal>
-        <Backdrop
-          open={open}
-          sx={{
-            zIndex:          9999,
-            backgroundColor: `rgba(0, 0, 0, ${opacity})`,
-            display:         "flex",
-            flexDirection:   "column",
-            alignItems:      "center",
-            gap:             2,
-          }}
-        >
-          {open ? content : null}
-        </Backdrop>
-      </Portal>
+    if (!open || typeof document === "undefined") return null
+    return createPortal(
+      <div
+        style={{
+          position:        "fixed",
+          inset:           0,
+          zIndex:          9999,
+          backgroundColor: `rgba(0, 0, 0, ${opacity})`,
+          display:         "flex",
+          flexDirection:   "column",
+          alignItems:      "center",
+          justifyContent:  "center",
+          gap:             16,
+        }}
+      >
+        {content}
+      </div>,
+      document.body,
     )
   }
 

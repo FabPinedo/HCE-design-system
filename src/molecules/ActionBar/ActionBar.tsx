@@ -6,10 +6,8 @@
  * Agrupa botones icon-only con separadores visuales entre grupos.
  * ---------------------------------------------------------
  */
-import { Box, IconButton } from "@mui/material";
+import "./ActionBar.css";
 import {
-  hceBorderRadius,
-  hceClinicalColors,
   hceColors,
 } from "../../tokens/hce.tokens";
 import { ActionIconButton } from "../ActionIconButton/ActionIconButton";
@@ -46,8 +44,8 @@ export const ActionBar = ({
   const isVertical = orientation === "vertical";
   const [closeBar, setCloseBar] = useState(false);
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         display: "flex",
         flexDirection: isVertical ? "column" : "row",
         alignItems: "center",
@@ -59,12 +57,13 @@ export const ActionBar = ({
         boxShadow: `0 2px 8px rgba(0,29,69,0.08)`,
         border: `1px solid ${hceColors.primary.blue[100]}`,
         width: isVertical ? "fit-content" : "100%",
+        boxSizing: "border-box",
       }}
       role="toolbar"
       aria-label="Barra de acciones"
     >
-      <Box
-        sx={{
+      <div
+        style={{
           display: "flex",
           flexDirection: isVertical ? "column" : "row",
           alignItems: isVertical ? "start" : "center",
@@ -72,50 +71,22 @@ export const ActionBar = ({
           padding: "6px 10px",
           backgroundColor: "#ffffff",
           width: isVertical ? "fit-content" : "100%",
+          boxSizing: "border-box",
         }}
       >
         {closeAction && (
-          // <ActionIconButton
-          //   key={0}
-          //   icon={CloseIcon}
-          //   onClick={()=>{console.log("cerrando")}}
-          //   disabled={false}
-          // />
-
-          <IconButton
+          <button
+            type="button"
+            className="hce-actionbar-close-btn"
             onClick={() => {
               setCloseBar(!closeBar);
             }}
             disabled={false}
-            size="small"
-            sx={{
-              width: 40,
-              height: 40,
-              borderRadius: hceBorderRadius.lg,
-              border: `1.5px solid ${hceColors.primary.blue[600]}`,
-              backgroundColor: hceColors.primary.blue[600],
-              color: hceClinicalColors.textSecondary,
-              padding: 0,
-
-              "&:hover": {
-                backgroundColor: hceColors.primary.blue[600],
-                borderColor: hceColors.primary.blue[600],
-                color: hceColors.primary.blue[600],
-              },
-              "&:active": {
-                backgroundColor: hceColors.primary.blue[600],
-              },
-              "&.Mui-disabled": {
-                opacity: 0.4,
-                backgroundColor: "#FFFFFF",
-                color: hceClinicalColors.textSecondary,
-              },
-            }}
           >
-            <Box
-              sx={{
+            <div
+              style={{
                 position: "relative",
-                width: 18, // Mismo tamaño que tus íconos
+                width: 18,
                 height: 18,
                 display: "flex",
                 alignItems: "center",
@@ -123,28 +94,28 @@ export const ActionBar = ({
               }}
             >
               {/* ÍCONO CERRAR (X) */}
-              <Box
-                sx={{
+              <div
+                style={{
                   position: "absolute",
                   transition: "opacity 0.2s ease-in-out",
-                  opacity: closeBar ? 1 : 0, // Se muestra si closeBar es true
+                  opacity: closeBar ? 1 : 0,
                 }}
               >
                 <MenuBurgerIcon size={18} color={hceColors.neutro.white[50]} />
-              </Box>
+              </div>
 
               {/* ÍCONO HAMBURGUESA */}
-              <Box
-                sx={{
+              <div
+                style={{
                   position: "absolute",
                   transition: "opacity 0.2s ease-in-out",
-                  opacity: closeBar ? 0 : 1, // Se muestra si closeBar es false
+                  opacity: closeBar ? 0 : 1,
                 }}
               >
                 <CloseIcon size={18} color={hceColors.neutro.white[50]} />
-              </Box>
-            </Box>
-          </IconButton>
+              </div>
+            </div>
+          </button>
         )}
         {!closeBar &&
           actions?.map((action) => (
@@ -156,7 +127,7 @@ export const ActionBar = ({
               disabled={action.disabled}
             />
           ))}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };

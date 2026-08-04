@@ -1,0 +1,33 @@
+.hce-menu-panel {
+  position: fixed;
+  z-index: 1400;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-sizing: border-box;
+  animation: hce-menu-fade-in 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+@keyframes hce-menu-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hce-menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.87);
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.hce-menu-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}

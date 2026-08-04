@@ -4,8 +4,6 @@ import { GenericTable } from "../../src/organisms/GenericTable/GenericTable"
 import type { GenericTableColumn } from "../../src/molecules/GenericCell/GenericCell"
 import type { PriorityLevel } from "../../src/atoms/PriorityBadge/PriorityBadge"
 import type { ClinicalIconStatus } from "../../src/molecules/ClinicalStatusIcon/ClinicalStatusIcon"
-import Table from "@mui/material/Table"
-import TableBody from "@mui/material/TableBody"
 
 interface MonitorRow {
   id: string

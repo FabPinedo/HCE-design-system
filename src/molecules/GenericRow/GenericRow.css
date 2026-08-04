@@ -1,0 +1,22 @@
+.hce-generic-row {
+  height: 44px;
+  transition: background-color 150ms ease;
+  cursor: default;
+  background-color: var(--row-bg);
+}
+
+.hce-generic-row:hover {
+  background-color: var(--row-hover-bg);
+}
+
+.hce-generic-row:last-child td {
+  border-bottom: none;
+}
+
+.hce-generic-cell {
+  border-bottom: none;
+  padding: 0 12px;
+  height: 44px;
+  border-left: 1px solid #ffffff;
+  box-sizing: border-box;
+}

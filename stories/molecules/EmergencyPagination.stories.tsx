@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import React, { useState } from "react"
 import { EmergencyPagination, injectHceTokens } from "@hce/design-system"
-import { Label } from "@mui/icons-material"
 
 interface summaryContent{
 

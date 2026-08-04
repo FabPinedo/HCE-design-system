@@ -1,9 +1,7 @@
-import { Box, Typography } from "@mui/material"
-import ChevronRightIcon from "@mui/icons-material/ChevronRight"
-import type { ReactNode } from "react"
+import type { ReactNode, MouseEvent } from "react"
+import "./HceBreadcrumb.css"
 
 import {
-
   hceColors,
   hceSpacing,
   hceTypography,
@@ -21,14 +19,23 @@ export interface HceBreadcrumbProps {
   onItemClick?: (item: HceBreadcrumbItem, index: number) => void
 }
 
+/** Chevron ">" — evita depender del sistema de íconos (se migra en el paso de íconos) */
+function ChevronRightGlyph() {
+  return (
+    <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke={hceColors.neutro.white[700]} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="9 6 15 12 9 18" />
+    </svg>
+  )
+}
+
 export function HceBreadcrumb({
   items,
   onItemClick,
 }: HceBreadcrumbProps) {
   return (
-    <Box
+    <div
       aria-label="breadcrumb"
-      sx={{
+      style={{
         display: "flex",
         alignItems: "center",
         gap: hceSpacing[1],
@@ -38,29 +45,24 @@ export function HceBreadcrumb({
       {items.map((item, index) => {
         const isLast = index === items.length - 1
         const isClickable = Boolean(!isLast && !item.disabled && onItemClick)
+        const Tag = item.href && !isLast ? "a" : "span"
+
+        const handleClick = (event: MouseEvent) => {
+          if (!isClickable) return
+          if (item.href) event.preventDefault()
+          onItemClick?.(item, index)
+        }
 
         return (
-          <Box
+          <div
             key={`${item.label}-${index}`}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: hceSpacing[1],
-            }}
+            style={{ display: "flex", alignItems: "center", gap: hceSpacing[1] }}
           >
-            <Typography
-              component={item.href && !isLast ? "a" : "span"}
+            <Tag
               href={item.href && !isLast ? item.href : undefined}
-              onClick={(event :any) => {
-                if (!isClickable) return
-
-                if (item.href) {
-                  event.preventDefault()
-                }
-
-                onItemClick?.(item, index)
-              }}
-              sx={{
+              onClick={handleClick}
+              className={`hce-breadcrumb-link${!isLast && !item.disabled ? " hce-breadcrumb-link--hoverable" : ""}`}
+              style={{
                 fontFamily: hceTypography.fontFamily,
                 display: "inline-flex",
                 alignItems: "center",
@@ -74,29 +76,16 @@ export function HceBreadcrumb({
                 pointerEvents: item.disabled ? "none" : "auto",
                 opacity: item.disabled ? 0.5 : 1,
                 fontSize: hceTypography.size.sm,
-                "&:hover": {
-                  color:
-                    !isLast && !item.disabled
-                      ? hceColors.neutro.black[400]
-                      : undefined,
-                },
               }}
             >
               {item.icon}
               {item.label}
-            </Typography>
+            </Tag>
 
-            {!isLast && (
-              <ChevronRightIcon
-                sx={{
-                  fontSize: 18,
-                  color: hceColors.neutro.white[700],
-                }}
-              />
-            )}
-          </Box>
+            {!isLast && <ChevronRightGlyph />}
+          </div>
         )
       })}
-    </Box>
+    </div>
   )
 }

@@ -1,0 +1,70 @@
+/**
+ * HceSidebar.css — clases reales de :hover/:focus-visible compartidas por
+ * todas las filas/items del árbol de navegación (antes selectores anidados
+ * repetidos en sx). --row-hover-bg / --row-focus-color se inyectan por
+ * instancia desde HceSidebar.tsx cuando el color difiere del default.
+ */
+
+.hce-sidebar-row {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-sidebar-row:hover {
+  background-color: var(--row-hover-bg, #e6ecf6);
+  transform: translateX(2px);
+}
+
+.hce-sidebar-row:focus-visible {
+  outline: 2px solid var(--row-focus-color, #0043a5);
+  outline-offset: 2px;
+}
+
+/* Botones circulares icon-only (toggle, home colapsado, item colapsado) —
+   mismo hover/focus pero sin el translateX (centrados, no filas). */
+.hce-sidebar-icon-btn {
+  cursor: pointer;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-sidebar-icon-btn:hover {
+  background-color: var(--row-hover-bg, rgba(255,255,255,0.15));
+}
+
+.hce-sidebar-icon-btn:focus-visible {
+  outline: 2px solid var(--row-focus-color, #ffffff);
+  outline-offset: 2px;
+}
+
+.hce-sidebar-chevron {
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-sidebar-chevron--open {
+  transform: rotate(180deg);
+}
+
+.hce-sidebar-scroll {
+  scrollbar-width: thin;
+}
+
+.hce-sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.hce-sidebar-scroll--collapsed::-webkit-scrollbar-track {
+  background-color: #003075;
+}
+.hce-sidebar-scroll--collapsed::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+.hce-sidebar-scroll--expanded::-webkit-scrollbar-track {
+  background-color: #e6ecf6;
+}
+.hce-sidebar-scroll--expanded::-webkit-scrollbar-thumb {
+  background-color: #8aa9d6;
+  border-radius: 4px;
+}

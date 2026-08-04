@@ -1,0 +1,31 @@
+.hce-infobtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  padding: 0;
+  border: none;
+  background-color: var(--infobtn-bg);
+  color: #ffffff;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.hce-infobtn:hover {
+  background-color: var(--infobtn-hover-bg);
+}
+
+.hce-infobtn:active {
+  background-color: var(--infobtn-hover-bg);
+  transform: scale(0.95);
+}
+
+.hce-infobtn:disabled {
+  background-color: var(--infobtn-disabled-bg);
+  opacity: 0.4;
+  color: #ffffff;
+  cursor: default;
+}

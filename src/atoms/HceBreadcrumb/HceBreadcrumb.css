@@ -1,0 +1,7 @@
+.hce-breadcrumb-link {
+  text-decoration: none;
+}
+
+.hce-breadcrumb-link--hoverable:hover {
+  color: #333333 !important; /* hceColors.neutro.black[400] */
+}

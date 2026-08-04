@@ -1,4 +1,3 @@
-import { Box, Typography } from "@mui/material"
 import type { ReactNode } from "react"
 import { hceTypography } from "../../tokens/hce.tokens"
 
@@ -11,23 +10,23 @@ interface Props {
 
 export const PageHeader = ({ icon, title, description, actions }: Props) => {
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'space-between',
-        mb: 3,
+        marginBottom: 24,
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
         {icon && (
-          <Box
-            sx={{
+          <div
+            style={{
               width: 40,
               height: 40,
               borderRadius: '50%',
-              bgcolor: '#EEF2F9',
+              backgroundColor: '#EEF2F9',
               color: '#1E4FA3',
               display: 'flex',
               alignItems: 'center',
@@ -36,30 +35,24 @@ export const PageHeader = ({ icon, title, description, actions }: Props) => {
             }}
           >
             {icon}
-          </Box>
+          </div>
         )}
-        <Box>
-          <Typography
-            variant="h6"
-            sx={{ fontFamily: hceTypography.fontFamily, fontWeight: 700, color: '#1C2B4A', lineHeight: 1.3 }}
-          >
+        <div>
+          <div style={{ fontFamily: hceTypography.fontFamily, fontSize: '1.25rem', fontWeight: 700, color: '#1C2B4A', lineHeight: 1.3 }}>
             {title}
-          </Typography>
+          </div>
           {description && (
-            <Typography
-              variant="body2"
-              sx={{ fontFamily: hceTypography.fontFamily, color: '#5A6A85', mt: 0.5 }}
-            >
+            <div style={{ fontFamily: hceTypography.fontFamily, fontSize: '0.875rem', color: '#5A6A85', marginTop: 4 }}>
               {description}
-            </Typography>
+            </div>
           )}
-        </Box>
-      </Box>
+        </div>
+      </div>
       {actions && (
-        <Box sx={{ flexShrink: 0, ml: 2 }}>
+        <div style={{ flexShrink: 0, marginLeft: 16 }}>
           {actions}
-        </Box>
+        </div>
       )}
-    </Box>
+    </div>
   )
 }

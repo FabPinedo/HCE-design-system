@@ -1,0 +1,45 @@
+.hce-quickaccess {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  transition: box-shadow 180ms ease, transform 180ms ease;
+  box-sizing: border-box;
+}
+
+.hce-quickaccess--enabled:hover {
+  box-shadow: 0 4px 16px rgba(0, 61, 150, 0.1);
+  transform: translateY(-2px);
+}
+
+.hce-quickaccess-icon-box svg {
+  width: 24px;
+  height: 24px;
+}
+
+.hce-quickaccess-btn {
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: none;
+  border-radius: 8px;
+  border: 1px solid #003d96;
+  color: #003d96;
+  background-color: transparent;
+  padding: 5px 15px;
+  margin-top: auto;
+  align-self: flex-start;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.hce-quickaccess-btn:hover {
+  background-color: #e6ecf6;
+  border-color: #003075;
+}
+
+.hce-quickaccess-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

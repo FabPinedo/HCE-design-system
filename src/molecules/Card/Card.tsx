@@ -1,4 +1,3 @@
-import { Card as MuiCard, CardContent, Typography, Box, Divider } from "@mui/material"
 import type { ReactNode, CSSProperties } from "react"
 import { hceTypography } from "../../tokens/hce.tokens"
 
@@ -12,33 +11,35 @@ interface Props {
 
 export const Card = ({ children, title, actions, style, noPadding }: Props) => {
   return (
-    <MuiCard
-      style={style}
-      sx={{
-        borderRadius: 3,
+    <div
+      style={{
+        // borderRadius: 3 en sx de MUI se multiplicaba por theme.shape.borderRadius
+        // (8px) => 24px, no 3px.
+        borderRadius: 24,
         boxShadow: '0 2px 12px rgba(26,58,107,0.08)',
         border: '1px solid #D0DBF0',
+        backgroundColor: '#ffffff',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+        ...style,
       }}
     >
-      <CardContent sx={{ padding: noPadding ? '0 !important' : '20px !important' }}>
+      <div style={{ padding: noPadding ? 0 : 20, boxSizing: 'border-box' }}>
         {title && (
           <>
-            <Typography
-              variant="subtitle1"
-              sx={{ fontFamily: hceTypography.fontFamily, fontWeight: 700, color: '#1C2B4A', mb: 1.5 }}
-            >
+            <div style={{ fontFamily: hceTypography.fontFamily, fontSize: '1rem', fontWeight: 700, color: '#1C2B4A', marginBottom: 12 }}>
               {title}
-            </Typography>
-            <Divider sx={{ mb: 2, borderColor: '#D0DBF0' }} />
+            </div>
+            <hr style={{ marginBottom: 16, border: 'none', borderTop: '1px solid #D0DBF0' }} />
           </>
         )}
-        <Box>{children}</Box>
+        <div>{children}</div>
         {actions && (
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
             {actions}
-          </Box>
+          </div>
         )}
-      </CardContent>
-    </MuiCard>
+      </div>
+    </div>
   )
 }

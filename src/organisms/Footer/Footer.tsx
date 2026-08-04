@@ -1,4 +1,3 @@
-import { Box, Typography } from "@mui/material"
 import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
 type Props = {
@@ -13,28 +12,27 @@ export function Footer({ copyright, color }: Props) {
   const text = copyright ?? `© ${year} Clínica XXXXXXX · Todos los derechos reservados · Sistema HCE v2.0`
 
   return (
-    <Box
-      component="footer"
-      sx={{
+    <footer
+      style={{
         width:           "100%",
-        py:              "6px",
-        px:              3,
+        padding:         "6px 24px",
         backgroundColor: color ?? hceColors.primary.blue[600],
         display:         "flex",
         alignItems:      "center",
         justifyContent:  "center",
         flexShrink:      0,
-        gap:             1,
+        gap:             8,
+        boxSizing:       "border-box",
       }}
     >
-      <Typography sx={{
+      <span style={{
         fontFamily: hceTypography.fontFamily,
         color:      "rgba(255,255,255,0.6)",
         fontSize:   "0.68rem",
         userSelect: "none",
       }}>
         {text}
-      </Typography>
-    </Box>
+      </span>
+    </footer>
   )
 }

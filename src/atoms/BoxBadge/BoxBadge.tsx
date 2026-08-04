@@ -21,7 +21,6 @@
  *   <BoxBadge stage="BOX_ASIGNADO" label="Box 3" />
  * ---------------------------------------------------------
  */
-import { Box } from "@mui/material"
 import {
   hceBorderRadius,
   hceColors,
@@ -85,9 +84,8 @@ export const BoxBadge = ({
   const visibleLabel = label ?? stage
 
   return (
-    <Box
-      component="span"
-      sx={{
+    <span
+      style={{
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
@@ -112,6 +110,6 @@ export const BoxBadge = ({
       aria-label={`Box ${visibleLabel} — ${stage}`}
     >
       {visibleLabel}
-    </Box>
+    </span>
   )
 }

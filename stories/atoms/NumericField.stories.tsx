@@ -27,6 +27,11 @@ const meta: Meta<typeof NumericField> = {
       description: "Campo de solo lectura (ej. IMC calculado).",
       table:       { defaultValue: { summary: "false" } },
     },
+    error: {
+      control:     "boolean",
+      description: "Activa el estado de error: label y borde cambian a rojo.",
+      table:       { defaultValue: { summary: "false" } },
+    },
   },
 }
 export default meta
@@ -64,5 +69,14 @@ export const ReadOnlyCalculated: Story = {
     value:    "24.2",
     suffix:   "",
     readOnly: true,
+  },
+}
+
+export const ErrorState: Story = {
+  args: {
+    label:  "Error",
+    value:  "",
+    suffix: "Kg",
+    error:  true,
   },
 }

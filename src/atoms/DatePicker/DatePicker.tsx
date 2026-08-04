@@ -1,6 +1,6 @@
-import { useState } from "react"
-import { Box, Typography, OutlinedInput } from "@mui/material"
-import { hceColors, hceTypography, hceTransition } from "../../tokens/hce.tokens"
+import type { CSSProperties } from "react"
+import "./DatePicker.css"
+import { hceColors } from "../../tokens/hce.tokens"
 
 export interface DatePickerProps {
   label?: string
@@ -26,80 +26,46 @@ export function DatePicker({
   required,
   error = false,
 }: DatePickerProps) {
-  const [focused, setFocused] = useState(false)
-  const [hovered, setHovered] = useState(false)
+  // El hover/focus ahora es CSS real (:hover/:focus-within en el wrapper),
+  // ya no necesita useState(focused/hovered).
+  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
+  // de DSProvider, mismo hex de siempre como fallback.
+  // Label y borde van coloreados por el tema DESDE EL INICIO (igual que
+  // TextInput/NumericField) -- antes quedaban en gris neutro hasta el
+  // hover, lo que hacía parecer el campo deshabilitado/apagado en reposo.
+  // Solo el texto ingresado (textDefault) se mantiene neutro en reposo y
+  // pasa a color de tema en hover/focus, igual que en TextInput.
+  const themeColor    = `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+  const accentDefault = error ? hceColors.alert.error[600] : themeColor
+  const accentActive  = error ? hceColors.alert.error[600] : themeColor
+  const textDefault   = error ? hceColors.alert.error[600] : hceColors.neutro.black[400]
+  const textActive    = error ? hceColors.alert.error[600] : themeColor
+  const borderDefault = error ? hceColors.alert.error[600] : themeColor
+  const borderActive  = error ? hceColors.alert.error[600] : themeColor
 
-  const active = focused || hovered
-
-  const accentColor = error
-    ? hceColors.alert.error[600]
-    : active
-      ? hceColors.primary.blue[600]
-      : hceColors.neutro.black[200]
-
-  const inputTextColor = error
-    ? hceColors.alert.error[600]
-    : active
-      ? hceColors.primary.blue[600]
-      : hceColors.neutro.black[400]
-
-  const borderDefault = error ? hceColors.alert.error[600] : hceColors.neutro.black[50]
-  const borderActive  = error ? hceColors.alert.error[600] : hceColors.primary.blue[600]
+  const cssVars = {
+    "--dp-accent-default": accentDefault,
+    "--dp-accent-active":  accentActive,
+    "--dp-text-default":   textDefault,
+    "--dp-text-active":    textActive,
+    "--dp-border-default": borderDefault,
+    "--dp-border-active":  borderActive,
+    "--dp-focus-ring":     hceColors.primary.blue[100],
+  } as CSSProperties
 
   return (
-    <Box
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {label && (
-        <Typography component="label" sx={{
-          fontFamily: hceTypography.fontFamily,
-          fontSize:   "0.75rem",
-          fontWeight: 600,
-          color:      accentColor,
-          mb:         0.5,
-          display:    "block",
-          transition: `color ${hceTransition.fast}`,
-        }}>
-          {label}
-        </Typography>
-      )}
-      <OutlinedInput
-        fullWidth
-        size="small"
-        type="date"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        required={required}
-        disabled={disabled}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        sx={{
-          borderRadius:    "8px",
-          backgroundColor: hceColors.neutro.white[50],
-          fontSize:        "0.875rem",
-          transition:      `box-shadow ${hceTransition.fast}`,
-          "& .MuiInputBase-input": {
-            color:               inputTextColor,
-            WebkitTextFillColor: inputTextColor,
-            transition:          `color ${hceTransition.fast}, -webkit-text-fill-color ${hceTransition.fast}`,
-            // Icono nativo del calendario — visible incluso con el texto en color de acento
-            "&::-webkit-calendar-picker-indicator": {
-              filter: "opacity(0.6)",
-              cursor: disabled ? "not-allowed" : "pointer",
-            },
-          },
-          "& fieldset": {
-            borderColor: borderDefault,
-            transition:  `border-color ${hceTransition.fast}`,
-          },
-          "&:hover fieldset":       { borderColor: borderActive },
-          "&.Mui-focused fieldset": { borderColor: borderActive },
-          "&.Mui-focused": {
-            boxShadow: `0 0 0 3px ${hceColors.primary.blue[100]}`,
-          },
-        }}
-      />
-    </Box>
+    <div className="hce-datepicker-wrapper" style={cssVars}>
+      {label && <label className="hce-datepicker-label">{label}</label>}
+      <div className="hce-datepicker-box">
+        <input
+          type="date"
+          className="hce-datepicker-field"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required={required}
+          disabled={disabled}
+        />
+      </div>
+    </div>
   )
 }

@@ -1,0 +1,28 @@
+.hce-beds-tab {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: fit-content;
+  margin: auto 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  border-radius: 0 8px 8px 0;
+  padding: 20px 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 150ms ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+}
+
+.hce-beds-tab:hover {
+  background-color: #1A3A6B; /* hceClinicalColors.headerBg */
+}
+
+.hce-beds-tab:focus-visible {
+  outline: 2px solid #2A722E; /* hceClinicalColors.priority4 */
+  outline-offset: 2px;
+}

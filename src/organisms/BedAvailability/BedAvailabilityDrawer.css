@@ -1,0 +1,52 @@
+.hce-baddrawer-panel {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  margin-left: auto;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+@media (min-width: 600px) {
+  .hce-baddrawer-panel {
+    width: 460px;
+  }
+}
+
+.hce-baddrawer-close:hover {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+.hce-baddrawer-boxcell {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.hce-baddrawer-boxcell:hover {
+  transform: scale(1.03);
+  box-shadow: 0 2px 8px rgba(0, 29, 69, 0.08);
+}
+
+.hce-baddrawer-assign-btn {
+  transition: background-color 150ms ease;
+}
+
+.hce-baddrawer-assign-btn:hover {
+  background-color: rgba(39, 174, 96, 0.08);
+}
+
+.hce-baddrawer-accordion-summary {
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.hce-baddrawer-accordion-chevron {
+  transition: transform 200ms ease;
+}
+
+.hce-baddrawer-accordion-chevron--open {
+  transform: rotate(180deg);
+}

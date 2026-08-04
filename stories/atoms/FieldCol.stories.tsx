@@ -16,6 +16,11 @@ const meta: Meta<typeof FieldCol> = {
       description: "Valor CSS flex del contenedor (número o string, ej. \"0 0 150px\").",
       table:       { defaultValue: { summary: "1" } },
     },
+    error: {
+      control:     "boolean",
+      description: "Activa el estado de error: la etiqueta cambia a rojo.",
+      table:       { defaultValue: { summary: "false" } },
+    },
   },
 }
 export default meta
@@ -39,6 +44,18 @@ export const AnyContent: Story = {
       <div style={{ padding: 8, border: "1px dashed #ccc", borderRadius: 8 }}>
         Contenido arbitrario
       </div>
+    </FieldCol>
+  ),
+}
+
+export const ErrorState: Story = {
+  args: {
+    label: "Peso",
+    error: true,
+  },
+  render: (args) => (
+    <FieldCol {...args}>
+      <TextInput value="" onChange={() => {}} placeholder="0.0" error={args.error} />
     </FieldCol>
   ),
 }

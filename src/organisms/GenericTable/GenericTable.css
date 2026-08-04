@@ -1,0 +1,37 @@
+/**
+ * GenericTable.css — reemplazo de MUI Table/TableContainer.
+ * El scrollbar vertical nativo se oculta (lo reemplaza el thumb dibujado a
+ * mano en GenericTable.tsx); el horizontal se deja nativo. El header queda
+ * fijo con position:sticky nativo (antes MUI stickyHeader).
+ */
+
+.hce-table-container {
+  scrollbar-width: none; /* Firefox */
+}
+
+.hce-table-container::-webkit-scrollbar {
+  width: 0;
+  height: 8px;
+}
+
+.hce-table-container::-webkit-scrollbar-thumb {
+  background-color: #D0DBF0;
+  border-radius: 4px;
+}
+
+.hce-table-container::-webkit-scrollbar-track {
+  background-color: #e6ecf6;
+}
+
+.hce-generic-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.hce-generic-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
