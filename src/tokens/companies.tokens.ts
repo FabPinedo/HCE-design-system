@@ -57,43 +57,42 @@ export const csfCompanyColors: HceCompanyColors = {
 // por defecto de `DSProvider`) tenga un punto de entrada neutro.
 export const defaultCompanyColors: HceCompanyColors = csfCompanyColors
 
-// ── Sanna — segundo tenant REAL, paleta placeholder ──────────────────────────
+// ── Sanna — segundo tenant REAL ───────────────────────────────────────────
 // Sanna es una red de salud peruana real (referenciada en otros sistemas
-// legacy de este proyecto bajo los códigos de sede `SANNA_SIRI_*`), pero su
-// paleta de marca real todavía no fue entregada por el equipo de diseño. Los
-// valores de acá son un placeholder que conserva el análisis de contraste
-// WCAG AA ya hecho (hallazgo de hce-code-reviewer, 2026-07-30): `primary` y
-// `secondary` (los tonos "brand" claros) NO cumplen 4.5:1 para texto normal
-// sobre fondo blanco/blanco-sobre-color (teal ≈4.31:1, coral ≈2.74:1). Por
-// eso las superficies sólidas con texto blanco encima (p. ej. botones
-// contained, vía atoms/Button/Button.tsx → tenantTheme) deben tomar
-// `primaryDark`/`secondaryDark` (teal dark ≈6.6:1 AA, coral dark ≈5.6:1 AA),
-// no los tonos claros. `primary`/`secondary` quedan para acentos, bordes e
-// íconos.
+// legacy de este proyecto bajo los códigos de sede `SANNA_SIRI_*`). Color
+// corporativo confirmado: verde `#2aad3d` (pedido explícito del usuario,
+// 2026-08-03). El resto de la paleta (secondary/superficies/textos) queda a
+// criterio de este archivo — grises y blancos, sin introducir un segundo
+// color de marca — igual que hace `csfCompanyColors` con verde institucional
+// como `secondary` en vez de un tercer color no relacionado.
 //
-// TODO: reemplazar con la paleta de marca real de Sanna cuando el equipo de
-// diseño la entregue.
+// Contraste WCAG AA (texto blanco sobre superficie sólida, 4.5:1 mínimo):
+// `primary` (#2aad3d) por sí solo NO alcanza 4.5:1 (~2.9:1) — igual que
+// `csfCompanyColors.primary`, queda para acento/borde, nunca como fondo
+// sólido con texto blanco. `primaryDark` es un verde más oscuro derivado
+// del mismo hue, sí apto para superficie sólida (~5.1:1 AA).
 //
 // Uso:
 //   import { sannaCompanyColors } from "@hce/design-system"
 //   <Button label="Guardar" tenantTheme={sannaCompanyColors} />
 export const sannaCompanyColors: HceCompanyColors = {
-  // Marca
-  primary:        '#00897B', // Teal — acento / borde (NO usar con texto blanco encima, ~4.31:1)
-  primaryDark:    '#00695C', // Teal oscuro — apto para superficie sólida + texto blanco (~6.6:1 AA)
-  primaryLight:   '#4DB6AC',
-  secondary:      '#FF7043', // Coral — acento (NO usar con texto blanco encima, ~2.74:1)
-  secondaryDark:  '#BF360C', // Coral oscuro (Material Deep Orange 900) — apto para superficie sólida + texto blanco (~5.6:1 AA)
-  secondaryLight: '#FFAB91',
+  // Marca — verde corporativo Sanna
+  primary:        '#2aad3d', // Verde Sanna — acento / borde (NO usar con texto blanco encima, ~2.9:1)
+  primaryDark:    '#1e7e2e', // Verde Sanna oscuro — apto para superficie sólida + texto blanco (~5.1:1 AA)
+  primaryLight:   '#e6f7e9', // Verde Sanna muy pálido — fondos de acento suaves
+  // Sin segundo color de marca: el "secondary" de Sanna es gris neutro
+  secondary:      '#6b7280', // Gris — acento / borde (~4.0:1, no usar con texto blanco encima)
+  secondaryDark:  '#374151', // Gris oscuro — apto para superficie sólida + texto blanco (~10.3:1 AA)
+  secondaryLight: '#d1d5db', // Gris claro — acentos suaves
 
-  // Superficies
+  // Superficies — blancos y grises neutros
   surfaceBg:      '#FFFFFF',
-  background:     '#F7FAF9',
-  border:         '#B2DFDB',
+  background:     '#F9FAFB',
+  border:         '#E5E7EB',
 
   // Textos
-  textPrimary:    '#1B3A36',
-  textSecondary:  '#4E6B67',
+  textPrimary:    '#1F2937',
+  textSecondary:  '#6B7280',
   textOnPrimary:  '#FFFFFF',
 }
 
