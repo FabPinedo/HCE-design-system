@@ -244,7 +244,9 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
           fontFamily:   hceTypography.fontFamily,
           fontSize:     "0.78rem",
           fontWeight:   grandActive || open ? 700 : 500,
-          color:        grandActive || open ? hceColors.primary.blue[600] : hceColors.neutro.black[400],
+          // blue[600] == --ds-color-interactive exactamente — reactivo al
+          // tema activo de DSProvider, mismo hex de siempre como fallback.
+          color:        grandActive || open ? `var(--ds-color-interactive, ${hceColors.primary.blue[600]})` : hceColors.neutro.black[400],
           lineHeight:   1.3,
           flex:         1,
           overflow:     "hidden",
@@ -288,8 +290,10 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
                   paddingBottom:   "6px",
                   borderRadius:    "0 8px 8px 0",
                   backgroundColor: isGcActive ? hceColors.primary.blue[50] : "transparent",
+                  // blue[600] == --ds-color-interactive exactamente — reactivo
+                  // al tema activo de DSProvider, mismo hex de siempre como fallback.
                   borderLeft:      isGcActive
-                    ? `3px solid ${hceColors.primary.blue[600]}`
+                    ? `3px solid var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
                     : "3px solid transparent",
                 }}
               >
@@ -449,8 +453,10 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
           paddingBottom:   "10px",
           borderRadius:    "8px",
           backgroundColor: parentBg,
+          // blue[600] == --ds-color-interactive exactamente — reactivo al
+          // tema activo de DSProvider, mismo hex de siempre como fallback.
           borderLeft:      isActive
-            ? `3px solid ${hceColors.primary.blue[600]}`
+            ? `3px solid var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
             : "3px solid transparent",
           paddingLeft:     isActive ? "9px" : "12px",
           paddingRight:    "12px",
@@ -468,7 +474,9 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
           flexShrink:      0,
         }}>
           {IconComp ? (
-            <IconComp size={15} color={hceColors.primary.blue[600]} />
+            // blue[600] == --ds-color-interactive exactamente — reactivo al
+            // tema activo de DSProvider, mismo hex de siempre como fallback.
+            <IconComp size={15} color={`var(--ds-color-interactive, ${hceColors.primary.blue[600]})`} />
           ) : (
             <span style={{
               fontFamily: hceTypography.fontFamily,
@@ -485,9 +493,11 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
           fontFamily:   hceTypography.fontFamily,
           fontSize:     "0.82rem",
           fontWeight:   isActive || childActive || open ? 700 : 500,
+          // blue[600] == --ds-color-interactive exactamente — reactivo al
+          // tema activo de DSProvider, mismo hex de siempre como fallback.
           color:        isActive || childActive
             ? hceColors.primary.blue[700]
-            : open ? hceColors.primary.blue[600] : hceColors.neutro.black[400],
+            : open ? `var(--ds-color-interactive, ${hceColors.primary.blue[600]})` : hceColors.neutro.black[400],
           flex:         1,
           lineHeight:   1.3,
           overflow:     "hidden",
@@ -559,8 +569,10 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                     paddingBottom:   "7px",
                     borderRadius:    "0 8px 8px 0",
                     backgroundColor: isChildActive ? hceColors.primary.blue[50] : "transparent",
+                    // blue[600] == --ds-color-interactive exactamente — reactivo
+                    // al tema activo de DSProvider, mismo hex de siempre como fallback.
                     borderLeft:      isChildActive
-                      ? `3px solid ${hceColors.primary.blue[600]}`
+                      ? `3px solid var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
                       : "3px solid transparent",
                   }}
                 >
@@ -619,8 +631,11 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                             paddingBottom:   "6px",
                             borderRadius:    "0 8px 8px 0",
                             backgroundColor: isGcActive ? hceColors.primary.blue[50] : "transparent",
+                            // blue[600] == --ds-color-interactive exactamente —
+                            // reactivo al tema activo de DSProvider, mismo hex
+                            // de siempre como fallback.
                             borderLeft:      isGcActive
-                              ? `3px solid ${hceColors.primary.blue[600]}`
+                              ? `3px solid var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
                               : "3px solid transparent",
                           }}
                         >
@@ -860,12 +875,14 @@ export function HceSidebar({
               borderRadius: "8px",
             } as CSSProperties}
           >
-            <HomeGlyph size={20} color={hceColors.primary.blue[600]} />
+            {/* blue[600] == --ds-color-interactive exactamente — reactivo al
+                tema activo de DSProvider, mismo hex de siempre como fallback. */}
+            <HomeGlyph size={20} color={`var(--ds-color-interactive, ${hceColors.primary.blue[600]})`} />
             <span style={{
               fontFamily: hceTypography.fontFamily,
               fontSize:   "0.85rem",
               fontWeight: 600,
-              color:      hceColors.primary.blue[600],
+              color:      `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`,
             }}>
               Inicio
             </span>
