@@ -6,6 +6,7 @@ import {
   DownloadIcon, CloseIcon, AddCircleIcon,
   hceColors,
   defaultCompanyColors,
+  csfCompanyColors,
   sannaCompanyColors,
 } from "@hce/design-system"
 
@@ -202,8 +203,11 @@ const TENANT_TOKENS_MAP = {
   none:    undefined,
   // Empresa por defecto/fallback (Clínica San Felipe) — pasada explícita
   // vía `tenantTheme` para probar el switcheo real entre archivos de
-  // empresa, no solo "con/sin tenant".
+  // empresa, no solo "con/sin tenant". `default` y `csf` son el mismo
+  // objeto (CSF es la empresa por defecto de este deployment); se listan
+  // ambos nombres acá para que los dos sean descubribles.
   default: defaultCompanyColors,
+  csf:     csfCompanyColors,
   sanna:   sannaCompanyColors,
 } as const
 
