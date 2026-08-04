@@ -49,6 +49,11 @@ export const csfCompanyColors: HceCompanyColors = {
   textPrimary:    hceUi.textPrimary,   // #374151
   textSecondary:  hceUi.textSecondary, // #545454
   textOnPrimary:  '#FFFFFF',
+
+  // Interactivo — acento de campos de formulario (borde/label/estado activo).
+  // Coincide exactamente con el valor hardcodeado histórico de estos
+  // componentes (blue[600], distinto de `primary` = blue[500]).
+  interactive:    hceColors.primary.blue[600], // #003d96
 }
 
 // CSF es la empresa por defecto/fallback de este deployment — no un alias
@@ -94,6 +99,11 @@ export const sannaCompanyColors: HceCompanyColors = {
   textPrimary:    '#1F2937',
   textSecondary:  '#6B7280',
   textOnPrimary:  '#FFFFFF',
+
+  // Interactivo — acento de campos de formulario (borde/label/estado activo).
+  // Mismo verde oscuro que `primaryDark` (pedido explícito del usuario:
+  // reusar, no inventar un cuarto tono de verde).
+  interactive:    '#1e7e2e', // Verde Sanna oscuro (= primaryDark)
 }
 
 // ── Mapa de empresas ──────────────────────────────────────────────────────

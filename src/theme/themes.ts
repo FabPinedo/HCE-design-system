@@ -60,6 +60,7 @@ export interface DsTheme {
   "--ds-color-secondary-light": string
   "--ds-color-secondary-contrast": string
   "--ds-color-danger": string
+  "--ds-color-interactive": string
 
   "--ds-color-background": string
   "--ds-color-surface": string
@@ -111,6 +112,7 @@ function buildDsTheme(colors: HceCompanyColors): DsTheme {
     "--ds-color-secondary-light": colors.secondaryLight,
     "--ds-color-secondary-contrast": colors.textOnPrimary,
     "--ds-color-danger": hceColors.alert.error[500], // semántico, nunca de marca
+    "--ds-color-interactive": colors.interactive,
 
     "--ds-color-background": colors.background,
     "--ds-color-surface": colors.surfaceBg,

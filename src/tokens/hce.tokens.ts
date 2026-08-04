@@ -391,6 +391,16 @@ export interface HceCompanyColors {
   textPrimary:    string
   textSecondary:  string
   textOnPrimary:  string
+
+  // Interactivo — acento de campos de formulario (borde/label/estado activo:
+  // TextInput, NumericField, MultiSelect, SelectField, etc.). Separado de
+  // `primary` (acento de Button/marca) porque históricamente era un tono de
+  // azul distinto (`blue[600]`, no `blue[500]`) — no porque sea conceptualmente
+  // un color de marca diferente. Mantener los dos campos separados permite que
+  // varíen de forma independiente si el `blue[600]` de una futura empresa
+  // difiere genuinamente de su `primary`, sin forzarlos a ser el mismo valor
+  // como hacen hoy csf/sanna.
+  interactive:    string
 }
 
 export function injectHceTokens(): void {
