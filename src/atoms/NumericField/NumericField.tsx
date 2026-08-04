@@ -12,6 +12,8 @@ export interface NumericFieldProps {
   numberType?: "decimal" | "natural"
   readOnly?: boolean
   disabled?: boolean
+  /** Activa el estado de error: label, borde y texto cambian a rojo, igual que TextInput/DatePicker. */
+  error?: boolean
 }
 
 /** Campo numérico con label y unidad como placeholder. */
@@ -23,26 +25,42 @@ export function NumericField({
   numberType = "decimal",
   readOnly = false,
   disabled = false,
+  error = false,
 }: NumericFieldProps) {
   // ── Colores reactivos (ahora vía :hover/:focus-within en CSS) ──────────
   // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
-  // de DSProvider, mismo hex de siempre como fallback.
+  // de DSProvider, mismo hex de siempre como fallback. Rojo si error, mismo
+  // criterio que TextInput/DatePicker (error pisa disabled/readOnly).
   const mainColor = disabled
     ? hceColors.neutro.black[300]
-    : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+    : error
+      ? hceColors.alert.error[600]
+      : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+
+  const activeColor = disabled
+    ? hceColors.neutro.black[300]
+    : error
+      ? hceColors.alert.error[600]
+      : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
   // Si es readOnly, el texto nunca "reacciona" (antes el listener de
   // hover/focus estaba deshabilitado) — mismo valor en default y active.
-  const textDefaultColor = disabled ? hceColors.neutro.black[300] : hceColors.neutro.black[700]
+  const textDefaultColor = disabled
+    ? hceColors.neutro.black[300]
+    : error
+      ? hceColors.alert.error[600]
+      : hceColors.neutro.black[700]
   const textActiveColor  = disabled
     ? hceColors.neutro.black[300]
-    : readOnly
-      ? hceColors.neutro.black[700]
-      : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+    : error
+      ? hceColors.alert.error[600]
+      : readOnly
+        ? hceColors.neutro.black[700]
+        : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
   const cssVars = {
     "--nf-main":         mainColor,
-    "--nf-active":       disabled ? hceColors.neutro.black[300] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`,
+    "--nf-active":       activeColor,
     "--nf-focus-ring":   hceColors.primary.blue[100],
     "--nf-text-default": textDefaultColor,
     "--nf-text-active":  textActiveColor,
