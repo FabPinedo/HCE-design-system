@@ -98,6 +98,35 @@ export function useDsTheme(): DsTheme {
 }
 
 /**
+ * DsTenantContext — implementación interna, NO exportada desde `src/index.ts`
+ * (no es API pública del design system).
+ *
+ * `DsThemeContext` alcanza para cualquier componente que solo necesite LOS
+ * COLORES resueltos (lee `var(--ds-color-*)` sin importarle de qué empresa
+ * vienen). Pero algunos componentes necesitan la IDENTIDAD del tenant en sí
+ * — no sus colores — para elegir entre assets completamente distintos según
+ * la empresa (ej. `HceSidebar` decide entre el isotipo/logo de Clínica San
+ * Felipe o el de Sanna, dos componentes SVG distintos, no dos valores de
+ * color). Para eso existe este segundo contexto, con la misma justificación
+ * de portales que `DsThemeContext` (ver el comentario de arriba).
+ */
+const DsTenantContext = createContext<CompanyThemeKey>("default")
+
+/**
+ * useDsTenant — hook interno para que componentes que necesitan bifurcar por
+ * IDENTIDAD de tenant (no solo por color, ver `DsTenantContext`) lean la
+ * clave de empresa resuelta del `DSProvider` ancestro más cercano.
+ *
+ * Cuando `DSProvider` recibe un `DsTheme` armado a mano en vez de una clave
+ * de `CompanyThemeKey` (tenant futuro sin entrada en `dsThemes`, ver el
+ * comentario de `DSProvider` más abajo) no hay una clave de tenant que
+ * derivar de ahí — en ese caso este hook resuelve a `"default"`.
+ */
+export function useDsTenant(): CompanyThemeKey {
+  return useContext(DsTenantContext)
+}
+
+/**
  * Reset de estilos equivalente al CssBaseline de MUI — box-sizing global +
  * margin:0 en body. Idempotente (se puede llamar desde múltiples
  * DSProvider anidados sin duplicar el <style>).
@@ -142,12 +171,15 @@ export const DSProvider = ({ children, theme = "default" }: Props) => {
   }, [])
 
   const resolvedTheme: DsTheme = typeof theme === "string" ? dsThemes[theme] : theme
+  const resolvedTenant: CompanyThemeKey = typeof theme === "string" ? theme : "default"
 
   return (
-    <DsThemeContext.Provider value={resolvedTheme}>
-      <div style={{ display: "contents", ...resolvedTheme } as CSSProperties}>
-        {children}
-      </div>
-    </DsThemeContext.Provider>
+    <DsTenantContext.Provider value={resolvedTenant}>
+      <DsThemeContext.Provider value={resolvedTheme}>
+        <div style={{ display: "contents", ...resolvedTheme } as CSSProperties}>
+          {children}
+        </div>
+      </DsThemeContext.Provider>
+    </DsTenantContext.Provider>
   )
 }
