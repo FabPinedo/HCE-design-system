@@ -26,16 +26,29 @@ import { hceColors, type HceCompanyColors } from "../../tokens/hce.tokens"
  * `color` ni `tenantTheme`) están hardcodeados acá igual que el tema
  * "default" (theme/themes.ts: primary=hceColors.primary.blue[500],
  * secondary=hceColors.primary.green[500], danger=rojo default de MUI
- * '#d32f2f', semántico y nunca tematizado). Antes, este Button heredaba el
- * theme activo vía contexto de MUI (`DSProvider`/`ThemeProvider`). Ese
- * enganche con el tema activo de `DSProvider` (empresa/tenant — ver
- * theme/themes.ts) todavía no está portado — se resuelve conectando este
- * Button a `var(--ds-color-primary, ...)` etc. (paso pendiente del
- * refactor, ver PENDIENTE en theme/themes.ts). Hasta entonces, este Button
- * SIEMPRE muestra estos colores por defecto, sin importar qué tema tenga
- * activo el `DSProvider` que lo envuelve. `tenantTheme` sí funciona igual
- * que antes — es un override explícito por instancia, completamente
- * independiente de `DSProvider`.
+ * '#d32f2f', semántico y nunca tematizado).
+ *
+ * Reactividad a `DSProvider` (empresa/tenant, ver theme/themes.ts):
+ * el variant "primary" SÍ está conectado — `DEFAULT_VARIANT_COLOR.primary`
+ * y `HOVER_VARIANT_COLOR.primary` leen `var(--ds-color-primary, ...)` /
+ * `var(--ds-color-primary-dark, ...)` con el hex de siempre como fallback,
+ * así que fuera de un `DSProvider` (o bajo el tema "csf"/"default") el
+ * resultado es idéntico a antes, y bajo otro tenant (ej. "sanna") el botón
+ * primary recolorea de verdad.
+ *
+ * El variant "secondary" SIGUE sin conectar a propósito: su color por
+ * defecto (green[500]) sí coincide con `--ds-color-secondary`, pero su
+ * shade de hover curado (green[700], ver HOVER_VARIANT_COLOR) NO coincide
+ * con `--ds-color-secondary-dark` (green[800] — elegido en
+ * companies.tokens.ts por contraste AA, no por ser el mismo shade). Conectar
+ * solo uno de los dos rompería la paridad visual bajo el tema csf (el
+ * default y el hover dejarían de ser el mismo verde institucional) y
+ * conectar ambos cambiaría el hover incluso bajo csf. Se deja hardcoded
+ * hasta que el design system decida cuál de los dos shades es la fuente de
+ * verdad. `variant === "danger"` nunca se conecta: es semántico.
+ *
+ * `tenantTheme` sigue funcionando igual que antes — es un override explícito
+ * por instancia con más prioridad que el `DSProvider` ambiente.
  */
 
 interface Props {
@@ -106,8 +119,11 @@ const VARIANT_CLASS: Record<string, string> = {
 
 // Colores semánticos por defecto (sin `color` ni `tenantTheme`) — calcados
 // del tema "default" (theme/themes.ts). Ver nota de paridad arriba.
+// `primary` lee `--ds-color-primary` (con el hex de siempre como fallback,
+// para paridad exacta fuera de DSProvider o bajo el tema csf); `secondary`
+// y `danger` quedan hardcoded (ver nota de paridad arriba sobre por qué).
 const DEFAULT_VARIANT_COLOR: Record<string, string> = {
-  primary:   hceColors.primary.blue[500],
+  primary:   `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
   secondary: hceColors.primary.green[500],
   danger:    "#d32f2f", // rojo default de MUI (theme.ts nunca sobreescribe `error`)
 }
@@ -122,7 +138,7 @@ const DEFAULT_VARIANT_COLOR: Record<string, string> = {
 // para TODOS los botones contained (incluido el default), dando un azul
 // visiblemente distinto (#003b91) al shade real que mostraba MUI (#003075).
 const HOVER_VARIANT_COLOR: Record<string, string> = {
-  primary:   hceColors.primary.blue[700],
+  primary:   `var(--ds-color-primary-dark, ${hceColors.primary.blue[700]})`,
   secondary: hceColors.primary.green[700],
   danger:    "#c62828", // theme.palette.error.dark default de MUI
 }
@@ -139,6 +155,21 @@ const HOVER_VARIANT_COLOR: Record<string, string> = {
  */
 function resolveTenantColor(tenantTheme: HceCompanyColors, variant: Props["variant"]): string {
   return variant === "secondary" ? tenantTheme.secondaryDark : tenantTheme.primaryDark
+}
+
+/**
+ * Aplica opacidad a un color CSS arbitrario devolviendo un string listo para usar
+ * en `background`/`box-shadow`. Antes esto se hacía concatenando un sufijo hex de
+ * 2 dígitos (`${hex}18`, etc.) directamente sobre el string de color — funcionaba
+ * porque `baseColor` siempre era un hex literal ("#0043a5"). Ahora que
+ * `DEFAULT_VARIANT_COLOR.primary`/`HOVER_VARIANT_COLOR.primary` pueden ser una
+ * referencia `var(--ds-color-primary, #0043a5)`, ese mismo truco produciría CSS
+ * inválido (`var(...)40`). `color-mix` funciona igual con cualquier color válido
+ * (hex literal o var()), y el mismo porcentaje mezclado con "transparent"
+ * reproduce visualmente el viejo hex+alpha (ej. 25.098% ≈ sufijo hex "40").
+ */
+function withAlpha(color: string, alphaPercent: number): string {
+  return `color-mix(in srgb, ${color} ${alphaPercent}%, transparent)`
 }
 
 export const Button = ({
@@ -179,9 +210,14 @@ export const Button = ({
 
   const cssVars: CSSProperties = {
     "--hce-btn-bg":        baseColor,
-    "--hce-btn-hover-bg":  muiVariant === "contained" ? undefined : `${baseColor}18`, // ~10% opacidad
-    "--hce-btn-active-bg": muiVariant === "contained" ? undefined : `${baseColor}28`,
-    "--hce-btn-hover-shadow": muiVariant === "contained" ? `0 4px 12px ${baseColor}40` : undefined,
+    // Antes: `${baseColor}18`/`28`/`40` (sufijo hex de alpha) — dejó de servir
+    // en cuanto `baseColor` pasó a poder ser `var(--ds-color-primary, #hex)` en
+    // vez de un hex literal (ver `withAlpha` arriba). Los porcentajes reproducen
+    // el mismo alpha visual que los sufijos hex de siempre (0x18≈9.412%,
+    // 0x28≈15.686%, 0x40≈25.098%).
+    "--hce-btn-hover-bg":  muiVariant === "contained" ? undefined : withAlpha(baseColor, 9.412), // ~10% opacidad
+    "--hce-btn-active-bg": muiVariant === "contained" ? undefined : withAlpha(baseColor, 15.686),
+    "--hce-btn-hover-shadow": muiVariant === "contained" ? `0 4px 12px ${withAlpha(baseColor, 25.098)}` : undefined,
     "--hce-btn-contained-hover-bg":     muiVariant === "contained" ? containedHoverBg : undefined,
     "--hce-btn-contained-hover-filter": muiVariant === "contained" ? containedHoverFilter : undefined,
   } as CSSProperties
