@@ -99,6 +99,7 @@ function BedCard({ bed }: { bed: BedAvailabilityItem }) {
         className="hce-bedv2-card"
         style={{
           display:         "flex",
+          width:           "100%",
           flexDirection:   "column",
           alignItems:      "center",
           justifyContent:  "center",
