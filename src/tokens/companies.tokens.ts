@@ -2,9 +2,11 @@
  * ---------------------------------------------------------
  * File: tokens/companies.tokens.ts
  * Description:
- * Paletas de marca por empresa/tenant (multiempresa). Fuente única para la
- * convención `HceCompanyColors` (definida en hce.tokens.ts) que consume,
- * por ejemplo, atoms/Button/Button.tsx vía la prop `tenantTheme`.
+ * Paletas de marca por empresa/tenant (multiempresa) — ÚNICO eje de theming
+ * del Design System. Fuente única para la convención `HceCompanyColors`
+ * (definida en hce.tokens.ts), consumida por atoms/Button/Button.tsx (prop
+ * `tenantTheme`, override por instancia) y por theme/themes.ts (que expande
+ * cada paleta a un `DsTheme` completo para `DSProvider`).
  *
  * Antes existían como archivos separados (`default.tokens.ts`,
  * `novasalud.tokens.ts`); se consolidan aquí en un único archivo por
@@ -17,20 +19,19 @@
  * `HceCompanyColors` sobre el incidente `ds_token_unification_break`).
  *
  * Uso:
- *   import { defaultCompanyColors, sannaCompanyColors, companyThemes } from "@hce/design-system"
- *   <Button label="Guardar" tenantTheme={defaultCompanyColors} />
+ *   import { csfCompanyColors, sannaCompanyColors, companyThemes } from "@hce/design-system"
+ *   <Button label="Guardar" tenantTheme={csfCompanyColors} />
  *   <Button label="Guardar" tenantTheme={companyThemes["sanna"]} />
  * ---------------------------------------------------------
  */
 import { hceColors, hceUi, type HceCompanyColors } from "./hce.tokens"
 
-// ── Empresa por defecto / fallback (Clínica San Felipe) ─────────────────────
+// ── Clínica San Felipe (empresa por defecto / fallback de este deployment) ──
 // No introduce hex nuevos: reorganiza valores que ya existen en `hceColors`
 // (azul/verde institucional) y `hceUi` bajo la forma compartida
 // `HceCompanyColors`, para que un componente como atoms/Button/Button.tsx
-// (prop `tenantTheme`) pueda tratar a "la empresa por defecto" igual que a
-// cualquier otro tenant.
-export const defaultCompanyColors: HceCompanyColors = {
+// (prop `tenantTheme`) pueda tratar a CSF igual que a cualquier otro tenant.
+export const csfCompanyColors: HceCompanyColors = {
   // Marca — azul/verde institucional de Clínica San Felipe (hceColors)
   primary:        hceColors.primary.blue[500],  // #0043a5 — acento / borde
   primaryDark:    hceColors.primary.blue[700],  // #003075 — superficie sólida + texto blanco (~12.5:1 AA)
@@ -49,6 +50,12 @@ export const defaultCompanyColors: HceCompanyColors = {
   textSecondary:  hceUi.textSecondary, // #545454
   textOnPrimary:  '#FFFFFF',
 }
+
+// CSF es la empresa por defecto/fallback de este deployment — no un alias
+// arbitrario, sino la misma paleta bajo el nombre genérico "default" para
+// que el código que no necesita saber el nombre del tenant (ej. el valor
+// por defecto de `DSProvider`) tenga un punto de entrada neutro.
+export const defaultCompanyColors: HceCompanyColors = csfCompanyColors
 
 // ── Sanna — segundo tenant REAL, paleta placeholder ──────────────────────────
 // Sanna es una red de salud peruana real (referenciada en otros sistemas
@@ -91,10 +98,14 @@ export const sannaCompanyColors: HceCompanyColors = {
 }
 
 // ── Mapa de empresas ──────────────────────────────────────────────────────
-// Punto único para resolver la paleta de una empresa por clave (ej. en un
-// selector de Storybook o en un futuro DSProvider-por-tenant).
+// Punto único para resolver la paleta de una empresa por clave (ej. en el
+// selector de Storybook o en `DSProvider`, ver provider/ThemeProvider.tsx).
+// Tres claves visibles/descubribles por pedido explícito, aunque `default`
+// y `csf` apunten al mismo objeto (misma paleta, dos nombres — ver la nota
+// junto a `defaultCompanyColors`).
 export const companyThemes = {
   default: defaultCompanyColors,
+  csf:     csfCompanyColors,
   sanna:   sannaCompanyColors,
 } as const satisfies Record<string, HceCompanyColors>
 
