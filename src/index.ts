@@ -60,7 +60,7 @@ export {
 export type { LucideIcon } from "./atoms/Icon/Icon"
 
 // ── Icons — HCE SVG (logo clínica + iconos de layout) ─────
-export { LogoClinicaSanFelipeIcon, LogoSannaIcon, LogoSannaIsotipoIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon, HceBurgerIcon } from "./atoms/Icon/SvgIconsHce"
+export { LogoClinicaSanFelipeIcon, LogoSannaIcon, LogoSannaIsotipoIcon, LogoUnknownIcon, LogoUnknownIsotipoIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon, HceBurgerIcon } from "./atoms/Icon/SvgIconsHce"
 // Escala de dolor EVA (0-10) — caras que reemplazan a los emojis en EvaScale
 export {
   EvaScale0Icon, EvaScale1Icon, EvaScale2Icon, EvaScale3Icon, EvaScale4Icon,

@@ -2,7 +2,7 @@ import { useState, type ComponentType, type CSSProperties, type KeyboardEvent, t
 import "./HceSidebar.css"
 import { Tooltip } from "../../atoms/Tooltip/Tooltip"
 import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
-import { LogoClinicaSanFelipeIcon, LogoSannaIcon, LogoSannaIsotipoIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon } from "../../atoms/Icon/SvgIconsHce"
+import { LogoClinicaSanFelipeIcon, LogoSannaIcon, LogoSannaIsotipoIcon, LogoUnknownIcon, LogoUnknownIsotipoIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon } from "../../atoms/Icon/SvgIconsHce"
 import { useDsTenant } from "../../provider/ThemeProvider"
 
 // Lucide icons
@@ -695,8 +695,12 @@ export function HceSidebar({
 }: HceSidebarProps) {
   // Identidad de tenant (no solo color) para elegir el logo correcto —
   // ver el comentario de `useDsTenant` en provider/ThemeProvider.tsx.
+  // "unknown" (tenant no registrado, ver unknownCompanyColors) usa un
+  // placeholder genérico ("EMPRESA DESCONOCIDA" / "?"), NO el logo de CSF
+  // -- mostrar el de CSF por defecto ocultaría el problema de configuración
+  // en vez de señalarlo (pedido explícito del usuario).
   const tenant = useDsTenant()
-  const IsotipoIcon = tenant === "sanna" ? LogoSannaIsotipoIcon : UiIsotipoClinicaIcon
+  const IsotipoIcon = tenant === "sanna" ? LogoSannaIsotipoIcon : tenant === "unknown" ? LogoUnknownIsotipoIcon : UiIsotipoClinicaIcon
 
   // Fondo sólido de cabecera + riel colapsado — blue[600] == --ds-color-interactive
   // exactamente en CSF, reactivo al tema activo de DSProvider (verde en Sanna, ver
@@ -788,7 +792,9 @@ export function HceSidebar({
           <>
             {tenant === "sanna"
               ? <LogoSannaIcon width={110} color="white" />
-              : <LogoClinicaSanFelipeIcon width={110} />}
+              : tenant === "unknown"
+                ? <LogoUnknownIcon width={110} color="white" />
+                : <LogoClinicaSanFelipeIcon width={110} />}
             <div
               role="button"
               tabIndex={0}

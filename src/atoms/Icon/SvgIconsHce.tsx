@@ -78,6 +78,41 @@ export function LogoSannaIsotipoIcon({ size = 28, color = "#2aad3d" }: { size?: 
   )
 }
 
+// ── Placeholder "empresa desconocida" (tenant no registrado) ──────────────────
+// NO es un logo de marca real -- es lo que HceSidebar muestra en vez del
+// logo de Clínica San Felipe o de Sanna cuando `useDsTenant()` resuelve a
+// "unknown" (ver unknownCompanyColors en tokens/companies.tokens.ts).
+// Mostrar el logo de CSF por defecto ahí ocultaría el problema de
+// configuración (pedido explícito del usuario: no debe mostrar nada que
+// insinúe una marca que no se sabe si es correcta); un texto/glifo genérico
+// deja claro que el tenant no se identificó, en vez de dejar el espacio
+// vacío (que podría leerse como un bug de layout en vez de un estado
+// intencional).
+export function LogoUnknownIcon({ width = 123, color = "#334155" }: { width?: number; color?: string }) {
+  const height = Math.round((40 / 140) * width)
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 140 40" fill="none">
+      <text x="0" y="17" fontFamily="'Poppins', sans-serif" fontWeight="700" fontSize="13" letterSpacing="1">
+        <tspan fill={color}>EMPRESA</tspan>
+      </text>
+      <text x="0" y="34" fontFamily="'Poppins', sans-serif" fontWeight="700" fontSize="13" letterSpacing="0.5" fill={color}>DESCONOCIDA</text>
+    </svg>
+  )
+}
+
+// ── Isotipo "empresa desconocida" (solo icono, para el sidebar colapsado) ─────
+// Mismo rol que LogoSannaIsotipoIcon/UiIsotipoClinicaIcon pero para el
+// tenant "unknown" -- un simple "?" en un círculo, sin ninguna semántica de
+// marca (ver la nota de LogoUnknownIcon arriba).
+export function LogoUnknownIsotipoIcon({ size = 28, color = "#334155" }: { size?: number; color?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="16.5" stroke={color} strokeWidth="3" fill="none" />
+      <text x="20" y="27" textAnchor="middle" fontFamily="'Poppins', sans-serif" fontWeight="800" fontSize="18" fill={color}>?</text>
+    </svg>
+  )
+}
+
 // ── Icono logout (flecha de salida 12×12) ─────────────────────────────────────
 export function LogoutIcon({ color = "#003d96", size = 12 }: { color?: string; size?: number }) {
   return (
