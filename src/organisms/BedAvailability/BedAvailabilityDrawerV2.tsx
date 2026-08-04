@@ -106,19 +106,21 @@ function BedCard({ bed }: { bed: BedAvailabilityItem }) {
           gap:             hceSpacing[1],
           padding:         `${hceSpacing[3]} ${hceSpacing[2]}`,
           borderRadius:    hceBorderRadius.lg,
-          border:          isOutlined ? `2px solid ${hceColors.primary.blue[500]}` : `2px solid ${bgColor}`,
+          // blue[500] == --ds-color-primary (csf) exactamente — reactivo al tema
+          // activo de DSProvider, mismo hex de siempre como fallback.
+          border:          isOutlined ? `2px solid var(--ds-color-primary, ${hceColors.primary.blue[500]})` : `2px solid ${bgColor}`,
           backgroundColor: isOutlined ? "#FFFFFF" : bgColor,
           minHeight:       "72px",
           boxShadow:       "0px 1px 3px rgba(0, 0, 0, 0.05)",
           boxSizing:       "border-box",
         }}
       >
-        <UiMedicalRoomIcon size={17} color={ isOutlined ? hceColors.primary.blue[500] : "#FFFFFF"} />
+        <UiMedicalRoomIcon size={17} color={ isOutlined ? `var(--ds-color-primary, ${hceColors.primary.blue[500]})` : "#FFFFFF"} />
         <span style={{
           fontFamily: hceTypography.fontFamilyClinical,
           fontSize:   hceTypography.size.tableCell,
           fontWeight: hceTypography.weight.bold,
-          color:      isOutlined ? hceColors.primary.blue[500] : "#FFFFFF",
+          color:      isOutlined ? `var(--ds-color-primary, ${hceColors.primary.blue[500]})` : "#FFFFFF",
         }}>
           {bed.code}
         </span>
