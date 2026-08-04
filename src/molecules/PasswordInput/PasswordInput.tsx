@@ -30,10 +30,14 @@ export function PasswordInput({
   // focus ahora es CSS real (ver PasswordInput.css), solo el error queda
   // como cálculo en JS.
   // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
-  // de DSProvider, mismo hex de siempre como fallback.
+  // de DSProvider, mismo hex de siempre como fallback. Coloreado por el tema
+  // DESDE EL INICIO (no solo en hover) — mismo criterio que el resto de
+  // adornments/íconos de TextInput (`--ti-active`, siempre activo) y que el
+  // fix de DatePicker (el ícono se veía "apagado" en reposo).
+  const eyeColor = error ? hceColors.alert.error[600] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
   const eyeCssVars = {
-    "--eye-color":        error ? hceColors.alert.error[600] : hceColors.neutro.black[200],
-    "--eye-color-active": error ? hceColors.alert.error[600] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`,
+    "--eye-color":        eyeColor,
+    "--eye-color-active": eyeColor,
   } as CSSProperties
 
   const eyeAdornment = (
