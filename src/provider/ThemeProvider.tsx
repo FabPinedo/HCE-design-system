@@ -56,9 +56,46 @@
  * ---------------------------------------------------------
  */
 import type { CSSProperties, ReactNode } from "react"
-import { useEffect } from "react"
+import { createContext, useContext, useEffect } from "react"
 import { dsThemes, defaultTheme, type DsTheme } from "../theme/themes"
 import type { CompanyThemeKey } from "../tokens/companies.tokens"
+
+/**
+ * DsThemeContext — implementación interna, NO exportada desde `src/index.ts`
+ * (no es API pública del design system).
+ *
+ * Por qué existe además de las variables CSS `--ds-*` que `DSProvider` ya
+ * inyecta vía `style` en su wrapper: esas variables cascadean por el árbol
+ * DOM normal, pero varios componentes (`atoms/Menu`, `atoms/Overlay`, y todo
+ * lo que se apoya en ellos — HceModal, HceFormModal, DataCardModal,
+ * BedAvailabilityDrawer/V2, los dropdowns de Header/HceHeader/HceSidebar,
+ * el listbox de MultiSelect) renderizan su contenido con
+ * `createPortal(..., document.body)`. Un portal deja su nodo como hijo
+ * directo de `document.body` en el árbol DOM real — fuera del subárbol del
+ * `<div>` de `DSProvider` — así que las custom properties CSS de ese `style`
+ * nunca cascadean hacia adentro del portal, sin importar cuántos
+ * componentes lean `var(--ds-color-primary, ...)`.
+ *
+ * React Context sí resuelve esto: un portal mantiene su posición en el
+ * árbol de *React* (para eventos y contexto) aunque escape el árbol DOM, así
+ * que `useContext(DsThemeContext)` dentro de contenido portado sigue
+ * resolviendo al `DSProvider` ancestro más cercano en JSX — incluyendo el
+ * caso de DSProviders anidados con distinto tenant (ver el comentario de
+ * `DSProvider` más abajo), que un enfoque más simple basado en copiar las
+ * variables a `document.documentElement`/`:root` rompería silenciosamente.
+ */
+const DsThemeContext = createContext<DsTheme>(defaultTheme)
+
+/**
+ * useDsTheme — hook interno para que componentes con portal (Menu, Overlay,
+ * y quien más lo necesite) lean el `DsTheme` resuelto del `DSProvider`
+ * ancestro más cercano y lo apliquen manualmente como `style` en su propio
+ * nodo portado, restaurando así el mismo efecto de cascada que tendrían si
+ * no hubieran escapado el árbol DOM.
+ */
+export function useDsTheme(): DsTheme {
+  return useContext(DsThemeContext)
+}
 
 /**
  * Reset de estilos equivalente al CssBaseline de MUI — box-sizing global +
@@ -107,8 +144,10 @@ export const DSProvider = ({ children, theme = "default" }: Props) => {
   const resolvedTheme: DsTheme = typeof theme === "string" ? dsThemes[theme] : theme
 
   return (
-    <div style={{ display: "contents", ...resolvedTheme } as CSSProperties}>
-      {children}
-    </div>
+    <DsThemeContext.Provider value={resolvedTheme}>
+      <div style={{ display: "contents", ...resolvedTheme } as CSSProperties}>
+        {children}
+      </div>
+    </DsThemeContext.Provider>
   )
 }

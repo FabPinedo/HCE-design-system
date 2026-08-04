@@ -2,6 +2,7 @@ import { useRef, type CSSProperties, type ReactNode } from "react"
 import { createPortal } from "react-dom"
 import "./Overlay.css"
 import { useFocusTrap } from "../../utils/useFocusTrap"
+import { useDsTheme } from "../../provider/ThemeProvider"
 
 export interface OverlayProps {
   open: boolean
@@ -43,6 +44,14 @@ export function Overlay({
   disableEscapeClose = false,
 }: OverlayProps) {
   const panelRef = useRef<HTMLDivElement>(null)
+  // Igual que en atoms/Menu: este backdrop+panel se porta a document.body,
+  // fuera del subárbol DOM de DSProvider, así que --ds-* no le cascadea por
+  // CSS normal. Se lee del DsThemeContext (sigue la posición del árbol de
+  // React, no la del DOM) y se reaplica como custom properties en la raíz
+  // portada para que vuelva a cascadear al backdrop y al panel (y a todo lo
+  // que HceModal/HceFormModal/DataCardModal/BedAvailabilityDrawer rendericen
+  // adentro).
+  const dsTheme = useDsTheme()
 
   useFocusTrap(panelRef, open, disableEscapeClose ? undefined : onClose)
 
@@ -51,6 +60,7 @@ export function Overlay({
   return createPortal(
     <div
       className="hce-overlay-backdrop"
+      style={dsTheme as CSSProperties}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget && !disableBackdropClose) onClose?.()
       }}

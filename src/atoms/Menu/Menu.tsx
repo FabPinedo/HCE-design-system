@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type HTMLAttributes, type ReactNode, type RefObject } from "react"
 import { createPortal } from "react-dom"
 import "./Menu.css"
+import { useDsTheme } from "../../provider/ThemeProvider"
 
 export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "className" | "style" | "children"> {
   open: boolean
@@ -43,6 +44,13 @@ export function Menu({
 }: MenuProps) {
   const panelRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState<{ top: number; left?: number; right?: number } | null>(null)
+  // El panel se porta a document.body (fuera del subárbol DOM de DSProvider),
+  // así que las variables --ds-* no le cascadean por CSS normal — se leen
+  // del DsThemeContext (que sí sigue la posición del árbol de React) y se
+  // reaplican a mano como custom properties en este nodo portado, para que
+  // vuelvan a cascadear a los descendientes (opciones del menú, checkboxes
+  // de MultiSelect, etc.).
+  const dsTheme = useDsTheme()
 
   useEffect(() => {
     if (!open) return
@@ -90,7 +98,7 @@ export function Menu({
       role={role}
       tabIndex={-1}
       className={`hce-menu-panel${panelClassName ? ` ${panelClassName}` : ""}`}
-      style={{ top: position.top, left: position.left, right: position.right, ...panelStyle }}
+      style={{ ...(dsTheme as CSSProperties), top: position.top, left: position.left, right: position.right, ...panelStyle }}
       {...rest}
     >
       {children}
