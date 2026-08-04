@@ -70,7 +70,9 @@ export function SearchComboInput({
   const [dropOpen,   setDropOpen]   = useState(false)
   const [activeIdx,  setActiveIdx]  = useState(-1)
 
-  const BLUE  = hceColors.primary.blue[600]
+  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
+  // de DSProvider, mismo hex de siempre como fallback.
+  const BLUE  = `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
   const GRAY  = hceColors.neutro.black[400]
   const BORDER = hceColors.neutro.black[200]
 

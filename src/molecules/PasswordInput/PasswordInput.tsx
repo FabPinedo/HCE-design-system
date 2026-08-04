@@ -29,9 +29,11 @@ export function PasswordInput({
   // El ícono eye sigue el mismo esquema de colores que el input — el hover/
   // focus ahora es CSS real (ver PasswordInput.css), solo el error queda
   // como cálculo en JS.
+  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
+  // de DSProvider, mismo hex de siempre como fallback.
   const eyeCssVars = {
     "--eye-color":        error ? hceColors.alert.error[600] : hceColors.neutro.black[200],
-    "--eye-color-active": error ? hceColors.alert.error[600] : hceColors.primary.blue[600],
+    "--eye-color-active": error ? hceColors.alert.error[600] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`,
   } as CSSProperties
 
   const eyeAdornment = (

@@ -46,9 +46,11 @@ export const RadioGroup = <T extends string | boolean>({
             fontFamily: hceTypography.fontFamily,
             fontSize: "0.72rem",
             fontWeight: 700,
+            // blue[600] == --ds-color-interactive exactamente — reactivo al
+            // tema activo de DSProvider, mismo hex de siempre como fallback.
             color: disabled
               ? hceColors.neutro.black[400]
-              : hceColors.primary.blue[600],
+              : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`,
           }}
         >
           {legend}
