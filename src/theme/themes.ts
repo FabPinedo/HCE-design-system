@@ -24,10 +24,29 @@
  * segunda vez — así `Button.tsx` (vía `tenantTheme`) y `DSProvider` (vía
  * `theme`) leen exactamente la misma fuente de verdad de marca.
  *
- * Lo estructural/neutral que no varía por marca (familia tipográfica,
- * tamaño base, radios, pesos/tamaños de tabla, el shadow de tabla) se
- * mantiene igual entre los 3 temas — solo lo que genuinamente es "color de
- * marca o de superficie de esa empresa" deriva de `HceCompanyColors`.
+ * Lo estructural/neutral que no varía por marca (tamaño base, radios,
+ * pesos/tamaños de tabla, el shadow de tabla) se mantiene igual entre los 3
+ * temas — solo lo que genuinamente es "color de marca o de superficie de esa
+ * empresa" deriva de `HceCompanyColors`.
+ *
+ * La familia tipográfica (`--ds-font-family`) es la única excepción a "todo
+ * lo no-color es fijo": Clínica San Felipe DEBE renderizarse siempre en
+ * Poppins — es la fuente de marca de HCE, un requisito no negociable, no
+ * solo el valor por defecto de hoy — pero otras empresas (Sanna, y futuras)
+ * deben poder usar una familia distinta si su marca lo requiere. Por eso
+ * `buildDsTheme` recibe la familia tipográfica como segundo parámetro
+ * explícito en vez de leerla siempre de `hceTypography.fontFamily`:
+ * `csfTheme` la pasa explícitamente (no depende del default) para que la
+ * garantía "CSF siempre Poppins" quede visible en el código, no implícita.
+ * Sanna no tiene todavía una tipografía de marca propia — se mantiene en
+ * Poppins también — pero el mecanismo para cambiarla ya existe.
+ *
+ * NOTA: esto NO va en `HceCompanyColors`/`tokens/companies.tokens.ts` — ese
+ * archivo es exclusivamente paleta de color de marca (ver el comentario de
+ * gobernanza sobre el incidente `ds_token_unification_break` en
+ * `tokens/hce.tokens.ts`, línea ~355). La tipografía es un token
+ * estructural/compartido, no de color, así que su variación por tenant se
+ * resuelve acá, en la capa que ya compone color de marca + estructura.
  *
  * `--ds-color-danger` es semántico (alerta/destructivo), NO de marca —
  * ninguna empresa lo sobreescribe (mismo criterio que ya usa Button.tsx
@@ -95,13 +114,18 @@ export interface DsTheme {
 
 /**
  * Construye un `DsTheme` completo a partir de la paleta de marca de una
- * empresa (`HceCompanyColors`). Los valores estructurales/neutrales
- * (tipografía, radios, pesos/tamaños de tabla, el shadow de tabla) son
- * fijos — no varían por empresa; solo los colores derivan de `colors`.
+ * empresa (`HceCompanyColors`) y, opcionalmente, su familia tipográfica.
+ * Los valores estructurales/neutrales (tamaño base, radios, pesos/tamaños
+ * de tabla, el shadow de tabla) son fijos — no varían por empresa; los
+ * colores derivan de `colors` y la tipografía de `fontFamily` (default:
+ * `hceTypography.fontFamily`, i.e. Poppins).
  */
-function buildDsTheme(colors: HceCompanyColors): DsTheme {
+function buildDsTheme(
+  colors: HceCompanyColors,
+  fontFamily: string = hceTypography.fontFamily,
+): DsTheme {
   return {
-    "--ds-font-family": hceTypography.fontFamily,
+    "--ds-font-family": fontFamily,
     "--ds-font-size-base": `${hceTypography.fontSize}px`,
 
     "--ds-color-primary": colors.primary,
@@ -145,7 +169,10 @@ function buildDsTheme(colors: HceCompanyColors): DsTheme {
 }
 
 // ── Clínica San Felipe (empresa por defecto / fallback de este deployment) ──
-export const csfTheme: DsTheme = buildDsTheme(csfCompanyColors)
+// `fontFamily` se pasa explícito (no se apoya en el default de
+// `buildDsTheme`) para que la garantía "CSF siempre Poppins" sea visible acá
+// mismo y no dependa silenciosamente de cuál sea el default de la función.
+export const csfTheme: DsTheme = buildDsTheme(csfCompanyColors, hceTypography.fontFamily)
 
 // `default === csf`: CSF es la empresa por defecto de este deployment (ver
 // la nota equivalente en tokens/companies.tokens.ts) — no es un alias
@@ -153,6 +180,9 @@ export const csfTheme: DsTheme = buildDsTheme(csfCompanyColors)
 export const defaultTheme: DsTheme = csfTheme
 
 // ── Sanna ─────────────────────────────────────────────────────────────────
+// Sanna no tiene todavía una tipografía de marca propia definida — se
+// mantiene en Poppins (el default de `buildDsTheme`) hasta que la tenga. El
+// día que la tenga, se agrega acá como segundo argumento, igual que csfTheme.
 export const sannaTheme: DsTheme = buildDsTheme(sannaCompanyColors)
 
 // ── Mapa de temas por empresa ────────────────────────────────────────────
