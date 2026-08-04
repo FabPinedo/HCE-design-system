@@ -34,6 +34,16 @@ function VisibilityGlyph() {
   )
 }
 
+/** Ícono "X" — botón de limpiar toda la selección (paridad con el clear de MUI Autocomplete) */
+function ClearGlyph() {
+  return (
+    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  )
+}
+
 /**
  * MultiSelect — reemplazo de MUI Autocomplete (multiple + disableCloseOnSelect
  * + checkboxes por opción), como listbox custom en CSS/HTML puro siguiendo el
@@ -142,6 +152,7 @@ export const MultiSelect = ({
     >
       <label id={triggerId} className="hce-multiselect-label">{label}</label>
 
+      <div className="hce-multiselect-trigger-row" style={{ position: "relative" }}>
       <button
         ref={triggerRef}
         type="button"
@@ -153,6 +164,7 @@ export const MultiSelect = ({
         aria-expanded={open}
         aria-labelledby={triggerId}
         aria-required={required}
+        style={value.length > 0 && !disabled ? { paddingRight: 36 } : undefined}
       >
         {value.length > 0 ? (
           <span className="hce-multiselect-summary">
@@ -163,6 +175,29 @@ export const MultiSelect = ({
           <span style={{ color: accentColor }}>{placeholder}</span>
         )}
       </button>
+
+      {/*
+        Botón "limpiar todo" — paridad con el ícono de clear que muestra MUI
+        Autocomplete cuando hay selección. Sibling del <button> del trigger
+        (no anidado adentro — un <button> dentro de otro <button> es HTML
+        inválido), posicionado encima con position:absolute. El trigger
+        recibe paddingRight extra (arriba) para que la píldora verde no
+        quede tapada por este botón.
+      */}
+      {value.length > 0 && !disabled && (
+        <button
+          type="button"
+          className="hce-multiselect-clear"
+          aria-label="Limpiar selección"
+          onClick={(e) => {
+            e.stopPropagation()
+            onChange([])
+          }}
+        >
+          <ClearGlyph />
+        </button>
+      )}
+      </div>
 
       <Menu
         open={open}
@@ -235,8 +270,22 @@ export const MultiSelect = ({
                   come casi todo el ancho y aplasta el <span> del label a
                   0px. fit-content fuerza a resolver el 100% del Checkbox
                   contra su propio contenido en vez de contra la fila.
+
+                  pointerEvents:"none" es a propósito: <Checkbox> renderiza
+                  un <label> real envolviendo su <input>, y el click en ese
+                  <label>/su <span> visual dispara el forwarding nativo del
+                  navegador hacia el input, que además re-emite un segundo
+                  click sintético que vuelve a subir por este mismo árbol —
+                  el onClick de abajo (en el <div role="option">) terminaba
+                  ejecutando toggleOption() DOS veces por un solo click del
+                  usuario (selecciona y deselecciona al toque), por lo que
+                  visualmente no pasaba nada. El Checkbox acá es puramente
+                  decorativo (su propio onChange ya es un no-op) — el click
+                  real siempre lo maneja el <div role="option">, así que
+                  quitarle pointer-events evita el doble evento sin tocar el
+                  átomo compartido.
                 */}
-                <div style={{ flex: "0 0 auto", width: "fit-content" }}>
+                <div style={{ flex: "0 0 auto", width: "fit-content", pointerEvents: "none" }}>
                   <Checkbox
                     ariaLabel={opt.label}
                     checked={selected}
