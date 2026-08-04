@@ -37,8 +37,10 @@ const TIPO_CONFIG: Record<HceNotificacion["tipo"], {
   Icon:    React.FC<{ color?: string; size?: number }>
 }> = {
   info: {
-    color:   hceColors.primary.blue[500],
-    bgLight: hceColors.primary.blue[50],
+    // blue[500]/blue[50] == --ds-color-primary/-light (csf) exactamente —
+    // reactivo al tema activo de DSProvider, mismos hex de siempre como fallback.
+    color:   `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
+    bgLight: `var(--ds-color-primary-light, ${hceColors.primary.blue[50]})`,
     Icon:    HceInfoIcon,
   },
   warning: {
