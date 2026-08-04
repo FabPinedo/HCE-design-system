@@ -66,6 +66,28 @@
   user-select: none;
 }
 
+.hce-multiselect-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ms-summary-bg);
+  cursor: pointer;
+}
+
+.hce-multiselect-clear:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
 /*
  * El posicionamiento (position:fixed + top/left, portado a document.body)
  * lo resuelve el componente <Menu> compartido (atoms/Menu) — acá solo queda
