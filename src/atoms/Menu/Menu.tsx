@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from "react"
+import { useEffect, useRef, useState, type CSSProperties, type HTMLAttributes, type ReactNode, type RefObject } from "react"
 import { createPortal } from "react-dom"
 import "./Menu.css"
 
-export interface MenuProps {
+export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "className" | "style" | "children"> {
   open: boolean
   onClose: () => void
   /** Elemento (botón/trigger) respecto al cual se posiciona el panel */
@@ -12,7 +12,14 @@ export interface MenuProps {
   align?: "left" | "right"
   panelStyle?: CSSProperties
   panelClassName?: string
-  "aria-label"?: string
+  /**
+   * Rol ARIA del panel portado. Default "menu" (uso original: dropdowns de
+   * Header/HceSidebar). Consumidores con otra semántica (ej. un listbox de
+   * selección múltiple) pueden pasar `role="listbox"` + `aria-multiselectable`
+   * + `id` — cualquier atributo HTML/ARIA adicional se reenvía tal cual al
+   * div portado (ver `...rest` más abajo).
+   */
+  role?: string
 }
 
 /**
@@ -31,7 +38,8 @@ export function Menu({
   align = "right",
   panelStyle,
   panelClassName,
-  ...aria
+  role = "menu",
+  ...rest
 }: MenuProps) {
   const panelRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState<{ top: number; left?: number; right?: number } | null>(null)
@@ -79,11 +87,11 @@ export function Menu({
   return createPortal(
     <div
       ref={panelRef}
-      role="menu"
-      aria-label={aria["aria-label"]}
+      role={role}
       tabIndex={-1}
       className={`hce-menu-panel${panelClassName ? ` ${panelClassName}` : ""}`}
       style={{ top: position.top, left: position.left, right: position.right, ...panelStyle }}
+      {...rest}
     >
       {children}
     </div>,

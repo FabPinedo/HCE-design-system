@@ -66,12 +66,15 @@
   user-select: none;
 }
 
+/*
+ * El posicionamiento (position:fixed + top/left, portado a document.body)
+ * lo resuelve el componente <Menu> compartido (atoms/Menu) — acá solo queda
+ * la apariencia visual del panel. Antes esto era position:absolute anclado
+ * al wrapper, lo que lo dejaba cortado por cualquier ancestro con
+ * overflow:hidden (ver hallazgo de QA manual, MultiSelectField dentro de un
+ * contenedor con scroll no mostraba las opciones completas).
+ */
 .hce-multiselect-listbox {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  z-index: 1400;
   max-height: 280px;
   overflow-y: auto;
   border-radius: 8px;

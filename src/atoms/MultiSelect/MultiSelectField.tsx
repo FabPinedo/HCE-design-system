@@ -1,9 +1,10 @@
-import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
+import { useId, useRef, useState, type CSSProperties } from "react";
 import "./MultiSelectField.css"
 import {
   hceColors,
 } from "../../tokens/hce.tokens";
 import { Checkbox } from "../Checkbox/Checkbox";
+import { Menu } from "../Menu/Menu";
 
 interface Option {
   value: string;
@@ -58,7 +59,9 @@ export const MultiSelect = ({
 }: Props) => {
   const [open, setOpen] = useState(false)
   const [activeIdx, setActiveIdx] = useState(-1)
+  const [menuWidth, setMenuWidth] = useState<number>()
   const containerRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
   const triggerId = useId()
   const listId = useId()
 
@@ -78,16 +81,15 @@ export const MultiSelect = ({
     (value ?? []).includes(opt.value),
   );
 
-  // Cierra el dropdown al hacer click afuera
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false)
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+  // Abre el dropdown y mide el ancho del trigger para que el panel portado
+  // (ver <Menu> más abajo) quede exactamente tan ancho como el trigger —
+  // igual que el `left:0; right:0` que tenía la versión no-portada. El
+  // click-afuera/Escape/reposicionamiento en scroll los maneja `Menu`
+  // internamente, no hace falta duplicarlos acá.
+  function openMenu() {
+    setMenuWidth(triggerRef.current?.getBoundingClientRect().width)
+    setOpen(true)
+  }
 
   function toggleOption(optionValue: string) {
     if (disabled) return
@@ -100,7 +102,7 @@ export const MultiSelect = ({
   function handleTriggerKeyDown(e: React.KeyboardEvent) {
     if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
       e.preventDefault()
-      setOpen(true)
+      openMenu()
       setActiveIdx(i => (i < 0 ? 0 : i))
     } else if (e.key === "Escape") {
       setOpen(false)
@@ -141,10 +143,11 @@ export const MultiSelect = ({
       <label id={triggerId} className="hce-multiselect-label">{label}</label>
 
       <button
+        ref={triggerRef}
         type="button"
         className="hce-multiselect-trigger"
         disabled={false}
-        onClick={() => setOpen(o => !o)}
+        onClick={() => (open ? setOpen(false) : openMenu())}
         onKeyDown={handleTriggerKeyDown}
         aria-haspopup="listbox"
         aria-expanded={open}
@@ -161,16 +164,23 @@ export const MultiSelect = ({
         )}
       </button>
 
-      {open && (
-        <div
-          id={listId}
-          role="listbox"
-          aria-multiselectable="true"
-          aria-label={label}
-          className="hce-multiselect-listbox"
-          style={{ border: `1px solid ${hceColors.primary.blue[100]}`, boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)" }}
-          onKeyDown={handleListKeyDown}
-        >
+      <Menu
+        open={open}
+        onClose={() => setOpen(false)}
+        anchorRef={triggerRef}
+        align="left"
+        role="listbox"
+        id={listId}
+        aria-multiselectable="true"
+        aria-label={label}
+        panelClassName="hce-multiselect-listbox"
+        panelStyle={{
+          width: menuWidth,
+          border: `1px solid ${hceColors.primary.blue[100]}`,
+          boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
+        }}
+        onKeyDown={handleListKeyDown}
+      >
           {options.map((opt, idx) => {
             const selected = selectedOptions.some(o => o.value === opt.value)
             return (
@@ -237,8 +247,7 @@ export const MultiSelect = ({
               </div>
             )
           })}
-        </div>
-      )}
+      </Menu>
     </div>
   );
 };
