@@ -106,16 +106,67 @@ export const sannaCompanyColors: HceCompanyColors = {
   interactive:    '#1e7e2e', // Verde Sanna oscuro (= primaryDark)
 }
 
+// ── Desconocido — paleta de respaldo para un tenant no registrado ─────────
+// NO es una empresa real: es lo que `DSProvider` usa cuando recibe una
+// `theme` de tipo string que no existe en `dsThemes` (ej. un typo, o un
+// código de tenant que llega desde un sistema externo — el caso típico es
+// una app que lee el tenant de una API/config y lo pasa tal cual, sin pasar
+// por el union type de `CompanyThemeKey`, así que TS no lo atrapa en
+// compilación). Antes ese caso resolvía a una `DsTheme` `undefined` — el
+// `<div style>` de `DSProvider` quedaba sin ninguna variable `--ds-*`, así
+// que todo lo que dependía de un fallback hardcodeado (ej. `blue[600]`)
+// seguía viéndose "bien" por accidente y lo que no tenía fallback quedaba
+// roto en silencio. Ver hallazgo de hce-code-reviewer.
+//
+// Deliberadamente NO es un alias de `csfCompanyColors` (pedido explícito
+// del usuario: "ya que es un default no es necesario que sea igual al
+// csf") — si lo fuera, un tenant mal configurado se vería idéntico a CSF y
+// el problema pasaría desapercibido. En cambio usa una paleta neutra
+// (slate + violeta) reconocible como "no es ninguna marca real", para que
+// un typo de tenant sea visualmente obvio en QA en vez de silencioso.
+//
+// Contraste WCAG AA (texto blanco sobre superficie sólida, 4.5:1 mínimo):
+// `primaryDark` (#334155, slate-700) ~9.4:1 AA; `secondaryDark` (#4c1d95,
+// violet-900) ~10.9:1 AA — igual criterio que csf/sanna (`primary`/`secondary`
+// claros quedan para acento/borde, nunca fondo sólido con texto blanco).
+export const unknownCompanyColors: HceCompanyColors = {
+  // Marca — slate neutro (deliberadamente no-azul, no-verde: no debe
+  // confundirse con CSF ni con Sanna)
+  primary:        '#64748b', // Slate 500 — acento / borde
+  primaryDark:    '#334155', // Slate 700 — superficie sólida + texto blanco (~9.4:1 AA)
+  primaryLight:   '#f1f5f9', // Slate 100 — fondo de acento suave
+  secondary:      '#7c3aed', // Violeta 600 — acento
+  secondaryDark:  '#4c1d95', // Violeta 900 — superficie sólida + texto blanco (~10.9:1 AA)
+  secondaryLight: '#ede9fe', // Violeta 100 — acentos suaves
+
+  // Superficies
+  surfaceBg:      '#FFFFFF',
+  background:     '#F8FAFC', // Slate 50
+  border:         '#E2E8F0', // Slate 200
+
+  // Textos
+  textPrimary:    '#1E293B', // Slate 800
+  textSecondary:  '#64748B', // Slate 500
+  textOnPrimary:  '#FFFFFF',
+
+  // Interactivo — acento de campos de formulario (borde/label/estado activo).
+  // Reusa `primaryDark`, mismo criterio que Sanna (no inventar un tercer tono).
+  interactive:    '#334155', // Slate 700 (= primaryDark)
+}
+
 // ── Mapa de empresas ──────────────────────────────────────────────────────
 // Punto único para resolver la paleta de una empresa por clave (ej. en el
 // selector de Storybook o en `DSProvider`, ver provider/ThemeProvider.tsx).
-// Tres claves visibles/descubribles por pedido explícito, aunque `default`
-// y `csf` apunten al mismo objeto (misma paleta, dos nombres — ver la nota
-// junto a `defaultCompanyColors`).
+// `default`/`csf` apuntan al mismo objeto (ver la nota junto a
+// `defaultCompanyColors`). `unknown` no es una empresa real — ver la nota
+// junto a `unknownCompanyColors` — pero necesita estar en este mapa (y por
+// lo tanto en `CompanyThemeKey`) para que `DSProvider` pueda resolverla por
+// clave igual que cualquier tenant real.
 export const companyThemes = {
   default: defaultCompanyColors,
   csf:     csfCompanyColors,
   sanna:   sannaCompanyColors,
+  unknown: unknownCompanyColors,
 } as const satisfies Record<string, HceCompanyColors>
 
 export type CompanyThemeKey = keyof typeof companyThemes

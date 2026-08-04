@@ -21,8 +21,12 @@ injectHceTokens()
 // tenant en vez de por color — ej. el logo de HceSidebar — dejarían de
 // reaccionar al selector de este toolbar.
 const storybookThemes: Record<string, CompanyThemeKey> = {
-  csf:   "csf",
-  sanna: "sanna",
+  csf:     "csf",
+  sanna:   "sanna",
+  // No es una empresa real -- deja verificar visualmente el tema de
+  // respaldo que usa DSProvider ante un tenant no registrado (typo, etc.).
+  // Ver unknownCompanyColors en tokens/companies.tokens.ts.
+  unknown: "unknown",
 }
 
 const preview: Preview = {
@@ -33,8 +37,9 @@ const preview: Preview = {
         title: "Theme",
         icon: "paintbrush",
         items: [
-          { value: "csf",   title: "Clínica San Felipe" },
-          { value: "sanna", title: "Sanna" },
+          { value: "csf",     title: "Clínica San Felipe" },
+          { value: "sanna",   title: "Sanna" },
+          { value: "unknown", title: "Desconocido (fallback)" },
         ],
         dynamicTitle: true,
       },

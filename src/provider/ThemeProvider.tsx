@@ -57,7 +57,7 @@
  */
 import type { CSSProperties, ReactNode } from "react"
 import { createContext, useContext, useEffect } from "react"
-import { dsThemes, defaultTheme, type DsTheme } from "../theme/themes"
+import { dsThemes, defaultTheme, unknownTheme, type DsTheme } from "../theme/themes"
 import type { CompanyThemeKey } from "../tokens/companies.tokens"
 
 /**
@@ -155,6 +155,11 @@ interface Props {
    * `dsThemes` ("default" | "csf" | "sanna") o, para un tenant que todavía
    * no tiene entrada ahí, un objeto `DsTheme` completo armado a mano.
    * Por defecto, `"default"` (Clínica San Felipe).
+   *
+   * Un string que NO sea ninguna de esas claves (typo, o un tenant externo
+   * sin registrar) cae en el tema de respaldo "unknown" — ver
+   * `unknownCompanyColors` en tokens/companies.tokens.ts — en vez de quedar
+   * sin ningún color aplicado.
    */
   theme?: CompanyThemeKey | DsTheme
 }
@@ -170,8 +175,30 @@ export const DSProvider = ({ children, theme = "default" }: Props) => {
     injectDsBaseline()
   }, [])
 
-  const resolvedTheme: DsTheme = typeof theme === "string" ? dsThemes[theme] : theme
-  const resolvedTenant: CompanyThemeKey = typeof theme === "string" ? theme : "default"
+  // Si `theme` es un string que no existe en `dsThemes` (typo, o un código
+  // de tenant que llegó sin pasar por el union type de `CompanyThemeKey` —
+  // ej. desde una API externa) cae en `unknownTheme`/"unknown" en vez de
+  // quedar sin ninguna variable `--ds-*`. Ver la nota junto a
+  // `unknownCompanyColors` (tokens/companies.tokens.ts) sobre por qué es
+  // deliberadamente distinto de CSF: un tenant mal configurado debe VERSE
+  // distinto, no pasar desapercibido.
+  // Sin gating por entorno (dev/prod): este paquete se distribuye como
+  // ESM + CJS (ver dist/index.js / dist/index.cjs) y `import.meta.env`/
+  // `process.env` no son igual de fiables en ambos formatos — un
+  // misconfiguration real de tenant vale la pena señalarlo siempre.
+  const isRegisteredKey = typeof theme === "string" && theme in dsThemes
+  if (typeof theme === "string" && !isRegisteredKey) {
+    console.warn(
+      `[DSProvider] theme="${theme}" no está registrado en dsThemes (default|csf|sanna) — usando el tema de respaldo "unknown". ¿Typo?`,
+    )
+  }
+
+  const resolvedTheme: DsTheme = typeof theme === "string"
+    ? (isRegisteredKey ? dsThemes[theme as CompanyThemeKey] : unknownTheme)
+    : theme
+  const resolvedTenant: CompanyThemeKey = typeof theme === "string"
+    ? (isRegisteredKey ? (theme as CompanyThemeKey) : "unknown")
+    : "default"
 
   return (
     <DsTenantContext.Provider value={resolvedTenant}>

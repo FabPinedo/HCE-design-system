@@ -65,7 +65,7 @@ import {
   hceBorderRadius,
   type HceCompanyColors,
 } from "../tokens/hce.tokens"
-import { csfCompanyColors, sannaCompanyColors } from "../tokens/companies.tokens"
+import { csfCompanyColors, sannaCompanyColors, unknownCompanyColors } from "../tokens/companies.tokens"
 
 export interface DsTheme {
   "--ds-font-family": string
@@ -185,11 +185,20 @@ export const defaultTheme: DsTheme = csfTheme
 // día que la tenga, se agrega acá como segundo argumento, igual que csfTheme.
 export const sannaTheme: DsTheme = buildDsTheme(sannaCompanyColors)
 
+// ── Desconocido — tema de respaldo para un tenant no registrado ───────────
+// Ver la nota junto a `unknownCompanyColors` (tokens/companies.tokens.ts):
+// `DSProvider` cae acá cuando recibe una `theme` de tipo string que no
+// existe en este mapa (typo, o un código de tenant externo sin validar),
+// en vez de quedarse sin ninguna variable `--ds-*`. Poppins también aquí —
+// no hay ninguna razón de marca para que sea distinto.
+export const unknownTheme: DsTheme = buildDsTheme(unknownCompanyColors)
+
 // ── Mapa de temas por empresa ────────────────────────────────────────────
 // Mismas claves que `companyThemes` (tokens/companies.tokens.ts) — un solo
-// eje, una sola lista de tenants conocidos.
+// eje, una sola lista de tenants conocidos (+ `unknown`, el fallback).
 export const dsThemes = {
   default: defaultTheme,
   csf:     csfTheme,
   sanna:   sannaTheme,
+  unknown: unknownTheme,
 } as const satisfies Record<string, DsTheme>
