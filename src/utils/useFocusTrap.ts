@@ -19,6 +19,28 @@ const FOCUSABLE_SELECTOR =
 const openStack: symbol[] = []
 
 /**
+ * Registra un overlay en la pila compartida. Para overlays que NO usan
+ * `useFocusTrap` directamente pero igual necesitan que su Escape respete el
+ * orden de apertura (ej. `Menu`, que no es modal y no atrapa el foco/Tab,
+ * pero sí debe ceder el Escape a un overlay modal más interno) — ver
+ * hallazgo de hce-code-reviewer: un `MultiSelect` (usa `Menu`) abierto
+ * dentro de un `HceFormModal` cerraba ambos con un solo Escape porque
+ * `Menu` tenía su propio listener de `keydown` totalmente ajeno a esta pila.
+ */
+export function registerOverlay(id: symbol) {
+  openStack.push(id)
+}
+
+export function unregisterOverlay(id: symbol) {
+  const idx = openStack.indexOf(id)
+  if (idx !== -1) openStack.splice(idx, 1)
+}
+
+export function isTopmostOverlay(id: symbol) {
+  return openStack[openStack.length - 1] === id
+}
+
+/**
  * useFocusTrap — hook compartido por los overlays propios (HceModal,
  * HceFormModal, DataCardModal, BedAvailabilityDrawer/V2) que reemplazan a
  * MUI Dialog/Drawer.
@@ -52,19 +74,15 @@ export function useFocusTrap(
     previouslyFocused.current = document.activeElement as HTMLElement | null
 
     const id = instanceId.current
-    openStack.push(id)
+    registerOverlay(id)
 
     const container = containerRef.current
     const toFocus = initialFocusRef?.current ?? container
     // rAF: espera a que el contenedor esté pintado/medido antes de mover el foco.
     const raf = requestAnimationFrame(() => toFocus?.focus())
 
-    function isTopmost() {
-      return openStack[openStack.length - 1] === id
-    }
-
     function handleKeyDown(e: KeyboardEvent) {
-      if (!isTopmost()) return
+      if (!isTopmostOverlay(id)) return
 
       if (e.key === "Escape") {
         onClose?.()
@@ -96,8 +114,7 @@ export function useFocusTrap(
     return () => {
       cancelAnimationFrame(raf)
       document.removeEventListener("keydown", handleKeyDown)
-      const idx = openStack.indexOf(id)
-      if (idx !== -1) openStack.splice(idx, 1)
+      unregisterOverlay(id)
       previouslyFocused.current?.focus?.()
     }
   }, [open])

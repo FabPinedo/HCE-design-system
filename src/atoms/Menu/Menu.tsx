@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type HTMLAttributes, t
 import { createPortal } from "react-dom"
 import "./Menu.css"
 import { useDsTheme } from "../../provider/ThemeProvider"
+import { registerOverlay, unregisterOverlay, isTopmostOverlay } from "../../utils/useFocusTrap"
 
 export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "className" | "style" | "children"> {
   open: boolean
@@ -51,9 +52,13 @@ export function Menu({
   // vuelvan a cascadear a los descendientes (opciones del menú, checkboxes
   // de MultiSelect, etc.).
   const dsTheme = useDsTheme()
+  const instanceId = useRef<symbol>(Symbol("menu"))
 
   useEffect(() => {
     if (!open) return
+
+    const id = instanceId.current
+    registerOverlay(id)
 
     function updatePosition() {
       const anchor = anchorRef.current
@@ -76,8 +81,11 @@ export function Menu({
       if (anchorRef.current?.contains(target)) return
       onClose()
     }
+    // Solo actúa si este Menu es el overlay más interno abierto (pila
+    // compartida con useFocusTrap) — si no, un Escape debe cerrar el
+    // overlay modal que lo contiene (ej. HceFormModal), no este dropdown.
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose()
+      if (e.key === "Escape" && isTopmostOverlay(id)) onClose()
     }
     document.addEventListener("mousedown", handleClickOutside)
     document.addEventListener("keydown", handleKeyDown)
@@ -87,6 +95,7 @@ export function Menu({
       window.removeEventListener("resize", updatePosition)
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("keydown", handleKeyDown)
+      unregisterOverlay(id)
     }
   }, [open, align])
 
