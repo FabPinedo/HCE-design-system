@@ -47,8 +47,20 @@
   color: var(--ms-active);
 }
 
-.hce-multiselect-trigger:focus-visible {
+/*
+ * :focus-within (no :focus-visible) a propósito, igual que
+ * TextInput/NumericField (ver hce-textinput:focus-within): el trigger es un
+ * <button>, y los navegadores por default NO aplican :focus-visible cuando
+ * un <button> recibe foco por click de mouse (solo por teclado) — con
+ * :focus-visible el anillo de foco nunca aparecía al hacer click, solo al
+ * tabular. :focus-within sí dispara con cualquier método de foco.
+ */
+.hce-multiselect-wrapper:focus-within .hce-multiselect-trigger {
   box-shadow: 0 0 0 3px var(--ms-focus-ring);
+}
+
+.hce-multiselect-trigger--disabled {
+  opacity: 0.6;
 }
 
 .hce-multiselect-summary {
@@ -80,7 +92,7 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: var(--ms-summary-bg);
+  color: var(--ms-clear-icon);
   cursor: pointer;
 }
 

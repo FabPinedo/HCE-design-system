@@ -75,17 +75,27 @@ export const MultiSelect = ({
   const triggerId = useId()
   const listId = useId()
 
-  const accentColor = error
-    ? hceColors.alert.error[600]
-    : hceColors.neutro.black[200];
+  // Mismos criterios que TextInput (ver TextInput.tsx): azul corporativo por
+  // defecto, gris solo cuando está disabled, rojo en error — antes el border
+  // por defecto era gris (black[200]) sin importar el estado, distinto del
+  // resto de los campos del design system.
+  const accentColor = disabled
+    ? hceColors.neutro.black[300]
+    : error
+      ? hceColors.alert.error[600]
+      : hceColors.primary.blue[600];
 
-  const activeColor = error
-    ? hceColors.alert.error[600]
-    : hceColors.primary.blue[600];
+  const activeColor = disabled
+    ? hceColors.neutro.black[300]
+    : error
+      ? hceColors.alert.error[600]
+      : hceColors.primary.blue[600];
 
-  const textDefaultColor = error
-    ? hceColors.alert.error[600]
-    : hceColors.neutro.black[400];
+  const textDefaultColor = disabled
+    ? hceColors.neutro.black[300]
+    : error
+      ? hceColors.alert.error[600]
+      : hceColors.neutro.black[400];
 
   const selectedOptions = options.filter((opt) =>
     (value ?? []).includes(opt.value),
@@ -140,6 +150,11 @@ export const MultiSelect = ({
     "--ms-text":   textDefaultColor,
     "--ms-focus-ring": hceColors.primary.blue[100],
     "--ms-summary-bg": hceColors.primary.green[600],
+    // Ícono del botón "limpiar todo" — gris neutro, independiente del verde
+    // de la píldora de resumen (--ms-summary-bg). Antes tomaba
+    // var(--ms-summary-bg) por error de copy-paste, así que la "X" salía
+    // verde en vez de gris.
+    "--ms-clear-icon": hceColors.neutro.black[400],
   } as CSSProperties
 
   if (!label) return null
@@ -156,7 +171,7 @@ export const MultiSelect = ({
       <button
         ref={triggerRef}
         type="button"
-        className="hce-multiselect-trigger"
+        className={`hce-multiselect-trigger${disabled ? " hce-multiselect-trigger--disabled" : ""}`}
         disabled={false}
         onClick={() => (open ? setOpen(false) : openMenu())}
         onKeyDown={handleTriggerKeyDown}
