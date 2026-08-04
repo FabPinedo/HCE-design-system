@@ -3,8 +3,10 @@
 // ─────────────────────────────────────────────────────────
 
 // ── Themes ────────────────────────────────────────────────
-export { theme }          from "./theme/theme"
-export { emergencyTheme } from "./theme/emergencyTheme"
+// Un solo eje de theming: empresa/tenant (default/csf/sanna). Ver
+// theme/themes.ts y tokens/companies.tokens.ts.
+export { defaultTheme, csfTheme, sannaTheme, dsThemes } from "./theme/themes"
+export type { DsTheme } from "./theme/themes"
 
 // ── Provider ──────────────────────────────────────────────
 export { DSProvider } from "./provider/ThemeProvider"
@@ -31,7 +33,7 @@ export type { HceCompanyColors } from "./tokens/hce.tokens"
 // ── Design Tokens — Multiempresa (paleta de marca por empresa) ───────────
 // Todas las empresas/tenants viven en src/tokens/companies.tokens.ts (NUNCA
 // se fragmentan aquí los tokens estructurales de arriba).
-export { defaultCompanyColors, sannaCompanyColors, companyThemes } from "./tokens/companies.tokens"
+export { defaultCompanyColors, csfCompanyColors, sannaCompanyColors, companyThemes } from "./tokens/companies.tokens"
 export type { CompanyThemeKey } from "./tokens/companies.tokens"
 
 // ── Primitivas propias (reemplazan a Box/Typography de MUI) ──────────────
