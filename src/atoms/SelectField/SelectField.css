@@ -6,7 +6,7 @@
  */
 
 .hce-selectfield-label {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--sf-main);
@@ -41,7 +41,7 @@
   border: none;
   outline: none;
   background: transparent;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.875rem;
   color: var(--sf-value-default);
   box-sizing: border-box;

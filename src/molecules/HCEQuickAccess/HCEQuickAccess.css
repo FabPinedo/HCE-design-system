@@ -19,7 +19,7 @@
 }
 
 .hce-quickaccess-btn {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-weight: 600;
   font-size: 0.8rem;
   text-transform: none;

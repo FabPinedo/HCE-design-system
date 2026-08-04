@@ -9,7 +9,7 @@
   border-radius: 10px;
   background-color: #0043a5;
   color: #ffffff;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.75rem;
   font-weight: 500;
   line-height: 1;

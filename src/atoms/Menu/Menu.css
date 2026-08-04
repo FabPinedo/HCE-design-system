@@ -20,7 +20,7 @@
   padding: 10px 16px;
   border: none;
   background: transparent;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.875rem;
   color: rgba(0, 0, 0, 0.87);
   text-align: left;

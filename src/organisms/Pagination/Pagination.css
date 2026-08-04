@@ -26,7 +26,7 @@
   border: none;
   background-color: transparent;
   color: #545454;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -64,7 +64,7 @@
   min-width: 32px;
   height: 32px;
   color: #545454;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.875rem;
   user-select: none;
 }

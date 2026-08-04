@@ -40,7 +40,7 @@
 
 .hce-hceheader-sede-select {
   appearance: none;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   color: #003d96;
   font-size: 16px;
   padding: 4px 28px 4px 10px;

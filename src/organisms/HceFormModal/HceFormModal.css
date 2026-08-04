@@ -1,7 +1,7 @@
 .hce-formmodal-panel {
   border-radius: 8px;
   overflow: hidden;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   background-color: #ffffff;
   box-sizing: border-box;
   animation: hce-formmodal-slide-down 220ms cubic-bezier(0.4, 0, 0.2, 1);

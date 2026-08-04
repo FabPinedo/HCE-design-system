@@ -60,5 +60,5 @@
 }
 
 .hce-checkbox__label {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
 }

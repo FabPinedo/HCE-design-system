@@ -16,7 +16,7 @@
 }
 
 .hce-selectinput-label {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.75rem;
   color: rgba(0, 0, 0, 0.6);
 }
@@ -54,7 +54,7 @@
   border: none;
   outline: none;
   background: transparent;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 1rem;
   color: rgba(0, 0, 0, 0.87);
   box-sizing: border-box;

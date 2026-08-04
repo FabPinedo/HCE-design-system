@@ -7,7 +7,7 @@
  */
 
 .hce-multiselect-label {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--ms-main);
@@ -31,7 +31,7 @@
   border-radius: 8px;
   border: 1px solid var(--ms-main);
   background-color: #ffffff;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.875rem;
   color: var(--ms-text);
   outline: none;

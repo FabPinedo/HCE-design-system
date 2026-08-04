@@ -21,7 +21,7 @@
   transition: opacity 100ms ease 0ms, visibility 0ms linear 250ms;
   background-color: rgba(97, 97, 97, 0.92);
   color: #ffffff;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.6875rem;
   font-weight: 500;
   border-radius: 4px;
