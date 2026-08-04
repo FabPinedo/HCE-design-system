@@ -2,7 +2,8 @@ import { useState, type ComponentType, type CSSProperties, type KeyboardEvent, t
 import "./HceSidebar.css"
 import { Tooltip } from "../../atoms/Tooltip/Tooltip"
 import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
-import { LogoClinicaSanFelipeIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon } from "../../atoms/Icon/SvgIconsHce"
+import { LogoClinicaSanFelipeIcon, LogoSannaIcon, LogoSannaIsotipoIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon } from "../../atoms/Icon/SvgIconsHce"
+import { useDsTenant } from "../../provider/ThemeProvider"
 
 // Lucide icons
 import {
@@ -689,6 +690,11 @@ export function HceSidebar({
   floating    = false,
   multiLevel  = false,
 }: HceSidebarProps) {
+  // Identidad de tenant (no solo color) para elegir el logo correcto —
+  // ver el comentario de `useDsTenant` en provider/ThemeProvider.tsx.
+  const tenant = useDsTenant()
+  const IsotipoIcon = tenant === "sanna" ? LogoSannaIsotipoIcon : UiIsotipoClinicaIcon
+  const LockupIcon  = tenant === "sanna" ? LogoSannaIcon        : LogoClinicaSanFelipeIcon
 
   const handleToggleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -769,11 +775,11 @@ export function HceSidebar({
               borderRadius:   "50%",
             } as CSSProperties}
           >
-            <UiIsotipoClinicaIcon size={28} color="white" />
+            <IsotipoIcon size={28} color="white" />
           </div>
         ) : (
           <>
-            <LogoClinicaSanFelipeIcon width={110} />
+            <LockupIcon width={110} />
             <div
               role="button"
               tabIndex={0}
