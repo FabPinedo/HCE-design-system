@@ -1,5 +1,6 @@
-import { useId } from "react"
+import { useId, type CSSProperties } from "react"
 import "./SelectInput.css"
+import { hceColors } from "../../tokens/hce.tokens"
 
 interface Option {
   value: string
@@ -40,8 +41,22 @@ export const SelectInput = ({
 }: Props) => {
   const id = useId()
 
+  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
+  // de DSProvider, mismo hex de siempre como fallback. Antes este componente
+  // no leía ninguna variable --ds-* (ni en reposo ni en hover/focus) y
+  // quedaba como un clon literal de los colores default de MUI — hallazgo de
+  // hce-code-reviewer, mismo criterio ya aplicado en SelectField.
+  const mainColor = disabled
+    ? hceColors.neutro.black[300]
+    : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+
+  const cssVars = {
+    "--si-main":       mainColor,
+    "--si-focus-ring":  hceColors.primary.blue[100],
+  } as CSSProperties
+
   return (
-    <div className={`hce-selectinput-wrapper${fullWidth ? " hce-selectinput-wrapper--full-width" : ""}`}>
+    <div className={`hce-selectinput-wrapper${fullWidth ? " hce-selectinput-wrapper--full-width" : ""}`} style={cssVars}>
       {label && (
         <label className="hce-selectinput-label" htmlFor={id}>
           {label}{required ? " *" : ""}
