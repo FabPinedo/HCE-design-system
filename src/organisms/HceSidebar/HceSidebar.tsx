@@ -697,7 +697,6 @@ export function HceSidebar({
   // ver el comentario de `useDsTenant` en provider/ThemeProvider.tsx.
   const tenant = useDsTenant()
   const IsotipoIcon = tenant === "sanna" ? LogoSannaIsotipoIcon : UiIsotipoClinicaIcon
-  const LockupIcon  = tenant === "sanna" ? LogoSannaIcon        : LogoClinicaSanFelipeIcon
 
   // Fondo sólido de cabecera + riel colapsado — blue[600] == --ds-color-interactive
   // exactamente en CSF, reactivo al tema activo de DSProvider (verde en Sanna, ver
@@ -787,7 +786,9 @@ export function HceSidebar({
           </div>
         ) : (
           <>
-            <LockupIcon width={110} />
+            {tenant === "sanna"
+              ? <LogoSannaIcon width={110} color="white" />
+              : <LogoClinicaSanFelipeIcon width={110} />}
             <div
               role="button"
               tabIndex={0}

@@ -38,23 +38,26 @@ export function LogoClinicaSanFelipeIcon({ width = 123 }: { width?: number }) {
 
 // ── Logo completo Sanna (red de clínicas) ─────────────────────────────────────
 // Mismo lockup (icono + wordmark, 123×40) que LogoClinicaSanFelipeIcon, para
-// el tenant "sanna" — isotipo cruz+bracket + wordmark "SANNA", ambos en el
-// verde corporativo (#2aad3d, ver tokens/companies.tokens.ts). Reconstruido
+// el tenant "sanna" — isotipo cruz+bracket + wordmark "SANNA". Reconstruido
 // a mano en SVG a partir del logo real que compartió el usuario (no es un
 // asset descargado ni una traza vectorial exacta) — se omite el sufijo de
 // sede ("\ Clínica Belén" en el original) porque acá representa a la red
 // Sanna en general, igual que este mismo logo representa a Clínica San
 // Felipe en general y no una sede puntual.
-export function LogoSannaIcon({ width = 123 }: { width?: number }) {
+// Acepta `color` (por defecto el verde corporativo #2aad3d, ver
+// tokens/companies.tokens.ts) para poder forzarlo a blanco sobre el fondo
+// sólido verde de la cabecera del sidebar — mismo motivo/patrón que
+// `color` en LogoSannaIsotipoIcon.
+export function LogoSannaIcon({ width = 123, color = "#2aad3d" }: { width?: number; color?: string }) {
   const height = Math.round((40 / 123) * width)
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 123 40" fill="none">
-      <g stroke="#2aad3d" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none">
+      <g stroke={color} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none">
         <path d="M15 8V18H5" />
         <path d="M15 32V22H5" />
         <path d="M19 8C26.5 8 31 13.5 31 20C31 26.5 26.5 32 19 32" />
       </g>
-      <text x="40" y="27" fontFamily="'Poppins', sans-serif" fontWeight="700" fontSize="19" letterSpacing="0.5" fill="#2aad3d">SANNA</text>
+      <text x="40" y="27" fontFamily="'Poppins', sans-serif" fontWeight="700" fontSize="19" letterSpacing="0.5" fill={color}>SANNA</text>
     </svg>
   )
 }
