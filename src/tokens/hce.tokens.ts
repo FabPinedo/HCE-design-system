@@ -406,6 +406,7 @@ export interface HceCompanyColors {
   // difiere genuinamente de su `primary`, sin forzarlos a ser el mismo valor
   // como hacen hoy csf/sanna.
   interactive:    string
+  interactiveButton: string
 }
 
 export function injectHceTokens(): void {

@@ -35,7 +35,7 @@ export const csfCompanyColors: HceCompanyColors = {
   // Marca — azul/verde institucional de Clínica San Felipe (hceColors)
   primary:        hceColors.primary.blue[500],  // #0043a5 — acento / borde
   primaryDark:    hceColors.primary.blue[700],  // #003075 — superficie sólida + texto blanco (~12.5:1 AA)
-  primaryLight:   hceColors.primary.blue[50],   // #e6ecf6
+  primaryLight:   hceColors.primary.blue[100],   // #e6ecf6
   secondary:      hceColors.primary.green[500], // #96dd43 — acento
   secondaryDark:  hceColors.primary.green[800], // #537a25 — superficie sólida + texto blanco (~5.0:1 AA)
   secondaryLight: hceColors.primary.green[50], // #b9e881
@@ -62,6 +62,7 @@ export const csfCompanyColors: HceCompanyColors = {
   // Coincide exactamente con el valor hardcodeado histórico de estos
   // componentes (blue[600], distinto de `primary` = blue[500]).
   interactive:    hceColors.primary.blue[600], // #003d96
+  interactiveButton: hceColors.primary.green[600], // #003d96
 }
 
 // CSF es la empresa por defecto/fallback de este deployment — no un alias
@@ -92,7 +93,7 @@ export const sannaCompanyColors: HceCompanyColors = {
   // Marca — verde corporativo Sanna
   primary:        '#36AD55', // Verde Sanna — acento / borde (NO usar con texto blanco encima, ~2.9:1)
   primaryDark:    '#297B41', // Verde Sanna oscuro — apto para superficie sólida + texto blanco (~5.1:1 AA)
-  primaryLight:   '#E3EEE9', // Verde Sanna muy pálido — fondos de acento suaves
+  primaryLight:   '#e3eee9e6', // Verde Sanna muy pálido — fondos de acento suaves
   // Sin segundo color de marca: el "secondary" de Sanna es gris neutro
   secondary:      '#7B61FF', // Gris — acento / borde (~4.0:1, no usar con texto blanco encima)
   secondaryDark:  '#3A2799', // Gris oscuro — apto para superficie sólida + texto blanco (~10.3:1 AA)
@@ -117,6 +118,7 @@ export const sannaCompanyColors: HceCompanyColors = {
   // Mismo verde oscuro que `primaryDark` (pedido explícito del usuario:
   // reusar, no inventar un cuarto tono de verde).
   interactive:     hceColors.primary.green[700], // Verde Sanna oscuro (= primaryDark)
+  interactiveButton: '#7560de', // Verde Sanna oscuro (= primaryDark)
 }
 
 // ── Desconocido — paleta de respaldo para un tenant no registrado ─────────
