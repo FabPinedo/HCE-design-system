@@ -10,7 +10,7 @@
  *   <AttentionCode code="E097382" />
  * ---------------------------------------------------------
  */
-import { hceTypography, hceUi } from "../../tokens/hce.tokens"
+import { hceTypography } from "../../tokens/hce.tokens"
 
 interface Props {
   /** Código alfanumérico de atención (ej: "E097382") */
@@ -31,7 +31,7 @@ export const AttentionCode = ({ code, bold }: Props) => {
         fontFamily:    hceTypography.fontFamilyClinical,
         fontSize:      hceTypography.size.base,
         fontWeight:    bold ? hceTypography.weight.bold : hceTypography.weight.regular,
-        color:         hceUi.textPrimaryTable,
+        color:         "var(--ds-color-primary, #374151)",
         letterSpacing: "0.5px",
         display:       "inline-block",
       }}

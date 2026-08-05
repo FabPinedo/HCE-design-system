@@ -59,9 +59,9 @@ const STAGE_COLORS: Partial<Record<BoxStage, BoxBadgeColors>> = {
     color: hceColors.neutro.white[900],
   },
   BOX_ASIGNADO: {
-    border: hceColors.primary.blue[600],
+    border: `var(--ds-color-primary-dark, ${hceColors.primary.blue[700]})`,
     background: hceColors.neutro.white[100],
-    color: hceColors.primary.blue[600],
+    color: `var(--ds-color-primary-dark, ${hceColors.primary.blue[700]})`,
   },
 }
 

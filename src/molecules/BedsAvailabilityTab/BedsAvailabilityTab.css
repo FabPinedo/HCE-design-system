@@ -16,13 +16,16 @@
   align-items: center;
   gap: 6px;
   border: none;
+  background-color: var(--ds-color-table-header-bg, #2B5BA8);
+  color: var(--ds-color-secondary-contrast, #ffffff);
 }
 
-.hce-beds-tab:hover {
-  background-color: #1A3A6B; /* hceClinicalColors.headerBg */
+.hce-beds-tab:hover,
+.hce-beds-tab--active {
+  background-color: var(--ds-color-header-bg, #1A3A6B);
 }
 
 .hce-beds-tab:focus-visible {
-  outline: 2px solid #2A722E; /* hceClinicalColors.priority4 */
+  outline: 2px solid var(--ds-color-secondary, #96dd43);
   outline-offset: 2px;
 }

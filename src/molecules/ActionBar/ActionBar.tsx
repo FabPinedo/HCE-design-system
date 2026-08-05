@@ -7,9 +7,7 @@
  * ---------------------------------------------------------
  */
 import "./ActionBar.css";
-import {
-  hceColors,
-} from "../../tokens/hce.tokens";
+import { hceColors } from "../../tokens/hce.tokens";
 import { ActionIconButton } from "../ActionIconButton/ActionIconButton";
 import { CloseIcon, MenuBurgerIcon } from "../../atoms/Icon/SvgIconsHce";
 import { useState } from "react";
@@ -52,10 +50,10 @@ export const ActionBar = ({
         justifyContent: "space-between",
         gap: "6px",
         padding: "6px 10px",
-        backgroundColor: "#ffffff",
+        backgroundColor: "var(--ds-color-surface, #ffffff)",
         borderRadius: "10px",
-        boxShadow: `0 2px 8px rgba(0,29,69,0.08)`,
-        border: `1px solid ${hceColors.primary.blue[100]}`,
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+        border: `1px solid var(--ds-color-divider, ${hceColors.primary.blue[100]})`,
         width: isVertical ? "fit-content" : "100%",
         boxSizing: "border-box",
       }}
@@ -69,7 +67,7 @@ export const ActionBar = ({
           alignItems: isVertical ? "start" : "center",
           gap: "0.5rem",
           padding: "6px 10px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "var(--ds-color-surface, #ffffff)",
           width: isVertical ? "fit-content" : "100%",
           boxSizing: "border-box",
         }}

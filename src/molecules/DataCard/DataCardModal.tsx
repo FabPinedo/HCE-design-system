@@ -44,10 +44,10 @@ export function DataCardModal({
       disableBackdropClose={disableOutsideClose}
       disableEscapeClose={disableEscapeClose}
       panelStyle={{
-        width: "100%",
+        width: "calc(100% - 32px)",
         maxWidth,
         maxHeight,
-        margin: 16,
+        margin: "auto",
         backgroundColor: "transparent",
         boxSizing: "border-box",
       }}

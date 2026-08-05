@@ -1,6 +1,5 @@
 import type { ReactNode } from "react"
 import "./HCEQuickAccess.css"
-import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
 export type HCEQuickAccessProps = {
   /** Icono a mostrar dentro del cuadro azul (ReactNode — cualquier SVG o componente) */
@@ -26,8 +25,8 @@ export function HCEQuickAccess({
     <div
       className={`hce-quickaccess${!disabled ? " hce-quickaccess--enabled" : ""}`}
       style={{
-        border:          `1px solid ${disabled ? "#e0e0e0" : hceColors.primary.blue[100]}`,
-        backgroundColor: disabled ? "#fafafa" : "white",
+        border:          `1px solid ${disabled ? "var(--ds-color-divider, #e6e6e6)" : "var(--ds-color-primary-light, #e6ecf6)"}`,
+        backgroundColor: disabled ? "var(--ds-color-background, #f5f7fa)" : "var(--ds-color-surface, #ffffff)",
         opacity:         disabled ? 0.6 : 1,
         cursor:          disabled ? "not-allowed" : "default",
       }}
@@ -39,7 +38,7 @@ export function HCEQuickAccess({
           width:           48,
           height:          48,
           borderRadius:    "10px",
-          backgroundColor: hceColors.primary.blue[50],
+          backgroundColor: "var(--ds-color-primary-light, #e6ecf6)",
           display:         "flex",
           alignItems:      "center",
           justifyContent:  "center",
@@ -47,7 +46,7 @@ export function HCEQuickAccess({
         }}
       >
         <div style={{
-          color:    hceColors.primary.blue[600],
+          color:    "var(--ds-color-interactive, #003d96)",
           display:  "flex",
           fontSize: 24,
         }}>
@@ -57,10 +56,10 @@ export function HCEQuickAccess({
 
       {/* Título */}
       <span style={{
-        fontFamily: hceTypography.fontFamily,
+        fontFamily: "var(--ds-font-family, 'Poppins', sans-serif)",
         fontWeight: 700,
         fontSize:   "0.92rem",
-        color:      "#1a1a2e",
+        color:      "var(--ds-color-text-primary, #374151)",
         lineHeight: 1.3,
       }}>
         {title}
@@ -68,9 +67,9 @@ export function HCEQuickAccess({
 
       {/* Descripción */}
       <span style={{
-        fontFamily: hceTypography.fontFamily,
+        fontFamily: "var(--ds-font-family, 'Poppins', sans-serif)",
         fontSize:   "0.78rem",
-        color:      "#666",
+        color:      "var(--ds-color-text-secondary, #545454)",
         lineHeight: 1.5,
         flex:       1,
       }}>

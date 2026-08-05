@@ -36,7 +36,7 @@
 }
 
 .hce-antswitch__input:checked ~ .hce-antswitch__track {
-  background-color: #003D96;
+  background-color: var(--ds-color-interactive, #003D96);
 }
 
 .hce-antswitch__thumb {

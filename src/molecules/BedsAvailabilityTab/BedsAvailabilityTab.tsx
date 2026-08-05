@@ -8,7 +8,7 @@
  * ---------------------------------------------------------
  */
 import "./BedsAvailabilityTab.css"
-import { hceClinicalColors, hceShadows, hceZIndex, hceTypography } from "../../tokens/hce.tokens"
+import { hceShadows, hceZIndex, hceTypography } from "../../tokens/hce.tokens"
 
 interface Props {
   /** Callback al hacer click en el tab */
@@ -40,7 +40,7 @@ export const BedsAvailabilityTab = ({
 }: Props) => {
   return (
     <div
-      className="hce-beds-tab"
+      className={`hce-beds-tab${isActive ? " hce-beds-tab--active" : ""}`}
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -50,25 +50,21 @@ export const BedsAvailabilityTab = ({
         if (e.key === "Enter" || e.key === " ") onClick?.()
       }}
       style={{
-        backgroundColor: isActive
-          ? hceClinicalColors.headerBg
-          : hceClinicalColors.tableHeaderBg,
         boxShadow: hceShadows.tab,
         zIndex:    hceZIndex.sideTab,
       }}
     >
       {/* Ícono: contra-rotado para que no quede invertido */}
-      <span style={{ color: "#FFFFFF", transform: "rotate(180deg)", flexShrink: 0, display: "flex" }}>
+      <span style={{ transform: "rotate(180deg)", flexShrink: 0, display: "flex" }}>
         <KingBedGlyph />
       </span>
 
       {/* Texto vertical de abajo hacia arriba */}
       <span
         style={{
-          fontFamily:    hceTypography.fontFamilyClinical,
+          fontFamily:    "var(--ds-font-family, 'Poppins', sans-serif)",
           fontSize:      "12px",
           fontWeight:    hceTypography.weight.semibold,
-          color:         "#FFFFFF",
           whiteSpace:    "nowrap",
           letterSpacing: "0.4px",
           lineHeight:    1,

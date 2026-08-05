@@ -170,7 +170,7 @@ export type { MonitoActionBarProps, MonitoPlacement } from "./molecules/MonitoAc
 export { ActionIconButton }    from "./molecules/ActionIconButton/ActionIconButton"
 export { BedsAvailabilityTab } from "./molecules/BedsAvailabilityTab/BedsAvailabilityTab"
 export { ClinicalStatusIcon }  from "./molecules/ClinicalStatusIcon/ClinicalStatusIcon"
-export { EmergencyHeader }     from "./molecules/EmergencyHeader/EmergencyHeader"
+export { EmergencyHeader }     from "./molecules/EmergencyHeader/EmergencyHeader" //no se usa
 export { EmergencyPagination } from "./molecules/EmergencyPagination/EmergencyPagination"
 export { IconButton }          from "./molecules/IconButton/IconButton"
 export { GenericRow }          from "./molecules/GenericRow/GenericRow"
@@ -183,10 +183,10 @@ export { RadioGroup }          from "./molecules/RadioGroup/RadioGroup"
 export { SectionHeader }       from "./molecules/SectionHeader/SectionHeader"
 export type { SectionHeaderProps } from "./molecules/SectionHeader/SectionHeader"
 // ContentCard: molecule Card with title, divider, actions
-export { Card as ContentCard } from "./molecules/Card/Card"
+export { Card as ContentCard } from "./molecules/Card/Card" //no se usa
 export { PageHeader }          from "./molecules/PageHeader/PageHeader"
 // DataTableSimple: molecule DataTable (generic T extends object)
-export { DataTable as DataTableSimple } from "./molecules/DataTable/DataTable"
+export { DataTable as DataTableSimple } from "./molecules/DataTable/DataTable" //no se usa
 
 // ── EvaScale (escala visual de dolor 0-10) ────────────────
 export { EvaScale } from "./molecules/EvaScale/EvaScale"

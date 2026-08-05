@@ -64,13 +64,13 @@ export const Disabled: Story = {
 
 // ── Color custom ──────────────────────────────────────────
 
-/** Color hex pasado directamente — outlined con azul HCE */
+/** Color interactivo del tenant pasado como override CSS reactivo. */
 export const OutlinedColorCustom: Story = {
   name:  "Outlined · color custom",
   args: {
     label:   "Reordenar",
     variant: "outlined",
-    color:   hceColors.primary.blue[600],
+    color:   `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`,
   },
 }
 
@@ -84,13 +84,13 @@ export const ContainedColorCustom: Story = {
   },
 }
 
-/** Ghost con color azul custom */
+/** Color primario del tenant pasado como override CSS reactivo. */
 export const GhostColorCustom: Story = {
   name: "Ghost · color custom",
   args: {
     label:   "Ver detalle",
     variant: "ghost",
-    color:   hceColors.primary.blue[500],
+    color:   `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
   },
 }
 
@@ -102,7 +102,7 @@ export const ConEndIcon: Story = {
   args: {
     label:   "Reordenar",
     variant: "outlined",
-    color:   hceColors.primary.blue[600],
+    color:   `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`,
     endIcon: <SortArrowsIcon size={14} />,
   },
 }
@@ -112,7 +112,7 @@ export const ConEndIconPersonalizar: Story = {
   args: {
     label:   "Personalizar",
     variant: "outlined",
-    color:   hceColors.primary.blue[600],
+    color:   `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`,
     endIcon: <ConfigurationIcon size={14} />,
   },
 }
@@ -123,7 +123,6 @@ export const ConStartIcon: Story = {
   args: {
     label:      "Aceptar",
     variant:    "primary",
-    color:      hceColors.primary.blue[600],
     startIcon:  <CheckedCircleIcon size={16} color="white" />,
   },
 }
@@ -258,14 +257,14 @@ export const Galeria: Story = {
       <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
         <Button variant="primary"  color={hceColors.primary.blue[600]}  label="Blue 600" />
         <Button variant="primary"  color={hceColors.primary.green[600]} label="Green 600" />
-        <Button variant="outlined" color={hceColors.primary.blue[600]}  label="Outlined Blue" />
-        <Button variant="ghost"    color={hceColors.primary.blue[500]}  label="Ghost Blue" />
+        <Button variant="outlined" color={`var(--ds-color-interactive, ${hceColors.primary.blue[600]})`} label="Outlined theme" />
+        <Button variant="ghost"    color={`var(--ds-color-primary, ${hceColors.primary.blue[500]})`} label="Ghost theme" />
       </div>
       {/* Con iconos */}
       <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-        <Button variant="outlined" color={hceColors.primary.blue[600]} endIcon={<SortArrowsIcon size={13} />} label="Reordenar" />
-        <Button variant="outlined" color={hceColors.primary.blue[600]} endIcon={<ConfigurationIcon size={13} />} label="Personalizar" />
-        <Button variant="primary"  color={hceColors.primary.blue[600]} startIcon={<CheckedCircleIcon size={15} color="white" />} label="Aceptar" />
+        <Button variant="outlined" color={`var(--ds-color-interactive, ${hceColors.primary.blue[600]})`} endIcon={<SortArrowsIcon size={13} />} label="Reordenar" />
+        <Button variant="outlined" color={`var(--ds-color-interactive, ${hceColors.primary.blue[600]})`} endIcon={<ConfigurationIcon size={13} />} label="Personalizar" />
+        <Button variant="primary" startIcon={<CheckedCircleIcon size={15} color="white" />} label="Aceptar" />
         <Button variant="danger"   startIcon={<CloseIcon size={15} color="white" />} label="Eliminar" />
         <Button variant="primary"  color={hceColors.primary.green[600]} startIcon={<AddCircleIcon size={15} color="white" />} label="Agregar" />
       </div>

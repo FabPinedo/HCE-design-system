@@ -383,6 +383,11 @@ export interface HceCompanyColors {
   secondaryLight: string
 
   // Superficies
+  headerBg:        string
+  tableHeaderBg:   string
+  rowAlternate:    string
+  hoverBg:         string
+  rowPriority:     string
   surfaceBg:      string
   background:     string
   border:         string

@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { useState } from "react"
-import { User } from "lucide-react"
-import { DataCard,DataCardModal } from "../../src/molecules/DataCard"
-import { Box, Button, Typography, hceColors, hceTypography, InfoButton, StatusBadge } from "@hce/design-system"
+import { Box, Button, Typography, hceColors, hceTypography, InfoButton, StatusBadge, User, DataCard,DataCardModal } from "@hce/design-system"
 
 /** Reemplazo de MUI Avatar — circulo con children centrados */
 function Avatar({ sx, children }: { sx?: Record<string, unknown>; children: React.ReactNode }) {

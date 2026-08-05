@@ -9,7 +9,7 @@
 }
 
 .hce-quickaccess--enabled:hover {
-  box-shadow: 0 4px 16px rgba(0, 61, 150, 0.1);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--ds-color-primary, #0043a5) 12%, transparent);
   transform: translateY(-2px);
 }
 
@@ -24,8 +24,8 @@
   font-size: 0.8rem;
   text-transform: none;
   border-radius: 8px;
-  border: 1px solid #003d96;
-  color: #003d96;
+  border: 1px solid var(--ds-color-interactive, #003d96);
+  color: var(--ds-color-interactive, #003d96);
   background-color: transparent;
   padding: 5px 15px;
   margin-top: auto;
@@ -35,8 +35,8 @@
 }
 
 .hce-quickaccess-btn:hover {
-  background-color: #e6ecf6;
-  border-color: #003075;
+  background-color: var(--ds-color-primary-light, #e6ecf6);
+  border-color: var(--ds-color-primary-dark, #003075);
 }
 
 .hce-quickaccess-btn:disabled {

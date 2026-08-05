@@ -38,7 +38,15 @@ export const csfCompanyColors: HceCompanyColors = {
   primaryLight:   hceColors.primary.blue[50],   // #e6ecf6
   secondary:      hceColors.primary.green[500], // #96dd43 — acento
   secondaryDark:  hceColors.primary.green[800], // #537a25 — superficie sólida + texto blanco (~5.0:1 AA)
-  secondaryLight: hceColors.primary.green[300], // #b9e881
+  secondaryLight: hceColors.primary.green[50], // #b9e881
+
+  //base
+
+  headerBg:        '#1A3A6B', // Azul marino institucional — header principal
+  tableHeaderBg:   '#2B5BA8', // Azul medio — encabezado de tabla
+  rowAlternate:    '#e6ecf6', // Fila alterna de tabla
+  hoverBg:         '#EEF2F9', // Fondo hover de fila / botón
+  rowPriority:     '#FFF5F5',
 
   // Superficies
   surfaceBg:      hceUi.surface,     // #ffffff
@@ -82,15 +90,20 @@ export const defaultCompanyColors: HceCompanyColors = csfCompanyColors
 //   <Button label="Guardar" tenantTheme={sannaCompanyColors} />
 export const sannaCompanyColors: HceCompanyColors = {
   // Marca — verde corporativo Sanna
-  primary:        '#2aad3d', // Verde Sanna — acento / borde (NO usar con texto blanco encima, ~2.9:1)
-  primaryDark:    '#1e7e2e', // Verde Sanna oscuro — apto para superficie sólida + texto blanco (~5.1:1 AA)
-  primaryLight:   '#e6f7e9', // Verde Sanna muy pálido — fondos de acento suaves
+  primary:        '#36AD55', // Verde Sanna — acento / borde (NO usar con texto blanco encima, ~2.9:1)
+  primaryDark:    '#297B41', // Verde Sanna oscuro — apto para superficie sólida + texto blanco (~5.1:1 AA)
+  primaryLight:   '#E3EEE9', // Verde Sanna muy pálido — fondos de acento suaves
   // Sin segundo color de marca: el "secondary" de Sanna es gris neutro
-  secondary:      '#6b7280', // Gris — acento / borde (~4.0:1, no usar con texto blanco encima)
-  secondaryDark:  '#374151', // Gris oscuro — apto para superficie sólida + texto blanco (~10.3:1 AA)
-  secondaryLight: '#d1d5db', // Gris claro — acentos suaves
+  secondary:      '#7B61FF', // Gris — acento / borde (~4.0:1, no usar con texto blanco encima)
+  secondaryDark:  '#3A2799', // Gris oscuro — apto para superficie sólida + texto blanco (~10.3:1 AA)
+  secondaryLight: '#F2EFFF', // Gris claro — acentos suaves
 
   // Superficies — blancos y grises neutros
+   headerBg:        '#1a6b29', // verde marino institucional — header principal
+  tableHeaderBg:   '#2ba859', // verde medio — encabezado de tabla
+  rowAlternate:    '#e6f6e9', // Fila alterna de tabla
+  hoverBg:         '#eef9f0', // Fondo hover de fila / botón
+  rowPriority:     '#f5fff5',
   surfaceBg:      '#FFFFFF',
   background:     '#F9FAFB',
   border:         '#E5E7EB',
@@ -103,7 +116,7 @@ export const sannaCompanyColors: HceCompanyColors = {
   // Interactivo — acento de campos de formulario (borde/label/estado activo).
   // Mismo verde oscuro que `primaryDark` (pedido explícito del usuario:
   // reusar, no inventar un cuarto tono de verde).
-  interactive:    '#1e7e2e', // Verde Sanna oscuro (= primaryDark)
+  interactive:     hceColors.primary.green[700], // Verde Sanna oscuro (= primaryDark)
 }
 
 // ── Desconocido — paleta de respaldo para un tenant no registrado ─────────
@@ -140,6 +153,11 @@ export const unknownCompanyColors: HceCompanyColors = {
   secondaryLight: '#ede9fe', // Violeta 100 — acentos suaves
 
   // Superficies
+  headerBg:       '#334155', // Slate 700
+  tableHeaderBg:  '#64748B', // Slate 500
+  rowAlternate:   '#F1F5F9', // Slate 100
+  hoverBg:        '#F8FAFC', // Slate 50
+  rowPriority:    '#FFF5F5', // Alerta sutil
   surfaceBg:      '#FFFFFF',
   background:     '#F8FAFC', // Slate 50
   border:         '#E2E8F0', // Slate 200

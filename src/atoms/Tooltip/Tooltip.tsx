@@ -1,5 +1,7 @@
-import type { ReactNode, CSSProperties } from "react"
+import { useCallback, useLayoutEffect, useRef, useState, type ReactNode, type CSSProperties } from "react"
+import { createPortal } from "react-dom"
 import "./Tooltip.css"
+import { useDsTheme } from "../../provider/ThemeProvider"
 
 /**
  * Tooltip — reemplazo propio de `Tooltip` de MUI, en CSS puro
@@ -43,19 +45,91 @@ export const Tooltip = ({
   bubbleStyle,
   bubbleClassName,
 }: TooltipProps) => {
+  const dsTheme = useDsTheme()
+  const triggerRef = useRef<HTMLSpanElement>(null)
+  const bubbleRef = useRef<HTMLSpanElement>(null)
+  const [visible, setVisible] = useState(false)
+  const [position, setPosition] = useState({ top: -9999, left: -9999 })
+
+  const updatePosition = useCallback(() => {
+    const trigger = triggerRef.current
+    const bubble = bubbleRef.current
+    if (!trigger || !bubble) return
+
+    const anchor = trigger.getBoundingClientRect()
+    const floating = bubble.getBoundingClientRect()
+    const gap = 8
+    const next = placement === "bottom"
+      ? { top: anchor.bottom + gap, left: anchor.left + (anchor.width - floating.width) / 2 }
+      : placement === "left"
+        ? { top: anchor.top + (anchor.height - floating.height) / 2, left: anchor.left - floating.width - gap }
+        : placement === "right"
+          ? { top: anchor.top + (anchor.height - floating.height) / 2, left: anchor.right + gap }
+          : { top: anchor.top - floating.height - gap, left: anchor.left + (anchor.width - floating.width) / 2 }
+
+    // Se respeta estrictamente el placement solicitado. En particular, un
+    // tooltip `top` nunca se empuja hacia abajo sobre el trigger cuando está
+    // cerca del borde superior; el portal solo resuelve capas/overflow.
+    // Horizontalmente sí se limita para evitar que el texto salga por los
+    // laterales de la ventana sin alterar su posición respecto al icono.
+    const viewportLeft = Math.max(
+      4,
+      Math.min(next.left, window.innerWidth - floating.width - 4),
+    )
+
+    // El bubble vive en document.body con position:absolute, por lo que sus
+    // coordenadas deben pertenecer al documento, no al viewport. Sumar el
+    // scroll evita que el tooltip se desplace demasiado arriba al scrollear.
+    setPosition({
+      top: next.top + window.scrollY,
+      left: viewportLeft + window.scrollX,
+    })
+  }, [placement])
+
+  useLayoutEffect(() => {
+    if (!visible) return
+    updatePosition()
+    window.addEventListener("resize", updatePosition)
+    window.addEventListener("scroll", updatePosition, true)
+    return () => {
+      window.removeEventListener("resize", updatePosition)
+      window.removeEventListener("scroll", updatePosition, true)
+    }
+  }, [visible, updatePosition])
+
   if (!title) return <>{children}</>
 
   return (
-    <span className={`hce-tooltip-wrapper${className ? ` ${className}` : ""}`} style={style}>
+    <span
+      ref={triggerRef}
+      className={`hce-tooltip-wrapper${className ? ` ${className}` : ""}`}
+      style={style}
+      onMouseEnter={() => setVisible(true)}
+      onMouseLeave={() => setVisible(false)}
+      onFocusCapture={() => setVisible(true)}
+      onBlurCapture={() => setVisible(false)}
+    >
       {children}
-      <span
-        role="tooltip"
-        className={`hce-tooltip-bubble hce-tooltip-bubble--${placement}${bubbleClassName ? ` ${bubbleClassName}` : ""}`}
-        style={bubbleStyle}
-      >
-        {title}
-        {arrow && <span className="hce-tooltip-bubble__arrow" />}
-      </span>
+      {visible && typeof document !== "undefined" && createPortal(
+        <span
+          ref={bubbleRef}
+          role="tooltip"
+          className={`hce-tooltip-bubble hce-tooltip-bubble--portal hce-tooltip-bubble--visible hce-tooltip-bubble--${placement}${bubbleClassName ? ` ${bubbleClassName}` : ""}`}
+          style={{
+            ...dsTheme,
+            ...bubbleStyle,
+            top: position.top,
+            left: position.left,
+            right: "auto",
+            bottom: "auto",
+            transform: "none",
+          } as CSSProperties}
+        >
+          {title}
+          {arrow && <span className="hce-tooltip-bubble__arrow" />}
+        </span>,
+        document.body,
+      )}
     </span>
   )
 }

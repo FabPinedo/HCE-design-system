@@ -9,7 +9,7 @@
  */
 import type { CSSProperties } from "react"
 import "./ActionIconButton.css"
-import { hceClinicalColors, hceColors } from "../../tokens/hce.tokens"
+import { hceColors } from "../../tokens/hce.tokens"
 import { HceTooltip } from "../../atoms/Tooltip/HceTooltip"
 
 interface Props {
@@ -23,10 +23,12 @@ interface Props {
 
 export const ActionIconButton = ({ icon: Icon, tooltip, onClick, disabled = false }: Props) => {
   const cssVars = {
-    "--aib-color":        hceClinicalColors.textSecondary,
-    "--aib-hover-bg":     hceClinicalColors.hoverBg,
-    "--aib-hover-border": hceClinicalColors.tableHeaderBg,
-    "--aib-active-bg":    hceClinicalColors.border,
+    "--aib-color":        `var(--ds-color-interactive, ${hceColors.primary.blue[700]})`,
+    "--aib-border":       `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
+    "--aib-surface":      "var(--ds-color-surface, #ffffff)",
+    "--aib-hover-bg":     `var(--ds-color-primary-light, ${hceColors.primary.blue[50]})`,
+    "--aib-hover-border": `var(--ds-color-interactive, ${hceColors.primary.blue[700]})`,
+    "--aib-active-bg":    `color-mix(in srgb, var(--ds-color-interactive, ${hceColors.primary.blue[700]}) 18%, transparent)`,
   } as CSSProperties
 
   return (
@@ -39,7 +41,7 @@ export const ActionIconButton = ({ icon: Icon, tooltip, onClick, disabled = fals
         disabled={disabled}
         aria-label={tooltip}
       >
-        <Icon sx={{ fontSize: 18 }} size={18} color={hceColors.primary.blue[600]} />
+        <Icon sx={{ fontSize: 18 }} size={18} color="var(--aib-color)" />
       </button>
     </HceTooltip>
   )

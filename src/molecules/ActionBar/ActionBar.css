@@ -6,26 +6,26 @@
   height: 40px;
   padding: 0;
   border-radius: 8px;
-  border: 1.5px solid #003d96;
-  background-color: #003d96;
-  color: #545454;
+  border: 1.5px solid var(--ds-color-primary-dark, #003075);
+  background-color: var(--ds-color-primary-dark, #003075);
+  color: var(--ds-color-secondary-contrast, #ffffff);
   cursor: pointer;
   transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
 }
 
 .hce-actionbar-close-btn:hover {
-  background-color: #003d96;
-  border-color: #003d96;
-  color: #003d96;
+  background-color: var(--ds-color-primary, #0043a5);
+  border-color: var(--ds-color-primary, #0043a5);
+  color: var(--ds-color-secondary-contrast, #ffffff);
 }
 
 .hce-actionbar-close-btn:active {
-  background-color: #003d96;
+  background-color: var(--ds-color-primary-dark, #003075);
 }
 
 .hce-actionbar-close-btn:disabled {
   opacity: 0.4;
-  background-color: #ffffff;
-  color: #545454;
+  background-color: var(--ds-color-surface, #ffffff);
+  color: var(--ds-color-text-secondary, #545454);
   cursor: default;
 }
