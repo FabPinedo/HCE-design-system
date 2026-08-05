@@ -1,8 +1,8 @@
 import "./SidebarMenu.css"
-import type { MenuItem } from "./types"
+import type { MenuItemData } from "./types"
 
 interface Props {
-  items:        MenuItem[]
+  items:        MenuItemData[]
   collapsed?:   boolean
   onNavigate:   (path: string) => void
   currentPath?: string

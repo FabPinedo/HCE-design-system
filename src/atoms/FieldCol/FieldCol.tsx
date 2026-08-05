@@ -2,7 +2,7 @@ import type { ReactNode } from "react"
 import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 
 export interface FieldColProps {
-  label: string
+  label?: string
   children: ReactNode
   flex?: number | string
   /** Ancho mínimo antes de que el campo se comprima — útil en filas flex-wrap. */

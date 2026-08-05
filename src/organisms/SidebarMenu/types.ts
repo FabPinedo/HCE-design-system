@@ -6,7 +6,7 @@
  */
 import type { ReactNode } from "react"
 
-export type MenuItem = {
+export type MenuItemData = {
 
   /** texto visible del menú */
   label: string
@@ -18,5 +18,5 @@ export type MenuItem = {
   icon?: ReactNode
 
   /** submenus opcionales */
-  children?: MenuItem[]
+  children?: MenuItemData[]
 }

@@ -7,6 +7,34 @@ Versionado basado en [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.3.6] - 2026-08-05
+
+### Agregado
+- **`Box`** (Átomo): reemplazo propio de `Box` de MUI, en CSS/HTML puro — `component` polimórfico, `forwardRef`, escape-hatch `sx`.
+- **`Grid`** (Átomo): reemplazo propio de `Grid` de MUI (API unificada v2: `size`, `offset`, `columns`, `columnSpacing`, `rowSpacing`, `direction`, `wrap`, todos con soporte responsivo por breakpoint).
+- **`FormControl`** (Átomo): reemplazo propio de `FormControl` de MUI, con contexto compartido (`useFormControl`) para `disabled`/`error`/`focused`/`required`/`filled` consumible por componentes hijos.
+- **`MenuItem`** (Átomo): reemplazo propio de `MenuItem` de MUI, con polyfill de `:focus-visible` y soporte de `value` para uso como opción dentro de `Select`.
+- **`Select`** (Átomo): reemplazo propio de `Select` de MUI — genérico (`Select<T>`), soporta `multiple`, `native`, apertura/cierre controlado o no controlado, navegación por teclado.
+- **`SelectChangeEvent`**: nuevo tipo público, compatible con la firma de evento de MUI (`event.target.value`).
+- **`Avatar`** (Átomo): reemplazo propio de `Avatar` de MUI, con fallback en cascada `src` → `children` → ícono por defecto, detectado vía precarga de imagen.
+- **`Avatar.stories.tsx`**: nuevas historias de Storybook para `Avatar` (imagen, iniciales, fallback por imagen rota, variantes de forma, tamaños, grupo superpuesto).
+- **`useMediaQuery`** (hook): reemplazo propio de `useMediaQuery` de MUI, implementado con `useSyncExternalStore`, sin dependencia de `ThemeProvider` — `query` acepta solo `string` a propósito.
+- **`utils/breakpoints.ts`**: nuevo módulo compartido con `useCurrentBreakpoint` y `resolveResponsiveValue`, usado por `Grid`, `sx` y cualquier componente con props responsivos.
+- **`utils/sx.ts`**: nuevo motor `sx` propio (`sxToStyle`, `mergeSx`, tipo `SxProps`) — soporta shorthand de espaciado (`p`, `m`, `px`, `py`, `pt`, `pb`, `pl`, `pr`, `mx`, `my`, `mt`, `mb`, `ml`, `mr`) y valores responsivos por breakpoint en cualquier propiedad CSS (ej. `px: { xs: 2, sm: 4 }`).
+
+### Cambiado
+- **`Box`**: prop `sx` retipado de `Record<string, unknown>` a `SxProps` — habilita autocomplete en VS Code y soporte de valores responsivos.
+- **`Button`** (Átomo): `sx` retipado a `SxProps` y ahora pasa por `sxToStyle` (antes se mezclaba directo en `style`, por lo que el shorthand de espaciado —`px`, `py`, etc.— quedaba sin efecto); se agregó padding por defecto para el tamaño `"md"` (`12px` vertical / `30px` horizontal).
+- **`Typography`** (Átomo): se agregaron los props `align`, `paragraph` (deprecado, por compatibilidad con MUI), `variantMapping` y `classes` para paridad completa con el API oficial; se separó el mapeo variant→tag HTML (`variantMapping`) de la tabla de estilos por variant.
+- **`IconButton`** (Molécula): se agregó soporte de `sx`, `style` y `className`; el ícono ahora se auto-dimensiona según el `size` del botón (o `iconSize` explícito) vía `cloneElement`, en vez de depender de `fontSize` (que no tenía efecto sobre íconos SVG propios).
+- **`SearchComboInput`** (Molécula): se corrigió `modePosition` para que reordene físicamente el bloque del toggle de modo y el input según `"left"`/`"right"` (antes solo cambiaba el `border-radius` del botón, que quedaba siempre primero en el DOM); se ajustaron los bordes para evitar grosor duplicado en el punto de unión entre el botón y el input.
+
+### Breaking changes
+- Ninguno en esta versión — todos los componentes nuevos (`Box`, `Grid`, `FormControl`, `MenuItem`, `Select`, `Avatar`) reemplazan imports directos de `@mui/material` manteniendo la misma API pública consumida por el repo; los cambios en `Button`/`Typography`/`IconButton` son aditivos (nuevos props opcionales, sin remover ninguno existente).
+
+---
+---
+
 ## [1.3.0] - 2026-07-06
 
 ### Agregado
