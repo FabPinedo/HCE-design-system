@@ -1,6 +1,8 @@
 import { type ReactNode, type CSSProperties } from "react"
 import "./Button.css"
 import { hceColors, type HceCompanyColors } from "../../tokens/hce.tokens"
+import { sxToStyle, type SxProps } from "../../utils/sx"
+import { useCurrentBreakpoint } from "../../utils/breakpoints"
 
 /**
  * Button — átomo del design system HCE
@@ -74,8 +76,17 @@ interface Props {
   startIcon?:  ReactNode
   /** Icono al final — acepta cualquier ReactNode (Lucide, HceIcon, SVG…) */
   endIcon?:    ReactNode
-  /** Estilo puntual (equivalente al escape-hatch `sx` de MUI — objeto plano de CSS) */
-  sx?:         CSSProperties
+  /**
+   * Estilo puntual — escape-hatch `sx` real del design system (ver
+   * utils/sx.ts): acepta propiedades CSS normales, el shorthand de
+   * espaciado (`px`, `py`, `pt`, `pb`, `pl`, `pr`, `m`, `mx`, `my`, `mt`,
+   * `mb`, `ml`, `mr` — número = unidades × 8px) y valores responsivos por
+   * breakpoint (`px: { xs: 1, sm: 2 }`). Antes este prop se mezclaba
+   * directo en `style` sin pasar por `sxToStyle`, por lo que el shorthand
+   * de spacing (`px`, `py`, etc.) nunca se resolvía — quedaba como
+   * `style.px`, una propiedad CSS inválida sin efecto.
+   */
+  sx?:         SxProps
   /**
    * Paleta de marca de una empresa/tenant (multiempresa) a aplicar SOLO a
    * esta instancia del botón. Objeto plano de colores con la forma
@@ -188,6 +199,8 @@ export const Button = ({
   sx,
   tenantTheme,
 }: Props) => {
+  const breakpoint = useCurrentBreakpoint()
+
   const muiVariant: "contained" | "outlined" | "text" =
     variant === "ghost"    ? "text"
     : variant === "outlined" ? "outlined"
@@ -235,7 +248,7 @@ export const Button = ({
       className={className}
       onClick={onClick}
       disabled={disabled}
-      style={{ ...cssVars, ...style, ...sx }}
+      style={{ ...cssVars, ...style, ...sxToStyle(sx, breakpoint) }}
     >
       {startIcon}
       {children ?? label}

@@ -81,6 +81,7 @@ export const Default: Story = {
           loading={loading ?? isLoading}
           disabled={disabled}
           debounceMs={debounceMs ?? 300}
+          modePosition="left"
         />
         {selected && (
           <Box sx={{ mt: 2, p: 1.5, bgcolor: "#f5fcec", borderRadius: "8px", border: "1px solid #89c93d" }}>

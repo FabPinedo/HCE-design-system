@@ -42,11 +42,18 @@ export type { CompanyThemeKey } from "./tokens/companies.tokens"
 // Misma API pública mínima (component/sx/style/className/children) que
 // este repo consumía de MUI — los consumidores externos no cambian su
 // import.
+export { Select } from "./atoms/Select/Select"
+export { MenuItem } from "./atoms/MenuItem/MenuItem"
+export { FormControl } from "./atoms/FormControl/FormControl"
+export { Grid } from "./atoms/Grid/Grid"
 export { Box }        from "./atoms/Box/Box"
 export { Typography } from "./atoms/Typography/Typography"
+export type { SelectChangeEvent } from "./atoms/Select/Select"
 export type { BoxProps }        from "./atoms/Box/Box"
 export type { TypographyProps, TypographyVariant } from "./atoms/Typography/Typography"
 
+// Hooks
+export { useMediaQuery } from "./hooks/useMediaQuery"
 
 // ── Icons — Lucide ─────────────────────────────────────────
 export {
@@ -102,6 +109,7 @@ export {
 } from "./atoms/Icon/Icon"
 
 // ── Atoms ─────────────────────────────────────────────────
+export { Avatar }         from "./atoms/Avatar/Avatar"
 export { Button }         from "./atoms/Button/Button"
 export { Badge }          from "./atoms/Badge/Badge"
 export { Chip }           from "./atoms/Chip/Chip"
@@ -232,7 +240,7 @@ export type {
   BedAvailabilityStatus,
   BedAvailabilityDrawerV2Props,
 }                               from "./organisms/BedAvailability/BedAvailabilityDrawerV2"
-export type { MenuItem }       from "./organisms/SidebarMenu/types"
+export type { MenuItemData }       from "./organisms/SidebarMenu/types"
 export type {
   HceHeaderProps,
   HceHeaderVariant,
