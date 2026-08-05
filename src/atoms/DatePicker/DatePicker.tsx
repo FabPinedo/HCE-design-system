@@ -1,6 +1,7 @@
-import type { CSSProperties } from "react"
+import { useRef, type CSSProperties } from "react"
 import "./DatePicker.css"
 import { hceColors } from "../../tokens/hce.tokens"
+import { HceCalendarIcon } from "../Icon/SvgIconsHce"
 
 export interface DatePickerProps {
   label?: string
@@ -26,6 +27,18 @@ export function DatePicker({
   required,
   error = false,
 }: DatePickerProps) {
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const openCalendar = () => {
+    if (disabled) return
+    try {
+      inputRef.current?.showPicker()
+    } catch {
+      // Fallback para navegadores que no implementan showPicker().
+      inputRef.current?.focus()
+    }
+  }
+
   // El hover/focus ahora es CSS real (:hover/:focus-within en el wrapper),
   // ya no necesita useState(focused/hovered).
   // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
@@ -36,12 +49,17 @@ export function DatePicker({
   // Solo el texto ingresado (textDefault) se mantiene neutro en reposo y
   // pasa a color de tema en hover/focus, igual que en TextInput.
   const themeColor    = `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
-  const accentDefault = error ? hceColors.alert.error[600] : themeColor
-  const accentActive  = error ? hceColors.alert.error[600] : themeColor
-  const textDefault   = error ? hceColors.alert.error[600] : hceColors.neutro.black[400]
-  const textActive    = error ? hceColors.alert.error[600] : themeColor
-  const borderDefault = error ? hceColors.alert.error[600] : themeColor
-  const borderActive  = error ? hceColors.alert.error[600] : themeColor
+  const disabledColor = hceColors.neutro.black[800]
+  const accentDefault = disabled ? disabledColor : error ? hceColors.alert.error[600] : themeColor
+  const accentActive  = disabled ? disabledColor : error ? hceColors.alert.error[600] : themeColor
+  const borderDefault = disabled ? disabledColor : error ? hceColors.alert.error[600] : themeColor
+  const borderActive  = disabled ? disabledColor : error ? hceColors.alert.error[600] : themeColor
+  // En un input date vacío, el texto que dibuja el navegador funciona como
+  // placeholder. Debe usar exactamente el mismo color que el borde.
+  const textDefault   = value
+    ? (disabled ? disabledColor : error ? hceColors.alert.error[600] : hceColors.neutro.black[800])
+    : borderDefault
+  const textActive    = disabled ? disabledColor : error ? hceColors.alert.error[600] : themeColor
 
   const cssVars = {
     "--dp-accent-default": accentDefault,
@@ -51,13 +69,16 @@ export function DatePicker({
     "--dp-border-default": borderDefault,
     "--dp-border-active":  borderActive,
     "--dp-focus-ring":     hceColors.primary.blue[100],
+     "--dp-background-disabled":     hceColors.neutro.white[600],
+
   } as CSSProperties
 
   return (
-    <div className="hce-datepicker-wrapper" style={cssVars}>
+    <div className={`hce-datepicker-wrapper${disabled ? " hce-datepicker-wrapper--disabled" : ""}`} style={cssVars}>
       {label && <label className="hce-datepicker-label">{label}</label>}
-      <div className="hce-datepicker-box">
+      <div className={`hce-datepicker-box${disabled ? " hce-datepicker-box--disabled" : ""}`}>
         <input
+          ref={inputRef}
           type="date"
           className="hce-datepicker-field"
           value={value}
@@ -65,6 +86,15 @@ export function DatePicker({
           required={required}
           disabled={disabled}
         />
+        <button
+          type="button"
+          className="hce-datepicker-calendar-button"
+          onClick={openCalendar}
+          disabled={disabled}
+          aria-label="Abrir calendario"
+        >
+          <HceCalendarIcon size={18} />
+        </button>
       </div>
     </div>
   )

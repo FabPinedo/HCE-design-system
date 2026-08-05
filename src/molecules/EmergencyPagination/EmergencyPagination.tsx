@@ -8,7 +8,7 @@
  */
 import type { CSSProperties } from "react"
 import "./EmergencyPagination.css"
-import { hceClinicalColors, hceSpacing, hceTypography, hceColors } from "../../tokens/hce.tokens"
+import { hceSpacing, hceTypography } from "../../tokens/hce.tokens"
 
 interface summaryContent{
 
@@ -109,9 +109,9 @@ export const EmergencyPagination = ({
           <span
             key={`ellipsis-${idx}`}
             style={{
-              fontFamily: hceTypography.fontFamilyClinical,
+              fontFamily: "var(--ds-font-family, 'Poppins', sans-serif)",
               fontSize:   "12px",
-              color:      hceColors.primary.blue[600],
+              color:      "var(--ds-pagination-item-color, #003d96)",
               userSelect: "none",
               padding:    "0 2px",
             }}
@@ -125,12 +125,12 @@ export const EmergencyPagination = ({
             className="hce-empag-pagebtn"
             onClick={() => onPageChange(page)}
             style={{
-              "--pagebtn-border":       page === currentPage ? hceClinicalColors.tableHeaderBg : hceClinicalColors.border,
-              "--pagebtn-bg":           page === currentPage ? hceClinicalColors.tableHeaderBg : "#FFFFFF",
-              "--pagebtn-color":        page === currentPage ? "#FFFFFF" : hceColors.primary.blue[600],
+              "--pagebtn-border":       page === currentPage ? "var(--ds-pagination-selected-bg, #2B5BA8)" : "var(--ds-pagination-nav-border, #D0DBF0)",
+              "--pagebtn-bg":           page === currentPage ? "var(--ds-pagination-selected-bg, #2B5BA8)" : "var(--ds-color-surface, #FFFFFF)",
+              "--pagebtn-color":        page === currentPage ? "var(--ds-pagination-selected-color, #FFFFFF)" : "var(--ds-pagination-item-color, #003d96)",
               "--pagebtn-weight":       page === currentPage ? hceTypography.weight.bold : hceTypography.weight.regular,
-              "--pagebtn-hover-bg":     page === currentPage ? hceClinicalColors.headerBg : hceClinicalColors.hoverBg,
-              "--pagebtn-hover-border": page === currentPage ? hceClinicalColors.headerBg : hceClinicalColors.tableHeaderBg,
+              "--pagebtn-hover-bg":     page === currentPage ? "var(--ds-pagination-selected-hover, #1A3A6B)" : "var(--ds-pagination-hover-bg, #EEF2F9)",
+              "--pagebtn-hover-border": page === currentPage ? "var(--ds-pagination-selected-hover, #1A3A6B)" : "var(--ds-color-table-header-bg, #2B5BA8)",
             } as CSSProperties}
             aria-label={`Página ${page}`}
             aria-current={page === currentPage ? "page" : undefined}

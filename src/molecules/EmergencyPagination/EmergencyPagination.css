@@ -5,13 +5,13 @@
   height: 26px;
   padding: 0 10px;
   box-sizing: border-box;
-  background-color: #ffffff;
-  color: #003d96;
-  font-family: 'IBM Plex Sans', 'Roboto', system-ui, sans-serif;
+  background-color: var(--ds-color-surface, #ffffff);
+  color: var(--ds-pagination-item-color, #003d96);
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 12px;
   font-weight: 500;
   border-radius: 4px;
-  border: 1px solid #003d96;
+  border: 1px solid var(--ds-pagination-item-color, #003d96);
   margin-right: 8px;
   white-space: nowrap;
 }
@@ -24,17 +24,17 @@
   height: 28px;
   padding: 0;
   border-radius: 4px;
-  border: 1px solid #003d96;
-  background-color: #ffffff;
-  color: #003d96;
+  border: 1px solid var(--ds-pagination-nav-border, #D0DBF0);
+  background-color: var(--ds-color-surface, #ffffff);
+  color: var(--ds-pagination-item-color, #003d96);
   cursor: pointer;
   box-sizing: border-box;
 }
 
 .hce-empag-navbtn:hover:not(:disabled) {
-  background-color: #EEF2F9;
-  border-color: #2B5BA8;
-  color: #2B5BA8;
+  background-color: var(--ds-pagination-hover-bg, #EEF2F9);
+  border-color: var(--ds-color-table-header-bg, #2B5BA8);
+  color: var(--ds-color-table-header-bg, #2B5BA8);
 }
 
 .hce-empag-navbtn:disabled {
@@ -50,7 +50,7 @@
   height: 28px;
   padding: 0;
   border-radius: 4px;
-  font-family: 'IBM Plex Sans', 'Roboto', system-ui, sans-serif;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 12px;
   cursor: pointer;
   box-sizing: border-box;

@@ -30,6 +30,16 @@
   line-height: 1.4;
 }
 
+.hce-tooltip-bubble--portal {
+  position: absolute;
+}
+
+.hce-tooltip-bubble--visible {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 150ms, 0ms;
+}
+
 .hce-tooltip-wrapper:hover .hce-tooltip-bubble,
 .hce-tooltip-wrapper:focus-within .hce-tooltip-bubble {
   opacity: 1;

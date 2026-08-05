@@ -72,7 +72,7 @@ export const Auditoria: Story = {
 export const ConIconoHceStethoscope: Story = {
   name: "Con ícono HCE · Stethoscope",
   args: {
-    icon:        <HceStethoscopeIcon size={24} color="#003d96" />,
+    icon:        <HceStethoscopeIcon size={24} />,
     title:       "Consulta Médica",
     description: "Registro de consultas y atenciones por especialidad médica.",
   },
@@ -81,7 +81,7 @@ export const ConIconoHceStethoscope: Story = {
 export const ConIconoHceDoctor: Story = {
   name: "Con ícono HCE · Doctor",
   args: {
-    icon:        <DoctorIcon size={24} color="#003d96" />,
+    icon:        <DoctorIcon size={24} />,
     title:       "Médicos",
     description: "Gestión del personal médico y sus especialidades.",
   },
@@ -90,7 +90,7 @@ export const ConIconoHceDoctor: Story = {
 export const ConIconoHceDrugs: Story = {
   name: "Con ícono HCE · Farmacia",
   args: {
-    icon:        <DrugsIcon size={24} color="#003d96" />,
+    icon:        <DrugsIcon size={24} />,
     title:       "Farmacia",
     description: "Control de medicamentos, stock e inventario de farmacia.",
   },
@@ -99,7 +99,7 @@ export const ConIconoHceDrugs: Story = {
 export const ConIconoHceBloodTest: Story = {
   name: "Con ícono HCE · Laboratorio",
   args: {
-    icon:        <BloodTestIcon size={24} color="#003d96" />,
+    icon:        <BloodTestIcon size={24} />,
     title:       "Laboratorio",
     description: "Solicitud y resultados de análisis de laboratorio clínico.",
   },
@@ -128,10 +128,10 @@ export const GridCompleto: Story = {
         { icon: <Stethoscope size={24} />,      title: "HCE Ambulatorio",  description: "Citas y consultorios ambulatorios." },
         { icon: <Building2 size={24} />,        title: "HCE Hospital",     description: "Hospitalización y altas médicas." },
         { icon: <ClipboardList size={24} />,    title: "Auditoría",         description: "Reportes y configuración del sistema." },
-        { icon: <BloodTestIcon size={24} color="#003d96" />, title: "Laboratorio", description: "Análisis y resultados de laboratorio clínico." },
-        { icon: <DrugsIcon size={24} color="#003d96" />,     title: "Farmacia",    description: "Medicamentos e inventario de farmacia.", disabled: true },
-        { icon: <RadiographyIcon size={24} color="#003d96" />, title: "Radiología", description: "Solicitud e interpretación de imágenes.", disabled: true },
-        { icon: <AltaMedicaIcon size={24} color="#003d96" />,  title: "Alta Médica", description: "Proceso de alta y epicrisis del paciente.", disabled: true },
+        { icon: <BloodTestIcon size={24} />, title: "Laboratorio", description: "Análisis y resultados de laboratorio clínico." },
+        { icon: <DrugsIcon size={24} />,     title: "Farmacia",    description: "Medicamentos e inventario de farmacia.", disabled: true },
+        { icon: <RadiographyIcon size={24} />, title: "Radiología", description: "Solicitud e interpretación de imágenes.", disabled: true },
+        { icon: <AltaMedicaIcon size={24} />,  title: "Alta Médica", description: "Proceso de alta y epicrisis del paciente.", disabled: true },
       ].map((card, i) => (
         <HCEQuickAccess
           key={i}

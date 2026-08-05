@@ -86,6 +86,11 @@ export interface DsTheme {
   "--ds-color-divider": string
   "--ds-color-text-primary": string
   "--ds-color-text-secondary": string
+  "--ds-color-header-bg": string
+  "--ds-color-table-header-bg": string
+  "--ds-color-row-alternate": string
+  "--ds-color-hover-bg": string
+  "--ds-color-row-priority": string
 
   "--ds-radius": string
   "--ds-radius-table": string
@@ -143,6 +148,11 @@ function buildDsTheme(
     "--ds-color-divider": colors.border,
     "--ds-color-text-primary": colors.textPrimary,
     "--ds-color-text-secondary": colors.textSecondary,
+    "--ds-color-header-bg": colors.headerBg,
+    "--ds-color-table-header-bg": colors.tableHeaderBg,
+    "--ds-color-row-alternate": colors.rowAlternate,
+    "--ds-color-hover-bg": colors.hoverBg,
+    "--ds-color-row-priority": colors.rowPriority,
 
     "--ds-radius": hceBorderRadius.lg,
     "--ds-radius-table": hceBorderRadius.xl,
@@ -159,11 +169,11 @@ function buildDsTheme(
     "--ds-table-cell-size": hceTypography.size.sm,
     "--ds-table-row-hover-bg": colors.background,
 
-    "--ds-pagination-item-color": colors.textSecondary,
-    "--ds-pagination-selected-bg": colors.primary,
+    "--ds-pagination-item-color": colors.interactive,
+    "--ds-pagination-selected-bg": colors.tableHeaderBg,
     "--ds-pagination-selected-color": colors.textOnPrimary,
-    "--ds-pagination-selected-hover": colors.primaryDark,
-    "--ds-pagination-hover-bg": colors.background,
+    "--ds-pagination-selected-hover": colors.headerBg,
+    "--ds-pagination-hover-bg": colors.hoverBg,
     "--ds-pagination-nav-border": colors.border,
   }
 }

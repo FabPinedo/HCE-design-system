@@ -5,8 +5,8 @@
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  border: 1.5px solid #0043a5;
-  background-color: #ffffff;
+  border: 1.5px solid var(--aib-border);
+  background-color: var(--aib-surface);
   color: var(--aib-color);
   padding: 0;
   cursor: pointer;
@@ -25,7 +25,7 @@
 
 .hce-action-iconbtn:disabled {
   opacity: 0.4;
-  background-color: #ffffff;
+  background-color: var(--aib-surface);
   color: var(--aib-color);
   cursor: default;
 }

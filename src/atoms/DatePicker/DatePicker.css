@@ -14,6 +14,8 @@
 }
 
 .hce-datepicker-box {
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 40px;
   box-sizing: border-box;
@@ -33,8 +35,24 @@
   box-shadow: 0 0 0 3px var(--dp-focus-ring);
 }
 
+.hce-datepicker-wrapper--disabled {
+  opacity: 0.6;
+}
+
+.hce-datepicker-wrapper--disabled:hover .hce-datepicker-label {
+  color: var(--dp-accent-default);
+}
+
+.hce-datepicker-box--disabled,
+.hce-datepicker-box--disabled:hover {
+  border-color: var(--dp-border-default);
+  background-color: var(--dp-background-disabled, #e8e8e8);
+  box-shadow: none;
+}
+
 .hce-datepicker-field {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   height: 100%;
   padding: 0 14px;
   border: none;
@@ -43,8 +61,9 @@
   box-sizing: border-box;
   font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.875rem;
-  color: var(--dp-text-default);
+  color: var(--dp-accent-default);
   transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 }
 
 .hce-datepicker-box:hover .hce-datepicker-field,
@@ -53,10 +72,42 @@
 }
 
 .hce-datepicker-field::-webkit-calendar-picker-indicator {
-  filter: opacity(0.6);
-  cursor: pointer;
+  display: none;
 }
 
-.hce-datepicker-field:disabled::-webkit-calendar-picker-indicator {
-  cursor: not-allowed;
+.hce-datepicker-calendar-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 38px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--dp-border-default);
+  cursor: pointer;
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-datepicker-box:hover .hce-datepicker-calendar-button,
+.hce-datepicker-box:focus-within .hce-datepicker-calendar-button {
+  color: var(--dp-border-active);
+}
+
+.hce-datepicker-calendar-button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -4px;
+  border-radius: 6px;
+}
+
+.hce-datepicker-calendar-button:disabled {
+  opacity: 0.5;
+  color: var(--dp-border-default);
+  cursor: default;
+}
+
+.hce-datepicker-field:disabled {
+  color: var(--dp-text-default);
+  cursor: default;
 }

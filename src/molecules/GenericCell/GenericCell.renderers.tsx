@@ -18,7 +18,6 @@ import {
   hceBorderRadius,
   hceColors,
   hceTypography,
-  hceUi,
 } from "../../tokens/hce.tokens"
 
 import type {
@@ -45,20 +44,6 @@ const clinicalIcons = {
   img: UiXRaysIcon,
   indication: UiPrescriptionIcon,
   interconsult: UiConversationIcon,
-}
-
-const lightenHexColor = (hex: string, amount = 0.9): string => {
-  const cleanHex = hex.replace("#", "")
-
-  const r = parseInt(cleanHex.substring(0, 2), 16)
-  const g = parseInt(cleanHex.substring(2, 4), 16)
-  const b = parseInt(cleanHex.substring(4, 6), 16)
-
-  const newR = Math.round(r + (255 - r) * amount)
-  const newG = Math.round(g + (255 - g) * amount)
-  const newB = Math.round(b + (255 - b) * amount)
-
-  return `rgb(${newR}, ${newG}, ${newB})`
 }
 
 type BoxCellValue =
@@ -138,7 +123,7 @@ export const cellRenderers: {
         fontSize: hceTypography.size.base,
         overflow: "hidden",
         textOverflow: "ellipsis",
-        color: hceUi.textPrimaryTable,
+        color: "var(--ds-color-primary, #374151)",
         fontWeight: boldText
           ? hceTypography.weight.bold
           : hceTypography.weight.regular,
@@ -231,11 +216,11 @@ export const cellRenderers: {
 
     const iconColor = disabled
       ? hceColors.neutro.white[800]
-      : color || hceUi.textPrimaryTable
+      : color || "var(--ds-color-text-primary, #374151)"
 
     const backgroundColor = disabled
       ? "#F2F2F2"
-      : lightenHexColor(iconColor, 0.9)
+      : `color-mix(in srgb, ${iconColor} 10%, white)`
 
     return (
       <div
@@ -313,7 +298,7 @@ export const cellRenderers: {
           <span
             style={{
               whiteSpace: "nowrap",
-              color: hceUi.textPrimaryTable,
+              color: "var(--ds-color-text-primary, #374151)",
               fontSize: hceTypography.size.base,
               fontWeight: checked
                 ? hceTypography.weight.bold
@@ -336,8 +321,8 @@ export const cellRenderers: {
     clickableA11yProps,
   }) => {
     const label = String(value ?? "-")
-    const tagColor = color || "#000000"
-    const backgroundColor = lightenHexColor(tagColor, 0.9)
+    const tagColor = color || "var(--ds-color-text-primary, #374151)"
+    const backgroundColor = `color-mix(in srgb, ${tagColor} 10%, white)`
 
     return (
       <div
@@ -392,7 +377,7 @@ export const cellRenderers: {
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis",
-        color: hceUi.textPrimaryTable,
+        color: "var(--ds-color-primary, #374151)",
         fontSize: hceTypography.size.base,
         fontWeight: boldText
           ? hceTypography.weight.bold

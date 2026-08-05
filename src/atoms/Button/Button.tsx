@@ -36,16 +36,10 @@ import { hceColors, type HceCompanyColors } from "../../tokens/hce.tokens"
  * resultado es idéntico a antes, y bajo otro tenant (ej. "sanna") el botón
  * primary recolorea de verdad.
  *
- * El variant "secondary" SIGUE sin conectar a propósito: su color por
- * defecto (green[500]) sí coincide con `--ds-color-secondary`, pero su
- * shade de hover curado (green[700], ver HOVER_VARIANT_COLOR) NO coincide
- * con `--ds-color-secondary-dark` (green[800] — elegido en
- * companies.tokens.ts por contraste AA, no por ser el mismo shade). Conectar
- * solo uno de los dos rompería la paridad visual bajo el tema csf (el
- * default y el hover dejarían de ser el mismo verde institucional) y
- * conectar ambos cambiaría el hover incluso bajo csf. Se deja hardcoded
- * hasta que el design system decida cuál de los dos shades es la fuente de
- * verdad. `variant === "danger"` nunca se conecta: es semántico.
+ * El variant "secondary" también está conectado al tema: usa
+ * `--ds-color-secondary` y `--ds-color-secondary-dark`. Así sus estados
+ * normal y hover pertenecen siempre a la empresa activa. El variant
+ * `danger` nunca se conecta porque su rojo es semántico.
  *
  * `tenantTheme` sigue funcionando igual que antes — es un override explícito
  * por instancia con más prioridad que el `DSProvider` ambiente.
@@ -86,12 +80,10 @@ interface Props {
    * design system no usa `createTheme`/`useTheme()` a nivel de componente,
    * todo se resuelve con tokens planos vía variables CSS por instancia.
    *
-   * El Button reusa la misma lógica de `resolveTenantColor` que ya usa el
-   * prop `color`: internamente toma `tenantTheme.primaryDark` (o
-   * `secondaryDark` si `variant === "secondary"`) — las variantes *Dark, no
-   * las claras, porque son las que cumplen contraste WCAG AA con el texto
-   * blanco de un botón contained (ver el comentario de accesibilidad en
-   * HceCompanyColors, hce.tokens.ts).
+ * El Button resuelve el mismo par de tonos que `DSProvider`: `primary` o
+ * `secondary` para el estado normal y sus variantes `*Dark` para hover.
+ * Así un botón configurado por `tenantTheme` se ve igual que uno bajo el
+ * `DSProvider` de esa misma empresa.
    *
    * `variant === "danger"` IGNORA `tenantTheme`: el rojo de peligro es
    * semántico (alerta/destructivo), no de marca — ninguna empresa lo
@@ -121,10 +113,10 @@ const VARIANT_CLASS: Record<string, string> = {
 // del tema "default" (theme/themes.ts). Ver nota de paridad arriba.
 // `primary` lee `--ds-color-primary` (con el hex de siempre como fallback,
 // para paridad exacta fuera de DSProvider o bajo el tema csf); `secondary`
-// y `danger` quedan hardcoded (ver nota de paridad arriba sobre por qué).
+// también lee la paleta activa. `danger` queda fijo por ser semántico.
 const DEFAULT_VARIANT_COLOR: Record<string, string> = {
   primary:   `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
-  secondary: hceColors.primary.green[500],
+  secondary: `var(--ds-color-secondary, ${hceColors.primary.green[500]})`,
   danger:    "#d32f2f", // rojo default de MUI (theme.ts nunca sobreescribe `error`)
 }
 
@@ -139,21 +131,24 @@ const DEFAULT_VARIANT_COLOR: Record<string, string> = {
 // visiblemente distinto (#003b91) al shade real que mostraba MUI (#003075).
 const HOVER_VARIANT_COLOR: Record<string, string> = {
   primary:   `var(--ds-color-primary-dark, ${hceColors.primary.blue[700]})`,
-  secondary: hceColors.primary.green[700],
+  secondary: `var(--ds-color-secondary-dark, ${hceColors.primary.green[700]})`,
   danger:    "#c62828", // theme.palette.error.dark default de MUI
 }
 
 /**
- * Resuelve el color CSS a aplicar cuando el caller pasa `tenantTheme` en vez
- * de `color`. Usa siempre las variantes *Dark (nunca los tonos "brand"
- * claros): son las que cumplen WCAG AA con texto blanco encima en un botón
- * contained — ver la nota de accesibilidad junto a `HceCompanyColors` en
- * hce.tokens.ts.
+ * Resuelve el color base cuando el caller pasa `tenantTheme` en vez de
+ * `color`. Debe coincidir con `--ds-color-primary`/`secondary` para mantener
+ * paridad con el mismo botón renderizado bajo `DSProvider`.
  *
  * `variant === "danger"` no debe pasar por acá — el rojo de peligro es
  * semántico, no de marca (ver el guard en `effectiveColor` más abajo).
  */
 function resolveTenantColor(tenantTheme: HceCompanyColors, variant: Props["variant"]): string {
+  return variant === "secondary" ? tenantTheme.secondary : tenantTheme.primary
+}
+
+/** Resuelve el tono hover equivalente a las variables `--ds-color-*-dark`. */
+function resolveTenantHoverColor(tenantTheme: HceCompanyColors, variant: Props["variant"]): string {
   return variant === "secondary" ? tenantTheme.secondaryDark : tenantTheme.primaryDark
 }
 
@@ -205,8 +200,13 @@ export const Button = ({
   // Hover del botón contained: shade ".dark" curado cuando no hay color
   // custom (matching MUI), filter de brillo cuando sí lo hay (ver
   // HOVER_VARIANT_COLOR arriba).
-  const containedHoverBg = effectiveColor ? baseColor : (HOVER_VARIANT_COLOR[variant] ?? baseColor)
-  const containedHoverFilter = effectiveColor ? "brightness(0.88)" : "none"
+  const tenantHoverColor = tenantTheme && variant !== "danger"
+    ? resolveTenantHoverColor(tenantTheme, variant)
+    : undefined
+  const containedHoverBg = color
+    ? baseColor
+    : tenantHoverColor ?? (HOVER_VARIANT_COLOR[variant] ?? baseColor)
+  const containedHoverFilter = color ? "brightness(0.88)" : "none"
 
   const cssVars: CSSProperties = {
     "--hce-btn-bg":        baseColor,

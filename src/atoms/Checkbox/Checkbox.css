@@ -34,8 +34,8 @@
   width: 24px;
   height: 24px;
   border-radius: 8px;
-  border: 2px solid #89c93d;
-  background-color: #f5fcec;
+  border: 2px solid var(--ds-color-secondary, #96dd43);
+  background-color: var(--ds-color-secondary-light, #b9e881);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -44,12 +44,12 @@
 }
 
 .hce-checkbox__input:checked + .hce-checkbox__box {
-  background-color: #89c93d;
-  border-color: #89c93d;
+  background-color: var(--ds-color-secondary, #96dd43);
+  border-color: var(--ds-color-secondary, #96dd43);
 }
 
 .hce-checkbox__input:focus-visible + .hce-checkbox__box {
-  outline: 2px solid #003d96;
+  outline: 2px solid var(--ds-color-secondary-dark, #537a25);
   outline-offset: 2px;
 }
 
