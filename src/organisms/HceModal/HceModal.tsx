@@ -182,10 +182,12 @@ export function HceModal({
 
           {/* Confirmar (filled — color customizable, default secondaryDark) */}
           {confirmButton && (
-            <div style={{ flex: isRow ? 1 : undefined }}>
+            <div style={{ flex: isRow ? 1 : undefined
+            }}>
               <Button
                 variant="primary"
                 fullWidth
+                style={{  padding: '6px 16px',    lineHeight: 1.75, minWidth: '64px' }}
                 onClick={confirmButton.onClick}
                 disabled={confirmButton.disabled}
                 startIcon={confirmButton.icon}

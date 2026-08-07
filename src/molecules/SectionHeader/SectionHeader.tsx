@@ -1,5 +1,4 @@
 import "./SectionHeader.css"
-import { hceTypography } from "../../tokens/hce.tokens"
 
 export interface SectionHeaderProps {
   title: string
@@ -18,8 +17,8 @@ export function SectionHeader({ title, expanded, onToggle }: SectionHeaderProps)
     >
       <span
         style={{
-          color: "#fff",
-          fontFamily: hceTypography.fontFamily,
+          color: "currentColor",
+          fontFamily: "var(--ds-font-family, 'Poppins', sans-serif)",
           fontWeight: 600,
           fontSize: "0.9rem",
         }}
@@ -28,7 +27,7 @@ export function SectionHeader({ title, expanded, onToggle }: SectionHeaderProps)
       </span>
       <span
         style={{
-          color: "#fff",
+          color: "currentColor",
           fontSize: "18px",
           lineHeight: 1,
           display: "inline-block",

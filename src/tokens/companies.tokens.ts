@@ -35,12 +35,11 @@ export const csfCompanyColors: HceCompanyColors = {
   // Marca — azul/verde institucional de Clínica San Felipe (hceColors)
   primary:        hceColors.primary.blue[500],  // #0043a5 — acento / borde
   primaryDark:    hceColors.primary.blue[700],  // #003075 — superficie sólida + texto blanco (~12.5:1 AA)
-  primaryLight:   hceColors.primary.blue[100],   // #e6ecf6
+  primaryLight:   hceColors.primary.blue[50],   // #e6ecf6
   secondary:      hceColors.primary.green[500], // #96dd43 — acento
   secondaryDark:  hceColors.primary.green[800], // #537a25 — superficie sólida + texto blanco (~5.0:1 AA)
   secondaryLight: hceColors.primary.green[50], // #b9e881
 
-  //base
 
   headerBg:        '#1A3A6B', // Azul marino institucional — header principal
   tableHeaderBg:   '#2B5BA8', // Azul medio — encabezado de tabla
@@ -49,7 +48,7 @@ export const csfCompanyColors: HceCompanyColors = {
   rowPriority:     '#FFF5F5',
 
   // Superficies
-  surfaceBg:      hceUi.surface,     // #ffffff
+  surfaceBg:      hceColors.primary.blue[100],     // #ffffff
   background:     hceUi.background,  // #f5f7fa
   border:         hceColors.neutro.black[50], // #e6e6e6
 
@@ -63,6 +62,7 @@ export const csfCompanyColors: HceCompanyColors = {
   // componentes (blue[600], distinto de `primary` = blue[500]).
   interactive:    hceColors.primary.blue[600], // #003d96
   interactiveButton: hceColors.primary.green[600], // #003d96
+  updateBannerIconBg: '#0369A1',
 }
 
 // CSF es la empresa por defecto/fallback de este deployment — no un alias
@@ -105,7 +105,7 @@ export const sannaCompanyColors: HceCompanyColors = {
   rowAlternate:    '#e6f6e9', // Fila alterna de tabla
   hoverBg:         '#eef9f0', // Fondo hover de fila / botón
   rowPriority:     '#f5fff5',
-  surfaceBg:      '#FFFFFF',
+  surfaceBg:      '#a6beb4', 
   background:     '#F9FAFB',
   border:         '#E5E7EB',
 
@@ -119,6 +119,7 @@ export const sannaCompanyColors: HceCompanyColors = {
   // reusar, no inventar un cuarto tono de verde).
   interactive:     hceColors.primary.green[700], // Verde Sanna oscuro (= primaryDark)
   interactiveButton: '#7560de', // Verde Sanna oscuro (= primaryDark)
+  updateBannerIconBg: '#36AD55',
 }
 
 // ── Desconocido — paleta de respaldo para un tenant no registrado ─────────
@@ -172,6 +173,8 @@ export const unknownCompanyColors: HceCompanyColors = {
   // Interactivo — acento de campos de formulario (borde/label/estado activo).
   // Reusa `primaryDark`, mismo criterio que Sanna (no inventar un tercer tono).
   interactive:    '#334155', // Slate 700 (= primaryDark)
+  interactiveButton: '#7c3aed', // Violeta 600
+  updateBannerIconBg: '#64748b', // Slate 500
 }
 
 // ── Mapa de empresas ──────────────────────────────────────────────────────

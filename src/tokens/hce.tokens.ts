@@ -407,6 +407,8 @@ export interface HceCompanyColors {
   // como hacen hoy csf/sanna.
   interactive:    string
   interactiveButton: string
+  /** Fondo del ícono del modal que anuncia una nueva versión. */
+  updateBannerIconBg: string
 }
 
 export function injectHceTokens(): void {

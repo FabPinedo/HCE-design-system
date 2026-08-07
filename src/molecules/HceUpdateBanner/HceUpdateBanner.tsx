@@ -35,7 +35,7 @@ export function HceUpdateBanner({ open, seconds, onReloadNow }: HceUpdateBannerP
         `Si lo prefieres, puedes recargar ahora.`
       }
       icon={<UiWarningIcon size={28} />}
-      iconBgColor="var(--ds-color-header-bg, #1A3A6B)"
+      iconBgColor="var(--ds-color-update-banner-icon-bg, #0369A1)"
       confirmButton={{
         label:   `Recargar ahora`,
         onClick: onReloadNow,

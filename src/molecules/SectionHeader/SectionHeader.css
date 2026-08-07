@@ -4,15 +4,25 @@
   justify-content: space-between;
   width: 100%;
   padding: 10px 24px;
-  background-color: #003d96;
+  background-color: var(--ds-color-interactive, #003d96);
+  color: var(--ds-color-secondary-contrast, #ffffff);
   border-radius: 8px;
   border: none;
   cursor: pointer;
   outline: none;
   box-sizing: border-box;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.hce-section-header:hover {
+  background-color: var(--ds-color-primary-dark, #003075);
+}
+
+.hce-section-header:active {
+  transform: scale(0.99);
 }
 
 .hce-section-header:focus-visible {
-  outline: 2px solid #ffffff;
+  outline: 2px solid var(--ds-color-secondary-contrast, #ffffff);
   outline-offset: -3px;
 }

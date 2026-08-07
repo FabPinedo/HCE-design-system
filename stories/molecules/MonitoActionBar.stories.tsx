@@ -72,7 +72,7 @@ export const AllVariants: Story = {
     <Box sx={{ display: "flex", flexDirection: "column", gap: 4, p: 2 }}>
       {(["top", "bottom"] as const).map(p => (
         <Box key={p}>
-          <Box sx={{ fontFamily: "monospace", fontSize: 11, color: "#6B7280", mb: 0.5 }}>
+          <Box sx={{ fontFamily: "monospace", fontSize: 11, color: "var(--ds-color-text-secondary, #6B7280)", mb: 0.5 }}>
             placement="{p}" — horizontal
           </Box>
           <MonitoActionBar tooltipPlacement={p} orientation="horizontal" />
@@ -81,7 +81,7 @@ export const AllVariants: Story = {
       <Box sx={{ display: "flex", gap: 6 }}>
         {(["right", "left"] as const).map(p => (
           <Box key={p}>
-            <Box sx={{ fontFamily: "monospace", fontSize: 11, color: "#6B7280", mb: 0.5 }}>
+            <Box sx={{ fontFamily: "monospace", fontSize: 11, color: "var(--ds-color-text-secondary, #6B7280)", mb: 0.5 }}>
               placement="{p}" — vertical
             </Box>
             <MonitoActionBar tooltipPlacement={p} orientation="vertical" />

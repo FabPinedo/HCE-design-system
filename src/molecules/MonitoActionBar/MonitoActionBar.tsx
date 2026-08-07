@@ -1,16 +1,12 @@
 import "./MonitoActionBar.css"
 import { HceTooltip } from "../../atoms/Tooltip/HceTooltip"
-import { hceColors, hceTypography } from "../../tokens/hce.tokens"
+import { hceTypography } from "../../tokens/hce.tokens"
 import {
   UiStethoscopeIcon,
   UiDoctorIcon,
   UiPrintingIcon,
   UiMedicalRoomIcon,
 } from "../../atoms/Icon/Icon"
-
-// ─── Estilos del botón ────────────────────────────────────────────────────────
-
-const BLUE = hceColors.primary.blue[600]
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -74,10 +70,10 @@ export function MonitoActionBar({
         justifyContent:  "space-between",
         gap:             "6px",
         padding:         "6px 10px",
-        backgroundColor: box? "#ffffff": 'transparent',
+        backgroundColor: box ? "var(--ds-color-surface, #ffffff)" : "transparent",
         borderRadius:    box? "10px": 'none',
-        boxShadow:       box? `0 2px 8px rgba(0,29,69,0.08)`: 'none',
-        border:          box?`1px solid ${hceColors.primary.blue[100]}`: 'none',
+        boxShadow:       box ? "0 2px 8px rgba(0, 0, 0, 0.08)" : "none",
+        border:          box ? "1px solid var(--ds-color-divider, #e6e6e6)" : "none",
         width:           isVertical ? "fit-content" : "100%",
         boxSizing:       "border-box",
       }}
@@ -91,7 +87,7 @@ export function MonitoActionBar({
 
         gap:             "35px",
         padding:         "6px 10px",
-        backgroundColor: box? "#ffffff": 'transparent',
+        backgroundColor: box ? "var(--ds-color-surface, #ffffff)" : "transparent",
         width:           isVertical ? "fit-content" : "100%",
         boxSizing:       "border-box",
       }}
@@ -105,7 +101,7 @@ export function MonitoActionBar({
           disabled={disabled.triaje}
           aria-label="Triaje"
         >
-          <UiStethoscopeIcon size={iconSize} color={disabled.triaje ? hceColors.primary.blue[300] : BLUE} />
+          <UiStethoscopeIcon size={iconSize} color="currentColor" />
         </button>
       </HceTooltip>
 
@@ -119,7 +115,7 @@ export function MonitoActionBar({
           disabled={disabled.reportes}
           aria-label="Reportes"
         >
-          <UiPrintingIcon size={iconSize} color={disabled.reportes ? hceColors.primary.blue[300] : BLUE} />
+          <UiPrintingIcon size={iconSize} color="currentColor" />
         </button>
       </HceTooltip>
 
@@ -132,7 +128,7 @@ export function MonitoActionBar({
           disabled={disabled.disponibilidad}
           aria-label="Disponibilidad de camas"
         >
-          <UiMedicalRoomIcon size={iconSize} color={disabled.disponibilidad ? hceColors.primary.blue[300] : BLUE} />
+          <UiMedicalRoomIcon size={iconSize} color="currentColor" />
         </button>
       </HceTooltip>
 
@@ -150,21 +146,15 @@ export function MonitoActionBar({
         >
           <UiDoctorIcon
             size={iconSize}
-            color={
-              disabled.asignarMedicos
-                ? hceColors.primary.blue[300]
-                : BLUE
-            }
+            color="currentColor"
           />
 
           <span
             style={{
               fontSize: hceTypography.size.md,
               fontWeight: hceTypography.weight.semibold,
-              fontFamily: hceTypography.fontFamilyClinical,
-              color: disabled.asignarMedicos
-                ? hceColors.primary.blue[300]
-                : BLUE,
+              fontFamily: "var(--ds-font-family, 'Poppins', sans-serif)",
+              color: "currentColor",
               lineHeight: 1,
               whiteSpace: "nowrap",
             }}

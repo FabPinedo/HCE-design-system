@@ -1,4 +1,5 @@
 import { useId } from "react";
+import "./RadioGroup.css"
 import { hceColors, hceTypography } from "../../tokens/hce.tokens";
 
 interface Option<T extends string | boolean> {
@@ -79,6 +80,7 @@ export const RadioGroup = <T extends string | boolean>({
             >
               {opt.label}
               <input
+                className="custom-radio"
                 type="radio"
                 name={groupName}
                 checked={value === opt.value}
@@ -88,9 +90,14 @@ export const RadioGroup = <T extends string | boolean>({
                   }
                 }}
                 disabled={disabled}
-                // blue[500] == --ds-color-primary (csf) exactamente — reactivo al
-                // tema activo de DSProvider, mismo hex de siempre como fallback.
-                style={{ accentColor: `var(--ds-color-primary, ${hceColors.primary.blue[500]})`, width: 18, height: 18 }}
+                style={
+                  {
+                    "--radio-color": `var(
+                      --ds-color-primary,
+                      ${hceColors.primary.blue[500]}
+                    )`,
+                  } as React.CSSProperties
+                }
               />
             </label>
           );
