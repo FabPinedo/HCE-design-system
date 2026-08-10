@@ -6,6 +6,7 @@ import { AttentionCode } from "../../atoms/AttentionCode/AttentionCode"
 import { WaitingBadge } from "../../atoms/WaitingBadge/WaitingBadge"
 import { InfoButton } from "../InfoButton/InfoButton"
 import { ClinicalStatusIcon } from "../ClinicalStatusIcon/ClinicalStatusIcon"
+import "./GenericCell.css"
 
 import {
   UiBloodTestIcon,
@@ -392,4 +393,29 @@ export const cellRenderers: {
       {String(value ?? "-")}
     </span>
   ),
+
+  list: ({ value, boldText }) => {
+    const items = Array.isArray(value)
+      ? value
+      : value
+        ? String(value).split(",").map((item) => item.trim())
+        : []
+
+    if (items.length === 0) return <>-</>
+
+    return (
+      <ul
+        className={`hce-generic-cell-list${boldText ? " hce-generic-cell-list--bold" : ""}`}
+      >
+        {items.map((item, index) => (
+          <li
+            key={`${item}-${index}`}
+            className="hce-generic-cell-list__item"
+          >
+            {String(item)}
+          </li>
+        ))}
+      </ul>
+    )
+  },
 }
