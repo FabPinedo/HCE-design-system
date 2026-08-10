@@ -2,8 +2,9 @@ import { useState, type ComponentType, type CSSProperties, type KeyboardEvent, t
 import "./HceSidebar.css"
 import { Tooltip } from "../../atoms/Tooltip/Tooltip"
 import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
-import { LogoClinicaSanFelipeIcon, LogoSannaIcon, LogoSannaIsotipoIcon, LogoUnknownIcon, LogoUnknownIsotipoIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon } from "../../atoms/Icon/SvgIconsHce"
+import { LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon } from "../../atoms/Icon/SvgIconsHce"
 import { useDsTenant } from "../../provider/ThemeProvider"
+import { getCompanyBranding } from "../../theme/companyBranding"
 
 // Lucide icons
 import {
@@ -700,7 +701,7 @@ export function HceSidebar({
   // -- mostrar el de CSF por defecto ocultaría el problema de configuración
   // en vez de señalarlo (pedido explícito del usuario).
   const tenant = useDsTenant()
-  const IsotipoIcon = tenant === "sanna" ? LogoSannaIsotipoIcon : tenant === "unknown" ? LogoUnknownIsotipoIcon : UiIsotipoClinicaIcon
+  const { Logo: CompanyLogo, Isotype: CompanyIsotype } = getCompanyBranding(tenant)
 
   // Fondo sólido de cabecera + riel colapsado — blue[600] == --ds-color-interactive
   // exactamente en CSF, reactivo al tema activo de DSProvider (verde en Sanna, ver
@@ -786,15 +787,11 @@ export function HceSidebar({
               borderRadius:   "50%",
             } as CSSProperties}
           >
-            <IsotipoIcon size={28} color="white" />
+            <CompanyIsotype size={28} color="white" />
           </div>
         ) : (
           <>
-            {tenant === "sanna"
-              ? <LogoSannaIcon width={110} color="white" />
-              : tenant === "unknown"
-                ? <LogoUnknownIcon width={110} color="white" />
-                : <LogoClinicaSanFelipeIcon width={110} />}
+            <CompanyLogo width={110} color="white" />
             <div
               role="button"
               tabIndex={0}

@@ -13,7 +13,7 @@ export const HceTooltip = ({ children, arrow = true, ...props }: TooltipProps) =
       arrow={arrow}
       {...props}
       bubbleStyle={{
-        backgroundColor: hceColors.primary.green[600],
+        backgroundColor: `var(--ds-color-interactive-button, ${hceColors.primary.green[600]})`,
         color:           "#ffffff",
         fontSize:        "0.72rem",
         fontWeight:      700,

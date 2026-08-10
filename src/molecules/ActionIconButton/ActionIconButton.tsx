@@ -25,7 +25,7 @@ export const ActionIconButton = ({ icon: Icon, tooltip, onClick, disabled = fals
   const cssVars = {
     "--aib-color":        `var(--ds-color-interactive, ${hceColors.primary.blue[700]})`,
     "--aib-border":       `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
-    "--aib-surface":      "var(--ds-color-surface, #ffffff)",
+    "--aib-surface":      " #ffffff",
     "--aib-hover-bg":     `var(--ds-color-primary-light, ${hceColors.primary.blue[50]})`,
     "--aib-hover-border": `var(--ds-color-interactive, ${hceColors.primary.blue[700]})`,
     "--aib-active-bg":    `color-mix(in srgb, var(--ds-color-interactive, ${hceColors.primary.blue[700]}) 18%, transparent)`,

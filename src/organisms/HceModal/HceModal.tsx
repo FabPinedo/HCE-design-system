@@ -2,7 +2,7 @@ import { type ReactNode }  from "react"
 import { Overlay }         from "../../atoms/Overlay/Overlay"
 import { Button }          from "../../atoms/Button/Button"
 import { TextInput }       from "../../atoms/TextInput/TextInput"
-import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
+import { hceColors, hceShadows } from "../../tokens/hce.tokens"
 
 // ─── Sub-tipos ────────────────────────────────────────────────────────────────
 
@@ -14,8 +14,8 @@ export interface ModalButtonConfig {
   disabled?: boolean
   /**
    * Color personalizado del botón.
-   * - confirmButton (filled): color de fondo. Default: verde hceColors.primary.green[600]
-   * - cancelButton (outlined): color de borde y texto. Default: azul hceColors.primary.blue[500]
+   * - confirmButton (filled): `secondaryDark` del tenant activo
+   * - cancelButton (outlined): `primary` del tenant activo
    */
   color?:   string
 }
@@ -53,9 +53,9 @@ export interface HceModalProps {
   children?: ReactNode
 
   // ── Botones (ambos opcionales) ─────────────────────
-  /** Botón principal (verde/filled) */
+  /** Botón principal (secondaryDark/filled) */
   confirmButton?: ModalButtonConfig
-  /** Botón secundario (outlined azul) */
+  /** Botón secundario (primary/outlined) */
   cancelButton?:  ModalButtonConfig
 
   // ── Layout ─────────────────────────────────────────
@@ -99,8 +99,8 @@ export function HceModal({
         width:         "100%",
         textAlign:     "center",
         boxShadow:     hceShadows.modal,
-        fontFamily:    hceTypography.fontFamily,
-        backgroundColor: "#ffffff",
+        fontFamily:    "var(--ds-font-family, 'Poppins', sans-serif)",
+        backgroundColor: " #ffffff",
         boxSizing:     "border-box",
       }}
     >
@@ -127,7 +127,7 @@ export function HceModal({
       <div
         id="hce-modal-title"
         style={{
-          fontFamily: hceTypography.fontFamily,
+          fontFamily: "var(--ds-font-family, 'Poppins', sans-serif)",
           fontWeight: 700,
           fontSize:   "1.125rem",
           color:      `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
@@ -142,9 +142,9 @@ export function HceModal({
         <div
           id="hce-modal-description"
           style={{
-            fontFamily: hceTypography.fontFamily,
+            fontFamily: "var(--ds-font-family, 'Poppins', sans-serif)",
             fontSize:   "0.875rem",
-            color:      hceColors.neutro.black[300],
+            color:      "var(--ds-color-text-secondary, #545454)",
             lineHeight: 1.65,
             marginBottom: (input || hasButtons) ? 20 : 0,
           }}
@@ -180,23 +180,25 @@ export function HceModal({
           gap:           12,
         }}>
 
-          {/* Confirmar (filled — color customizable, default verde) */}
+          {/* Confirmar (filled — color customizable, default secondaryDark) */}
           {confirmButton && (
-            <div style={{ flex: isRow ? 1 : undefined }}>
+            <div style={{ flex: isRow ? 1 : undefined
+            }}>
               <Button
                 variant="primary"
                 fullWidth
+                style={{  padding: '6px 16px',    lineHeight: 1.75, minWidth: '64px' }}
                 onClick={confirmButton.onClick}
                 disabled={confirmButton.disabled}
                 startIcon={confirmButton.icon}
-                color={confirmButton.color ?? hceColors.primary.green[600]}
+                color={confirmButton.color ?? `var(--ds-color-interactive-button, ${hceColors.primary.green[800]})`}
               >
                 {confirmButton.label}
               </Button>
             </div>
           )}
 
-          {/* Cancelar (outlined — color customizable, default azul) */}
+          {/* Cancelar (outlined — color customizable, default primary) */}
           {cancelButton && (
             <div style={{ flex: isRow ? 1 : undefined }}>
               <Button

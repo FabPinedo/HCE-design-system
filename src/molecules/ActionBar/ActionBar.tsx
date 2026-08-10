@@ -50,7 +50,7 @@ export const ActionBar = ({
         justifyContent: "space-between",
         gap: "6px",
         padding: "6px 10px",
-        backgroundColor: "var(--ds-color-surface, #ffffff)",
+        backgroundColor: "#ffffff",
         borderRadius: "10px",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
         border: `1px solid var(--ds-color-divider, ${hceColors.primary.blue[100]})`,
@@ -67,7 +67,7 @@ export const ActionBar = ({
           alignItems: isVertical ? "start" : "center",
           gap: "0.5rem",
           padding: "6px 10px",
-          backgroundColor: "var(--ds-color-surface, #ffffff)",
+          backgroundColor: "#ffffff",
           width: isVertical ? "fit-content" : "100%",
           boxSizing: "border-box",
         }}

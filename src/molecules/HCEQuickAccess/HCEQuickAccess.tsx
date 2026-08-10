@@ -25,8 +25,8 @@ export function HCEQuickAccess({
     <div
       className={`hce-quickaccess${!disabled ? " hce-quickaccess--enabled" : ""}`}
       style={{
-        border:          `1px solid ${disabled ? "var(--ds-color-divider, #e6e6e6)" : "var(--ds-color-primary-light, #e6ecf6)"}`,
-        backgroundColor: disabled ? "var(--ds-color-background, #f5f7fa)" : "var(--ds-color-surface, #ffffff)",
+        border:          `1px solid ${disabled ? " #e6e6e6" : "var(--ds-color-divider, #e6ecf6)"}`,
+        backgroundColor: disabled ? "var(--ds-color-background, #f5f7fa)" : " #ffffff",
         opacity:         disabled ? 0.6 : 1,
         cursor:          disabled ? "not-allowed" : "default",
       }}

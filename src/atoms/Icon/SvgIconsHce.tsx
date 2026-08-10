@@ -9,7 +9,7 @@ import { hceClinicalColors } from "../../tokens/hce.tokens"
 
 // ── Logo completo Clínica San Felipe ──────────────────────────────────────────
 // Acepta `width`; la altura se escala proporcialmente (ratio 123:40)
-export function LogoClinicaSanFelipeIcon({ width = 123 }: { width?: number }) {
+export function LogoCSFIcon({ width = 123 }: { width?: number }) {
   const height = Math.round((40 / 123) * width)
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 123 40" fill="none">

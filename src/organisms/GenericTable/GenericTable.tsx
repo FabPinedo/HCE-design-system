@@ -2,7 +2,7 @@ import type { CSSProperties } from "react"
 import "./GenericTable.css"
 import { GenericRow } from "../../molecules/GenericRow/GenericRow"
 import type {  GenericTableColumn } from "../../molecules/GenericCell/GenericCell"
-import { hceBorderRadius, hceClinicalColors, hceColors, hceTypography, hceUi } from "../../tokens/hce.tokens"
+import { hceBorderRadius, hceClinicalColors, hceColors, hceTypography } from "../../tokens/hce.tokens"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { getColumnWidths, getTableWidthNumber } from "./tableWidth.utils"
 
@@ -11,7 +11,7 @@ import { getColumnWidths, getTableWidthNumber } from "./tableWidth.utils"
 // tabla debe coincidir exactamente con ese color, no con hceClinicalColors
 // .tableHeaderBg / .headerBg (tokens de azul "similares" pero no son el que
 // realmente se renderiza en el header de este componente).
-const TABLE_BORDER_COLOR = hceUi.textPrimaryTable
+const TABLE_BORDER_COLOR = `var(--ds-color-interactive, #003d96)`
 const TABLE_RADIUS = hceBorderRadius.md
 const SCROLLBAR_THUMB_MIN_HEIGHT = 24
 
@@ -53,9 +53,10 @@ interface GenericTableProps<T> {
 
 const headerCellStyle: CSSProperties = {
   height: HEADER_HEIGHT_FALLBACK,
-  backgroundColor: hceUi.textPrimaryTable,
+  backgroundColor: `var(--ds-color-interactive, #003d96)`,
   color: hceColors.neutro.white[100],
   borderLeft: "1px solid #ffff",
+  fontSize: "12px",
   // fontSize / fontWeight / fontFamily NO se fuerzan acá a propósito: antes
   // el theme (MuiTableHead + MuiTableCell.styleOverrides.head) definía sus
   // propios tokens hce específicos para headers (ej. weight.bold,

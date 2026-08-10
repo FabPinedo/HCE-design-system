@@ -37,7 +37,10 @@ export default meta
 type Story = StoryObj<typeof Button>
 
 // ── Variants ──────────────────────────────────────────────
-
+export const Contained: Story = {
+  args: { label: "Guardar", variant: "contained" },
+  
+}
 export const Primary: Story = {
   args: { label: "Guardar", variant: "primary" },
 }

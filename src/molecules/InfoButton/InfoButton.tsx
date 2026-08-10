@@ -10,7 +10,7 @@ import type { CSSProperties } from "react"
 import "./InfoButton.css"
 import { Tooltip } from "../../atoms/Tooltip/Tooltip"
 import { HceEyeIcon } from "../../atoms/Icon/SvgIconsHce"
-import { hceClinicalColors } from "../../tokens/hce.tokens"
+
 
 interface Props {
   onClick?:  () => void
@@ -20,9 +20,9 @@ interface Props {
 
 export const InfoButton = ({ onClick, tooltip = "Ver información del paciente", disabled = false }: Props) => {
   const cssVars = {
-    "--infobtn-bg":          hceClinicalColors.btnInfoBg,
-    "--infobtn-hover-bg":    hceClinicalColors.headerBg,
-    "--infobtn-disabled-bg": hceClinicalColors.tableHeaderBg,
+    "--infobtn-bg":          `var(--ds-color-secondary, #003d96)`,
+    "--infobtn-hover-bg":    `var(--ds-color-primary-dark, #002a66)`,
+    "--infobtn-disabled-bg": `var(--ds-color-interactive-disabled, #cccccc)`,
   } as CSSProperties
 
   return (

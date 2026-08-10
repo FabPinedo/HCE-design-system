@@ -761,4 +761,21 @@ export const TextBoldByDischarge: Story = {
       boldGetter: (row) => row.has_discharge,
     },
   },
+
+  
+}
+export const TextasList: Story = {
+  args: {
+    row: {
+      ...baseRow,
+      patient_name: "A ,B ,C ,D ,E ,F ,G ,H ,I ,J",
+    },
+    column: {
+      key: "patient",
+      header: "Listado",
+      type: "list",
+      field: "patient_name",
+      
+    },
+  },
 }

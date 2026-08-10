@@ -82,7 +82,7 @@ export const ConCuentaRegresiva: Story = {
         <Button onClick={simular}>
           Simular nueva versión
         </Button>
-        <span style={{ fontSize: 12, color: "#6B7280" }}>
+        <span style={{ fontSize: 12, color: "var(--ds-color-text-secondary, #6B7280)" }}>
           {open ? `Recargando en ${seconds}s…` : "Modal cerrado"}
         </span>
         <HceUpdateBanner

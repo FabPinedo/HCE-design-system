@@ -131,7 +131,7 @@ function ModalTrigger({
         onClick={() => setOpen(true)}
         style={{
           padding:         "10px 20px",
-          backgroundColor: hceColors.primary.blue[600],
+          backgroundColor: `var(--ds-color-interactive, #003d96)`,
           color:           hceColors.neutro.white[50],
           border:          "none",
           borderRadius:    6,

@@ -83,7 +83,7 @@ function BedCard({ bed }: { bed: BedAvailabilityItem }) {
       arrow
       placement="top"
       bubbleStyle={{
-        backgroundColor: hceColors.primary.blue[600],
+        backgroundColor: 'var(--ds-color-primary, #1A3A6B)',
         fontFamily: hceTypography.fontFamilyClinical,
         fontSize: "12px",
         fontWeight: hceTypography.weight.bold,
@@ -117,7 +117,7 @@ function BedCard({ bed }: { bed: BedAvailabilityItem }) {
       >
         <UiMedicalRoomIcon size={17} color={ isOutlined ? `var(--ds-color-primary, ${hceColors.primary.blue[500]})` : "#FFFFFF"} />
         <span style={{
-          fontFamily: hceTypography.fontFamilyClinical,
+          fontFamily: "var(--ds-font-family, 'Poppins', sans-serif)",
           fontSize:   hceTypography.size.tableCell,
           fontWeight: hceTypography.weight.bold,
           color:      isOutlined ? `var(--ds-color-primary, ${hceColors.primary.blue[500]})` : "#FFFFFF",
@@ -192,17 +192,19 @@ export function BedAvailabilityDrawerV2({
       labelledBy="hce-bedv2-title"
     >
       {/* ── Header (Fijo arriba) ── */}
-      <div style={{
-        flexShrink:      0,
-        backgroundColor: hceColors.primary.blue[600],
-        padding:         `${hceSpacing[4]} ${hceSpacing[4]}`,
-      }}>
+      <div
+        className="hce-bed-header"
+        style={{
+          flexShrink: 0,
+          padding: `${hceSpacing[4]} ${hceSpacing[4]}`,
+        }}
+      >
         <span id="hce-bedv2-title" style={{
           display: "block",
           fontFamily: hceTypography.fontFamilyClinical,
           fontSize:   hceTypography.size.headerTitle,
           fontWeight: hceTypography.weight.bold,
-          color:      "#FFFFFF",
+          color:      "currentColor",
           textAlign:  "center",
         }}>
           {title}

@@ -41,7 +41,8 @@
 .hce-hceheader-sede-select {
   appearance: none;
   font-family: var(--ds-font-family, 'Poppins', sans-serif);
-  color: #003d96;
+  color: var(--ds-color-interactive, #003d96);
+  opacity: 1;
   font-size: 16px;
   padding: 4px 28px 4px 10px;
   border-radius: 8px;
@@ -54,8 +55,8 @@
 }
 
 .hce-hceheader-sede-select:focus {
-  border-color: #3369b7;
-  box-shadow: 0 0 0 6px #b0c5e3;
+  border-color: var(--ds-color-update-banner-icon-bg, #003d96);
+  box-shadow: 0 0 0 6px var(--ds-color-primary-light, #003d96);;
   outline: none;
 }
 

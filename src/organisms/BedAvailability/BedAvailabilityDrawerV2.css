@@ -21,6 +21,11 @@
   box-sizing: border-box;
 }
 
+.hce-bed-header {
+  background-color: var(--ds-color-header-bg, #1A3A6B);
+  color: var(--ds-color-secondary-contrast, #ffffff);
+}
+
 /* Breakpoint "sm" de MUI = 600px */
 @media (min-width: 600px) {
   .hce-bedv2-panel {
@@ -49,7 +54,7 @@
 
 .hce-bedv2-close-btn {
   width: 100%;
-  background-color: #70C934;
+  background-color: var(--ds-color-secondary, #1A3A6B);
   color: #ffffff;
   font-family: 'IBM Plex Sans', 'Roboto', system-ui, sans-serif;
   font-weight: 700;

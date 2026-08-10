@@ -61,8 +61,8 @@
 }
 
 .hce-scombo-input:focus {
-  border-color: #0043a5;
-  box-shadow: 0 0 0 3px #b0c5e3;
+  border-color: var(--ds-color-primary-light, #0043a5);
+  box-shadow: 0 0 0 3px var(--ds-color-surface, #0043a5);
 }
 
 .hce-scombo-option {
@@ -83,8 +83,8 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 2px solid rgba(0, 67, 165, 0.25);
-  border-top-color: #0043a5;
+  border: 2px solid var(--ds-color-primary-dark, rgba(0, 67, 165, 0.25));
+  border-top-color: var(--ds-color-primary-light, #0043a5);
   animation: hce-scombo-spin 800ms linear infinite;
 }
 
