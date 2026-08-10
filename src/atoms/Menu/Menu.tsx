@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties, type HTMLAttributes, type ReactNode, type RefObject } from "react"
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type HTMLAttributes, type ReactNode, type RefObject } from "react"
 import { createPortal } from "react-dom"
 import "./Menu.css"
 import { useDsTheme } from "../../provider/ThemeProvider"
@@ -24,6 +24,10 @@ export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "classNa
   role?: string
 }
 
+// Margen mínimo respecto al borde del viewport, para que el panel nunca
+// quede pegado literalmente al borde (mismo criterio que MUI Popover).
+const VIEWPORT_MARGIN = 8
+
 /**
  * Menu — reemplazo propio de MUI Menu/Popover (dropdown anclado a un
  * trigger), usado por Header/HceHeader/HceSidebar. Portal a document.body +
@@ -31,6 +35,16 @@ export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "classNa
  * cierre por click-afuera/Escape. No es un overlay modal (sin backdrop ni
  * focus-trap) — igual que MUI Menu, que tampoco bloquea interacción con el
  * resto de la página.
+ *
+ * Detección de colisión con el viewport: por defecto abre hacia ABAJO del
+ * anchor. Si no hay espacio suficiente hacia abajo (típico cuando el
+ * trigger está cerca del borde inferior de un modal con scroll interno —
+ * el panel es `position: fixed` portado a <body>, así que NO lo recorta el
+ * `overflow` del modal, pero tampoco "sabe" dónde termina el modal, y sin
+ * este chequeo se extendía sobre el contenido de atrás), se "voltea" hacia
+ * ARRIBA del anchor. Si tampoco entra completo hacia arriba, se clampea la
+ * altura máxima al espacio disponible del lado elegido (con scroll propio
+ * del panel vía overflow-y del CSS existente).
  */
 export function Menu({
   open,
@@ -44,7 +58,13 @@ export function Menu({
   ...rest
 }: MenuProps) {
   const panelRef = useRef<HTMLDivElement>(null)
-  const [position, setPosition] = useState<{ top: number; left?: number; right?: number } | null>(null)
+  const [position, setPosition] = useState<{
+    top?: number
+    bottom?: number
+    left?: number
+    right?: number
+    maxHeight?: number
+  } | null>(null)
   // El panel se porta a document.body (fuera del subárbol DOM de DSProvider),
   // así que las variables --ds-* no le cascadean por CSS normal — se leen
   // del DsThemeContext (que sí sigue la posición del árbol de React) y se
@@ -64,10 +84,24 @@ export function Menu({
       const anchor = anchorRef.current
       if (!anchor) return
       const rect = anchor.getBoundingClientRect()
+
+      const spaceBelow = window.innerHeight - rect.bottom - VIEWPORT_MARGIN
+      const spaceAbove = rect.top - VIEWPORT_MARGIN
+      // Altura real del panel ya montado (si existe, ej. al reposicionar en
+      // scroll); si todavía no se montó (primer render tras abrir), se
+      // asume que sí entra abajo y se corrige en el useLayoutEffect de más
+      // abajo apenas se conozca la altura real.
+      const panelHeight = panelRef.current?.getBoundingClientRect().height ?? 0
+      const opensUp = panelHeight > spaceBelow && spaceAbove > spaceBelow
+
+      const vertical = opensUp
+        ? { bottom: window.innerHeight - rect.top + 4, maxHeight: spaceAbove }
+        : { top: rect.bottom + 4, maxHeight: spaceBelow }
+
       if (align === "right") {
-        setPosition({ top: rect.bottom + 4, right: window.innerWidth - rect.right })
+        setPosition({ ...vertical, right: window.innerWidth - rect.right })
       } else {
-        setPosition({ top: rect.bottom + 4, left: rect.left })
+        setPosition({ ...vertical, left: rect.left })
       }
     }
 
@@ -87,17 +121,43 @@ export function Menu({
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape" && isTopmostOverlay(id)) onClose()
     }
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside, true)
     document.addEventListener("keydown", handleKeyDown)
 
     return () => {
       window.removeEventListener("scroll", updatePosition, true)
       window.removeEventListener("resize", updatePosition)
-      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("mousedown", handleClickOutside, true)
       document.removeEventListener("keydown", handleKeyDown)
       unregisterOverlay(id)
     }
   }, [open, align])
+
+  // Primer render tras abrir: el panel se monta con la posición "optimista"
+  // (asumiendo que entra hacia abajo). Apenas se conoce su altura real,
+  // recalcula una vez más — así el flip hacia arriba también aplica en la
+  // apertura inicial, no solo en reposiciones por scroll subsecuentes.
+  useLayoutEffect(() => {
+    if (!open || !position) return
+    const anchor = anchorRef.current
+    const panel = panelRef.current
+    if (!anchor || !panel) return
+
+    const rect = anchor.getBoundingClientRect()
+    const panelHeight = panel.getBoundingClientRect().height
+    const spaceBelow = window.innerHeight - rect.bottom - VIEWPORT_MARGIN
+    const spaceAbove = rect.top - VIEWPORT_MARGIN
+    const shouldBeUp = panelHeight > spaceBelow && spaceAbove > spaceBelow
+    const isCurrentlyUp = position.bottom !== undefined
+
+    if (shouldBeUp !== isCurrentlyUp) {
+      const vertical = shouldBeUp
+        ? { bottom: window.innerHeight - rect.top + 4, maxHeight: spaceAbove }
+        : { top: rect.bottom + 4, maxHeight: spaceBelow }
+      setPosition((prev) => (prev ? { ...prev, ...vertical, top: vertical.top, bottom: vertical.bottom } : prev))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, position?.top, position?.bottom])
 
   if (!open || !position || typeof document === "undefined") return null
 
@@ -107,7 +167,16 @@ export function Menu({
       role={role}
       tabIndex={-1}
       className={`hce-menu-panel${panelClassName ? ` ${panelClassName}` : ""}`}
-      style={{ ...(dsTheme as CSSProperties), top: position.top, left: position.left, right: position.right, ...panelStyle }}
+      style={{
+        ...(dsTheme as CSSProperties),
+        top: position.top,
+        bottom: position.bottom,
+        left: position.left,
+        right: position.right,
+        maxHeight: position.maxHeight,
+        overflowY: "auto",
+        ...panelStyle,
+      }}
       {...rest}
     >
       {children}

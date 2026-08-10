@@ -92,8 +92,8 @@ export function SearchComboInput({
         setDropOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside,true);
+    return () => document.removeEventListener("mousedown", handleClickOutside,true);
   }, []);
 
   // Abre/cierra dropdown de opciones según si hay resultados

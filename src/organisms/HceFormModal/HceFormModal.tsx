@@ -205,6 +205,7 @@ export function HceFormModal({
           {primaryButton && (
             <div style={{ minWidth: buttonsFullWidth ? 0 : "100px", flex: buttonsFullWidth ? 1 : undefined }}>
               <Button
+                sx={{px: "30px", py: "12px"}}
                 variant="primary"
                 fullWidth
                 onClick={primaryButton.onClick}
@@ -228,6 +229,7 @@ export function HceFormModal({
           {secondaryButton && (
             <div style={{ minWidth: buttonsFullWidth ? 0 : "100px", flex: buttonsFullWidth ? 1 : undefined }}>
               <Button
+                sx={{px: "30px", py: "12px"}}
                 variant="outlined"
                 fullWidth
                 onClick={secondaryButton.onClick}

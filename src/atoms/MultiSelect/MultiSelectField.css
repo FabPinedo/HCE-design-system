@@ -67,8 +67,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  width: 100%;
+  gap: 18px;
   padding: 4px 12px;
   border-radius: 8px;
   background-color: var(--ms-summary-bg);

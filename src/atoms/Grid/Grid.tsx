@@ -1,46 +1,54 @@
 import {
   forwardRef,
   createElement,
-  useEffect,
-  useState,
   type ElementType,
   type ReactNode,
   type HTMLAttributes,
   type CSSProperties,
 } from "react"
-import { sxToStyle } from "../../utils/sx"
+import { sxToStyle, type SxProps } from "../../utils/sx"
+import {
+  type Breakpoint,
+  breakpointOrder,
+  useCurrentBreakpoint,
+  type ResponsiveValue,
+  resolveResponsiveValue,
+} from "../../utils/breakpoints"
 
-type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl"
-
-const breakpointOrder: Breakpoint[] = ["xs", "sm", "md", "lg", "xl"]
-
-// Mismos valores por defecto que el theme de MUI
-const breakpointValues: Record<Breakpoint, number> = {
-  xs: 0,
-  sm: 600,
-  md: 900,
-  lg: 1200,
-  xl: 1536,
-}
-
-type ResponsiveValue<T> = T | Partial<Record<Breakpoint, T>> | T[]
-type Direction = "row" | "row-reverse"
-type SizeValue = "auto" | boolean | number
-type SpacingValue = number | string
+// number en vez de la unión literal 1-12: este componente admite `columns`
+// personalizado (p. ej. un grid de 24), así que el tamaño no debe limitarse
+// a los 12 valores fijos que asume MUI real.
+type GridSize = false | "auto" | true | number
+type Direction = "row" | "row-reverse" | "column" | "column-reverse"
+type AlignItems = "flex-start" | "center" | "flex-end" | "stretch" | "baseline"
+type AlignContent =
+  | "stretch"
+  | "center"
+  | "flex-start"
+  | "flex-end"
+  | "space-between"
+  | "space-around"
+type JustifyContent =
+  | "flex-start"
+  | "center"
+  | "flex-end"
+  | "space-between"
+  | "space-around"
+  | "space-evenly"
+type Wrap = "nowrap" | "wrap" | "wrap-reverse"
+type SpacingStep = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 
 /**
- * Grid — reemplazo propio de `Grid` de MUI (v2, API unificada), en CSS/HTML
- * puro sobre flexbox.
+ * Grid — réplica del `Grid` de MUI v4 (https://v4.mui.com/api/grid/) en
+ * CSS/HTML puro sobre flexbox, con la MISMA API pública que documenta MUI:
+ * `container`, `item`, `direction`, `spacing`, `wrap`, `alignItems`,
+ * `alignContent`, `justifyContent` (+ alias deprecado `justify`),
+ * `zeroMinWidth`, `xs`, `sm`, `md`, `lg`, `xl`.
  *
- * Mantiene la misma API mínima que este repo consumía de MUI:
- * `container`, `columns`, `columnSpacing`, `direction`, `offset`,
- * `rowSpacing`, `size`, `spacing`, `wrap` — todos aceptan valores
- * responsivos (número plano, array posicional [xs,sm,md,lg,xl] u objeto
- * { xs, sm, md, lg, xl }), igual que MUI. Además: `component` (elemento
- * HTML a renderizar, default "div"), `sx` (subconjunto propio, ver
- * utils/sx.ts), `style`, `className`, `children` y el resto de atributos
- * HTML nativos del elemento (onClick, id, role, aria-*, etc. se reenvían
- * tal cual vía `...rest`).
+ * EXTENSIÓN propia (no forma parte de la API de MUI v4, se mantiene por
+ * compatibilidad con consumidores existentes en el monorepo): `size`,
+ * `offset`, `columns`, `columnSpacing`, `rowSpacing`. Si se usan `xs`/`sm`/
+ * `md`/`lg`/`xl`, estas tienen prioridad sobre `size`/`offset`.
  *
  * Re-exportado desde el índice público (`export { Grid } from "@hce/design-system"`)
  * en lugar de re-exportar el `Grid` de MUI, para que los consumidores externos
@@ -49,78 +57,55 @@ type SpacingValue = number | string
 export interface GridProps extends Omit<HTMLAttributes<HTMLElement>, "color"> {
   component?: ElementType
   children?: ReactNode
-  sx?: Record<string, unknown>
-  columns?: ResponsiveValue<number>
-  columnSpacing?: ResponsiveValue<SpacingValue>
+  sx?: SxProps
+  classes?: Partial<Record<"root" | "container" | "item" | "zeroMinWidth", string>>
+
+  // ---- API oficial de MUI v4 Grid ----
   container?: boolean
-  direction?: ResponsiveValue<Direction>
-  offset?: ResponsiveValue<SizeValue>
-  rowSpacing?: ResponsiveValue<SpacingValue>
-  size?: ResponsiveValue<SizeValue>
-  spacing?: ResponsiveValue<SpacingValue>
-  wrap?: "nowrap" | "wrap-reverse" | "wrap"
+  item?: boolean
+  alignContent?: AlignContent
+  alignItems?: AlignItems
+  direction?: Direction
+  /** @deprecated usa `justifyContent`, se mantiene por compatibilidad */
+  justify?: JustifyContent
+  justifyContent?: JustifyContent
+  spacing?: SpacingStep
+  wrap?: Wrap
+  zeroMinWidth?: boolean
+  xs?: GridSize
+  sm?: GridSize
+  md?: GridSize
+  lg?: GridSize
+  xl?: GridSize
+
+  // ---- Extensión propia (compatibilidad hacia atrás, NO es de MUI v4) ----
+  columns?: number
+  columnSpacing?: ResponsiveValue<SpacingStep>
+  rowSpacing?: ResponsiveValue<SpacingStep>
+  size?: ResponsiveValue<GridSize>
+  offset?: ResponsiveValue<GridSize | number>
 }
 
-function getBreakpoint(width: number): Breakpoint {
-  if (width >= breakpointValues.xl) return "xl"
-  if (width >= breakpointValues.lg) return "lg"
-  if (width >= breakpointValues.md) return "md"
-  if (width >= breakpointValues.sm) return "sm"
-  return "xs"
-}
-
-function useCurrentBreakpoint(): Breakpoint {
-  const [bp, setBp] = useState<Breakpoint>(() =>
-    typeof window !== "undefined" ? getBreakpoint(window.innerWidth) : "xs"
-  )
-
-  useEffect(() => {
-    const handleResize = () => setBp(getBreakpoint(window.innerWidth))
-    window.addEventListener("resize", handleResize)
-    handleResize()
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
-
-  return bp
-}
-
-// Resuelve un valor responsivo al valor vigente para el breakpoint actual,
-// heredando en cascada mobile-first como hace MUI.
-function resolveResponsive<T>(
-  value: ResponsiveValue<T> | undefined,
-  current: Breakpoint,
-  fallback?: T
-): T | undefined {
-  if (value === undefined) return fallback
-
-  if (Array.isArray(value)) {
-    const idx = breakpointOrder.indexOf(current)
-    for (let i = idx; i >= 0; i--) {
-      if (value[i] !== undefined) return value[i]
-    }
-    return fallback
+// Resuelve xs/sm/md/lg/xl tal como lo hace MUI v4: cada prop define el
+// tamaño desde ESE breakpoint hacia arriba (mobile-first), tomando el
+// definido más cercano hacia abajo del breakpoint actual.
+function resolveGridSize(
+  values: Partial<Record<Breakpoint, GridSize | undefined>>,
+  current: Breakpoint
+): GridSize | undefined {
+  const idx = breakpointOrder.indexOf(current)
+  for (let i = idx; i >= 0; i--) {
+    const bp = breakpointOrder[i]
+    if (values[bp] !== undefined) return values[bp]
   }
-
-  if (typeof value === "object" && value !== null) {
-    const obj = value as Partial<Record<Breakpoint, T>>
-    const idx = breakpointOrder.indexOf(current)
-    for (let i = idx; i >= 0; i--) {
-      const bp = breakpointOrder[i]
-      if (obj[bp] !== undefined) return obj[bp] as T
-    }
-    return fallback
-  }
-
-  return value as T
+  return undefined
 }
 
 const SPACING_UNIT = 8 // px, igual a theme.spacing(1) por defecto
 
-function toSpacingPx(value: SpacingValue | undefined): number {
-  if (value === undefined) return 0
-  if (typeof value === "number") return value * SPACING_UNIT
-  const parsed = parseFloat(value)
-  return Number.isNaN(parsed) ? 0 : parsed * SPACING_UNIT
+function toSpacingPx(value: SpacingStep | undefined): number {
+  if (!value) return 0
+  return value * SPACING_UNIT
 }
 
 export const Grid = forwardRef<HTMLElement, GridProps>(function Grid(
@@ -130,28 +115,41 @@ export const Grid = forwardRef<HTMLElement, GridProps>(function Grid(
     style,
     sx,
     className,
+    classes,
     columns = 12,
     columnSpacing,
     container = false,
+    item,
     direction = "row",
     offset,
     rowSpacing,
     size,
     spacing = 0,
     wrap = "wrap",
+    alignItems,
+    alignContent,
+    justify,
+    justifyContent,
+    zeroMinWidth = false,
+    xs,
+    sm,
+    md,
+    lg,
+    xl,
     ...rest
   },
   ref
 ) {
   const bp = useCurrentBreakpoint()
 
-  const currentColumns = resolveResponsive(columns, bp, 12) ?? 12
-  const currentDirection = resolveResponsive<Direction>(direction, bp, "row") ?? "row"
-  const baseSpacing = resolveResponsive<SpacingValue>(spacing, bp, 0) ?? 0
-  const currentColumnSpacing =
-    resolveResponsive<SpacingValue>(columnSpacing, bp, baseSpacing) ?? baseSpacing
-  const currentRowSpacing =
-    resolveResponsive<SpacingValue>(rowSpacing, bp, baseSpacing) ?? baseSpacing
+  // `justify` es el alias deprecado de `justifyContent` (igual que en v4)
+  const effectiveJustifyContent = justifyContent ?? justify
+
+  const baseSpacing = spacing ?? 0
+  const currentColumnSpacing = resolveResponsiveValue<SpacingStep>(columnSpacing, bp) ?? baseSpacing
+  const currentRowSpacing = resolveResponsiveValue<SpacingStep>(rowSpacing, bp) ?? baseSpacing
+
+  const isItem = item ?? !container
 
   let computedStyle: CSSProperties
 
@@ -162,17 +160,27 @@ export const Grid = forwardRef<HTMLElement, GridProps>(function Grid(
     computedStyle = {
       display: "flex",
       flexWrap: wrap,
-      flexDirection: currentDirection,
+      flexDirection: direction,
+      alignItems,
+      alignContent,
+      justifyContent: effectiveJustifyContent,
       columnGap: `${columnGap}px`,
       rowGap: `${rowGap}px`,
       boxSizing: "border-box",
       width: "100%",
-      ...sxToStyle(sx),
+      ...sxToStyle(sx, bp),
       ...style,
     }
   } else {
-    const currentSize = resolveResponsive<SizeValue>(size, bp)
-    const currentOffset = resolveResponsive<SizeValue>(offset, bp)
+    // Prioridad: props clásicas de v4 (xs/sm/md/lg/xl) sobre la extensión `size`
+    const hasClassicBreakpoints =
+      xs !== undefined || sm !== undefined || md !== undefined || lg !== undefined || xl !== undefined
+
+    const currentSize = hasClassicBreakpoints
+      ? resolveGridSize({ xs, sm, md, lg, xl }, bp)
+      : resolveResponsiveValue<GridSize>(size, bp)
+
+    const currentOffset = resolveResponsiveValue<GridSize | number>(offset, bp)
 
     let flexBasis: string | number | undefined
     let maxWidth: string | undefined
@@ -186,14 +194,14 @@ export const Grid = forwardRef<HTMLElement, GridProps>(function Grid(
       flexBasis = "auto"
       maxWidth = "none"
     } else if (typeof currentSize === "number") {
-      const percent = (currentSize / currentColumns) * 100
+      const percent = (currentSize / columns) * 100
       flexBasis = `${percent}%`
       maxWidth = `${percent}%`
     }
 
     let marginLeft: string | undefined
     if (typeof currentOffset === "number") {
-      marginLeft = `${(currentOffset / currentColumns) * 100}%`
+      marginLeft = `${(currentOffset / columns) * 100}%`
     } else if (currentOffset === "auto") {
       marginLeft = "auto"
     }
@@ -204,14 +212,30 @@ export const Grid = forwardRef<HTMLElement, GridProps>(function Grid(
       flexGrow,
       maxWidth,
       marginLeft,
-      ...sxToStyle(sx),
+      ...(zeroMinWidth ? { minWidth: 0 } : null),
+      ...sxToStyle(sx, bp),
       ...style,
     }
   }
 
   const rootClassName = [
     "MuiGrid-root",
+    classes?.root,
     container && "MuiGrid-container",
+    container && classes?.container,
+    isItem && "MuiGrid-item",
+    isItem && classes?.item,
+    zeroMinWidth && "MuiGrid-zeroMinWidth",
+    zeroMinWidth && classes?.zeroMinWidth,
+    container && direction !== "row" && `MuiGrid-direction-xs-${direction}`,
+    container && wrap !== "wrap" && `MuiGrid-wrap-xs-${wrap}`,
+    container && alignItems && `MuiGrid-align-items-xs-${alignItems}`,
+    container && alignContent && `MuiGrid-align-content-xs-${alignContent}`,
+    container &&
+      effectiveJustifyContent &&
+      effectiveJustifyContent !== "flex-start" &&
+      `MuiGrid-justify-content-xs-${effectiveJustifyContent}`,
+    container && baseSpacing > 0 && `MuiGrid-spacing-xs-${baseSpacing}`,
     className,
   ]
     .filter(Boolean)

@@ -43,7 +43,7 @@ export function TriagePriorityDisplay({
     <div
       role="radiogroup"
       aria-label="Clasificación de triaje"
-      style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}
+      style={{ display: "flex", alignItems: "center", gap: "40px", flexWrap: "wrap" }}
     >
       {PRIORITY_ORDER.map(priority => {
         const cfg      = PRIORITY_CONFIG[priority]
@@ -64,8 +64,8 @@ export function TriagePriorityDisplay({
               "--triage-border":    cfg.border,
               display:         "flex",
               alignItems:      "center",
-              gap:             8,
-              padding:         "6px 12px",
+              gap:             18,
+              padding:         "5px 9px",
               borderRadius:    "10px",
               border:          `1.5px solid ${cfg.border}`,
               backgroundColor: isActive ? cfg.bg : "#ffffff",
@@ -94,8 +94,9 @@ export function TriagePriorityDisplay({
               display:         "flex",
               alignItems:      "center",
               justifyContent:  "center",
-              minWidth:        32,
-              padding:         "4px 6px",
+              minWidth:        30,
+              minHeight:       28,
+              padding:         "5px 6px",
               borderRadius:    "6px",
               backgroundColor: cfg.badge,
               color:           "#ffffff",
