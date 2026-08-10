@@ -50,7 +50,7 @@ export const csfCompanyColors: HceCompanyColors = {
   // Superficies
   surfaceBg:      hceColors.primary.blue[100],     // #ffffff
   background:     hceUi.background,  // #f5f7fa
-  border:         hceColors.neutro.black[50], // #e6e6e6
+  border:         hceColors.primary.blue[100], // #e6e6e6
 
   // Textos
   textPrimary:    hceUi.textPrimary,   // #374151

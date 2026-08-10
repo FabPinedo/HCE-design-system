@@ -126,7 +126,7 @@ export const EmergencyPagination = ({
             onClick={() => onPageChange(page)}
             style={{
               "--pagebtn-border":       page === currentPage ? "var(--ds-pagination-selected-bg, #2B5BA8)" : "var(--ds-pagination-nav-border, #D0DBF0)",
-              "--pagebtn-bg":           page === currentPage ? "var(--ds-pagination-selected-bg, #2B5BA8)" : "var(--ds-color-surface, #FFFFFF)",
+              "--pagebtn-bg":           page === currentPage ? "var(--ds-pagination-selected-bg, #2B5BA8)" : " #FFFFFF",
               "--pagebtn-color":        page === currentPage ? "var(--ds-pagination-selected-color, #FFFFFF)" : "var(--ds-pagination-item-color, #003d96)",
               "--pagebtn-weight":       page === currentPage ? hceTypography.weight.bold : hceTypography.weight.regular,
               "--pagebtn-hover-bg":     page === currentPage ? "var(--ds-pagination-selected-hover, #1A3A6B)" : "var(--ds-pagination-hover-bg, #EEF2F9)",

@@ -2,7 +2,7 @@ import { type ReactNode }  from "react"
 import { Overlay }         from "../../atoms/Overlay/Overlay"
 import { Button }          from "../../atoms/Button/Button"
 import { TextInput }       from "../../atoms/TextInput/TextInput"
-import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
+import { hceColors, hceShadows } from "../../tokens/hce.tokens"
 
 // ─── Sub-tipos ────────────────────────────────────────────────────────────────
 
@@ -100,7 +100,7 @@ export function HceModal({
         textAlign:     "center",
         boxShadow:     hceShadows.modal,
         fontFamily:    "var(--ds-font-family, 'Poppins', sans-serif)",
-        backgroundColor: "var(--ds-color-surface, #ffffff)",
+        backgroundColor: " #ffffff",
         boxSizing:     "border-box",
       }}
     >

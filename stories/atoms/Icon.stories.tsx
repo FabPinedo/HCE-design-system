@@ -35,7 +35,7 @@ import {
   UiStethoscopeIcon, UiTrashIcon, UiUndoIcon, UiUploadDocumentIcon,
   UiVectorIcon, UiWarningIcon, UiXRaysIcon,
   //hce
-  LogoClinicaSanFelipeIcon, LogoSannaIcon, LogoSannaIsotipoIcon, LogoUnknownIcon, LogoUnknownIsotipoIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon,
+  LogoCSFIcon, LogoSannaIcon, LogoSannaIsotipoIcon, LogoUnknownIcon, LogoUnknownIsotipoIcon, LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon,
   // EVA Scale (caras 0-10)
   EvaScale0Icon, EvaScale1Icon, EvaScale2Icon, EvaScale3Icon, EvaScale4Icon,
   EvaScale5Icon, EvaScale6Icon, EvaScale7Icon, EvaScale8Icon, EvaScale9Icon,
@@ -180,7 +180,7 @@ const HCE_UIKIT: { name: string; icon: HceFn }[] = [
 ]
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HCE_NoMapeado: { name: string; icon: React.FC<any> }[] = [
-  { name: "LogoClinicaSanFelipeIcon",  icon: LogoClinicaSanFelipeIcon },
+  { name: "LogoClinicaSanFelipeIcon",  icon: LogoCSFIcon },
   { name: "LogoSannaIcon",             icon: LogoSannaIcon },
   { name: "LogoSannaIsotipoIcon",      icon: LogoSannaIsotipoIcon },
   { name: "LogoUnknownIcon",           icon: LogoUnknownIcon },

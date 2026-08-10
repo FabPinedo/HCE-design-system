@@ -5,7 +5,7 @@
   height: 26px;
   padding: 0 10px;
   box-sizing: border-box;
-  background-color: var(--ds-color-surface, #ffffff);
+  background-color:  #ffffff;
   color: var(--ds-pagination-item-color, #003d96);
   font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 12px;
@@ -25,7 +25,7 @@
   padding: 0;
   border-radius: 4px;
   border: 1px solid var(--ds-pagination-nav-border, #D0DBF0);
-  background-color: var(--ds-color-surface, #ffffff);
+  background-color:  #ffffff;
   color: var(--ds-pagination-item-color, #003d96);
   cursor: pointer;
   box-sizing: border-box;

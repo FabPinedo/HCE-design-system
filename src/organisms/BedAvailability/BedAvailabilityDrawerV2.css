@@ -54,7 +54,7 @@
 
 .hce-bedv2-close-btn {
   width: 100%;
-  background-color: #70C934;
+  background-color: var(--ds-color-secondary, #1A3A6B);
   color: #ffffff;
   font-family: 'IBM Plex Sans', 'Roboto', system-ui, sans-serif;
   font-weight: 700;

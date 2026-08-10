@@ -70,7 +70,7 @@ export function MonitoActionBar({
         justifyContent:  "space-between",
         gap:             "6px",
         padding:         "6px 10px",
-        backgroundColor: box ? "var(--ds-color-surface, #ffffff)" : "transparent",
+        backgroundColor: box ? "#ffffff" : "transparent",
         borderRadius:    box? "10px": 'none',
         boxShadow:       box ? "0 2px 8px rgba(0, 0, 0, 0.08)" : "none",
         border:          box ? "1px solid var(--ds-color-divider, #e6e6e6)" : "none",

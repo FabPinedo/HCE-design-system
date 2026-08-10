@@ -7,6 +7,33 @@ Versionado basado en [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.0] - 2026-08-08
+
+### Agregado
+- **Theming multiempresa**: se consolidaron las paletas de CSF, Sanna y el fallback `unknown` mediante `companyThemes`, `DSProvider`, `useDsTheme` y `useDsTenant`.
+- **Tokens semánticos por empresa**: se incorporaron colores para cabeceras, tablas, filas alternas y prioritarias, hover, interacción, botones interactivos y fondo del ícono de actualización.
+- **Identidad visual por tenant**: nuevo registro centralizado `companyBranding` para resolver el logo e isotipo de cada empresa sin condicionales dentro de los componentes.
+- **Logos de empresa**: se agregaron variantes completas e isotipos para Sanna y para tenants desconocidos.
+
+### Cambiado
+- **`Button`**: los estados `primary`, `secondary`, `outlined`, `ghost`, colores personalizados e íconos ahora respetan la paleta activa; las historias individuales, Playground y Gallery comparten la misma configuración visual.
+- **`Checkbox`**: el estado seleccionado utiliza el color `secondary` del tenant activo.
+- **`BoxBadge`**: el estado `assigned` utiliza `primaryDark` del tema.
+- **`DatePicker`**: usa `HceCalendarIcon`; el ícono, placeholder, borde y estado deshabilitado se ajustan al tema y al estado del campo.
+- **Componentes temáticos**: `ActionBar`, `ActionIconButton`, `BedsAvailabilityTab`, `BedAvailabilityDrawerV2`, `EmergencyPagination`, `GenericCell`, `GenericTable`, `HCEQuickAccess`, `HceUpdateBanner`, `MonitorActionBar`, `SectionHeader`, `HceModal`, `HceFormModal`, `InfoButton`, `Footer` y `NavTab` consumen variables semánticas del tenant activo.
+- **`HceHeader` y `HceSidebar`**: el color institucional y la identidad visual se resuelven dinámicamente mediante el tema; agregar una empresa nueva ya no requiere modificar estos componentes.
+- **`DataCardModal`**: se ajustó la presentación del modal para mantenerlo centrado en pantalla.
+
+### Corregido
+- **`Tooltip`**: se renderiza sobre los demás elementos, conserva su posición superior respecto al ícono y recalcula correctamente su ubicación durante el scroll.
+- **Storybook**: se corrigieron diferencias de color entre historias independientes, Playground y galerías al cambiar de tenant o variante.
+- **Cabeceras y textos**: se eliminaron colores institucionales fijos en tablas y componentes clínicos que provocaban tonos azules bajo el tema Sanna.
+
+### Breaking changes
+- Ninguno. Los cambios mantienen las APIs públicas existentes y agregan soporte temático de forma compatible.
+
+---
+
 ## [1.3.6] - 2026-08-05
 
 ### Agregado

@@ -125,7 +125,7 @@ export function HceFormModal({
           display:         "flex",
           alignItems:      "center",
           justifyContent:  "space-between",
-          backgroundColor: hceColors.primary.blue[600],
+          backgroundColor: `var(--ds-color-interactive, #003d96)`,
           padding:         "16px 20px",
           borderRadius:    "8px 8px 0 0",
           flexShrink:      0,
@@ -210,7 +210,7 @@ export function HceFormModal({
                 onClick={primaryButton.onClick}
                 disabled={primaryButton.disabled || primaryButton.loading}
                 startIcon={(!primaryButton.loading && primaryButton.icon) ? primaryButton.icon : undefined}
-                color={primaryButton.color ?? hceColors.primary.blue[600]}
+                color={primaryButton.color ?? `var(--ds-color-interactive, #003d96)`}
               >
                 {primaryButton.loading ? (
                   <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -233,7 +233,7 @@ export function HceFormModal({
                 onClick={secondaryButton.onClick}
                 disabled={secondaryButton.disabled}
                 startIcon={secondaryButton.icon}
-                color={secondaryButton.color ?? hceColors.primary.blue[600]}
+                color={secondaryButton.color ?? `var(--ds-color-interactive, #003d96)`}
               >
                 {secondaryButton.label}
               </Button>

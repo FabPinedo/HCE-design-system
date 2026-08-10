@@ -83,7 +83,7 @@ function BedCard({ bed }: { bed: BedAvailabilityItem }) {
       arrow
       placement="top"
       bubbleStyle={{
-        backgroundColor: hceColors.primary.blue[600],
+        backgroundColor: 'var(--ds-color-primary, #1A3A6B)',
         fontFamily: hceTypography.fontFamilyClinical,
         fontSize: "12px",
         fontWeight: hceTypography.weight.bold,

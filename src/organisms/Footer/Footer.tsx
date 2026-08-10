@@ -1,4 +1,4 @@
-import { hceColors, hceTypography } from "../../tokens/hce.tokens"
+
 
 type Props = {
   /** Texto de copyright personalizado. Si se omite usa el texto por defecto. */
@@ -16,7 +16,7 @@ export function Footer({ copyright, color }: Props) {
       style={{
         width:           "100%",
         padding:         "6px 24px",
-        backgroundColor: color ?? hceColors.primary.blue[600],
+        backgroundColor: color ?? `var(--ds-color-interactive, #003d96)`,
         display:         "flex",
         alignItems:      "center",
         justifyContent:  "center",
@@ -26,7 +26,7 @@ export function Footer({ copyright, color }: Props) {
       }}
     >
       <span style={{
-        fontFamily: hceTypography.fontFamily,
+        fontFamily: `var(--ds-font-family, Poppins)`,
         color:      "rgba(255,255,255,0.6)",
         fontSize:   "0.68rem",
         userSelect: "none",

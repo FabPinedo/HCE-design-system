@@ -1,10 +1,12 @@
 import "./HceHeader.css"
 import { Menu } from "../../atoms/Menu/Menu"
 import { hceColors, hceTypography, hceUi, hceShadows } from "../../tokens/hce.tokens"
-import { LogoClinicaSanFelipeIcon, LogoutIcon, HceBurgerIcon } from "../../atoms/Icon/SvgIconsHce"
+import { LogoutIcon, HceBurgerIcon } from "../../atoms/Icon/SvgIconsHce"
 import {
   CheckedCircleIcon, DangerIcon, HceInfoIcon, WarningIcon,
 } from "../../atoms/Icon/SvgIconsHce"
+import { useDsTenant } from "../../provider/ThemeProvider"
+import { getCompanyBranding } from "../../theme/companyBranding"
 
 import { useEffect, useRef, useState } from "react"
 // ─── Tipos públicos ───────────────────────────────────────────────────────────
@@ -138,6 +140,8 @@ export function HceHeader({
   floating        = false,
   onMenuClick,
 }: HceHeaderProps) {
+  const tenant = useDsTenant()
+  const { Logo: CompanyLogo } = getCompanyBranding(tenant)
   const notifTriggerRef = useRef<HTMLButtonElement>(null)
   const userTriggerRef  = useRef<HTMLButtonElement>(null)
   const [userOpen,  setUserOpen]  = useState(false)
@@ -186,7 +190,7 @@ export function HceHeader({
     <header
       style={{
         height:          64,
-        backgroundColor: hceColors.primary.blue[600],
+        backgroundColor: 'var(--ds-color-interactive, #1A3A6B)',
         display:         "flex",
         alignItems:      "center",
         padding:         "0 16px",
@@ -251,7 +255,7 @@ export function HceHeader({
         alignItems:    "center",
         pointerEvents: "none",
       }}>
-        <LogoClinicaSanFelipeIcon width={123} />
+        <CompanyLogo width={123} color="white" />
       </div>
 
       {/* ── Derecha ──────────────────────────────────────────── */}
@@ -276,7 +280,7 @@ export function HceHeader({
               width: "150px",
               maxWidth: "150px",
               textAlign: "center",
-              color: hceColors.primary.blue[600],
+
               backgroundColor: hceColors.neutro.white[100],
               fontWeight: hceTypography.weight.bold,
               borderRadius: "6px",
@@ -303,7 +307,7 @@ export function HceHeader({
               width: "160px",
               maxWidth: "160px",
               textAlign: "center",
-              color: hceColors.primary.blue[600],
+              color: 'var(--ds-color-header-bg, #1A3A6B)',
               backgroundColor: hceColors.neutro.white[100],
               fontWeight: hceTypography.weight.bold,
               borderRadius: "6px",
