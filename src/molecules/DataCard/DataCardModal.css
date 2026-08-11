@@ -11,11 +11,11 @@
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  background-color: #0043a5;
+  background-color: var(--ds-color-primary, #0043a5);
   cursor: pointer;
   transition: background-color 150ms ease;
 }
 
 .hce-datacard-modal-close:hover {
-  background-color: #003075;
+  background-color: var(--ds-color-primary-dark, #003075);
 }

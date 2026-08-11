@@ -486,7 +486,7 @@ export const IconStatus: Story = {
     type: "icon",
     field: "has_discharge",
     icon: UiCloseIcon,
-    iconSize: 20,
+    iconSize: 15,
     width: 80,
     align: "center",
     clickable: true,

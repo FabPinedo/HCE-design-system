@@ -232,14 +232,14 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
           paddingTop:      "7px",
           paddingBottom:   "7px",
           borderRadius:    "0 8px 8px 0",
-          backgroundColor: grandActive || open ? hceColors.primary.blue[50] : "transparent",
+          backgroundColor: grandActive || open ? "var(--ds-color-primary-light, #e6ecf6)" : "transparent",
         }}
       >
         <span style={{
           width:           14,
           height:          1,
           flexShrink:      0,
-          backgroundColor: hceColors.primary.blue[200],
+          backgroundColor: "var(--ds-color-divider, #8aa9d6)",
           marginRight:     8,
         }} />
         <span style={{
@@ -248,7 +248,7 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
           fontWeight:   grandActive || open ? 700 : 500,
           // blue[600] == --ds-color-interactive exactamente — reactivo al
           // tema activo de DSProvider, mismo hex de siempre como fallback.
-          color:        grandActive || open ? `var(--ds-color-interactive, ${hceColors.primary.blue[600]})` : hceColors.neutro.black[400],
+          color:        grandActive || open ? `var(--ds-color-interactive, ${hceColors.primary.blue[600]})` : "var(--ds-color-text-secondary, #545454)",
           lineHeight:   1.3,
           flex:         1,
           overflow:     "hidden",
@@ -258,12 +258,12 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
           {item.titulo}
         </span>
         <span className={`hce-sidebar-chevron${open ? " hce-sidebar-chevron--open" : ""}`} style={{ display: "flex", flexShrink: 0 }}>
-          <ExpandMoreGlyph size={14} color={open ? hceColors.primary.blue[500] : hceColors.neutro.black[100]} />
+          <ExpandMoreGlyph size={14} color={open ? "var(--ds-color-primary, #0043a5)" : "var(--ds-color-text-secondary, #545454)"} />
         </span>
       </div>
 
       {open && (
-        <div style={{ marginLeft: 16, borderLeft: `2px solid ${hceColors.primary.blue[50]}` }}>
+        <div style={{ marginLeft: 16, borderLeft: "2px solid var(--ds-color-primary-light, #e6ecf6)" }}>
           {visibleKids.map(gc => {
             const isGcActive = currentPath === gc.vista
 
@@ -291,7 +291,7 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
                   paddingTop:      "6px",
                   paddingBottom:   "6px",
                   borderRadius:    "0 8px 8px 0",
-                  backgroundColor: isGcActive ? hceColors.primary.blue[50] : "transparent",
+                  backgroundColor: isGcActive ? "var(--ds-color-primary-light, #e6ecf6)" : "transparent",
                   // blue[600] == --ds-color-interactive exactamente — reactivo
                   // al tema activo de DSProvider, mismo hex de siempre como fallback.
                   borderLeft:      isGcActive
@@ -303,14 +303,14 @@ function SecondLevelGroup({ item, currentPath, onNavigate }: SecondLevelGroupPro
                   width:           10,
                   height:          1,
                   flexShrink:      0,
-                  backgroundColor: isGcActive ? hceColors.primary.blue[400] : hceColors.primary.blue[100],
+                  backgroundColor: isGcActive ? "var(--ds-color-primary, #0043a5)" : "var(--ds-color-divider, #b0c5e3)",
                   marginRight:     6,
                 }} />
                 <span style={{
                   fontFamily:   hceTypography.fontFamily,
                   fontSize:     "0.73rem",
                   fontWeight:   isGcActive ? 700 : 400,
-                  color:        isGcActive ? hceColors.primary.blue[700] : hceColors.neutro.black[300],
+                  color:        isGcActive ? "var(--ds-color-primary-dark, #003075)" : "var(--ds-color-text-secondary, #545454)",
                   lineHeight:   1.3,
                   overflow:     "hidden",
                   textOverflow: "ellipsis",
@@ -396,6 +396,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
             marginRight:     8,
             marginBottom:    4,
             borderRadius:    "8px",
+             padding:      "10px",
             backgroundColor: isActive || childActive
               ? "rgba(255,255,255,0.2)"
               : "transparent",
@@ -431,9 +432,9 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
 
   // ── Modo expandido ──
   const parentBg = isActive
-    ? hceColors.primary.blue[100]
+    ? "var(--ds-color-surface)"
     : (childActive || open)
-      ? hceColors.primary.blue[50]
+      ? "var(--ds-color-primary-light)"
       : "transparent"
 
   return (
@@ -448,7 +449,8 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
         onKeyDown={handleKeyDown}
         className="hce-sidebar-row"
         style={{
-          "--row-hover-bg": isActive ? hceColors.primary.blue[100] : hceColors.primary.blue[50],
+          "--row-hover-bg": isActive ? "var(--ds-color-surface)" : "var(--ds-color-primary-light)",
+          "--row-focus-color": "var(--ds-color-primary)",
           display:         "flex",
           alignItems:      "center",
           gap:             8,
@@ -472,7 +474,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
           width:           26,
           height:          26,
           borderRadius:    IconComp ? "6px" : "50%",
-          backgroundColor: hceColors.primary.blue[isActive || childActive || open ? 100 : 50],
+          backgroundColor: isActive || childActive || open ? "var(--ds-color-surface, #f9fafb)" : "var(--ds-color-primary-light, #e6ecf6)",
           display:         "flex",
           alignItems:      "center",
           justifyContent:  "center",
@@ -485,7 +487,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
           ) : (
             <span style={{
               fontFamily: hceTypography.fontFamily,
-              color:      hceColors.primary.blue[700],
+              color:      "var(--ds-color-primary-dark, #003075)",
               fontSize:   "0.6rem",
               fontWeight: 700,
             }}>
@@ -501,8 +503,8 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
           // blue[600] == --ds-color-interactive exactamente — reactivo al
           // tema activo de DSProvider, mismo hex de siempre como fallback.
           color:        isActive || childActive
-            ? hceColors.primary.blue[700]
-            : open ? `var(--ds-color-interactive, ${hceColors.primary.blue[600]})` : hceColors.neutro.black[400],
+            ? "var(--ds-color-primary-dark, #003075)"
+            : open ? `var(--ds-color-interactive, ${hceColors.primary.blue[600]})` : "var(--ds-color-text-secondary, #545454)",
           flex:         1,
           lineHeight:   1.3,
           overflow:     "hidden",
@@ -514,7 +516,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
 
         {hasChildren && (
           <span className={`hce-sidebar-chevron${open ? " hce-sidebar-chevron--open" : ""}`} style={{ display: "flex", flexShrink: 0 }}>
-            <ExpandMoreGlyph size={16} color={open ? hceColors.primary.blue[500] : hceColors.neutro.black[100]} />
+            <ExpandMoreGlyph size={16} color={open ? "var(--ds-color-primary, #0043a5)" : "var(--ds-color-neutral, #6b7280)"} />
           </span>
         )}
       </div>
@@ -525,7 +527,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
           marginLeft:  28,
           marginRight: 8,
           marginBottom: 4,
-          borderLeft: `2px solid ${hceColors.primary.blue[100]}`,
+          borderLeft: `2px solid var(--ds-color-surface, #e6ecf6)`,
         }}>
           {item.opciones!.map(child => {
             const childCanNav  = !!child.vista
@@ -573,7 +575,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                     paddingTop:      "7px",
                     paddingBottom:   "7px",
                     borderRadius:    "0 8px 8px 0",
-                    backgroundColor: isChildActive ? hceColors.primary.blue[50] : "transparent",
+                    backgroundColor: isChildActive ? "var(--ds-color-primary-light, #e6ecf6)" : "transparent",
                     // blue[600] == --ds-color-interactive exactamente — reactivo
                     // al tema activo de DSProvider, mismo hex de siempre como fallback.
                     borderLeft:      isChildActive
@@ -587,15 +589,15 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                     height:          1,
                     flexShrink:      0,
                     backgroundColor: isChildActive
-                      ? hceColors.primary.blue[400]
-                      : hceColors.primary.blue[200],
+                      ? 'var(--ds-color-interactive)'
+                      : 'var(--ds-color-primary-light)',
                     marginRight:     8,
                   }} />
                   <span style={{
                     fontFamily:   hceTypography.fontFamily,
                     fontSize:     "0.78rem",
                     fontWeight:   isChildActive ? 700 : 400,
-                    color:        isChildActive ? hceColors.primary.blue[700] : hceColors.neutro.black[400],
+                    color:        isChildActive ? "var(--ds-color-primary-dark, #003075)" : "var(--ds-color-text-secondary, #545454)",
                     lineHeight:   1.3,
                     overflow:     "hidden",
                     textOverflow: "ellipsis",
@@ -607,7 +609,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                 </div>
 
                 {grandkidsWithVista.length > 0 && (
-                  <div style={{ marginLeft: 16, borderLeft: `2px solid ${hceColors.primary.blue[50]}` }}>
+                  <div style={{ marginLeft: 16, borderLeft: "2px solid var(--ds-color-primary-light, #e6ecf6)" }}>
                     {grandkidsWithVista.map(gc => {
                       const isGcActive = currentPath === gc.vista
 
@@ -635,7 +637,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                             paddingTop:      "6px",
                             paddingBottom:   "6px",
                             borderRadius:    "0 8px 8px 0",
-                            backgroundColor: isGcActive ? hceColors.primary.blue[50] : "transparent",
+                            backgroundColor: isGcActive ? "var(--ds-color-primary-light, #e6ecf6)" : "transparent",
                             // blue[600] == --ds-color-interactive exactamente —
                             // reactivo al tema activo de DSProvider, mismo hex
                             // de siempre como fallback.
@@ -649,15 +651,15 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                             height:          1,
                             flexShrink:      0,
                             backgroundColor: isGcActive
-                              ? hceColors.primary.blue[400]
-                              : hceColors.primary.blue[100],
+                              ? "var(--ds-color-primary, #0043a5)"
+                              : "var(--ds-color-divider, #b0c5e3)",
                             marginRight:     6,
                           }} />
                           <span style={{
                             fontFamily:   hceTypography.fontFamily,
                             fontSize:     "0.73rem",
                             fontWeight:   isGcActive ? 700 : 400,
-                            color:        isGcActive ? hceColors.primary.blue[700] : hceColors.neutro.black[300],
+                            color:        isGcActive ? "var(--ds-color-primary-dark, #003075)" : "var(--ds-color-text-secondary, #545454)",
                             lineHeight:   1.3,
                             overflow:     "hidden",
                             textOverflow: "ellipsis",
@@ -858,12 +860,14 @@ export function HceSidebar({
                 display:         "flex",
                 alignItems:      "center",
                 justifyContent:  "center",
+                padding:          "10px",
                 height:          44,
                 marginLeft:      8,
                 marginRight:     8,
                 marginBottom:    4,
                 borderRadius:    "8px",
                 backgroundColor: "transparent",
+                
               } as CSSProperties}
             >
               <HomeGlyph size={22} color="white" />
@@ -875,7 +879,7 @@ export function HceSidebar({
             tabIndex={0}
             aria-label="Inicio"
             onClick={onHome}
-            onKeyDown={e => {
+            onKeyDown={e =>      {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault()
                 onHome?.()
@@ -936,6 +940,7 @@ export function HceSidebar({
             marginLeft:    collapsed ? 0 : 20,
             marginRight:   collapsed ? 0 : 20,
             marginTop:     collapsed ? 8 : 4,
+           
             marginBottom:  4,
           }}>
             Menu

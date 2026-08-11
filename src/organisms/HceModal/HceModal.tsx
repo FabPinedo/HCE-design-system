@@ -205,6 +205,7 @@ export function HceModal({
                 variant="outlined"
                 fullWidth
                 onClick={cancelButton.onClick}
+                style={{  padding: '6px 16px',    lineHeight: 1.75, minWidth: '64px' }}
                 disabled={cancelButton.disabled}
                 startIcon={cancelButton.icon}
                 color={cancelButton.color ?? `var(--ds-color-primary, ${hceColors.primary.blue[500]})`}

@@ -13,6 +13,7 @@ import { getColumnWidths, getTableWidthNumber } from "./tableWidth.utils"
 // realmente se renderiza en el header de este componente).
 const TABLE_BORDER_COLOR = `var(--ds-color-interactive, #003d96)`
 const TABLE_RADIUS = hceBorderRadius.md
+const TABLE_BORDER_WIDTH = 1
 const SCROLLBAR_THUMB_MIN_HEIGHT = 24
 
 // En <td>/<th>, "height" es un MÍNIMO: si el contenido necesita más (ej. 2
@@ -196,7 +197,11 @@ export const GenericTable = <T,>({
   // sigue poniendo el suyo por compatibilidad, pero es inerte para el layout
   // real). Ver tableWidth.utils.getColumnWidths para la lógica fijo/flex.
   const columnWidths = useMemo(
-    () => getColumnWidths(columns, tableWidth, scrollMetrics.clientWidth),
+    () => getColumnWidths(
+      columns,
+      tableWidth,
+      Math.max(scrollMetrics.clientWidth - TABLE_BORDER_WIDTH * 2, 0),
+    ),
     [columns, tableWidth, scrollMetrics.clientWidth],
   )
 
@@ -245,13 +250,14 @@ export const GenericTable = <T,>({
           overflow: "auto",
         }}
       >
-        <div style={{
-          border: `1px solid ${TABLE_BORDER_COLOR}`,
-          borderRadius: TABLE_RADIUS,
-          paddingBottom: '3px',
-          width: "100%",
-          minWidth: tableMinWidth,
-         }}>
+        <div
+          className="hce-generic-table-frame"
+          style={{
+            borderColor: TABLE_BORDER_COLOR,
+            borderRadius: TABLE_RADIUS,
+            minWidth: `calc(${tableMinWidth} + ${TABLE_BORDER_WIDTH * 2}px)`,
+          }}
+        >
         <table
           className="hce-generic-table"
           aria-label="generic table"

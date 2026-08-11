@@ -128,9 +128,11 @@ export const cellRenderers: {
         fontWeight: boldText
           ? hceTypography.weight.bold
           : hceTypography.weight.regular,
-        display: "flex",
+        display: "block",
         justifyContent: "center",
         textAlign: 'center',
+      
+      
       }}
     >
       {String(value ?? "-")}
@@ -243,10 +245,8 @@ export const cellRenderers: {
         <Icon
           color={iconColor}
           disable={disabled}
-          sx={{
-            fontSize: column.iconSize ?? 20,
-            color: iconColor,
-          }}
+          size={column.iconSize ?? 20}
+        
         />
       </div>
     )

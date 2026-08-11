@@ -30,6 +30,14 @@
   border-spacing: 0;
 }
 
+.hce-generic-table-frame {
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  box-sizing: border-box;
+  overflow: clip;
+}
+
 .hce-generic-table thead th {
   position: sticky;
   background-color: var(--ds-color-interactive, #003d96) !important;
