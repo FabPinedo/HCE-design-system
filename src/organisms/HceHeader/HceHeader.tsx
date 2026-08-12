@@ -41,8 +41,8 @@ const TIPO_CONFIG: Record<HceNotificacion["tipo"], {
   info: {
     // blue[500]/blue[50] == --ds-color-primary/-light (csf) exactamente —
     // reactivo al tema activo de DSProvider, mismos hex de siempre como fallback.
-    color:   `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
-    bgLight: `var(--ds-color-primary-light, ${hceColors.primary.blue[50]})`,
+    color:   `var(--ds-color-primary, ${"var(--ds-color-primary, #0043a5)"})`,
+    bgLight: `var(--ds-color-primary-light, ${"var(--ds-color-primary-light, #e5e7eb)"})`,
     Icon:    HceInfoIcon,
   },
   warning: {
@@ -366,7 +366,7 @@ export function HceHeader({
             borderRadius: "16px",
             boxShadow:    hceShadows.modal,
             overflow:     "hidden",
-            border:       `1px solid ${hceColors.primary.blue[100]}`,
+            border:       `1px solid ${"var(--ds-color-primary-light, #e5e7eb)"}`,
           }}
         >
           {/* Cabecera del panel */}
@@ -375,7 +375,7 @@ export function HceHeader({
             display:         "flex",
             alignItems:      "center",
             justifyContent:  "space-between",
-            backgroundColor: hceColors.primary.blue[600],
+            backgroundColor: "var(--ds-color-interactive, #0043a5)",
           }}>
             <span style={{
               fontFamily: hceTypography.fontFamily,
@@ -401,7 +401,7 @@ export function HceHeader({
           <div style={{ maxHeight: 360, overflowY: "auto" }}>
             {notifs.length === 0 ? (
               <div style={{ padding: "32px 0", textAlign: "center" }}>
-                <div style={{ display: "flex", justifyContent: "center", marginBottom: 8, color: hceColors.primary.blue[200] }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 8, color: "var(--ds-color-primary-light, #0043a5)" }}>
                   <BellGlyph />
                 </div>
                 <span style={{
@@ -474,7 +474,7 @@ export function HceHeader({
           {/* Footer */}
           <div style={{
             padding:         "8px 16px",
-            borderTop:       `1px solid ${hceColors.primary.blue[100]}`,
+            borderTop:       `1px solid ${"var(--ds-color-primary-light, #e5e7eb)"}`,
             backgroundColor: hceUi.background,
           }}>
             <div
@@ -483,7 +483,7 @@ export function HceHeader({
               style={{
                 fontFamily: hceTypography.fontFamily,
                 fontSize:   "0.75rem",
-                color:      hceColors.primary.blue[600],
+                color:      "var(--ds-color-interactive, #0043a5)",
                 textAlign:  "center",
                 cursor:     "pointer",
                 fontWeight: 600,

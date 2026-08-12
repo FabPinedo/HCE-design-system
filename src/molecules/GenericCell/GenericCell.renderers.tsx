@@ -124,7 +124,7 @@ export const cellRenderers: {
         fontSize: hceTypography.size.base,
         overflow: "hidden",
         textOverflow: "ellipsis",
-        color: "var(--ds-color-text-primary, #374151)",
+        color: "var(--ds-color-primary, #374151)",
         fontWeight: boldText
           ? hceTypography.weight.bold
           : hceTypography.weight.regular,
@@ -219,7 +219,7 @@ export const cellRenderers: {
 
     const iconColor = disabled
       ? hceColors.neutro.white[800]
-      : color || "var(--ds-color-text-primary, #374151)"
+      : color || "var(--ds-color-primary, #374151)"
 
     const backgroundColor = disabled
       ? "#F2F2F2"
@@ -299,7 +299,7 @@ export const cellRenderers: {
           <span
             style={{
               whiteSpace: "nowrap",
-              color: "var(--ds-color-text-primary, #374151)",
+              color: "var(--ds-color-primary, #374151)",
               fontSize: hceTypography.size.base,
               fontWeight: checked
                 ? hceTypography.weight.bold
@@ -322,7 +322,7 @@ export const cellRenderers: {
     clickableA11yProps,
   }) => {
     const label = String(value ?? "-")
-    const tagColor = color || "var(--ds-color-text-primary, #374151)"
+    const tagColor = color || "var(--ds-color-primary, #374151)"
     const backgroundColor = `color-mix(in srgb, ${tagColor} 10%, white)`
 
     return (
@@ -378,7 +378,7 @@ export const cellRenderers: {
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis",
-        color: "var(--ds-color-text-primary, #374151)",
+        color: "var(--ds-color-primary, #374151)",
         fontSize: hceTypography.size.base,
         fontWeight: boldText
           ? hceTypography.weight.bold

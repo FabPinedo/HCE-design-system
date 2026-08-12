@@ -1,32 +1,42 @@
+import type { ReactNode } from "react"
 import "./MonitoActionBar.css"
 import { HceTooltip } from "../../atoms/Tooltip/HceTooltip"
 import { hceTypography } from "../../tokens/hce.tokens"
-import {
-  UiStethoscopeIcon,
-  UiDoctorIcon,
-  UiPrintingIcon,
-  UiMedicalRoomIcon,
-} from "../../atoms/Icon/Icon"
+import { UiDoctorIcon } from "../../atoms/Icon/Icon"
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 export type MonitoPlacement = "top" | "bottom" | "left" | "right"
 
+/** Una acción del grupo izquierdo de la barra (ícono + tooltip). */
+export interface MonitoAction {
+  /** Identificador único — se usa como `key` de React, no se muestra. */
+  key: string
+  /** Ícono a mostrar. Cualquier ReactNode — trae su propio tamaño/color ya resuelto (ej. `<UiStethoscopeIcon size={17} color="currentColor" />`). */
+  icon: ReactNode
+  /** Texto del tooltip. */
+  tooltip: string
+  onClick?: () => void
+  disabled?: boolean
+  /** `aria-label` del botón. Si no se pasa, usa `tooltip`. */
+  ariaLabel?: string
+}
+
 export interface MonitoActionBarProps {
-  /** Callback al presionar el botón Triaje */
-  onTriaje?:         () => void
+  /** texto boton derecho */
+  labelBtn?:         string
+  /**
+   * Lista de acciones del grupo izquierdo (ícono + tooltip), en el orden en
+   * que se deben mostrar. OBLIGATORIO — este componente ya no trae botones
+   * fijos por defecto (antes Triaje/Reportes/Disponibilidad venían
+   * hardcodeados); cada consumidor arma su propia lista.
+   */
+  actions: MonitoAction[]
   /** Callback al presionar Asignar Médicos */
   onAsignarMedicos?: () => void
-  /** Callback al presionar Reportes */
-  onReportes?:       () => void
-  /** Callback al presionar Disponibilidad de Camas */
-  onDisponibilidad?: () => void
-  /** Deshabilita botones individualmente */
+  /** Deshabilita el botón "Asignar médico". Para el resto de los botones, usá `disabled` en cada `MonitoAction` de `actions`. */
   disabled?: {
-    triaje?:         boolean
     asignarMedicos?: boolean
-    reportes?:       boolean
-    disponibilidad?: boolean
   }
   /**
    * Posición del tooltip respecto al botón.
@@ -47,14 +57,13 @@ export interface MonitoActionBarProps {
 // ─── Componente ───────────────────────────────────────────────────────────────
 
 export function MonitoActionBar({
-  onTriaje,
   onAsignarMedicos,
-  onReportes,
-  onDisponibilidad,
+  actions,
   disabled         = {},
   tooltipPlacement = "top",
   orientation      = "horizontal",
-  box= false
+  box= false,
+  labelBtn
 }: MonitoActionBarProps) {
   const isVertical = orientation === "vertical"
   const iconSize   = 17
@@ -92,46 +101,19 @@ export function MonitoActionBar({
         boxSizing:       "border-box",
       }}
       >
-      {/* Triaje */}
-      <HceTooltip title="Triaje" placement={tooltipPlacement}>
-        <button
-          type="button"
-          className="hce-monito-btn"
-          onClick={onTriaje}
-          disabled={disabled.triaje}
-          aria-label="Triaje"
-        >
-          <UiStethoscopeIcon size={iconSize} color="currentColor" />
-        </button>
-      </HceTooltip>
-
-
-      {/* Reportes */}
-      <HceTooltip title="Reportes" placement={tooltipPlacement}>
-        <button
-          type="button"
-          className="hce-monito-btn"
-          onClick={onReportes}
-          disabled={disabled.reportes}
-          aria-label="Reportes"
-        >
-          <UiPrintingIcon size={iconSize} color="currentColor" />
-        </button>
-      </HceTooltip>
-
-      {/* Disponibilidad de camas */}
-      <HceTooltip title="Disponibilidad de camas" placement={tooltipPlacement}>
-        <button
-          type="button"
-          className="hce-monito-btn"
-          onClick={onDisponibilidad}
-          disabled={disabled.disponibilidad}
-          aria-label="Disponibilidad de camas"
-        >
-          <UiMedicalRoomIcon size={iconSize} color="currentColor" />
-        </button>
-      </HceTooltip>
-
+      {actions.map((action) => (
+        <HceTooltip key={action.key} title={action.tooltip} placement={tooltipPlacement}>
+          <button
+            type="button"
+            className="hce-monito-btn"
+            onClick={action.onClick}
+            disabled={action.disabled}
+            aria-label={action.ariaLabel ?? action.tooltip}
+          >
+            {action.icon}
+          </button>
+        </HceTooltip>
+      ))}
 
      </div>
 
@@ -159,7 +141,7 @@ export function MonitoActionBar({
               whiteSpace: "nowrap",
             }}
           >
-            Asignar médico
+            {labelBtn}
           </span>
         </button>
     </HceTooltip>

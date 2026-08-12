@@ -38,3 +38,6 @@ services:
 
 volumes:
   verdaccio-storage:
+networks:
+  default:
+    name: hce-shared-network
