@@ -190,7 +190,7 @@ export function HceHeader({
     <header
       style={{
         height:          64,
-        backgroundColor: 'var(--ds-color-interactive, #1A3A6B)',
+        backgroundColor: 'var(--ds-color-interactive, #003d96)',
         display:         "flex",
         alignItems:      "center",
         padding:         "0 16px",

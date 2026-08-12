@@ -9,7 +9,8 @@ import {
   type HTMLAttributes,
   type CSSProperties,
 } from "react"
-import { sxToStyle } from "../../utils/sx"
+import { sxToStyle, type SxProps } from "../../utils/sx"
+import { useCurrentBreakpoint } from "../../utils/breakpoints"
 
 type Variant = "circular" | "rounded" | "square"
 type ImageLoadState = "loading" | "loaded" | "error"
@@ -51,7 +52,7 @@ function DefaultPersonIcon() {
 export interface AvatarProps extends Omit<HTMLAttributes<HTMLElement>, "color"> {
   component?: ElementType
   children?: ReactNode
-  sx?: Record<string, unknown>
+  sx?: SxProps
   alt?: string
   classes?: Record<string, string>
   imgProps?: ImgHTMLAttributes<HTMLImageElement>
@@ -122,6 +123,7 @@ export const Avatar = forwardRef<HTMLElement, AvatarProps>(function Avatar(
 ) {
   const loadState = useImageLoadState(src, srcSet, sizes)
   const showImage = (src || srcSet) && loadState === "loaded"
+  const breakpoint = useCurrentBreakpoint()
 
   const computedStyle: CSSProperties = {
     position: "relative",
@@ -139,7 +141,7 @@ export const Avatar = forwardRef<HTMLElement, AvatarProps>(function Avatar(
     color: "#fff",
     backgroundColor: "#bdbdbd", // gris neutro por defecto, igual que MUI sin theme
     userSelect: "none",
-    ...sxToStyle(sx),
+    ...sxToStyle(sx, breakpoint),
     ...style,
   }
 

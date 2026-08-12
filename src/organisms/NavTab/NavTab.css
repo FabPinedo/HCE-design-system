@@ -6,7 +6,7 @@
 .hce-navtab-item {
   border: none;
   border-radius: 8px 8px 0 0;
-  color: var(--ds-color-surface, #003d96);
+  color: var(--ds-color-interactive, #003d96);
   background-color: #e6ecf6;
   padding: 8px 16px;
   font-family: var(--ds-font-family, 'Poppins', sans-serif);

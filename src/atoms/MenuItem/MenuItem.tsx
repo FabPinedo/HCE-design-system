@@ -13,7 +13,8 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react"
-import { sxToStyle } from "../../utils/sx"
+import { sxToStyle, type SxProps } from "../../utils/sx"
+import { useCurrentBreakpoint } from "../../utils/breakpoints"
 
 /**
  * MenuItem — reemplazo propio de `MenuItem` de MUI, en CSS/HTML puro.
@@ -37,7 +38,7 @@ import { sxToStyle } from "../../utils/sx"
 export interface MenuItemProps extends Omit<HTMLAttributes<HTMLElement>, "color"> {
   component?: ElementType
   children?: ReactNode
-  sx?: Record<string, unknown>
+  sx?: SxProps
   autoFocus?: boolean
   classes?: Record<string, string>
   dense?: boolean
@@ -80,6 +81,7 @@ export const MenuItem = forwardRef<HTMLElement, MenuItemProps>(function MenuItem
   const innerRef = useRef<HTMLElement | null>(null)
   const usedKeyboard = useRef(false)
   const [focusVisible, setFocusVisible] = useState(false)
+  const breakpoint = useCurrentBreakpoint()
 
   // Combina el ref interno (para autoFocus) con el ref que reenvía el consumidor
   const setRefs = useCallback(
@@ -144,12 +146,12 @@ export const MenuItem = forwardRef<HTMLElement, MenuItemProps>(function MenuItem
     padding: disableGutters ? "6px 0" : dense ? "4px 8px" : "6px 16px",
     fontSize: dense ? "0.8125rem" : "1rem",
     lineHeight: 1.5,
-    borderBottom: divider ? "1px solid rgba(0, 0, 0, 0.12)" : undefined,
+    borderBottom: divider ? "1px solid var(--ds-color-divider, rgba(0, 0, 0, 0.12))" : undefined,
     opacity: disabled ? 0.5 : 1,
     pointerEvents: disabled ? "none" : undefined,
-    backgroundColor: selected ? "rgba(25, 118, 210, 0.08)" : "transparent",
+    backgroundColor: selected ? "var(--ds-color-primary-light, rgba(25, 118, 210, 0.08))" : "transparent",
     outline: "none",
-    ...sxToStyle(sx),
+    ...sxToStyle(sx, breakpoint),
     ...style,
   }
 

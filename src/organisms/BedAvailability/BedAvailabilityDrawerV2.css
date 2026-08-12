@@ -54,7 +54,7 @@
 
 .hce-bedv2-close-btn {
   width: 100%;
-  background-color: var(--ds-color-secondary, #1A3A6B);
+  background-color: var(--ds-color-secondary, #96dd43);
   color: #ffffff;
   font-family: 'IBM Plex Sans', 'Roboto', system-ui, sans-serif;
   font-weight: 700;
@@ -69,5 +69,5 @@
 }
 
 .hce-bedv2-close-btn:hover {
-  background-color: #89c93d;
+  background-color: var(--ds-color-secondary-dark, #537a25);
 }

@@ -432,9 +432,9 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
 
   // ── Modo expandido ──
   const parentBg = isActive
-    ? "var(--ds-color-surface)"
+    ? "var(--ds-color-surface, #f9fafb)"
     : (childActive || open)
-      ? "var(--ds-color-primary-light)"
+      ? "var(--ds-color-primary-light, #e6ecf6)"
       : "transparent"
 
   return (
@@ -449,8 +449,8 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
         onKeyDown={handleKeyDown}
         className="hce-sidebar-row"
         style={{
-          "--row-hover-bg": isActive ? "var(--ds-color-surface)" : "var(--ds-color-primary-light)",
-          "--row-focus-color": "var(--ds-color-primary)",
+          "--row-hover-bg": isActive ? "var(--ds-color-surface, #f9fafb)" : "var(--ds-color-primary-light, #e6ecf6)",
+          "--row-focus-color": "var(--ds-color-primary, #0043a5)",
           display:         "flex",
           alignItems:      "center",
           gap:             8,
@@ -589,8 +589,8 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
                     height:          1,
                     flexShrink:      0,
                     backgroundColor: isChildActive
-                      ? 'var(--ds-color-interactive)'
-                      : 'var(--ds-color-primary-light)',
+                      ? `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+                      : 'var(--ds-color-primary-light, #e6ecf6)',
                     marginRight:     8,
                   }} />
                   <span style={{

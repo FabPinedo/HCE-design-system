@@ -1,4 +1,3 @@
-import { hceColors } from "../../tokens/hce.tokens";
 import "./Checkbox.css"
 
 interface Props {
@@ -34,7 +33,7 @@ export const Checkbox = ({
   return (
     <label
       className={`hce-checkbox${disabled ? " hce-checkbox--disabled" : ""}`}
-      style={{ flexDirection: PLACEMENT_FLEX_DIRECTION[sideLabel] as React.CSSProperties["flexDirection"], color:hceColors.primary.blue[600] }}
+      style={{ flexDirection: PLACEMENT_FLEX_DIRECTION[sideLabel] as React.CSSProperties["flexDirection"], color: "var(--ds-color-text-primary, #003d96)" }}
     >
       <input
         type="checkbox"

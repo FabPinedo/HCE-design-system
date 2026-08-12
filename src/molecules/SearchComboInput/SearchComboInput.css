@@ -61,8 +61,8 @@
 }
 
 .hce-scombo-input:focus {
-  border-color: var(--ds-color-primary-light, #0043a5);
-  box-shadow: 0 0 0 3px var(--ds-color-surface, #0043a5);
+  border-color: var(--ds-color-interactive, #0043a5);
+  box-shadow: 0 0 0 3px var(--ds-color-primary-light, #b0c5e3);
 }
 
 .hce-scombo-option {

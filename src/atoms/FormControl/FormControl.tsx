@@ -11,7 +11,8 @@ import {
   type HTMLAttributes,
   type CSSProperties,
 } from "react"
-import { sxToStyle } from "../../utils/sx"
+import { sxToStyle, type SxProps } from "../../utils/sx"
+import { useCurrentBreakpoint } from "../../utils/breakpoints"
 
 type Color = "primary" | "secondary" | "error" | "info" | "success" | "warning" | string
 type Margin = "dense" | "none" | "normal"
@@ -42,7 +43,7 @@ type Variant = "filled" | "outlined" | "standard"
 export interface FormControlProps extends Omit<HTMLAttributes<HTMLElement>, "color"> {
   component?: ElementType
   children?: ReactNode
-  sx?: Record<string, unknown>
+  sx?: SxProps
   color?: Color
   disabled?: boolean
   error?: boolean
@@ -115,6 +116,7 @@ export const FormControl = forwardRef<HTMLElement, FormControlProps>(function Fo
   const onBlur = useCallback(() => setFocusedState(false), [])
 
   const focused = focusedProp !== undefined ? focusedProp : focusedState
+  const breakpoint = useCurrentBreakpoint()
 
   const contextValue = useMemo<FormControlContextValue>(
     () => ({
@@ -171,7 +173,7 @@ export const FormControl = forwardRef<HTMLElement, FormControlProps>(function Fo
     verticalAlign: "top",
     width: fullWidth ? "100%" : undefined,
     ...marginStyle,
-    ...sxToStyle(sx),
+    ...sxToStyle(sx, breakpoint),
     ...style,
   }
 

@@ -17,7 +17,8 @@ import {
   type MouseEvent as ReactMouseEvent,
   type Ref,
 } from "react"
-import { sxToStyle } from "../../utils/sx"
+import { sxToStyle, type SxProps } from "../../utils/sx"
+import { useCurrentBreakpoint } from "../../utils/breakpoints"
 
 type Variant = "filled" | "outlined" | "standard"
 // Tipo por defecto cuando no se especifica T (uso sin genérico explícito,
@@ -61,7 +62,7 @@ export interface SelectChangeEvent<T = Value> {
 export interface SelectProps<T = Value> extends Omit<HTMLAttributes<HTMLElement>, "color" | "onChange" | "defaultValue"> {
   component?: ElementType
   children?: ReactNode
-  sx?: Record<string, unknown>
+  sx?: SxProps
   autoWidth?: boolean
   classes?: Record<string, string>
   defaultOpen?: boolean
@@ -155,6 +156,7 @@ const SelectImpl = forwardRef<HTMLElement, SelectProps<Value>>(function Select(
     defaultValue ?? (multiple ? [] : "")
   )
   const value = valueProp !== undefined ? valueProp : internalValue
+  const breakpoint = useCurrentBreakpoint()
 
   // Abierto/cerrado controlado / no controlado
   const [internalOpen, setInternalOpen] = useState(defaultOpen)
@@ -294,10 +296,10 @@ const SelectImpl = forwardRef<HTMLElement, SelectProps<Value>>(function Select(
       padding: "8.5px 14px",
       fontSize: "1rem",
       borderRadius: 4,
-      border: `1px solid ${error ? "#d32f2f" : "rgba(0, 0, 0, 0.23)"}`,
+      border: `1px solid ${error ? "var(--ds-color-danger, #d32f2f)" : "var(--ds-color-divider, rgba(0, 0, 0, 0.23))"}`,
       backgroundColor: variant === "filled" ? "rgba(0, 0, 0, 0.06)" : "#fff",
       opacity: disabled ? 0.5 : 1,
-      ...sxToStyle(sx),
+      ...sxToStyle(sx, breakpoint),
       ...style,
     }
 
@@ -359,13 +361,13 @@ const SelectImpl = forwardRef<HTMLElement, SelectProps<Value>>(function Select(
     userSelect: "none",
     color: isEmpty && !displayEmpty ? "rgba(0, 0, 0, 0.38)" : "inherit",
     backgroundColor: variant === "filled" ? "rgba(0, 0, 0, 0.06)" : "transparent",
-    border: variant === "outlined" ? `1px solid ${error ? "#d32f2f" : open ? "#1976d2" : "rgba(0, 0, 0, 0.23)"}` : "none",
-    borderBottom: variant === "standard" ? `1px solid ${error ? "#d32f2f" : "rgba(0, 0, 0, 0.42)"}` : undefined,
+    border: variant === "outlined" ? `1px solid ${error ? "var(--ds-color-danger, #d32f2f)" : open ? "var(--ds-color-interactive, #1976d2)" : "var(--ds-color-divider, rgba(0, 0, 0, 0.23))"}` : "none",
+    borderBottom: variant === "standard" ? `1px solid ${error ? "var(--ds-color-danger, #d32f2f)" : "rgba(0, 0, 0, 0.42)"}` : undefined,
     borderRadius: variant === "outlined" ? 4 : variant === "filled" ? "4px 4px 0 0" : 0,
     opacity: disabled ? 0.5 : 1,
     pointerEvents: disabled ? "none" : undefined,
     outline: "none",
-    ...sxToStyle(sx),
+    ...sxToStyle(sx, breakpoint),
     ...style,
   }
 
@@ -439,7 +441,7 @@ const SelectImpl = forwardRef<HTMLElement, SelectProps<Value>>(function Select(
             style: {
               ...(item.element.props as { style?: CSSProperties }).style,
               backgroundColor: isSelected(item.value)
-                ? "rgba(25, 118, 210, 0.08)"
+                ? "var(--ds-color-primary-light, rgba(25, 118, 210, 0.08))"
                 : index === highlightedIndex
                 ? "rgba(0, 0, 0, 0.04)"
                 : undefined,
@@ -451,7 +453,7 @@ const SelectImpl = forwardRef<HTMLElement, SelectProps<Value>>(function Select(
     label &&
       createElement(
         "label",
-        { style: { fontSize: "0.75rem", color: error ? "#d32f2f" : "rgba(0, 0, 0, 0.6)" } },
+        { style: { fontSize: "0.75rem", color: error ? "var(--ds-color-danger, #d32f2f)" : "rgba(0, 0, 0, 0.6)" } },
         label
       )
   )

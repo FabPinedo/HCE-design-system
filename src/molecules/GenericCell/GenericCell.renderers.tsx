@@ -124,7 +124,7 @@ export const cellRenderers: {
         fontSize: hceTypography.size.base,
         overflow: "hidden",
         textOverflow: "ellipsis",
-        color: "var(--ds-color-primary, #374151)",
+        color: "var(--ds-color-text-primary, #374151)",
         fontWeight: boldText
           ? hceTypography.weight.bold
           : hceTypography.weight.regular,
@@ -378,7 +378,7 @@ export const cellRenderers: {
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis",
-        color: "var(--ds-color-primary, #374151)",
+        color: "var(--ds-color-text-primary, #374151)",
         fontSize: hceTypography.size.base,
         fontWeight: boldText
           ? hceTypography.weight.bold

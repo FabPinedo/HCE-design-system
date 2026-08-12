@@ -1,5 +1,6 @@
 import { forwardRef, createElement, type ElementType, type ReactNode, type CSSProperties, type HTMLAttributes } from "react"
-import { sxToStyle } from "../../utils/sx"
+import { sxToStyle, type SxProps } from "../../utils/sx"
+import { useCurrentBreakpoint } from "../../utils/breakpoints"
 import { hceTypography } from "../../tokens/hce.tokens"
 
 /**
@@ -78,7 +79,7 @@ export interface TypographyProps extends Omit<HTMLAttributes<HTMLElement>, "colo
   variant?:        TypographyVariant
   component?:      ElementType
   children?:       ReactNode
-  sx?:             Record<string, unknown>
+  sx?:             SxProps
   align?:          TypographyAlign
   classes?:        Record<string, string>
   gutterBottom?:   boolean
@@ -107,6 +108,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(function Typo
   ref,
 ) {
   const { style: variantStyle } = VARIANTS[variant] ?? VARIANTS.body1
+  const breakpoint = useCurrentBreakpoint()
 
   // Orden de resolución del tag, igual que MUI: `component` explícito gana
   // siempre; si no viene, `paragraph` fuerza "p"; si no, se usa el mapping
@@ -121,7 +123,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(function Typo
     ...(align !== "inherit" ? { textAlign: align } : {}),
     ...(gutterBottom ? { marginBottom: "0.35em" } : {}),
     ...(noWrap ? { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const } : {}),
-    ...sxToStyle(sx),
+    ...sxToStyle(sx, breakpoint),
     ...style,
   }
 

@@ -55,8 +55,8 @@
 }
 
 .hce-hceheader-sede-select:focus {
-  border-color: var(--ds-color-update-banner-icon-bg, #003d96);
-  box-shadow: 0 0 0 6px var(--ds-color-primary-light, #003d96);;
+  border-color: var(--ds-color-interactive, #3369b7);
+  box-shadow: 0 0 0 6px var(--ds-color-primary-light, #b0c5e3);
   outline: none;
 }
 

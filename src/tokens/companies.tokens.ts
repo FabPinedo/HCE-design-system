@@ -48,9 +48,9 @@ export const csfCompanyColors: HceCompanyColors = {
   rowPriority:     '#FFF5F5',
 
   // Superficies
-  surfaceBg:      hceColors.primary.blue[100],     // #ffffff
+  surfaceBg:      hceUi.surface,     // #ffffff
   background:     hceUi.background,  // #f5f7fa
-  border:         hceColors.primary.blue[100], // #e6e6e6
+  border:         hceColors.neutro.black[50], // #e6e6e6
 
   // Textos
   textPrimary:    hceUi.textPrimary,   // #374151
@@ -94,10 +94,10 @@ export const sannaCompanyColors: HceCompanyColors = {
   primary:        '#36AD55', // Verde Sanna — acento / borde (NO usar con texto blanco encima, ~2.9:1)
   primaryDark:    '#297B41', // Verde Sanna oscuro — apto para superficie sólida + texto blanco (~5.1:1 AA)
   primaryLight:   '#e3eee9e6', // Verde Sanna muy pálido — fondos de acento suaves
-  // Sin segundo color de marca: el "secondary" de Sanna es gris neutro
-  secondary:      '#7B61FF', // Gris — acento / borde (~4.0:1, no usar con texto blanco encima)
-  secondaryDark:  '#3A2799', // Gris oscuro — apto para superficie sólida + texto blanco (~10.3:1 AA)
-  secondaryLight: '#F2EFFF', // Gris claro — acentos suaves
+  // Segundo color de marca de Sanna: violeta/púrpura
+  secondary:      '#7B61FF', // Violeta — acento / borde (~4.0:1, no usar con texto blanco encima)
+  secondaryDark:  '#3A2799', // Violeta oscuro — apto para superficie sólida + texto blanco (~10.3:1 AA)
+  secondaryLight: '#F2EFFF', // Violeta claro — acentos suaves
 
   // Superficies — blancos y grises neutros
    headerBg:        '#1a6b29', // verde marino institucional — header principal
@@ -105,7 +105,7 @@ export const sannaCompanyColors: HceCompanyColors = {
   rowAlternate:    '#e6f6e9', // Fila alterna de tabla
   hoverBg:         '#eef9f0', // Fondo hover de fila / botón
   rowPriority:     '#f5fff5',
-  surfaceBg:      '#a6beb4', 
+  surfaceBg:      '#FFFFFF',
   background:     '#F9FAFB',
   border:         '#E5E7EB',
 
