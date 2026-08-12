@@ -1,27 +1,75 @@
-import type { Meta, StoryObj } from "@storybook/react"
-import { Box, MonitoActionBar } from "@hce/design-system"
+import type { Meta, StoryObj } from "@storybook/react";
+import {
+  Box,
+  MonitoActionBar,
+  UiPrintingIcon,
+  UiSearchIcon,
+  UiStethoscopeIcon,
+} from "@hce/design-system";
 
 const meta: Meta<typeof MonitoActionBar> = {
-  title:      "Molecules/MonitoActionBar",
-  component:  MonitoActionBar,
-  tags:       ["autodocs"],
+  title: "Molecules/MonitoActionBar",
+  component: MonitoActionBar,
+  tags: ["autodocs"],
   parameters: { layout: "padded" },
   argTypes: {
     tooltipPlacement: {
-      control:     { type: "radio" },
-      options:     ["top", "bottom", "left", "right"],
+      control: { type: "radio" },
+      options: ["top", "bottom", "left", "right"],
       description: "Posición del tooltip.",
     },
     orientation: {
-      control:     { type: "radio" },
-      options:     ["horizontal", "vertical"],
+      control: { type: "radio" },
+      options: ["horizontal", "vertical"],
       description: "Disposición de los botones",
     },
   },
-}
-export default meta
-type Story = StoryObj<typeof MonitoActionBar>
+};
+export default meta;
+type Story = StoryObj<typeof MonitoActionBar>;
 
+const actions = [
+  {
+    key: "triaje",
+    icon: <UiStethoscopeIcon size={17} color="currentColor" />,
+    tooltip: "Triaje",
+    onClick: () => {},
+  },
+  {
+    key: "reportes",
+    icon: <UiPrintingIcon size={17} color="currentColor" />,
+    tooltip: "Reportes",
+    onClick: () => {},
+  },
+  {
+    key: "auditoria",
+    icon: <UiSearchIcon size={17} color="currentColor" />,
+    tooltip: "Auditoría",
+    onClick: () => {},
+  },
+];
+
+const actionsDisabled = [
+  {
+    key: "triaje",
+    icon: <UiStethoscopeIcon size={17} color="currentColor" />,
+    tooltip: "Triaje",
+    onClick: () => {},
+  },
+  {
+    key: "reportes",
+    icon: <UiPrintingIcon size={17} color="currentColor" />,
+    tooltip: "Reportes",
+    onClick: () => {},
+    disabled: true,
+  },
+  {
+    key: "auditoria",
+    icon: <UiSearchIcon size={17} color="currentColor" />,
+    tooltip: "Auditoría",
+    onClick: () => {},
+  },
+];
 /** Uso real: barra ancho completo, botones a la izquierda, tooltip abajo */
 export const Default: Story = {
   name: "Default — ancho completo",
@@ -32,13 +80,10 @@ export const Default: Story = {
   ),
   args: {
     tooltipPlacement: "bottom",
-    orientation:      "horizontal",
-    onTriaje:         () => alert("Triaje"),
-    onAsignarMedicos: () => alert("Asignar médicos"),
-    onReportes:       () => alert("Reportes"),
-    onDisponibilidad: () => alert("Disponibilidad de camas"),
+    orientation: "horizontal",
+    actions: actions,
   },
-}
+};
 
 /** Con botones deshabilitados */
 export const ConDisabled: Story = {
@@ -50,9 +95,9 @@ export const ConDisabled: Story = {
   ),
   args: {
     ...Default.args,
-    disabled: { reportes: true, disponibilidad: true },
+    actions: actionsDisabled,
   },
-}
+};
 
 /** Orientación vertical — para sidebars */
 export const Vertical: Story = {
@@ -60,37 +105,51 @@ export const Vertical: Story = {
   parameters: { layout: "centered" },
   args: {
     ...Default.args,
-    orientation:      "vertical",
+    orientation: "vertical",
     tooltipPlacement: "right",
   },
-}
+};
 
 /** Todas las variantes de tooltip placement */
 export const AllVariants: Story = {
   name: "All Variants — placements",
   render: () => (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 4, p: 2 }}>
-      {(["top", "bottom"] as const).map(p => (
+      {(["top", "bottom"] as const).map((p) => (
         <Box key={p}>
-          <Box sx={{ fontFamily: "monospace", fontSize: 11, color: "var(--ds-color-text-secondary, #6B7280)", mb: 0.5 }}>
+          <Box
+            sx={{
+              fontFamily: "monospace",
+              fontSize: 11,
+              color: "var(--ds-color-text-secondary, #6B7280)",
+              mb: 0.5,
+            }}
+          >
             placement="{p}" — horizontal
           </Box>
-          <MonitoActionBar tooltipPlacement={p} orientation="horizontal" />
+          <MonitoActionBar actions={actions} tooltipPlacement={p} orientation="horizontal" />
         </Box>
       ))}
       <Box sx={{ display: "flex", gap: 6 }}>
-        {(["right", "left"] as const).map(p => (
+        {(["right", "left"] as const).map((p) => (
           <Box key={p}>
-            <Box sx={{ fontFamily: "monospace", fontSize: 11, color: "var(--ds-color-text-secondary, #6B7280)", mb: 0.5 }}>
+            <Box
+              sx={{
+                fontFamily: "monospace",
+                fontSize: 11,
+                color: "var(--ds-color-text-secondary, #6B7280)",
+                mb: 0.5,
+              }}
+            >
               placement="{p}" — vertical
             </Box>
-            <MonitoActionBar tooltipPlacement={p} orientation="vertical" />
+            <MonitoActionBar actions={actions} tooltipPlacement={p} orientation="vertical" />
           </Box>
         ))}
       </Box>
     </Box>
   ),
-}
+};
 
 /** Playground — controles interactivos */
 export const Playground: Story = {
@@ -102,7 +161,7 @@ export const Playground: Story = {
   ),
   args: {
     tooltipPlacement: "bottom",
-    orientation:      "horizontal",
-    disabled:         {},
+    orientation: "horizontal",
+    disabled: {},
   },
-}
+};

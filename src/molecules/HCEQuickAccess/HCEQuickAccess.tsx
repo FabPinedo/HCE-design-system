@@ -6,6 +6,8 @@ export type HCEQuickAccessProps = {
   icon:         ReactNode
   /** Título del módulo */
   title:        string
+  /** texto de botón */
+  labelBtn?:    string
   /** Descripción corta */
   description:  string
   /** Callback del botón "Acceder" */
@@ -20,6 +22,7 @@ export function HCEQuickAccess({
   description,
   onAcceder,
   disabled = false,
+  labelBtn = "Acceder"
 }: HCEQuickAccessProps) {
   return (
     <div
@@ -83,7 +86,7 @@ export function HCEQuickAccess({
         disabled={disabled}
         onClick={disabled ? undefined : onAcceder}
       >
-        Acceder
+        {labelBtn}
       </button>
     </div>
   )
