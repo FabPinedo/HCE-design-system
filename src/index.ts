@@ -12,6 +12,8 @@ export type { DsTheme } from "./theme/themes"
 
 // ── Provider ──────────────────────────────────────────────
 export { DSProvider } from "./provider/ThemeProvider"
+export { useCompanyBranding } from "./theme/companyBranding"
+export type { CompanyBranding } from "./theme/companyBranding"
 
 // ── Design Tokens — HCE (fuente única de verdad, estructurales) ──────────
 export {
@@ -249,4 +251,3 @@ export type {
 } from "./organisms/HceHeader/HceHeader"
 export type { HceSidebarProps, OpcionMAC } from "./organisms/HceSidebar/HceSidebar"
 export type { CarruselHomeProps }           from "./organisms/CarruselHome/CarruselHome"
-

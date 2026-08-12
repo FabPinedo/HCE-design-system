@@ -185,7 +185,7 @@ export interface CSFLoadingProps {
 // Fase 1 (intro): renderiza dinámicamente F01→F14 a frameDuration ms/frame.
 // Fase 2 (loop):  gira el logo completo con animateTransform SVG nativo.
 
-function CSFSpinner({ size = 150, duration = 1.5, frameDuration = FRAME_MS }: { size?: number; duration?: number; frameDuration?: number }) {
+export function CSFSpinner({ size = 150, duration = 1.5, frameDuration = FRAME_MS }: { size?: number; duration?: number; frameDuration?: number }) {
   const [frameIdx, setFrameIdx] = useState(0)
   const [spinning, setSpinning] = useState(false)
   const [blueIn,   setBlueIn]  = useState(false)
