@@ -280,9 +280,10 @@ export function HceHeader({
               width: "150px",
               maxWidth: "150px",
               textAlign: "center",
-
+              color: 'var(--ds-color-interactive, #1A3A6B)',
               backgroundColor: hceColors.neutro.white[100],
               fontWeight: hceTypography.weight.bold,
+              fontSize: "14px",
               borderRadius: "6px",
               border: "none",
               boxSizing: "border-box",
@@ -302,12 +303,13 @@ export function HceHeader({
               hour12: false,
             })}`}
             style={{
-              fontFamily: hceTypography.fontFamily,
+              fontFamily: "var(--ds-font-family, 'Poppins', sans-serif)",
               padding: "4px 0",
+                  fontSize: "14px",
               width: "160px",
               maxWidth: "160px",
               textAlign: "center",
-              color: 'var(--ds-color-header-bg, #1A3A6B)',
+              color: 'var(--ds-color-interactive, #1A3A6B)',
               backgroundColor: hceColors.neutro.white[100],
               fontWeight: hceTypography.weight.bold,
               borderRadius: "6px",
