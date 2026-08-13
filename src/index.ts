@@ -168,7 +168,7 @@ export type { CSFLoadingProps } from "./molecules/CSFLoading/CSFLoading"
 // ── Molecules ─────────────────────────────────────────────
 export { ActionBar }           from "./molecules/ActionBar/ActionBar"
 export { MonitoActionBar }     from "./molecules/MonitoActionBar/MonitoActionBar"
-export type { MonitoActionBarProps, MonitoPlacement } from "./molecules/MonitoActionBar/MonitoActionBar"
+export type { MonitoActionBarProps, MonitoAction, MonitoPlacement } from "./molecules/MonitoActionBar/MonitoActionBar"
 export { ActionIconButton }    from "./molecules/ActionIconButton/ActionIconButton"
 export { BedsAvailabilityTab } from "./molecules/BedsAvailabilityTab/BedsAvailabilityTab"
 export { ClinicalStatusIcon }  from "./molecules/ClinicalStatusIcon/ClinicalStatusIcon"
