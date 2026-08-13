@@ -6,7 +6,7 @@ import {
   CheckedCircleIcon, DangerIcon, HceInfoIcon, WarningIcon,
 } from "../../atoms/Icon/SvgIconsHce"
 import { useDsTenant } from "../../provider/ThemeProvider"
-import { getCompanyBranding } from "../../theme/companyBranding"
+import { getCompanyBranding, getCompanyName } from "../../theme/companyBranding"
 
 import { useEffect, useRef, useState } from "react"
 // ─── Tipos públicos ───────────────────────────────────────────────────────────
@@ -142,6 +142,8 @@ export function HceHeader({
 }: HceHeaderProps) {
   const tenant = useDsTenant()
   const { Logo: CompanyLogo } = getCompanyBranding(tenant)
+  
+
   const notifTriggerRef = useRef<HTMLButtonElement>(null)
   const userTriggerRef  = useRef<HTMLButtonElement>(null)
   const [userOpen,  setUserOpen]  = useState(false)
@@ -257,6 +259,8 @@ export function HceHeader({
       }}>
         <CompanyLogo width={123} color="white" />
       </div>
+
+    
 
       {/* ── Derecha ──────────────────────────────────────────── */}
       <div style={{

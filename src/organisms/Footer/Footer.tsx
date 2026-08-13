@@ -1,3 +1,5 @@
+import { useDsTenant } from "../../provider/ThemeProvider"
+import { getCompanyBranding, getCompanyName } from "../../theme/companyBranding"
 
 
 type Props = {
@@ -9,8 +11,9 @@ type Props = {
 
 export function Footer({ copyright, color }: Props) {
   const year = new Date().getFullYear()
-  const text = copyright ?? `© ${year} Clínica XXXXXXX · Todos los derechos reservados · Sistema HCE v2.0`
-
+  const tenant = useDsTenant()
+  const displayName = getCompanyName(tenant)
+  const text = copyright ?? `© ${year} ${displayName} · Todos los derechos reservados · Sistema HCE v2.0`
   return (
     <footer
       style={{
