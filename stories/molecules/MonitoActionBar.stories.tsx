@@ -82,6 +82,7 @@ export const Default: Story = {
     tooltipPlacement: "bottom",
     orientation: "horizontal",
     actions: actions,
+    labelBtn: "Asignar médicos",
   },
 };
 

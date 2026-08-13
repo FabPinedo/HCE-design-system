@@ -22,7 +22,7 @@
 }
 
 .hce-bed-header {
-  background-color: var(--ds-color-header-bg, #1A3A6B);
+  background-color: var(--ds-color-interactive, #1A3A6B);
   color: var(--ds-color-secondary-contrast, #ffffff);
 }
 

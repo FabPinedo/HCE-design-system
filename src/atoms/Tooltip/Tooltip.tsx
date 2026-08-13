@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useRef, useState, type ReactNode, type CSSProperties } from "react"
+import { useCallback, useLayoutEffect, useRef, useState, type ReactNode, type CSSProperties, useEffect } from "react"
 import { createPortal } from "react-dom"
 import "./Tooltip.css"
 import { useDsTheme } from "../../provider/ThemeProvider"
@@ -86,6 +86,48 @@ export const Tooltip = ({
     })
   }, [placement])
 
+  const hideTooltip = useCallback(() => {
+  setVisible(false)
+}, [])
+
+useEffect(() => {
+  if (!visible) return
+
+  const handleVisibilityChange = () => {
+    if (document.visibilityState !== "visible") {
+      hideTooltip()
+    }
+  }
+
+  window.addEventListener("blur", hideTooltip)
+
+  document.addEventListener(
+    "visibilitychange",
+    handleVisibilityChange,
+  )
+
+  document.addEventListener(
+    "pointerdown",
+    hideTooltip,
+    true,
+  )
+
+  return () => {
+    window.removeEventListener("blur", hideTooltip)
+
+    document.removeEventListener(
+      "visibilitychange",
+      handleVisibilityChange,
+    )
+
+    document.removeEventListener(
+      "pointerdown",
+      hideTooltip,
+      true,
+    )
+  }
+}, [visible, hideTooltip])
+
   useLayoutEffect(() => {
     if (!visible) return
     updatePosition()
@@ -104,10 +146,21 @@ export const Tooltip = ({
       ref={triggerRef}
       className={`hce-tooltip-wrapper${className ? ` ${className}` : ""}`}
       style={style}
-      onMouseEnter={() => setVisible(true)}
-      onMouseLeave={() => setVisible(false)}
-      onFocusCapture={() => setVisible(true)}
+      onPointerEnter={() => setVisible(true)}
+      onPointerLeave={() => setVisible(false)}
+      onFocusCapture={(event) => {
+        const target = event.target
+
+        if (
+          target instanceof HTMLElement &&
+          target.matches(":focus-visible")
+        ) {
+          setVisible(true)
+        }
+      }}
+
       onBlurCapture={() => setVisible(false)}
+      
     >
       {children}
       {visible && typeof document !== "undefined" && createPortal(
