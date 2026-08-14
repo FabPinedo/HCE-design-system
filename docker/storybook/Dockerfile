@@ -23,9 +23,15 @@ RUN CI=true npm run build-storybook
 # ─────────────────────────────────────────────────────────────
 FROM nginx:alpine
 
+# openssl CLI: nginx:alpine trae las librerias pero no el binario --
+# hace falta para que nginx-entrypoint.sh pueda convertir un .pfx/.p12
+# montado (CERT_PATH) a PEM en runtime.
+RUN apk add --no-cache openssl
+
 COPY --from=builder /app/storybook-static /usr/share/nginx/html
-COPY docker/storybook/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/storybook/nginx-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
-EXPOSE 80
+EXPOSE 80 443
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/docker-entrypoint.sh"]

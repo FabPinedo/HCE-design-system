@@ -13,14 +13,27 @@ services:
     restart: unless-stopped
 
   # ── Storybook (static build served by nginx) ────────────────
+  # SSL opcional via nginx-entrypoint.sh (mismo mecanismo ya probado en
+  # HCE-MF-PLATFORM/docker/nginx-entrypoint.sh) -- con USE_SSL=true pero
+  # sin certs montados en CERT_PATH, sigue sirviendo HTTP puro sin
+  # romperse, asi que queda seguro dejarlo siempre en true.
   storybook:
     build:
       context: .
       dockerfile: docker/storybook/Dockerfile
     container_name: hce-storybook
+    restart: unless-stopped
     ports:
       - "10101:80"
-    restart: unless-stopped
+      - "20101:443"
+    environment:
+      PORT: "80"
+      SSL_PORT: "443"
+      USE_SSL: "true"
+      CERT_PATH: /proyectos/certs
+      NGINX_TYPE: spa
+    volumes:
+      - /proyectos/certs:/proyectos/certs:ro
 
   # ── Publisher (build + publish to Verdaccio) ────────────────
   publisher:

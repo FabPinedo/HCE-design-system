@@ -121,3 +121,7 @@ export function getCompanyBranding(tenant: CompanyThemeKey): CompanyBranding {
 export function useCompanyBranding(): CompanyBranding {
   return getCompanyBranding(useDsTenant())
 }
+
+export function getCompanyName(tenant: CompanyThemeKey): string {
+  return companyBranding[tenant].displayName
+}
