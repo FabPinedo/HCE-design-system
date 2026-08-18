@@ -3,7 +3,7 @@ import { Menu } from "../../atoms/Menu/Menu"
 import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
 import { LogoutIcon, HceBurgerIcon } from "../../atoms/Icon/SvgIconsHce"
 import { useDsTenant } from "../../provider/ThemeProvider"
-import { getCompanyBranding, getCompanyName } from "../../theme/companyBranding"
+import { getCompanyBranding } from "../../theme/companyBranding"
 
 import { useEffect, useRef, useState } from "react"
 // ─── Tipos públicos ───────────────────────────────────────────────────────────

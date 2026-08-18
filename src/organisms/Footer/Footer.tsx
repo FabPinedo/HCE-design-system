@@ -1,5 +1,5 @@
 import { useDsTenant } from "../../provider/ThemeProvider"
-import { getCompanyBranding, getCompanyName } from "../../theme/companyBranding"
+import {  getCompanyName } from "../../theme/companyBranding"
 
 
 type Props = {

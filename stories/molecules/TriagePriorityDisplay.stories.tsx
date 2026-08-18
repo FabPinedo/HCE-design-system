@@ -45,7 +45,7 @@ export const PrioridadI: Story = {
   name: "Prioridad I (rojo)",
   render: () => (
     <Box sx={{ p: 3 }}>
-      <TriagePriorityDisplay selected="I" readOnly />
+      <TriagePriorityDisplay selected="I" readOnly label="Priority" />
     </Box>
   ),
 }
