@@ -179,6 +179,9 @@ export type HceSidebarProps = {
    *   <HceSidebar multiLevel={true} ... />
    */
   multiLevel?:   boolean
+  /** Label para boton de inicio de Sidebar */
+  labelHome?:    string
+  titleOptions?: string
 }
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
@@ -695,6 +698,8 @@ export function HceSidebar({
   onHome,
   floating    = false,
   multiLevel  = false,
+  labelHome   = "Inicio", 
+  titleOptions = "Menu"
 }: HceSidebarProps) {
   // Identidad de tenant (no solo color) para elegir el logo correcto —
   // ver el comentario de `useDsTenant` en provider/ThemeProvider.tsx.
@@ -841,11 +846,11 @@ export function HceSidebar({
           /* Tooltip.hce-tooltip-wrapper es inline-flex (shrink-to-fit) por
              defecto — sin este override queda anclado al borde izquierdo
              del riel en vez de centrado, igual que en FirstLevelItem. */
-          <Tooltip title="Inicio" placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
+          <Tooltip title={labelHome} placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
             <div
               role="button"
               tabIndex={0}
-              aria-label="Inicio"
+              aria-label={labelHome}
               onClick={e => { e.stopPropagation(); onHome?.() }}
               onKeyDown={e => {
                 if (e.key === "Enter" || e.key === " ") {
@@ -909,7 +914,7 @@ export function HceSidebar({
               fontWeight: 600,
               color:      `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`,
             }}>
-              Inicio
+              {labelHome}
             </span>
           </div>
         )}
@@ -943,7 +948,7 @@ export function HceSidebar({
            
             marginBottom:  4,
           }}>
-            Menu
+            {titleOptions}
           </div>
         )}
 

@@ -848,6 +848,7 @@ const monitorDskColumns: GenericTableColumn<MonitorRow>[] = [
     key: "info",
     header: "Info",
     type: "info-button",
+    tooltip: "Ver información del paciente",
     width: 60,
     maxWidth: 60,
     align: "center",

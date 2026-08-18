@@ -1,10 +1,7 @@
 import "./HceHeader.css"
 import { Menu } from "../../atoms/Menu/Menu"
-import { hceColors, hceTypography, hceUi, hceShadows } from "../../tokens/hce.tokens"
+import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
 import { LogoutIcon, HceBurgerIcon } from "../../atoms/Icon/SvgIconsHce"
-import {
-  CheckedCircleIcon, DangerIcon, HceInfoIcon, WarningIcon,
-} from "../../atoms/Icon/SvgIconsHce"
 import { useDsTenant } from "../../provider/ThemeProvider"
 import { getCompanyBranding } from "../../theme/companyBranding"
 
@@ -33,34 +30,34 @@ export type HceHeaderVariant = "default" | "tv"
 
 // ─── Configuración visual por tipo ────────────────────────────────────────────
 
-const TIPO_CONFIG: Record<HceNotificacion["tipo"], {
-  color:   string
-  bgLight: string
-  Icon:    React.FC<{ color?: string; size?: number }>
-}> = {
-  info: {
-    // blue[500]/blue[50] == --ds-color-primary/-light (csf) exactamente —
-    // reactivo al tema activo de DSProvider, mismos hex de siempre como fallback.
-    color:   `var(--ds-color-primary, ${"var(--ds-color-primary, #0043a5)"})`,
-    bgLight: `var(--ds-color-primary-light, ${"var(--ds-color-primary-light, #e5e7eb)"})`,
-    Icon:    HceInfoIcon,
-  },
-  warning: {
-    color:   hceColors.alert.warning[500],
-    bgLight: hceColors.alert.warning[50],
-    Icon:    DangerIcon,
-  },
-  success: {
-    color:   hceColors.alert.success[500],
-    bgLight: hceColors.alert.success[50],
-    Icon:    CheckedCircleIcon,
-  },
-  error: {
-    color:   hceColors.alert.error[500],
-    bgLight: hceColors.alert.error[50],
-    Icon:    WarningIcon,
-  },
-}
+// const TIPO_CONFIG: Record<HceNotificacion["tipo"], {
+//   color:   string
+//   bgLight: string
+//   Icon:    React.FC<{ color?: string; size?: number }>
+// }> = {
+//   info: {
+//     // blue[500]/blue[50] == --ds-color-primary/-light (csf) exactamente —
+//     // reactivo al tema activo de DSProvider, mismos hex de siempre como fallback.
+//     color:   `var(--ds-color-primary, ${"var(--ds-color-primary, #0043a5)"})`,
+//     bgLight: `var(--ds-color-primary-light, ${"var(--ds-color-primary-light, #e5e7eb)"})`,
+//     Icon:    HceInfoIcon,
+//   },
+//   warning: {
+//     color:   hceColors.alert.warning[500],
+//     bgLight: hceColors.alert.warning[50],
+//     Icon:    DangerIcon,
+//   },
+//   success: {
+//     color:   hceColors.alert.success[500],
+//     bgLight: hceColors.alert.success[50],
+//     Icon:    CheckedCircleIcon,
+//   },
+//   error: {
+//     color:   hceColors.alert.error[500],
+//     bgLight: hceColors.alert.error[50],
+//     Icon:    WarningIcon,
+//   },
+// }
 
 // Notificaciones de ejemplo — en producción se pasan via props desde la API
 const NOTIF_EJEMPLO: HceNotificacion[] = [
@@ -121,6 +118,8 @@ export type HceHeaderProps = {
   floating?:         boolean
   /** Callback del botón hamburguesa — visible solo en pantallas pequeñas (< md) */
   onMenuClick?:      () => void
+  /** Label de boton para cierre de sesión */
+  labelCloseSesion?: string
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -136,9 +135,9 @@ export function HceHeader({
   userPhotoUrl,
   onLogout,
   notifications,
-  onVerTodas,
   floating        = false,
   onMenuClick,
+  labelCloseSesion = "Cerrar Sesión"
 }: HceHeaderProps) {
   const tenant = useDsTenant()
   const { Logo: CompanyLogo } = getCompanyBranding(tenant)
@@ -147,7 +146,7 @@ export function HceHeader({
   const notifTriggerRef = useRef<HTMLButtonElement>(null)
   const userTriggerRef  = useRef<HTMLButtonElement>(null)
   const [userOpen,  setUserOpen]  = useState(false)
-  const [notifOpen, setNotifOpen] = useState(false)
+  // const [setNotifOpen] = useState(false)
 
   // Estado interno de notificaciones (leídas/no leídas)
   const [notifs, setNotifs] = useState<HceNotificacion[]>(
@@ -158,11 +157,11 @@ export function HceHeader({
   const handleLogout     = () => { handleUserClose(); onLogout?.() }
 
   const handleNotifOpen  = () => {
-    setNotifOpen(true)
+    // setNotifOpen(true)
     // Marca todas como leídas al abrir el panel (mismo comportamiento que Header.tsx)
     setNotifs(prev => prev.map(n => ({ ...n, leida: true })))
   }
-  const handleNotifClose = () => setNotifOpen(false)
+  // const handleNotifClose = () => setNotifOpen(false)
 
   const initials = userName
     .split(" ")
@@ -361,7 +360,7 @@ export function HceHeader({
         )}
 
         {/* ── Panel de notificaciones ──────────────────────────── */}
-        <Menu
+        {/* <Menu
           open={!isTvVariant && notifOpen}
           onClose={handleNotifClose}
           anchorRef={notifTriggerRef}
@@ -374,9 +373,9 @@ export function HceHeader({
             overflow:     "hidden",
             border:       `1px solid ${"var(--ds-color-primary-light, #e5e7eb)"}`,
           }}
-        >
+        > */}
           {/* Cabecera del panel */}
-          <div style={{
+          {/* <div style={{
             padding:         "12px 16px",
             display:         "flex",
             alignItems:      "center",
@@ -401,10 +400,10 @@ export function HceHeader({
             }}>
               {notifs.length} nuevas
             </span>
-          </div>
+          </div> */}
 
           {/* Lista de notificaciones */}
-          <div style={{ maxHeight: 360, overflowY: "auto" }}>
+          {/* <div style={{ maxHeight: 360, overflowY: "auto" }}>
             {notifs.length === 0 ? (
               <div style={{ padding: "32px 0", textAlign: "center" }}>
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: 8, color: "var(--ds-color-primary-light, #0043a5)" }}>
@@ -432,12 +431,10 @@ export function HceHeader({
                       cursor:          "default",
                       boxSizing:       "border-box",
                     }}>
-                      {/* Ícono del tipo */}
                       <div style={{ marginTop: "2px", flexShrink: 0 }}>
                         <cfg.Icon color={cfg.color} size={18} />
                       </div>
 
-                      {/* Contenido */}
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{
                           fontFamily: hceTypography.fontFamily,
@@ -477,7 +474,6 @@ export function HceHeader({
             )}
           </div>
 
-          {/* Footer */}
           <div style={{
             padding:         "8px 16px",
             borderTop:       `1px solid ${"var(--ds-color-primary-light, #e5e7eb)"}`,
@@ -498,7 +494,7 @@ export function HceHeader({
               Ver todas las notificaciones
             </div>
           </div>
-        </Menu>
+        </Menu> */}
 
         {/* Avatar + nombre */}
        {!isTvVariant  && (
@@ -586,7 +582,7 @@ export function HceHeader({
               color:      hceColors.alert.error[500],
               fontWeight: 500,
             }}>
-              Cerrar sesión
+              {labelCloseSesion}
             </span>
           </button>
         </Menu>
