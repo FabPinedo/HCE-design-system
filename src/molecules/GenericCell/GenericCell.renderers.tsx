@@ -36,6 +36,7 @@ export interface CellRenderContext<T> {
   boldText: boolean
   handleColumnClick: (event: MouseEvent<HTMLElement>) => void
   clickableA11yProps: HTMLAttributes<HTMLElement>
+  tooltip?: string
 }
 
 export type CellRenderer<T> = (context: CellRenderContext<T>) => ReactNode
@@ -178,6 +179,7 @@ export const cellRenderers: {
     value,
     disabled,
     canClick,
+    tooltip
   }) => (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <InfoButton
@@ -187,6 +189,7 @@ export const cellRenderers: {
           column.onClick?.(row, value)
         }}
         disabled={disabled}
+        tooltip={tooltip}
       />
     </div>
   ),

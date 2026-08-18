@@ -25,7 +25,7 @@ export interface GenericTableColumn<T> {
   key: string
   header: string
   type: GenericColumnType
-
+  tooltip?: string
   field?: string
   valueGetter?: (row: T) => unknown
 
@@ -140,6 +140,7 @@ export const GenericCell = <T,>({ row, column }: GenericCellProps<T>) => {
         boldText,
         handleColumnClick,
         clickableA11yProps,
+        tooltip: column.tooltip
       })}
     </>
   )
