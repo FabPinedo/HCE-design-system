@@ -27,6 +27,8 @@ export interface TriagePriorityDisplayProps {
   selected?:  TriagePriority | null
   /** Callback al seleccionar. Si no se provee, el componente es solo lectura */
   onSelect?:  (priority: TriagePriority) => void
+
+  label?:     string
   readOnly?:  boolean
 }
 
@@ -36,6 +38,7 @@ export function TriagePriorityDisplay({
   selected,
   onSelect,
   readOnly = false,
+  label = "Prioridad",
 }: TriagePriorityDisplayProps) {
   const interactive = !readOnly && Boolean(onSelect)
 
@@ -57,7 +60,7 @@ export function TriagePriorityDisplay({
             onClick={interactive ? () => onSelect!(priority) : undefined}
             role={interactive ? undefined : "radio"}
             aria-checked={isActive}
-            aria-label={`Prioridad ${priority}`}
+            aria-label={`${label} ${priority}`}
             className={`hce-triage-pill${interactive ? " hce-triage-pill--interactive" : ""}`}
             style={{
               "--triage-bg-active": cfg.bg,
@@ -86,7 +89,7 @@ export function TriagePriorityDisplay({
               lineHeight: 1,
               userSelect: "none",
             }}>
-              Prioridad
+              {label}
             </span>
 
             {/* Badge con numeral romano */}
