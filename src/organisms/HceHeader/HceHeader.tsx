@@ -6,7 +6,7 @@ import {
   CheckedCircleIcon, DangerIcon, HceInfoIcon, WarningIcon,
 } from "../../atoms/Icon/SvgIconsHce"
 import { useDsTenant } from "../../provider/ThemeProvider"
-import { getCompanyBranding, getCompanyName } from "../../theme/companyBranding"
+import { getCompanyBranding } from "../../theme/companyBranding"
 
 import { useEffect, useRef, useState } from "react"
 // ─── Tipos públicos ───────────────────────────────────────────────────────────
