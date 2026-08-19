@@ -28,7 +28,7 @@
     "generate:stories:force": "node scripts/generate-stories.mjs --force",
     "prepublishOnly": "npm run build",
     "publish:local": "npm publish --registry http://localhost:10100",
-    "publish:docker": "npm publish --registry http://verdaccio:4873"
+    "publish:docker": "npm publish --registry http://host.docker.internal:10100"
   },
   "peerDependencies": {
     "react": ">=18",

@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-REGISTRY="${VERDACCIO_URL:-http://verdaccio:4873}"
+REGISTRY="${VERDACCIO_URL:-http://host.docker.internal:10100}"
 REGISTRY_HOST=$(echo "$REGISTRY" | sed 's|https\?://||')
 MAX_RETRIES=30
 PUB_USER="hce-publisher"

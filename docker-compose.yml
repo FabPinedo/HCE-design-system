@@ -1,17 +1,4 @@
 services:
-  # ── Private npm Registry (Verdaccio) ────────────────────────
-  verdaccio:
-    image: verdaccio/verdaccio:5
-    container_name: hce-verdaccio
-    ports:
-      - "10100:4873"
-    volumes:
-      - ./docker/verdaccio/config.yaml:/verdaccio/conf/config.yaml:ro
-      - verdaccio-storage:/verdaccio/storage
-    environment:
-      - VERDACCIO_PUBLIC_URL=http://localhost:10100
-    restart: unless-stopped
-
   # ── Storybook (static build served by nginx) ────────────────
   # SSL opcional via nginx-entrypoint.sh (mismo mecanismo ya probado en
   # HCE-MF-PLATFORM/docker/nginx-entrypoint.sh) -- con USE_SSL=true pero
@@ -35,22 +22,20 @@ services:
     volumes:
       - /proyectos/certs:/proyectos/certs:ro
 
-  # ── Publisher (build + publish to Verdaccio) ────────────────
+  # ── Publisher (build + publish al Verdaccio externo) ────────
+  # Verdaccio ya no vive en este repo: corre en el repo hermano
+  # hce-verdaccio-registry (puerto de host 10100). host.docker.internal
+  # resuelve al host en Windows/Mac y con host-gateway en Linux, así que
+  # no depende de una red Docker compartida.
   publisher:
     build:
       context: .
       dockerfile: docker/publisher/Dockerfile
     container_name: hce-publisher
     environment:
-      - VERDACCIO_URL=http://verdaccio:4873
+      - VERDACCIO_URL=http://host.docker.internal:10100
       - NPM_TOKEN=${NPM_TOKEN:-}
-    depends_on:
-      - verdaccio
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     profiles:
       - publish
-
-volumes:
-  verdaccio-storage:
-networks:
-  default:
-    name: hce-shared-network

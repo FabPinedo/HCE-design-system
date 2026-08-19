@@ -1,6 +1,6 @@
 # HCE Design System
 
-Librería de componentes compartida para los proyectos HCE. Construida con React, CSS puro y Vite. Incluye Storybook para documentación visual y Verdaccio como registry npm privado.
+Librería de componentes compartida para los proyectos HCE. Construida con React, CSS puro y Vite. Incluye Storybook para documentación visual. Se publica en el registry npm privado **Verdaccio**, que corre en el repo hermano [`hce-verdaccio-registry`](../hce-verdaccio-registry) (puerto **10100**) bajo el scope `@hce/*` — este repo ya no contiene el servicio Verdaccio, solo Storybook y el `publisher` que apunta a él.
 
 ---
 
@@ -11,7 +11,7 @@ Librería de componentes compartida para los proyectos HCE. Construida con React
 - [Agregar un componente nuevo](#agregar-un-componente-nuevo)
 - [Generar stories automáticamente](#generar-stories-automáticamente)
 - [Build de la librería](#build-de-la-librería)
-- [Docker — Verdaccio y Storybook](#docker--verdaccio-y-storybook)
+- [Docker — Storybook y Publisher](#docker--storybook-y-publisher)
 - [Publicar en Verdaccio](#publicar-en-verdaccio)
 - [Actualizar una versión publicada](#actualizar-una-versión-publicada)
 - [Consumir el paquete en otros proyectos](#consumir-el-paquete-en-otros-proyectos)
@@ -39,9 +39,8 @@ HCE-design-system/
 ├── scripts/
 │   └── generate-stories.mjs   # Script de auto-generación de stories
 ├── docker/
-│   ├── verdaccio/      # Config de Verdaccio
 │   ├── storybook/      # Dockerfile + nginx para Storybook
-│   └── publisher/      # Script de publicación automática
+│   └── publisher/      # Script de publicación automática (apunta al Verdaccio externo)
 ├── docker-compose.yml
 ├── vite.config.ts      # Build en modo librería
 ├── tsconfig.lib.json   # TS config para el build de la lib
@@ -203,23 +202,34 @@ Genera en `dist/`:
 
 ---
 
-## Docker — Verdaccio y Storybook
+## Docker — Storybook y Publisher
+
+Este repo **no tiene Verdaccio propio**. Verdaccio corre en el repo hermano [`hce-verdaccio-registry`](../hce-verdaccio-registry), que expone el registry en el puerto de host **10100** para todos los paquetes `@hce/*` (design-system y hce-libraries por igual). El `publisher` de este repo lo alcanza vía `http://host.docker.internal:10100` (no depende de una red Docker compartida).
 
 ### Servicios disponibles
 
 | Servicio | Puerto | Descripción |
 |---|---|---|
-| `verdaccio` | 10100 | Registry npm privado, persistente |
 | `storybook` | 10101 | Storybook estático servido con nginx |
-| `publisher` | — | Publica el paquete a Verdaccio (perfil: `publish`) |
+| `publisher` | — | Publica el paquete al Verdaccio externo (perfil: `publish`) |
 
-### Levantar Verdaccio y Storybook
+### Levantar Storybook
 
 ```bash
 docker compose up -d
 ```
 
 - Storybook disponible en `http://localhost:10101`
+
+### Prerequisito para publicar
+
+Verdaccio debe estar corriendo antes de usar el `publisher`:
+
+```bash
+# Desde la raíz de hce-verdaccio-registry
+docker compose up -d
+```
+
 - Verdaccio disponible en `http://localhost:10100`
 
 ### Detener los servicios
@@ -250,10 +260,10 @@ docker compose up -d
 
 ### Publicar rápido (sin cambios de versión)
 
-Si Verdaccio ya está corriendo y solo querés publicar la versión actual:
+Si Verdaccio (en `hce-verdaccio-registry`) ya está corriendo y solo querés publicar la versión actual:
 
 ```bash
-# Desde el servidor donde corre Verdaccio
+# Desde la raíz de HCE-design-system
 docker compose --profile publish run --rm publisher
 ```
 
@@ -300,7 +310,9 @@ git tag "v$(node -p "require('./package.json').version")"
 git push
 git push --tags
 
-# 9. Reconstruir imágenes y publicar en Verdaccio
+# 9. Asegurarse de que Verdaccio (hce-verdaccio-registry) esté corriendo,
+#    reconstruir imágenes de este repo y publicar
+cd ../hce-verdaccio-registry && docker compose up -d && cd -
 docker compose down
 docker compose build
 docker compose up -d
@@ -345,10 +357,11 @@ Ejecutar desde el directorio del design system:
 npm unpublish @hce/design-system@1.0.20 --registry http://localhost:10100 --force
 ```
 
-Reemplazar `1.0.20` por la versión que se quiere eliminar. Si Verdaccio da error de permisos, borrar directamente del volumen:
+Reemplazar `1.0.20` por la versión que se quiere eliminar. Si Verdaccio da error de permisos, borrar directamente del volumen — esto se hace desde la raíz de **`hce-verdaccio-registry`**, no desde este repo (ver el volumen exacto con `docker volume ls | grep verdaccio` en ese repo):
 
 ```bash
-docker run --rm -v hce-design-system_verdaccio-storage:/storage alpine sh -c "rm -rf /storage/@hce/design-system"
+# Desde la raíz de hce-verdaccio-registry
+docker run --rm -v <nombre-del-volumen-verdaccio-storage>:/storage alpine sh -c "rm -rf /storage/@hce/design-system"
 docker compose restart verdaccio
 ```
 
@@ -463,14 +476,14 @@ docker compose ps
 ### Ver logs en tiempo real
 
 ```bash
-# Todos los servicios
+# Todos los servicios de este repo (storybook, publisher)
 docker compose logs -f
-
-# Solo Verdaccio
-docker compose logs -f verdaccio
 
 # Solo Storybook
 docker compose logs -f storybook
+
+# Verdaccio corre en hce-verdaccio-registry — sus logs se ven desde ahí:
+# cd ../hce-verdaccio-registry && docker compose logs -f verdaccio
 ```
 
 ### Puerto ocupado (el error más común)
@@ -506,7 +519,7 @@ Al hacer `docker compose up` puede aparecer el warning `Found orphan containers`
 docker compose up -d --remove-orphans
 ```
 
-> Esto solo elimina contenedores parados que ya no corresponden a ningún servicio del `compose.yml`. **No toca los volúmenes ni los paquetes publicados en Verdaccio.**
+> Esto solo elimina contenedores parados que ya no corresponden a ningún servicio del `compose.yml`. **No toca los volúmenes ni los paquetes publicados en Verdaccio** (que además vive en su propio repo, `hce-verdaccio-registry`, así que ni siquiera comparte volúmenes con este `docker compose`).
 
 ### Verificar paquetes en Verdaccio
 
@@ -523,15 +536,19 @@ curl http://localhost:10100/-/ping
 
 ### Verificar que el volumen de Verdaccio persiste
 
+El volumen de almacenamiento de Verdaccio ya no vive en este repo — se administra desde `hce-verdaccio-registry`:
+
 ```bash
+# Desde la raíz de hce-verdaccio-registry
+
 # Listar volúmenes Docker
 docker volume ls | grep verdaccio
 
 # Inspeccionar el volumen (muestra dónde está montado en el host)
-docker volume inspect hce-design-system_verdaccio-storage
+docker volume inspect <nombre-del-volumen-verdaccio-storage>
 ```
 
-> Los paquetes publicados viven en este volumen. Se pierden **solo** si se ejecuta `docker volume rm hce-design-system_verdaccio-storage`. Detener, reiniciar o reconstruir contenedores no lo afecta.
+> Los paquetes publicados viven en ese volumen, dentro de `hce-verdaccio-registry`. Se pierden **solo** si se ejecuta `docker volume rm` sobre él ahí. Detener, reiniciar o reconstruir los contenedores de este repo (`HCE-design-system`) no lo afecta en absoluto, ya que Verdaccio no corre aquí.
 
 ### Forzar rebuild completo (cuando los cambios no se reflejan)
 
