@@ -7,6 +7,11 @@ Versionado basado en [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.5.0] - 2026-08-26
+
+### Agregado
+- **`HceLanguageSwitch`**: nuevo molecule — botón + dropdown para elegir el idioma activo (globo + código + `Menu`/`MenuItem` existentes). Componente "tonto": recibe `locales`, `activeLocale` y `onLocaleChange` por props y no depende de i18next/react-i18next, mismo criterio de separación que ya usa el resto del design system con MUI. Pensado para montarse junto a `HceHeader` en el shell/remote consumidor, que resuelve los idiomas soportados y aplica el cambio (ej. vía `useLocaleSwitch()` de `@hce/i18n-core`).
+
 ## [1.4.0] - 2026-08-08
 
 ### Agregado
