@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { HceHeader } from "@hce/design-system"
+import React, { useState } from "react"
+import { HceHeader, HceLanguageSwitch, type HceLocaleOption } from "@hce/design-system"
 
 // ─── Datos de ejemplo ──────────────────────────────────────
 const SUCURSALES_MULTI = [
@@ -14,6 +15,14 @@ const SUCURSALES_UNA = [
 
 // URL de foto de ejemplo (placeholder público para Storybook)
 const PHOTO_URL_DEMO = "https://picsum.photos/seed/hce-doctor/34/34"
+
+// Idiomas de ejemplo — en un consumidor real vienen de SUPPORTED_LOCALES
+// (@hce/i18n-core), nunca hardcodeados como acá.
+const LOCALES_DEMO: HceLocaleOption[] = [
+  { code: "es", label: "Español" },
+  { code: "en", label: "English" },
+  { code: "pt", label: "Português" },
+]
 
 // ─── Meta ──────────────────────────────────────────────────
 const meta: Meta<typeof HceHeader> = {
@@ -135,5 +144,37 @@ export const SinFoto: Story = {
     sucursales: SUCURSALES_MULTI,
     userName:   "Dr. CARLOS AUGUSTO RIOS MENDOZA",
     userRole:   "CARDIOLOGIA",
+  },
+}
+
+/**
+ * Con selector de idioma — ejemplo de uso de `extraActions` para componer
+ * `HceLanguageSwitch` dentro del header, junto a la campana. `HceHeader` no
+ * sabe nada de idiomas: el consumidor (shell/remote) arma el switch con los
+ * locales soportados y lo pasa como `extraActions`. El estado activo cambia
+ * de verdad al elegir una opción — en un consumidor real ese cambio se hace
+ * vía `useLocaleSwitch()` de `@hce/i18n-core`.
+ */
+export const ConSelectorDeIdioma: Story = {
+  render: (args) => {
+    const [activeLocale, setActiveLocale] = useState("es")
+    return (
+      <HceHeader
+        {...args}
+        extraActions={
+          <HceLanguageSwitch
+            locales={LOCALES_DEMO}
+            activeLocale={activeLocale}
+            onLocaleChange={setActiveLocale}
+          />
+        }
+      />
+    )
+  },
+  args: {
+    sede:       "2",
+    sucursales: SUCURSALES_MULTI,
+    userName:   "Carlos Rossi Gregorovich",
+    userRole:   "Médico Internista",
   },
 }

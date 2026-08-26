@@ -5,7 +5,7 @@ import { LogoutIcon, HceBurgerIcon } from "../../atoms/Icon/SvgIconsHce"
 import { useDsTenant } from "../../provider/ThemeProvider"
 import { getCompanyBranding } from "../../theme/companyBranding"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 // ─── Tipos públicos ───────────────────────────────────────────────────────────
 
 export type Sucursal = {
@@ -120,6 +120,8 @@ export type HceHeaderProps = {
   onMenuClick?:      () => void
   /** Label de boton para cierre de sesión */
   labelCloseSesion?: string
+  /** Slot genérico para acciones adicionales, renderizado antes de la campana (ej. selector de idioma). Oculto en variant="tv" igual que campana/avatar. */
+  extraActions?:     ReactNode
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -137,7 +139,8 @@ export function HceHeader({
   notifications,
   floating        = false,
   onMenuClick,
-  labelCloseSesion = "Cerrar Sesión"
+  labelCloseSesion = "Cerrar Sesión",
+  extraActions,
 }: HceHeaderProps) {
   const tenant = useDsTenant()
   const { Logo: CompanyLogo } = getCompanyBranding(tenant)
@@ -322,6 +325,9 @@ export function HceHeader({
           />
         </>
       )}
+
+        {/* Acciones extra (ej. selector de idioma) */}
+      {!isTvVariant && extraActions}
 
         {/* Campana */}
       {!isTvVariant  && (

@@ -190,6 +190,9 @@ export { PageHeader }          from "./molecules/PageHeader/PageHeader"
 // DataTableSimple: molecule DataTable (generic T extends object)
 export { DataTable as DataTableSimple } from "./molecules/DataTable/DataTable" //no se usa
 
+export { HceLanguageSwitch }   from "./molecules/HceLanguageSwitch/HceLanguageSwitch"
+export type { HceLanguageSwitchProps, HceLocaleOption } from "./molecules/HceLanguageSwitch/HceLanguageSwitch"
+
 // ── EvaScale (escala visual de dolor 0-10) ────────────────
 export { EvaScale } from "./molecules/EvaScale/EvaScale"
 export type { EvaScaleProps } from "./molecules/EvaScale/EvaScale"
