@@ -11,7 +11,7 @@
 
 import "./BedAvailabilityDrawerV2.css"
 import { Overlay } from "../../atoms/Overlay/Overlay"
-import { Tooltip } from "../../atoms/Tooltip/Tooltip"
+import { HceTooltip } from "../../atoms/HceTooltip/HceTooltip"
 
 import {
   hceClinicalColors, hceColors, hceTypography,
@@ -78,7 +78,7 @@ function BedCard({ bed }: { bed: BedAvailabilityItem }) {
   const accessibleLbl = bed.ariaLabel ?? [bed.code, statusLabel].filter(Boolean).join(" — ")
 
   return (
-    <Tooltip
+    <HceTooltip
       title={accessibleLbl}
       arrow
       placement="top"
@@ -125,7 +125,7 @@ function BedCard({ bed }: { bed: BedAvailabilityItem }) {
           {bed.code}
         </span>
       </div>
-    </Tooltip>
+    </HceTooltip>
   )
 }
 

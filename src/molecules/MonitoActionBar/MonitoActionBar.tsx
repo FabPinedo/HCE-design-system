@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import "./MonitoActionBar.css"
-import { HceTooltip } from "../../atoms/Tooltip/HceTooltip"
+import { HceTooltip } from "../../atoms/HceTooltip/HceTooltip"
 import { hceTypography } from "../../tokens/hce.tokens"
 import { UiDoctorIcon } from "../../atoms/Icon/Icon"
 

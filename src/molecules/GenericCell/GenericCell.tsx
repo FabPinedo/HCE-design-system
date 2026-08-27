@@ -20,6 +20,7 @@ export type GenericColumnType =
   | "switch"
   | "tag"
   | "list"
+  | "datetime"
 
 export interface GenericTableColumn<T> {
   key: string

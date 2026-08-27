@@ -8,7 +8,7 @@
  */
 import type { CSSProperties } from "react"
 import "./InfoButton.css"
-import { Tooltip } from "../../atoms/Tooltip/Tooltip"
+import { HceTooltip } from "../../atoms/HceTooltip/HceTooltip"
 import { HceEyeIcon } from "../../atoms/Icon/SvgIconsHce"
 
 
@@ -26,7 +26,7 @@ export const InfoButton = ({ onClick, tooltip = "Ver información del paciente",
   } as CSSProperties
 
   return (
-    <Tooltip title={disabled ? "" : tooltip} placement="top">
+    <HceTooltip title={disabled ? "" : tooltip} placement="top">
       <button
         type="button"
         className="hce-infobtn"
@@ -37,6 +37,6 @@ export const InfoButton = ({ onClick, tooltip = "Ver información del paciente",
       >
         <HceEyeIcon size={14} color="#FFFFFF" />
       </button>
-    </Tooltip>
+    </HceTooltip>
   )
 }

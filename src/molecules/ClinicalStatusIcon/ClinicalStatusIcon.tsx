@@ -13,7 +13,7 @@
  * ---------------------------------------------------------
  */
 import { hceClinicalColors, hceBorderRadius } from "../../tokens/hce.tokens"
-import { Tooltip } from "../../atoms/Tooltip/Tooltip"
+import { HceTooltip } from "../../atoms/HceTooltip/HceTooltip"
 import type { ComponentType } from "react"
 
 export type ClinicalIconStatus = "alert" | "ok" | "urgent" | "empty"
@@ -69,7 +69,7 @@ export const ClinicalStatusIcon = ({ status, icon: Icon, tooltipLabel }: Props) 
   }
 
   return (
-    <Tooltip
+    <HceTooltip
       title={tooltipLabel ?? config.label}
       placement="top"
     >
@@ -92,6 +92,6 @@ export const ClinicalStatusIcon = ({ status, icon: Icon, tooltipLabel }: Props) 
       >
         <Icon size= {16} color= {config.color} />
       </div>
-    </Tooltip>
+    </HceTooltip>
   )
 }

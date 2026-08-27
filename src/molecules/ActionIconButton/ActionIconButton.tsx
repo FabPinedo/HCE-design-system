@@ -10,7 +10,7 @@
 import type { CSSProperties } from "react"
 import "./ActionIconButton.css"
 import { hceColors } from "../../tokens/hce.tokens"
-import { HceTooltip } from "../../atoms/Tooltip/HceTooltip"
+import { HceTooltip } from "../../atoms/HceTooltip/HceTooltip"
 
 interface Props {
   /** Componente de ícono (HceIcon custom o cualquier ElementType compatible con size/color/sx) */

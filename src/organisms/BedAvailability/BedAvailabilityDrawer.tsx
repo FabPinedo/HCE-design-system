@@ -1,7 +1,7 @@
 import { useState }                                    from "react"
 import "./BedAvailabilityDrawer.css"
 import { Overlay }                                     from "../../atoms/Overlay/Overlay"
-import { Tooltip }                                     from "../../atoms/Tooltip/Tooltip"
+import { HceTooltip }                                     from "../../atoms/HceTooltip/HceTooltip"
 import { Button }                                      from "../../atoms/Button/Button"
 import { CloseIcon, ChevronDownIcon }                   from "../../atoms/Icon/SvgIconsHce"
 import { hceClinicalColors, hceTypography, hceBorderRadius, hceSpacing } from "../../tokens/hce.tokens"
@@ -186,7 +186,7 @@ function BoxCell({ box }: { box: BoxData }) {
   ) : isDisponible ? "Disponible — listo para asignar" : "En mantenimiento"
 
   return (
-    <Tooltip title={tooltipContent} placement="top" arrow>
+    <HceTooltip title={tooltipContent} placement="top" arrow>
       <div
         className="hce-baddrawer-boxcell"
         style={{
@@ -231,7 +231,7 @@ function BoxCell({ box }: { box: BoxData }) {
           </span>
         )}
       </div>
-    </Tooltip>
+    </HceTooltip>
   )
 }
 
