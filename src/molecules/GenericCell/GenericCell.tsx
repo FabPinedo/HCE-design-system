@@ -59,6 +59,14 @@ export interface GenericTableColumn<T> {
 
   /** Estilo puntual de la celda — objeto plano de CSS (antes SystemStyleObject<Theme> de MUI). */
   cellSx?: CSSProperties
+
+  /**
+   * Hook de pruebas E2E — `data-testid` del elemento interactivo de la celda
+   * (icon/info-button/switch/tag/etc.), análogo a `getRowTestId` de
+   * GenericTable pero a nivel de columna. Debe derivarse de un id técnico
+   * opaco de la fila, nunca de datos identificables del paciente.
+   */
+  getCellTestId?: (row: T) => string
 }
 
 interface GenericCellProps<T> {
@@ -140,7 +148,8 @@ export const GenericCell = <T,>({ row, column }: GenericCellProps<T>) => {
         boldText,
         handleColumnClick,
         clickableA11yProps,
-        tooltip: column.tooltip
+        tooltip: column.tooltip,
+        testId: column.getCellTestId?.(row),
       })}
     </>
   )

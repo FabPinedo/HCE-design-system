@@ -9,6 +9,7 @@
  * ---------------------------------------------------------
  */
 
+import { useId } from "react"
 import "./BedAvailabilityDrawerV2.css"
 import { Overlay } from "../../atoms/Overlay/Overlay"
 import { Tooltip } from "../../atoms/Tooltip/Tooltip"
@@ -59,6 +60,8 @@ export interface BedAvailabilityDrawerV2Props {
   onClose:   () => void
   beds:      BedAvailabilityItem[]
   title?:    string
+  /** Hook de pruebas E2E — id base; sufija `-close` y `-bed-{id}`. */
+  testId?:   string
 }
 
 function resolveBedColor(bed: BedAvailabilityItem): string {
@@ -70,7 +73,7 @@ function resolveBedColor(bed: BedAvailabilityItem): string {
 }
 
 
-function BedCard({ bed }: { bed: BedAvailabilityItem }) {
+function BedCard({ bed, testId }: { bed: BedAvailabilityItem; testId?: string }) {
   const bgColor       = resolveBedColor(bed)
   const isOutlined    = bed.status === "disponible" || bgColor === hceColors.neutro.white[50]
 
@@ -96,6 +99,7 @@ function BedCard({ bed }: { bed: BedAvailabilityItem }) {
       <div
         role="listitem"
         aria-label={accessibleLbl}
+        data-testid={testId}
         className="hce-bedv2-card"
         style={{
           display:         "flex",
@@ -182,14 +186,20 @@ export function BedAvailabilityDrawerV2({
   onClose,
   beds,
   title = "Disponibilidad de camas",
+  testId,
 }: BedAvailabilityDrawerV2Props) {
+  // Antes: id fijo "hce-bedv2-title" — mismo bug que HceModal si el drawer
+  // coexiste con otra instancia en el DOM. useId() lo hace único por instancia.
+  const titleId = useId()
+
   return (
     <Overlay
       open={open}
       onClose={onClose}
       variant="drawer-right"
       panelClassName="hce-bedv2-panel"
-      labelledBy="hce-bedv2-title"
+      labelledBy={titleId}
+      testId={testId}
     >
       {/* ── Header (Fijo arriba) ── */}
       <div
@@ -199,7 +209,7 @@ export function BedAvailabilityDrawerV2({
           padding: `${hceSpacing[4]} ${hceSpacing[4]}`,
         }}
       >
-        <span id="hce-bedv2-title" style={{
+        <span id={titleId} style={{
           display: "block",
           fontFamily: hceTypography.fontFamilyClinical,
           fontSize:   hceTypography.size.headerTitle,
@@ -238,7 +248,7 @@ export function BedAvailabilityDrawerV2({
               gap:                 hceSpacing[3],
             }}
           >
-            {beds.map((bed) => <BedCard key={bed.id} bed={bed} />)}
+            {beds.map((bed) => <BedCard key={bed.id} bed={bed} testId={testId ? `${testId}-bed-${bed.id}` : undefined} />)}
           </div>
         )}
       </div>
@@ -254,7 +264,7 @@ export function BedAvailabilityDrawerV2({
         <StatusLegend />
 
         {/* Botón Cerrar */}
-        <button type="button" className="hce-bedv2-close-btn" onClick={onClose}>
+        <button type="button" className="hce-bedv2-close-btn" onClick={onClose} data-testid={testId ? `${testId}-close` : undefined}>
           Cerrar
         </button>
       </div>

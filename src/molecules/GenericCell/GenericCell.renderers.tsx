@@ -37,6 +37,7 @@ export interface CellRenderContext<T> {
   handleColumnClick: (event: MouseEvent<HTMLElement>) => void
   clickableA11yProps: HTMLAttributes<HTMLElement>
   tooltip?: string
+  testId?: string
 }
 
 export type CellRenderer<T> = (context: CellRenderContext<T>) => ReactNode
@@ -179,7 +180,8 @@ export const cellRenderers: {
     value,
     disabled,
     canClick,
-    tooltip
+    tooltip,
+    testId,
   }) => (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <InfoButton
@@ -190,6 +192,7 @@ export const cellRenderers: {
         }}
         disabled={disabled}
         tooltip={tooltip}
+        testId={testId}
       />
     </div>
   ),
@@ -215,6 +218,7 @@ export const cellRenderers: {
     canClick,
     handleColumnClick,
     clickableA11yProps,
+    testId,
   }) => {
     const Icon = column.icon
 
@@ -232,6 +236,7 @@ export const cellRenderers: {
       <div
         onClick={handleColumnClick}
         {...clickableA11yProps}
+        data-testid={testId}
         style={{
           width: 28,
           height: 28,
@@ -260,6 +265,7 @@ export const cellRenderers: {
     column,
     value,
     disabled,
+    testId,
   }) => {
     const checked = column.checkedGetter
       ? column.checkedGetter(row)
@@ -296,6 +302,7 @@ export const cellRenderers: {
 
             column.onClick?.(row, event.target.checked)
           }}
+          testId={testId}
         />
 
         {showLabel && (
