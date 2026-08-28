@@ -18,6 +18,8 @@ interface GenericRowProps<T> {
    */
   rowAlertGetter?: (row: T) => boolean
 
+  /** Hook de pruebas E2E — `data-testid` de la fila (ver GenericTable.getRowTestId). */
+  testId?: string
 }
 
 /** Resuelve bg base + bg de hover de la fila según alerta/alternancia. */
@@ -47,6 +49,7 @@ export const GenericRow = <T,>({
   columns,
   rowSx,
   rowAlertGetter,
+  testId,
 
 }: GenericRowProps<T>) => {
   // Mismo peso relativo (px como ratio -> %) que usa el header, para que
@@ -58,6 +61,7 @@ export const GenericRow = <T,>({
   return (
     <tr
       className="hce-generic-row"
+      data-testid={testId}
       style={{
         "--row-bg":       bg,
         "--row-hover-bg": hoverBg,

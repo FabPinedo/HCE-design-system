@@ -1,4 +1,4 @@
-import { type ReactNode }  from "react"
+import { type ReactNode, useId }  from "react"
 import { Overlay }         from "../../atoms/Overlay/Overlay"
 import { Button }          from "../../atoms/Button/Button"
 import { TextInput }       from "../../atoms/TextInput/TextInput"
@@ -63,6 +63,16 @@ export interface HceModalProps {
   buttonLayout?: "row" | "column"
   /** Ancho máximo del card en px. Default: 420 */
   maxWidth?:     number
+
+  // ── Testing ─────────────────────────────────────────
+  /**
+   * Hook de pruebas E2E (Playwright) — id base del modal. Se sufija
+   * internamente para cada sub-elemento: `{testId}` (panel), `-title`,
+   * `-description`, `-confirm`, `-cancel`. Convención:
+   * `{microfrontend}-{componente}` (ver docs/testing-convention.md). No
+   * derivar el valor de datos identificables del paciente.
+   */
+  testId?: string
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -82,16 +92,27 @@ export function HceModal({
   cancelButton,
   buttonLayout = "row",
   maxWidth     = 420,
+  testId,
 }: HceModalProps) {
   const hasButtons = !!(confirmButton || cancelButton)
   const isRow      = buttonLayout === "row"
+
+  // Antes: ids fijos ("hce-modal-title"/"hce-modal-description") — si dos
+  // HceModal coexistían en el DOM (mf-shell monta varios MFs a la vez), el
+  // aria-labelledby/describedby de uno apuntaba al título/descripción del
+  // otro. useId() genera un id único por instancia, sin que el consumidor
+  // tenga que pasarlo.
+  const reactId     = useId()
+  const titleId      = `${reactId}-title`
+  const descriptionId = `${reactId}-description`
 
   return (
     <Overlay
       open={open}
       onClose={onClose}
-      labelledBy="hce-modal-title"
-      describedBy={description ? "hce-modal-description" : undefined}
+      labelledBy={titleId}
+      describedBy={description ? descriptionId : undefined}
+      testId={testId}
       panelStyle={{
         borderRadius:  16,
         padding:       "32px 28px 28px",
@@ -125,7 +146,8 @@ export function HceModal({
 
       {/* ── Título ──────────────────────────────────────── */}
       <div
-        id="hce-modal-title"
+        id={titleId}
+        data-testid={testId ? `${testId}-title` : undefined}
         style={{
           fontFamily: "var(--ds-font-family, 'Poppins', sans-serif)",
           fontWeight: 700,
@@ -140,7 +162,8 @@ export function HceModal({
       {/* ── Descripción ─────────────────────────────────── */}
       {description && (
         <div
-          id="hce-modal-description"
+          id={descriptionId}
+          data-testid={testId ? `${testId}-description` : undefined}
           style={{
             fontFamily: "var(--ds-font-family, 'Poppins', sans-serif)",
             fontSize:   "0.875rem",
@@ -191,6 +214,7 @@ export function HceModal({
                 onClick={confirmButton.onClick}
                 disabled={confirmButton.disabled}
                 startIcon={confirmButton.icon}
+                testId={testId ? `${testId}-confirm` : undefined}
                 color={confirmButton.color ?? `var(--ds-color-interactive-button, ${hceColors.primary.green[800]})`}
               >
                 {confirmButton.label}
@@ -208,6 +232,7 @@ export function HceModal({
                 style={{  padding: '6px 16px',    lineHeight: 1.75, minWidth: '64px' }}
                 disabled={cancelButton.disabled}
                 startIcon={cancelButton.icon}
+                testId={testId ? `${testId}-cancel` : undefined}
                 color={cancelButton.color ?? `var(--ds-color-primary, ${hceColors.primary.blue[500]})`}
               >
                 {cancelButton.label}
