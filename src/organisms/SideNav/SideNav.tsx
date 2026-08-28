@@ -6,15 +6,17 @@ type Props = {
   collapsed?: boolean
   isMobile?:  boolean
   onToggle:   () => void
+  /** Hook de pruebas E2E — id base; sufija `-toggle` en el botón colapsar. */
+  testId?: string
 }
 
-export function SideNav({ children, collapsed = false, isMobile = false, onToggle }: Props) {
+export function SideNav({ children, collapsed = false, isMobile = false, onToggle, testId }: Props) {
   return (
-    <div className={`jarvis-sidenav ${collapsed ? "collapsed" : ""}`}>
+    <div className={`jarvis-sidenav ${collapsed ? "collapsed" : ""}`} data-testid={testId}>
 
       {/* Botón colapsar — solo en desktop */}
       {!isMobile && (
-        <button className="jarvis-sidenav-toggle" onClick={onToggle} title={collapsed ? "Expandir sidebar" : "Colapsar sidebar"}>
+        <button className="jarvis-sidenav-toggle" onClick={onToggle} title={collapsed ? "Expandir sidebar" : "Colapsar sidebar"} data-testid={testId ? `${testId}-toggle` : undefined}>
           <svg
             width="14" height="14" viewBox="0 0 14 14"
             fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"

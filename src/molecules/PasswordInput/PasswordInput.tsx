@@ -13,6 +13,8 @@ interface Props {
   fullWidth?:   boolean
   /** Activa el estado de error: todo cambia a rojo */
   error?:       boolean
+  /** Hook de pruebas E2E — reenviado al `<input>` interno (TextInput). */
+  testId?:      string
 }
 
 export function PasswordInput({
@@ -23,6 +25,7 @@ export function PasswordInput({
   startIcon,
   fullWidth = true,
   error     = false,
+  testId,
 }: Props) {
   const [show, setShow] = useState(false)
 
@@ -66,6 +69,7 @@ export function PasswordInput({
       type={show ? "text" : "password"}
       endAdornment={eyeAdornment}
       error={error}
+      testId={testId}
     />
   )
 }

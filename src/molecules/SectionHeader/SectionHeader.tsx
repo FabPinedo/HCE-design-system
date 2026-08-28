@@ -4,16 +4,19 @@ export interface SectionHeaderProps {
   title: string
   expanded: boolean
   onToggle: () => void
+  /** Hook de pruebas E2E — `data-testid` en el `<button>`. */
+  testId?: string
 }
 
 /** Header clickeable de sección desplegable, con chevron animado. */
-export function SectionHeader({ title, expanded, onToggle }: SectionHeaderProps) {
+export function SectionHeader({ title, expanded, onToggle, testId }: SectionHeaderProps) {
   return (
     <button
       type="button"
       className="hce-section-header"
       onClick={onToggle}
       aria-expanded={expanded}
+      data-testid={testId}
     >
       <span
         style={{

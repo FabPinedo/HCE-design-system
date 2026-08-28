@@ -2,6 +2,8 @@ import "./Badge.css"
 
 interface Props {
   value: number
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 /**
@@ -9,6 +11,6 @@ interface Props {
  * `children` que envolver, ver stories/atoms/Badge.stories.tsx) por un
  * <span> con el mismo aspecto: círculo azul primario con el número.
  */
-export const Badge = ({ value }: Props) => {
-  return <span className="hce-badge">{value}</span>
+export const Badge = ({ value, testId }: Props) => {
+  return <span className="hce-badge" data-testid={testId}>{value}</span>
 }

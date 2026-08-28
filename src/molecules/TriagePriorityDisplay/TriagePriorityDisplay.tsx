@@ -30,6 +30,8 @@ export interface TriagePriorityDisplayProps {
 
   label?:     string
   readOnly?:  boolean
+  /** Hook de pruebas E2E — id base, sufijado `-{priority}` en cada pill. */
+  testId?:    string
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -39,6 +41,7 @@ export function TriagePriorityDisplay({
   onSelect,
   readOnly = false,
   label = "Prioridad",
+  testId,
 }: TriagePriorityDisplayProps) {
   const interactive = !readOnly && Boolean(onSelect)
 
@@ -61,6 +64,7 @@ export function TriagePriorityDisplay({
             role={interactive ? undefined : "radio"}
             aria-checked={isActive}
             aria-label={`${label} ${priority}`}
+            data-testid={testId ? `${testId}-${priority}` : undefined}
             className={`hce-triage-pill${interactive ? " hce-triage-pill--interactive" : ""}`}
             style={{
               "--triage-bg-active": cfg.bg,

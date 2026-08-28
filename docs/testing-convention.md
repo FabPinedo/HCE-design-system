@@ -48,14 +48,33 @@ consumidor en el call site — el design system nunca fija un valor.
   `getRowId(row)` — un callback en vez de un valor fijo, porque cada fila
   necesita un testid distinto.
 
-## Componentes con `testId` (piloto)
+## Componentes con `testId`
 
-- `Button` — prop `testId`.
-- `Overlay` — prop `testId` (panel raíz).
-- `HceModal` — prop `testId` (sufijada: panel, `-title`, `-description`,
-  `-confirm`, `-cancel`).
-- `GenericTable` / `GenericRow` — prop `getRowTestId`.
+Cobertura completa (desde v1.7.0) en prácticamente todos los átomos,
+moléculas y organismos interactivos del design system: botones, inputs
+(text/textarea/numeric/date/password), selects (nativo y custom),
+checkbox/toggle/radio, badges, modales/overlays, tablas, paginación,
+headers, sidebars, menús, breadcrumbs, tarjetas, etc. Cada componente
+reenvía `testId` (o `getRowTestId`/`getRowId`-style callback en listas) a
+su nodo DOM raíz o al elemento interactivo real, con sufijos en compuestos
+(`-title`, `-confirm`, `-close`, `-item-{id}`, etc. — ver el prop de cada
+componente en su archivo `.tsx`, todos documentados con JSDoc).
 
-El resto de átomos/organismos se va agregando bajo el mismo patrón conforme
-se necesite en cada microfrontend — no es necesario cubrir todo el design
-system de una sola vez.
+**Intencionalmente sin `testId`** — componentes puramente de layout/estilo
+o decorativos, sin valor como hook de test: `Box`, `Grid`, `FieldCol`,
+`Typography`, `Icon`, `SkeletonLoader`, `HceTooltip`/`Tooltip`,
+`CSFLoading`, `LoadingOverlay`.
+
+**Cobertura parcial señalada** — `HceSidebar`: el ítem de primer nivel
+(`-item-{idMenu|codigo}`) tiene testId, pero los sub-niveles anidados
+(`SecondLevelGroup` y nietos) no fueron instrumentados en esta pasada, dado
+el volumen del árbol; agregar si un test necesita bajar más de un nivel.
+
+## Bug de accesibilidad corregido de paso
+
+Dos organismos tenían `id` HTML **fijo** (no relacionado a testid) usado en
+`aria-labelledby`/`aria-describedby`: `HceModal` y `HceFormModal`. Si dos
+instancias coexistían en el DOM (mf-shell monta varios MFs a la vez), el
+aria de una apuntaba al contenido de la otra. Corregido con `useId()` de
+React — génera un id único por instancia automáticamente, sin tocar la API
+pública de ninguno de los dos componentes.

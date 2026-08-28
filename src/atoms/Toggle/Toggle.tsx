@@ -5,10 +5,12 @@ export interface ToggleProps {
   checked: boolean
   onChange: (v: boolean) => void
   disabled?: boolean
+  /** Hook de pruebas E2E — `data-testid` en el `<input>`. */
+  testId?: string
 }
 
 /** Switch on/off. */
-export function Toggle({ checked, onChange, disabled = false }: ToggleProps) {
+export function Toggle({ checked, onChange, disabled = false, testId }: ToggleProps) {
   const id = useId()
   return (
     <label
@@ -27,6 +29,7 @@ export function Toggle({ checked, onChange, disabled = false }: ToggleProps) {
         checked={checked}
         disabled={disabled}
         onChange={(e) => onChange(e.target.checked)}
+        data-testid={testId}
         style={{ display: "none" }}
       />
       {/* Sin onClick propio: el <label> ya reenvía el click nativamente al <input>

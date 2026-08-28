@@ -1,4 +1,4 @@
-import { type ReactNode } from "react"
+import { type ReactNode, useId } from "react"
 import "./HceFormModal.css"
 import { Overlay } from "../../atoms/Overlay/Overlay"
 import { Button } from "../../atoms/Button/Button"
@@ -70,6 +70,13 @@ export interface HceFormModalProps {
   className?: string
   style?:     React.CSSProperties
   borderNone? : boolean
+
+  // ── Testing ─────────────────────────────────────────
+  /**
+   * Hook de pruebas E2E — id base, sufijado `-close`, `-primary`,
+   * `-secondary` en los botones correspondientes.
+   */
+  testId?: string
 }
 
 // Mismos anchos de breakpoint que usaba MUI Dialog maxWidth
@@ -99,18 +106,24 @@ export function HceFormModal({
   iconClose= true,
   style,
   borderNone=false,
+  testId,
 }: HceFormModalProps) {
 
   const hasButtons = !!(primaryButton || secondaryButton)
 
   const maxWidthPx = typeof maxWidth === "number" ? maxWidth : BREAKPOINT_PX[maxWidth]
 
+  // Antes: id fijo "hce-form-modal-title" — mismo bug que HceModal si el
+  // modal se monta más de una vez a la vez. useId() lo hace único por instancia.
+  const titleId = useId()
+
   return (
     <Overlay
       open={open}
       onClose={onClose}
       disableBackdropClose={!closeOnBackdrop}
-      labelledBy="hce-form-modal-title"
+      labelledBy={titleId}
+      testId={testId}
       panelClassName={`hce-formmodal-panel${className ? ` ${className}` : ""}`}
       panelStyle={{
         ...style,
@@ -132,7 +145,7 @@ export function HceFormModal({
         }}
       >
         <h2
-          id="hce-form-modal-title"
+          id={titleId}
           style={{
             fontFamily:  hceTypography.fontFamily,
             fontWeight:  600,
@@ -153,6 +166,7 @@ export function HceFormModal({
           className="hce-formmodal-close"
           onClick={onClose}
           aria-label="Cerrar modal"
+          data-testid={testId ? `${testId}-close` : undefined}
         >
           {/* Icono X en SVG inline — sin dependencia de ningún paquete de iconos */}
           <svg
@@ -211,6 +225,7 @@ export function HceFormModal({
                 onClick={primaryButton.onClick}
                 disabled={primaryButton.disabled || primaryButton.loading}
                 startIcon={(!primaryButton.loading && primaryButton.icon) ? primaryButton.icon : undefined}
+                testId={testId ? `${testId}-primary` : undefined}
                 color={primaryButton.color ?? `var(--ds-color-interactive, #003d96)`}
               >
                 {primaryButton.loading ? (
@@ -235,6 +250,7 @@ export function HceFormModal({
                 onClick={secondaryButton.onClick}
                 disabled={secondaryButton.disabled}
                 startIcon={secondaryButton.icon}
+                testId={testId ? `${testId}-secondary` : undefined}
                 color={secondaryButton.color ?? `var(--ds-color-interactive, #003d96)`}
               >
                 {secondaryButton.label}

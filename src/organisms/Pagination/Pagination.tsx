@@ -4,6 +4,8 @@ interface Props {
   page: number
   total: number
   onChange: (page: number) => void
+  /** Hook de pruebas E2E — id base, sufija `-prev`, `-next`, `-page-{n}`. */
+  testId?: string
 }
 
 /** Genera el array de páginas visibles con "..." — misma heurística que
@@ -38,12 +40,12 @@ function ChevronRightGlyph() {
   )
 }
 
-export const Pagination = ({ page, total, onChange }: Props) => {
+export const Pagination = ({ page, total, onChange, testId }: Props) => {
   if (total <= 0) return null
   const pages = buildPageRange(page, total)
 
   return (
-    <ul className="hce-pagination" role="navigation" aria-label="pagination navigation">
+    <ul className="hce-pagination" role="navigation" aria-label="pagination navigation" data-testid={testId}>
       <li>
         <button
           type="button"
@@ -51,6 +53,7 @@ export const Pagination = ({ page, total, onChange }: Props) => {
           disabled={page === 1}
           onClick={() => onChange(page - 1)}
           aria-label="Go to previous page"
+          data-testid={testId ? `${testId}-prev` : undefined}
         >
           <ChevronLeftGlyph />
         </button>
@@ -66,6 +69,7 @@ export const Pagination = ({ page, total, onChange }: Props) => {
               onClick={() => onChange(p)}
               aria-current={p === page ? "true" : undefined}
               aria-label={p === page ? `page ${p}` : `Go to page ${p}`}
+              data-testid={testId ? `${testId}-page-${p}` : undefined}
             >
               {p}
             </button>
@@ -79,6 +83,7 @@ export const Pagination = ({ page, total, onChange }: Props) => {
           disabled={page === total}
           onClick={() => onChange(page + 1)}
           aria-label="Go to next page"
+          data-testid={testId ? `${testId}-next` : undefined}
         >
           <ChevronRightGlyph />
         </button>

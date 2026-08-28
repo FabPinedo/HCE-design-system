@@ -24,6 +24,8 @@ interface Props {
    * existentes que la pasan.
    */
   menuMaxHeight?: number
+  /** Hook de pruebas E2E — `data-testid` en el `<select>`. */
+  testId?: string
 }
 
 export function SelectField({
@@ -35,6 +37,7 @@ export function SelectField({
   fullWidth   = true,
   disabled    = false,
   error       = false,
+  testId,
 }: Props) {
   // ── Colores reactivos ──────────────────────────────────────
   // 1. Color principal (aplica a label, borde, ícono de flecha y placeholder)
@@ -83,6 +86,7 @@ export function SelectField({
           value={value}
           disabled={disabled}
           onChange={(e) => onChange(e.target.value)}
+          data-testid={testId}
         >
           <option value="" disabled hidden>{placeholder}</option>
           {options.map((opt) => (

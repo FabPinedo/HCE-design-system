@@ -16,6 +16,8 @@ interface Props {
   /** Código alfanumérico de atención (ej: "E097382") */
   code: string
   bold?: boolean
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 /**
@@ -24,9 +26,10 @@ interface Props {
  * Texto monoespaciado, 13px, color primario.
  * Sin decoraciones adicionales.
  */
-export const AttentionCode = ({ code, bold }: Props) => {
+export const AttentionCode = ({ code, bold, testId }: Props) => {
   return (
     <span
+      data-testid={testId}
       style={{
         fontFamily:    hceTypography.fontFamilyClinical,
         fontSize:      hceTypography.size.base,

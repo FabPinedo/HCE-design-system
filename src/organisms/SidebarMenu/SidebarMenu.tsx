@@ -6,9 +6,11 @@ interface Props {
   collapsed?:   boolean
   onNavigate:   (path: string) => void
   currentPath?: string
+  /** Hook de pruebas E2E — id base, sufijado `-{path}` en cada ítem. */
+  testId?: string
 }
 
-export function SidebarMenu({ items, onNavigate, currentPath = "" }: Props) {
+export function SidebarMenu({ items, onNavigate, currentPath = "", testId }: Props) {
   // Pick the most-specific item that matches the current path
   const activePath = items.reduce<string | null>((best, item) => {
     const matches = currentPath === item.path
@@ -30,6 +32,7 @@ export function SidebarMenu({ items, onNavigate, currentPath = "" }: Props) {
               tabIndex={0}
               aria-current={isActive ? "page" : undefined}
               aria-label={item.label}
+              data-testid={testId ? `${testId}-${item.path}` : undefined}
               className={`jarvis-menu-item${isActive ? " active" : ""}`}
               onClick={() => onNavigate(item.path)}
               onKeyDown={(e) => {

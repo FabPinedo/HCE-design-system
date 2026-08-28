@@ -60,6 +60,8 @@ export interface AvatarProps extends Omit<HTMLAttributes<HTMLElement>, "color"> 
   src?: string
   srcSet?: string
   variant?: Variant
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 // Precarga la imagen en un <img> "fantasma" (fuera del DOM visible) para
@@ -117,6 +119,7 @@ export const Avatar = forwardRef<HTMLElement, AvatarProps>(function Avatar(
     src,
     srcSet,
     variant = "circular",
+    testId,
     ...rest
   },
   ref
@@ -182,6 +185,7 @@ export const Avatar = forwardRef<HTMLElement, AvatarProps>(function Avatar(
       // cuando NO hay imagen visible (si hay imagen, el alt ya va en el <img>).
       "aria-label": !showImage && alt ? alt : undefined,
       role: !showImage && alt ? "img" : undefined,
+      "data-testid": testId,
       ...rest,
     },
     content

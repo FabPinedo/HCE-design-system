@@ -122,6 +122,11 @@ export type HceHeaderProps = {
   labelCloseSesion?: string
   /** Slot genérico para acciones adicionales, renderizado antes de la campana (ej. selector de idioma). Oculto en variant="tv" igual que campana/avatar. */
   extraActions?:     ReactNode
+  /**
+   * Hook de pruebas E2E — id base. Se sufija `-menu-button`, `-notifications`,
+   * `-user-menu`, `-logout` en los controles internos.
+   */
+  testId?: string
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -141,6 +146,7 @@ export function HceHeader({
   onMenuClick,
   labelCloseSesion = "Cerrar Sesión",
   extraActions,
+  testId,
 }: HceHeaderProps) {
   const tenant = useDsTenant()
   const { Logo: CompanyLogo } = getCompanyBranding(tenant)
@@ -192,6 +198,7 @@ export function HceHeader({
 
   return (
     <header
+      data-testid={testId}
       style={{
         height:          64,
         backgroundColor: 'var(--ds-color-interactive, #003d96)',
@@ -218,6 +225,7 @@ export function HceHeader({
             type="button"
             className="hce-hceheader-iconbtn hce-hceheader-hamburger"
             onClick={onMenuClick}
+            data-testid={testId ? `${testId}-menu-button` : undefined}
           >
             <HceBurgerIcon size={20} color="white" />
           </button>
@@ -337,6 +345,7 @@ export function HceHeader({
             className="hce-hceheader-iconbtn"
             onClick={handleNotifOpen}
             aria-label="Notificaciones"
+            data-testid={testId ? `${testId}-notifications` : undefined}
           >
             <span style={{ position: "relative", display: "flex" }}>
               <BellGlyph />
@@ -509,6 +518,7 @@ export function HceHeader({
             type="button"
             className="hce-hceheader-user-trigger"
             onClick={() => setUserOpen(o => !o)}
+            data-testid={testId ? `${testId}-user-menu` : undefined}
           >
             <span style={{
               display:         "flex",
@@ -579,6 +589,7 @@ export function HceHeader({
             type="button"
             className="hce-menu-item"
             onClick={handleLogout}
+            data-testid={testId ? `${testId}-logout` : undefined}
             style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px" }}
           >
             <LogoutIcon color={hceColors.alert.error[500]} size={14} />

@@ -16,6 +16,8 @@ interface Props {
   fullWidth?: boolean
   size?: 'small' | 'medium'
   required?: boolean
+  /** Hook de pruebas E2E — `data-testid` en el `<select>`. */
+  testId?: string
 }
 
 /**
@@ -38,6 +40,7 @@ export const SelectInput = ({
   fullWidth = true,
   size = 'small',
   required,
+  testId,
 }: Props) => {
   const id = useId()
 
@@ -76,6 +79,7 @@ export const SelectInput = ({
           disabled={disabled}
           required={required}
           onChange={(e) => onChange(e.target.value)}
+          data-testid={testId}
         >
           {options.map((opt) => (
             <option key={opt.value} value={opt.value}>

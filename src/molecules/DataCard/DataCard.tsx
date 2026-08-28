@@ -21,6 +21,9 @@ export interface DataCardProps {
   borderColor?: string
   borderWidth?: number | string
   borderRadius?: number | string
+
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 export function DataCard({
@@ -38,6 +41,7 @@ export function DataCard({
   borderColor = "transparent",
   borderWidth = 0,
   borderRadius = "16px",
+  testId,
 }: DataCardProps) {
   const resolvedBorderWidth =
     typeof borderWidth === "number"
@@ -46,6 +50,7 @@ export function DataCard({
 
   return (
     <div
+      data-testid={testId}
       style={{
         width: "100%",
         maxWidth,

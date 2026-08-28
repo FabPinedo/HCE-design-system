@@ -6,11 +6,14 @@ interface Props {
 
   /** Color semáforo del tiempo de espera. */
   color?: string | null
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 export const WaitingBadge = ({
   label,
   color = null,
+  testId,
 }: Props) => {
   const colors = getSemaphoreColors(color)
   const visibleLabel = label ?? "-"
@@ -33,6 +36,7 @@ export const WaitingBadge = ({
         boxSizing: "border-box",
       }}
       aria-label={`Tiempo de espera: ${visibleLabel}`}
+      data-testid={testId}
     >
       {visibleLabel}
     </span>

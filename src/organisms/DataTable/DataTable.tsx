@@ -13,12 +13,15 @@ interface Props {
   columns: Column[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rows: any[]
+  /** Hook de pruebas E2E — id base del contenedor; sufijado `-row-{id|index}` en cada fila. */
+  testId?: string
 }
 
-export const DataTable = ({ columns, rows }: Props) => {
+export const DataTable = ({ columns, rows, testId }: Props) => {
   return (
     <div
       className="jarvis-table-container"
+      data-testid={testId}
       style={{ borderRadius: '12px', border: '1px solid #E2E8F0', boxShadow: 'none', boxSizing: 'border-box' }}
     >
       <div className="jarvis-table-wrapper">
@@ -52,7 +55,7 @@ export const DataTable = ({ columns, rows }: Props) => {
           </thead>
           <tbody>
             {rows.map((row, i) => (
-              <tr key={row.id || i}>
+              <tr key={row.id || i} data-testid={testId ? `${testId}-row-${row.id ?? i}` : undefined}>
                 {columns.map(col => (
                   <td key={col.field} style={{ padding: '10px 16px' }}>
                     {col.render
