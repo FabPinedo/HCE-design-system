@@ -25,7 +25,7 @@ export const NavTab = ({tabs, value, onChange}: Props) => {
             disabled={tab.disabled}
             onClick={() => onChange(tab.value)}
             >
-                {tab.value}
+                {tab.label}
             </button>
         ))}
     </div>

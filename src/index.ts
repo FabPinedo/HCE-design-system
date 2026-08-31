@@ -295,7 +295,6 @@ export { CSFLoading } from "./molecules/CSFLoading/CSFLoading";
 export type { CSFLoadingProps } from "./molecules/CSFLoading/CSFLoading";
 
 // ── Molecules ─────────────────────────────────────────────
-export { PaginationGenericTable } from "./molecules/PaginationGenericTable/PaginationGenericTable";
 export { ActionBar } from "./molecules/ActionBar/ActionBar";
 export { MonitoActionBar } from "./molecules/MonitoActionBar/MonitoActionBar";
 export type {
@@ -345,6 +344,9 @@ export type {
   SearchMode,
   SearchOption,
 } from "./molecules/SearchComboInput/SearchComboInput";
+
+// ── SegmentedToggle — Molecules ──────────────────────────────────────
+export { SegmentedToggle } from "./molecules/SegmentedToggle/SegmentedToggle";
 
 // ── Types — Molecules ──────────────────────────────────────
 export type { ClinicalIconStatus } from "./molecules/ClinicalStatusIcon/ClinicalStatusIcon";
