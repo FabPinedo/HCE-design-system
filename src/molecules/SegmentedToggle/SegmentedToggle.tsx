@@ -25,6 +25,13 @@ interface SegmentedToggleProps<T extends string = string> {
   className?: string;
   /** Estilo inline adicional, mergeado sobre los estilos por defecto del contenedor raíz. */
   style?: React.CSSProperties;
+  /**
+   * "default" (por defecto): comportamiento actual, bordes redondeados en
+   * las cuatro esquinas. "panel": redondea solo las esquinas superiores y
+   * quita el borde inferior — pensado para cuando el toggle va pegado
+   * arriba de un panel/contenedor (ver AddPatientBackgroundModal).
+   */
+  variant?: "default" | "panel";
 }
 
 export function SegmentedToggle<T extends string = string>({
@@ -35,6 +42,7 @@ export function SegmentedToggle<T extends string = string>({
   testId,
   className,
   style,
+  variant = "default",
 }: SegmentedToggleProps<T>) {
   const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -86,7 +94,13 @@ export function SegmentedToggle<T extends string = string>({
     }
   };
 
-  const rootClassName = ["hce-segmented-toggle", className].filter(Boolean).join(" ");
+  const rootClassName = [
+    "hce-segmented-toggle",
+    variant === "panel" ? "hce-segmented-toggle--panel" : "",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div

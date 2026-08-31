@@ -328,7 +328,7 @@ export const GenericTable = <T,>({
                         color: hceClinicalColors.textSecondary,
                       }}
                     >
-                      No hay pacientes en el Monitor de Emergencia
+                      No hay datos disponibles
                     </span>
                   </div>
                 </td>

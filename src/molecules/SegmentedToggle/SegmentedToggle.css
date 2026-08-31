@@ -38,3 +38,8 @@
   outline: 2px solid var(--ds-color-interactive);
   outline-offset: -2px;
 }
+
+.hce-segmented-toggle--panel {
+  border-radius: var(--ds-radius) var(--ds-radius) 0 0;
+  border-bottom: none;
+}
