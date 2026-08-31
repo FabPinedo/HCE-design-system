@@ -6,8 +6,27 @@ const meta: Meta<typeof SegmentedToggle> = {
   title: "Molecules/SegmentedToggle",
   component: SegmentedToggle,
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Implementa el patrón WAI-ARIA APG de tabs con roving tabindex: " +
+          "solo la opción seleccionada es alcanzable con Tab, y las flechas " +
+          "izquierda/derecha (u Home/End) mueven el foco y activan la opción " +
+          "(activación automática), saltando las opciones `disabled`.",
+      },
+    },
+  },
   argTypes: {
     onChange: { action: "changed" },
+    testId: {
+      control: "text",
+      description: "Hook de pruebas E2E (Playwright) — se renderiza como data-testid en el contenedor raíz (role=\"tablist\").",
+    },
+    className: {
+      control: "text",
+      description: "Clase CSS extra, mergeada con la clase interna del contenedor raíz.",
+    },
   },
 }
 export default meta
