@@ -16,12 +16,25 @@ const MOCK_DIAGNOSTICOS: SearchOption[] = [
   { value: 8, label: "Dolor de garganta, no especificado",                   secondary: "R07.9" },
 ]
 
+// ⚠️ mock nuevo, imitando el shape de medication-products/search
+const MOCK_MEDICAMENTOS: SearchOption[] = [
+  { value: 1, label: "Paracetamol 500mg Tableta" },
+  { value: 2, label: "Amoxicilina 500mg Cápsula" },
+  { value: 3, label: "Ibuprofeno 400mg Tableta" },
+  { value: 4, label: "Loratadina 10mg Tableta" },
+]
+
 function filterOptions(query: string, mode: SearchMode): SearchOption[] {
   const q = query.toLowerCase()
   if (mode === "cie_code") {
     return MOCK_DIAGNOSTICOS.filter(o => o.secondary?.toLowerCase().startsWith(q))
   }
   return MOCK_DIAGNOSTICOS.filter(o => o.label.toLowerCase().includes(q))
+}
+
+function filterMedicamentos(query: string): SearchOption[] {
+  const q = query.toLowerCase()
+  return MOCK_MEDICAMENTOS.filter(o => o.label.toLowerCase().includes(q))
 }
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
@@ -59,7 +72,6 @@ export const Default: Story = {
 
     function handleSearch(query: string, m: SearchMode) {
       setIsLoading(true)
-      // Simula latencia de API
       setTimeout(() => {
         setOptions(filterOptions(query, m))
         setIsLoading(false)
@@ -151,6 +163,51 @@ export const ModoCIE10: Story = {
           onSearch={(q, m) => setOptions(filterOptions(q, m))}
           onSelect={opt => { setValue(opt.label); setOptions([]) }}
         />
+      </Box>
+    )
+  },
+}
+
+/** Sin toggle de modo — búsqueda simple de un solo criterio (ej. medicamentos) */
+export const SinToggleDeModo: Story = {
+  name: "Sin toggle de modo — búsqueda simple",
+  render: () => {
+    const [value, setValue] = useState("")
+    const [options, setOptions] = useState<SearchOption[]>([])
+    const [selected, setSelected] = useState<SearchOption | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
+
+    function handleSearch(query: string) {
+      setIsLoading(true)
+      setTimeout(() => {
+        setOptions(filterMedicamentos(query))
+        setIsLoading(false)
+      }, 400)
+    }
+
+    return (
+      <Box sx={{ maxWidth: 600, p: 3 }}>
+        <SearchComboInput
+          label="Búsqueda de medicamento"
+          value={value}
+          onChange={setValue}
+          options={options}
+          onSearch={handleSearch}
+          onSelect={opt => { setSelected(opt); setOptions([]) }}
+          loading={isLoading}
+          placeholder="Ingrese texto"
+          showModeToggle={false}
+        />
+        {selected && (
+          <Box sx={{ mt: 2, p: 1.5, bgcolor: "#f5fcec", borderRadius: "8px", border: "1px solid #89c93d" }}>
+            <Box sx={{ fontFamily: "monospace", fontSize: 11, color: "#6B7280" }}>Seleccionado:</Box>
+            <Box sx={{ fontWeight: 600, fontSize: "0.875rem", mt: 0.5 }}>{selected.label}</Box>
+          </Box>
+        )}
+        <Box sx={{ mt: 3, fontFamily: "monospace", fontSize: 11, color: "#9CA3AF" }}>
+          Sin selector de modo — solo un input de búsqueda con dropdown de resultados.
+          <br />Escribe al menos 2 caracteres (ej: "para", "amox", "ibup").
+        </Box>
       </Box>
     )
   },

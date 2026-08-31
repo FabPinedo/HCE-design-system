@@ -1,0 +1,40 @@
+.hce-segmented-toggle {
+  display: grid;
+  grid-template-columns: repeat(var(--hce-segmented-count, 2), 1fr);
+  width: 100%;
+  border-radius: var(--ds-radius);
+  overflow: hidden;
+  border: 1px solid var(--ds-color-interactive);
+}
+
+.hce-segmented-toggle__item {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  font-family: var(--ds-font-family);
+  font-weight: 600;
+  font-size: 0.9rem;
+  background-color: var(--ds-color-surface);
+  color: var(--ds-color-interactive);
+  transition: background-color 150ms, color 150ms;
+}
+
+.hce-segmented-toggle__item:not(:last-child) {
+  border-right: 1px solid var(--ds-color-interactive);
+}
+
+.hce-segmented-toggle__item--selected {
+  background-color: var(--ds-color-interactive);
+  color: var(--ds-color-secondary-contrast);
+}
+
+.hce-segmented-toggle__item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hce-segmented-toggle__item:focus-visible {
+  outline: 2px solid var(--ds-color-interactive);
+  outline-offset: -2px;
+}

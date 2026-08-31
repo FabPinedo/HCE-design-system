@@ -1,6 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { useState } from "react"
-import { Box, Button, Typography, hceColors, hceTypography, InfoButton, StatusBadge, User, DataCard,DataCardModal } from "@hce/design-system"
+import { Box, Button, Typography, hceColors, InfoButton, StatusBadge, User, DataCard,DataCardModal, hceTypography } from "@hce/design-system"
+import { PatientField } from "../../src/atoms/PatientField/PatientField";
+
+const labelSx = {
+  fontFamily: hceTypography.fontFamily,
+  fontSize: "0.625rem",
+  fontWeight: 700,
+  color: hceColors.primary.blue[500],
+  lineHeight: 1.2,
+  mb: 0.75,
+}
+
+const valueSx = {
+  fontFamily: hceTypography.fontFamily,
+  fontSize: "0.8125rem",
+  fontWeight: 400,
+  color: hceColors.primary.blue[500],
+  lineHeight: 1.3,
+}
 
 /** Reemplazo de MUI Avatar — circulo con children centrados */
 function Avatar({ sx, children }: { sx?: Record<string, unknown>; children: React.ReactNode }) {
@@ -23,47 +41,6 @@ const meta: Meta<typeof DataCard> = {
 }
 export default meta
 type Story = StoryObj<typeof DataCard>
-
-const labelSx = {
-  fontFamily: hceTypography.fontFamily,
-  fontSize: "0.625rem",
-  fontWeight: 700,
-  color: hceColors.primary.blue[500],
-  lineHeight: 1.2,
-  mb: 0.75,
-}
-
-const valueSx = {
-  fontFamily: hceTypography.fontFamily,
-  fontSize: "0.8125rem",
-  fontWeight: 400,
-  color: hceColors.primary.blue[500],
-  lineHeight: 1.3,
-}
-
-interface PatientFieldProps {
-  label: string
-  value: React.ReactNode
-}
-
-function PatientField({
-  label,
-  value,
-}: PatientFieldProps) {
-  return (
-    <Box sx={{ minWidth: 0 }}>
-      <Typography sx={labelSx}>
-        {label}
-      </Typography>
-
-      <Box sx={valueSx}>
-        {value}
-      </Box>
-    </Box>
-  )
-}
-
-
 
 export const Default: Story = {
   args: {

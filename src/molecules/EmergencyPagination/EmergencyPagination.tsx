@@ -28,6 +28,8 @@ interface Props {
   onPageChange: (page: number) => void
   /** Máximo de páginas visibles a ambos lados de la página actual (default: 2) */
   siblingCount?: number
+  /**Mostrar casillas genéricas */
+  viewChip?:boolean
   /**
    * Hook de pruebas E2E — id base. Se sufija `-prev`, `-next`,
    * `-page-{n}` en los botones correspondientes.
@@ -74,6 +76,7 @@ export const EmergencyPagination = ({
   totalPages,
   onPageChange,
   siblingCount = 2,
+  viewChip = true,
   testId,
 }: Props) => {
   const pages = buildPageRange(currentPage, totalPages, siblingCount)
@@ -92,7 +95,7 @@ export const EmergencyPagination = ({
       aria-label="Paginación de pacientes"
     >
       {/* casillas genericas */}
-      {summary.map((item) => (
+      {viewChip && summary.map((item) => (
         <span key={item.label} className="hce-empag-chip">
           <span style={{ fontWeight: hceTypography.weight.bold }}>{item.value}</span>{" "}
           {item.label}

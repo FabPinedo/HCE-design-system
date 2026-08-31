@@ -28,8 +28,6 @@ export default defineConfig({
         'react',
         'react-dom',
         'react/jsx-runtime',
-        '@mui/material',
-        '@mui/icons-material',
         '@emotion/react',
         '@emotion/styled',
       ],

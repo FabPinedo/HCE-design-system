@@ -43,6 +43,12 @@ export interface SearchComboInputProps {
   /** Lado del input donde se ubica el botón de modo (toggle). Default: "left" */
   modePosition?: "left" | "right";
   /**
+   * Muestra el botón de alternar modo de búsqueda (ej. "Por nombre" / "CIE-10").
+   * Default: true (mismo comportamiento de siempre). Ponelo en false para un
+   * input de búsqueda simple sin selector de modo.
+   */
+  showModeToggle?: boolean;
+ /**
    * Hook de pruebas E2E — id base. Se aplica al `<input>` y se sufija
    * `-mode-toggle` y `-option-{value}`.
    */
@@ -67,6 +73,7 @@ export function SearchComboInput({
   modes = [],
   modePosition = "left",
   debounceMs = 300,
+  showModeToggle = true,
   testId,
 }: SearchComboInputProps) {
   const labelId = useId();
@@ -80,14 +87,11 @@ export function SearchComboInput({
   const [dropOpen, setDropOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState(-1);
 
-  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
-  // de DSProvider, mismo hex de siempre como fallback.
   const BLUE = `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`;
   const GRAY = hceColors.neutro.black[400];
   const BORDER = hceColors.neutro.black[200];
   const isLeft = modePosition === "left";
 
-  // Cierra dropdowns al click fuera
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (
@@ -98,11 +102,11 @@ export function SearchComboInput({
         setDropOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside,true);
-    return () => document.removeEventListener("mousedown", handleClickOutside,true);
+    document.addEventListener("mousedown", handleClickOutside, true);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside, true);
   }, []);
 
-  // Abre/cierra dropdown de opciones según si hay resultados
   useEffect(() => {
     setDropOpen(options.length > 0 && value.length > 0);
     setActiveIdx(-1);
@@ -163,9 +167,6 @@ export function SearchComboInput({
       ? "Ej: J06.9, A09..."
       : "Ingrese texto para buscar...";
 
-  // ─── Bloque: toggle de modo (Por nombre / CIE-10) ────────────────────────────
-  // Los bordes redondeados y el borde "interno" (el que da contra el input) se
-  // calculan según si este bloque queda a la izquierda o a la derecha en el DOM.
   const modeToggle = (
     <div style={{ position: "relative", flexShrink: 0 }}>
       <button
@@ -182,8 +183,6 @@ export function SearchComboInput({
           border: `1.5px solid ${BLUE}`,
           cursor: disabled ? "not-allowed" : "pointer",
           opacity: disabled ? 0.5 : 1,
-          // Redondeado hacia el lado "externo" (el que no toca el input),
-          // recto hacia el lado que se une al input.
           borderRadius: isLeft ? "8px 0 0 8px" : "0 8px 8px 0",
         }}
       >
@@ -198,8 +197,6 @@ export function SearchComboInput({
         />
       </button>
 
-      {/* Dropdown de modos: se alinea hacia el mismo lado donde vive el botón,
-          para que no se salga del contenedor cuando el botón está a la derecha */}
       {modeOpen && (
         <div
           style={{
@@ -225,9 +222,7 @@ export function SearchComboInput({
               style={{
                 fontWeight: m.value === searchMode ? 700 : 400,
                 color:
-                  m.value === searchMode
-                    ? BLUE
-                    : hceColors.neutro.black[700],
+                  m.value === searchMode ? BLUE : hceColors.neutro.black[700],
                 backgroundColor:
                   m.value === searchMode
                     ? hceColors.primary.blue[50]
@@ -242,7 +237,6 @@ export function SearchComboInput({
     </div>
   );
 
-  // ─── Bloque: input de texto ───────────────────────────────────────────────────
   const searchInput = (
     <div style={{ position: "relative", flex: 1 }}>
       <input
@@ -266,21 +260,25 @@ export function SearchComboInput({
           paddingLeft: "12px",
           paddingRight: loading ? "36px" : "12px",
           border: `1.5px solid ${BORDER}`,
-          // Redondeado hacia el lado "externo", recto hacia el lado que se
-          // une al botón de modo — así no queda una esquina cuadrada suelta
-          // ni doble radio en el punto de contacto.
-          borderRadius: isLeft ? "0 8px 8px 0" : "8px 0 0 8px",
-          // Sin borde doble en el punto de unión con el botón (el botón ya
-          // pone su propio borde de 1.5px de ese lado).
-          borderLeft: isLeft ? "none" : `1.5px solid ${BORDER}`,
-          borderRight: isLeft ? `1.5px solid ${BORDER}` : "none",
+          borderRadius: !showModeToggle
+            ? "8px"
+            : isLeft
+              ? "0 8px 8px 0"
+              : "8px 0 0 8px",
+          borderLeft: !showModeToggle
+            ? `1.5px solid ${BORDER}`
+            : isLeft
+              ? "none"
+              : `1.5px solid ${BORDER}`,
+          borderRight: !showModeToggle
+            ? `1.5px solid ${BORDER}`
+            : isLeft
+              ? `1.5px solid ${BORDER}`
+              : "none",
           color: hceColors.neutro.black[700],
-          backgroundColor: disabled
-            ? hceColors.neutro.black[50]
-            : "#ffffff",
+          backgroundColor: disabled ? hceColors.neutro.black[50] : "#ffffff",
         }}
       />
-      {/* Spinner de carga */}
       {loading && (
         <span
           style={{
@@ -299,7 +297,6 @@ export function SearchComboInput({
 
   return (
     <div ref={containerRef} style={{ position: "relative", width: "100%" }}>
-      {/* Label */}
       {label && (
         <label
           id={labelId}
@@ -324,23 +321,26 @@ export function SearchComboInput({
         </label>
       )}
 
-      {/* Input row — el orden de los dos bloques se decide según modePosition,
-          en vez de solo cambiar el estilo del botón dejándolo siempre primero */}
+      {/* Input row — el orden de los dos bloques se decide según modePosition;
+          si showModeToggle es false, se omite el botón de modo por completo */}
       <div style={{ display: "flex", position: "relative" }}>
-        {isLeft ? (
-          <>
-            {modeToggle}
-            {searchInput}
-          </>
+        {showModeToggle ? (
+          isLeft ? (
+            <>
+              {modeToggle}
+              {searchInput}
+            </>
+          ) : (
+            <>
+              {searchInput}
+              {modeToggle}
+            </>
+          )
         ) : (
-          <>
-            {searchInput}
-            {modeToggle}
-          </>
+          searchInput
         )}
       </div>
 
-      {/* Dropdown de resultados */}
       {dropOpen && options.length > 0 && (
         <div
           id={listId}

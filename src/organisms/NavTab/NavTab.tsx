@@ -28,7 +28,7 @@ export const NavTab = ({tabs, value, onChange, testId}: Props) => {
             onClick={() => onChange(tab.value)}
             data-testid={testId ? `${testId}-${tab.value}` : undefined}
             >
-                {tab.value}
+                {tab.label}
             </button>
         ))}
     </div>

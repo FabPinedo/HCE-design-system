@@ -16,7 +16,7 @@
  *   <PriorityBadge priority="none" />
  * ---------------------------------------------------------
  */
-import { Tooltip } from "../Tooltip/Tooltip"
+import { HceTooltip } from "../HceTooltip/HceTooltip"
 import { hceClinicalColors, hceTypography } from "../../tokens/hce.tokens"
 import type { CSSProperties } from "react"
 
@@ -60,7 +60,7 @@ export const PriorityBadge = ({ priority, tooltipText, cursor='default', testId 
   const isNone = priority === "none"
 
   return (
-    <Tooltip
+    <HceTooltip
       title={tooltipText ?? config.description}
       placement="top"
       arrow
@@ -96,6 +96,6 @@ export const PriorityBadge = ({ priority, tooltipText, cursor='default', testId 
       >
         {!isNone && config.label}
       </div>
-    </Tooltip>
+    </HceTooltip>
   )
 }

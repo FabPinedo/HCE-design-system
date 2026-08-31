@@ -1,6 +1,6 @@
 import { useState, type ComponentType, type CSSProperties, type KeyboardEvent, type MouseEvent } from "react"
 import "./HceSidebar.css"
-import { Tooltip } from "../../atoms/Tooltip/Tooltip"
+import { HceTooltip } from "../../atoms/HceTooltip/HceTooltip"
 import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
 import { LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon } from "../../atoms/Icon/SvgIconsHce"
 import { useDsTenant } from "../../provider/ThemeProvider"
@@ -387,7 +387,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel, 
       /* Tooltip.hce-tooltip-wrapper es inline-flex (shrink-to-fit) por defecto
          — sin este override queda anclado al borde izquierdo del riel en vez
          de centrado, ver el mismo override en el Tooltip de "Inicio". */
-      <Tooltip title={item.titulo} placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
+      <HceTooltip title={item.titulo} placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
         <div
           role="button"
           tabIndex={0}
@@ -436,7 +436,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel, 
             </span>
           )}
         </div>
-      </Tooltip>
+      </HceTooltip>
     )
   }
 
@@ -858,7 +858,7 @@ export function HceSidebar({
           /* Tooltip.hce-tooltip-wrapper es inline-flex (shrink-to-fit) por
              defecto — sin este override queda anclado al borde izquierdo
              del riel en vez de centrado, igual que en FirstLevelItem. */
-          <Tooltip title={labelHome} placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
+          <HceTooltip title={labelHome} placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
             <div
               role="button"
               tabIndex={0}
@@ -890,7 +890,7 @@ export function HceSidebar({
             >
               <HomeGlyph size={22} color="white" />
             </div>
-          </Tooltip>
+          </HceTooltip>
         ) : (
           <div
             role="button"
