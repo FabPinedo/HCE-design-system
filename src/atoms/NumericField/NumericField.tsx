@@ -14,6 +14,8 @@ export interface NumericFieldProps {
   disabled?: boolean
   /** Activa el estado de error: label, borde y texto cambian a rojo, igual que TextInput/DatePicker. */
   error?: boolean
+  /** Hook de pruebas E2E — `data-testid` en el `<input>`. */
+  testId?: string
 }
 
 /** Campo numérico con label y unidad como placeholder. */
@@ -26,6 +28,7 @@ export function NumericField({
   readOnly = false,
   disabled = false,
   error = false,
+  testId,
 }: NumericFieldProps) {
   // ── Colores reactivos (ahora vía :hover/:focus-within en CSS) ──────────
   // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
@@ -79,6 +82,7 @@ export function NumericField({
           placeholder={suffix || undefined}
           readOnly={readOnly}
           className="hce-numeric-field"
+          data-testid={testId}
           onChange={(e) =>
             onChange?.(
               numberType === "decimal"

@@ -22,6 +22,8 @@ export type HceLanguageSwitchProps = {
   onLocaleChange: (code: string) => void
   /** aria-label del botón trigger */
   ariaLabel?: string
+  /** Hook de pruebas E2E — id base; sufija `-trigger` y `-option-{code}`. */
+  testId?: string
 }
 
 /** Ícono de globo — inline, mismo criterio que los glyphs propios de HceHeader
@@ -59,6 +61,7 @@ export function HceLanguageSwitch({
   activeLocale,
   onLocaleChange,
   ariaLabel = "Cambiar idioma",
+  testId,
 }: HceLanguageSwitchProps) {
   const triggerRef = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useState(false)
@@ -78,6 +81,7 @@ export function HceLanguageSwitch({
         aria-label={ariaLabel}
         aria-haspopup="menu"
         aria-expanded={open}
+        data-testid={testId ? `${testId}-trigger` : undefined}
       >
         <GlobeGlyph />
         <span style={{
@@ -104,6 +108,7 @@ export function HceLanguageSwitch({
             key={locale.code}
             selected={locale.code === activeLocale}
             onClick={() => handleSelect(locale.code)}
+            testId={testId ? `${testId}-option-${locale.code}` : undefined}
             style={{ fontFamily: hceTypography.fontFamily, fontSize: "0.85rem" }}
           >
             {locale.label}

@@ -12,6 +12,11 @@ export interface DatePickerProps {
   required?: boolean
   /** Activa el estado de error: todo (label, borde) cambia a rojo */
   error?: boolean
+  /**
+   * Hook de pruebas E2E — id base. Se aplica al `<input>` y se sufija
+   * `-calendar-button` en el botón de calendario.
+   */
+  testId?: string
 }
 
 /**
@@ -26,6 +31,7 @@ export function DatePicker({
   disabled = false,
   required,
   error = false,
+  testId,
 }: DatePickerProps) {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -85,6 +91,7 @@ export function DatePicker({
           onChange={(e) => onChange(e.target.value)}
           required={required}
           disabled={disabled}
+          data-testid={testId}
         />
         <button
           type="button"
@@ -92,6 +99,7 @@ export function DatePicker({
           onClick={openCalendar}
           disabled={disabled}
           aria-label="Abrir calendario"
+          data-testid={testId ? `${testId}-calendar-button` : undefined}
         >
           <HceCalendarIcon size={18} />
         </button>

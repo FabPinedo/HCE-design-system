@@ -41,6 +41,7 @@ export function DataCardModal({
       open={open}
       onClose={onClose}
       labelledBy={`${generatedId}-title`}
+      testId={dataCardProps.testId}
       disableBackdropClose={disableOutsideClose}
       disableEscapeClose={disableEscapeClose}
       panelStyle={{
@@ -65,6 +66,7 @@ export function DataCardModal({
               className="hce-datacard-modal-close"
               onClick={onClose}
               aria-label="Cerrar"
+              data-testid={dataCardProps.testId ? `${dataCardProps.testId}-close` : undefined}
             >
               <CloseIcon size={20} color={hceColors.neutro.white[50]} />
             </button>

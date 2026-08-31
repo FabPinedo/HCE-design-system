@@ -30,6 +30,11 @@ interface Props {
   siblingCount?: number
   /**Mostrar casillas genéricas */
   viewChip?:boolean
+  /**
+   * Hook de pruebas E2E — id base. Se sufija `-prev`, `-next`,
+   * `-page-{n}` en los botones correspondientes.
+   */
+  testId?: string
 }
 
 /** Genera el array de páginas visibles con "..." cuando corresponde */
@@ -71,12 +76,14 @@ export const EmergencyPagination = ({
   totalPages,
   onPageChange,
   siblingCount = 2,
-  viewChip = true
+  viewChip = true,
+  testId,
 }: Props) => {
   const pages = buildPageRange(currentPage, totalPages, siblingCount)
 
   return (
     <div
+      data-testid={testId}
       style={{
         display:         "flex",
         alignItems:      "center",
@@ -102,6 +109,7 @@ export const EmergencyPagination = ({
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
         aria-label="Página anterior"
+        data-testid={testId ? `${testId}-prev` : undefined}
       >
         <ChevronLeftGlyph />
       </button>
@@ -137,6 +145,7 @@ export const EmergencyPagination = ({
             } as CSSProperties}
             aria-label={`Página ${page}`}
             aria-current={page === currentPage ? "page" : undefined}
+            data-testid={testId ? `${testId}-page-${page}` : undefined}
           >
             {page}
           </button>
@@ -150,6 +159,7 @@ export const EmergencyPagination = ({
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
         aria-label="Página siguiente"
+        data-testid={testId ? `${testId}-next` : undefined}
       >
         <ChevronRightGlyph />
       </button>

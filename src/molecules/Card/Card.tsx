@@ -7,11 +7,14 @@ interface Props {
   actions?: ReactNode
   style?: CSSProperties
   noPadding?: boolean
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
-export const Card = ({ children, title, actions, style, noPadding }: Props) => {
+export const Card = ({ children, title, actions, style, noPadding, testId }: Props) => {
   return (
     <div
+      data-testid={testId}
       style={{
         // borderRadius: 3 en sx de MUI se multiplicaba por theme.shape.borderRadius
         // (8px) => 24px, no 3px.

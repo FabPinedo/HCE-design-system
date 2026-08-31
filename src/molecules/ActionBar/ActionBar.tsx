@@ -27,6 +27,8 @@ interface Props {
   actions?: ExtraAction[];
   /** Boton adicional para ocultar o mostrar barra de botones */
   closeAction?: boolean;
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string;
 }
 
 /**
@@ -38,11 +40,13 @@ export const ActionBar = ({
   orientation = "horizontal",
   actions,
   closeAction,
+  testId,
 }: Props) => {
   const isVertical = orientation === "vertical";
   const [closeBar, setCloseBar] = useState(false);
   return (
     <div
+      data-testid={testId}
       style={{
         display: "flex",
         flexDirection: isVertical ? "column" : "row",
@@ -119,6 +123,7 @@ export const ActionBar = ({
               icon={action.icon}
               onClick={action.onClick}
               disabled={action.disabled}
+              testId={testId ? `${testId}-action-${action.id}` : undefined}
             />
           ))}
       </div>

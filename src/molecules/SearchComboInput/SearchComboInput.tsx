@@ -48,6 +48,11 @@ export interface SearchComboInputProps {
    * input de búsqueda simple sin selector de modo.
    */
   showModeToggle?: boolean;
+ /**
+   * Hook de pruebas E2E — id base. Se aplica al `<input>` y se sufija
+   * `-mode-toggle` y `-option-{value}`.
+   */
+  testId?: string;
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -69,6 +74,7 @@ export function SearchComboInput({
   modePosition = "left",
   debounceMs = 300,
   showModeToggle = true,
+  testId,
 }: SearchComboInputProps) {
   const labelId = useId();
   const inputId = useId();
@@ -171,6 +177,7 @@ export function SearchComboInput({
         aria-expanded={modeOpen}
         aria-label="Tipo de búsqueda"
         disabled={disabled}
+        data-testid={testId ? `${testId}-mode-toggle` : undefined}
         style={{
           backgroundColor: BLUE,
           border: `1.5px solid ${BLUE}`,
@@ -248,6 +255,7 @@ export function SearchComboInput({
           activeIdx >= 0 ? `${listId}-opt-${activeIdx}` : undefined
         }
         aria-label={label ?? "Buscar"}
+        data-testid={testId}
         style={{
           paddingLeft: "12px",
           paddingRight: loading ? "36px" : "12px",
@@ -359,6 +367,7 @@ export function SearchComboInput({
               className="hce-scombo-option"
               role="option"
               aria-selected={activeIdx === idx}
+              data-testid={testId ? `${testId}-option-${opt.value}` : undefined}
               onMouseEnter={() => setActiveIdx(idx)}
               onMouseDown={(e) => {
                 e.preventDefault();

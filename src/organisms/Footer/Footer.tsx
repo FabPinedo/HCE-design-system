@@ -7,15 +7,18 @@ type Props = {
   copyright?: string
   /** Color de fondo del footer. Por defecto usa hceColors.primary.blue[600]. Ej: hceColors.primary.blue[700] */
   color?: string
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
-export function Footer({ copyright, color }: Props) {
+export function Footer({ copyright, color, testId }: Props) {
   const year = new Date().getFullYear()
   const tenant = useDsTenant()
   const displayName = getCompanyName(tenant)
   const text = copyright ?? `© ${year} ${displayName} · Todos los derechos reservados · Sistema HCE v2.0`
   return (
     <footer
+      data-testid={testId}
       style={{
         width:           "100%",
         padding:         "6px 24px",

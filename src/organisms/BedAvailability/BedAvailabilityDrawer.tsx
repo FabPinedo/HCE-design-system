@@ -1,4 +1,4 @@
-import { useState }                                    from "react"
+import { useState, useId }                             from "react"
 import "./BedAvailabilityDrawer.css"
 import { Overlay }                                     from "../../atoms/Overlay/Overlay"
 import { HceTooltip }                                     from "../../atoms/HceTooltip/HceTooltip"
@@ -236,7 +236,7 @@ function BoxCell({ box }: { box: BoxData }) {
 }
 
 // ─── WaitingRow ───────────────────────────────────────────
-function WaitingRow({ p, onAssign }: { p: WaitingPatient; onAssign: (id: string) => void }) {
+function WaitingRow({ p, onAssign, testId }: { p: WaitingPatient; onAssign: (id: string) => void; testId?: string }) {
   const isTP      = p.type === "tp"
   const typeColor = isTP ? hceClinicalColors.priority2 : hceClinicalColors.boxWaiting
   const typeLabel = isTP ? "Triage" : "En espera"
@@ -299,6 +299,7 @@ function WaitingRow({ p, onAssign }: { p: WaitingPatient; onAssign: (id: string)
           variant="outlined"
           onClick={() => onAssign(p.id)}
           color={hceClinicalColors.boxActive}
+          testId={testId}
         >
           Asignar Box
         </Button>
@@ -344,9 +345,18 @@ function PriorityLegend() {
 }
 
 // ─── Componente principal ─────────────────────────────────
-export function BedAvailabilityDrawer() {
+export interface BedAvailabilityDrawerProps {
+  /** Hook de pruebas E2E — id base (tab, drawer, botones internos). */
+  testId?: string
+}
+
+export function BedAvailabilityDrawer({ testId }: BedAvailabilityDrawerProps = {}) {
   const [open, setOpen] = useState(false)
   const [waitingExpanded, setWaitingExpanded] = useState(false)
+  // Antes: id fijo "hce-baddrawer-title" — mismo bug que HceModal si el
+  // drawer se monta más de una vez a la vez (dos MFs simultáneos). useId()
+  // lo hace único por instancia.
+  const titleId = useId()
 
   const ocupados      = BOXES.filter(b => b.status === "ocupado").length
   const disponibles   = BOXES.filter(b => b.status === "disponible").length
@@ -369,14 +379,15 @@ export function BedAvailabilityDrawer() {
 
   return (
     <>
-      <BedsAvailabilityTab isActive={open} onClick={() => setOpen(true)} />
+      <BedsAvailabilityTab isActive={open} onClick={() => setOpen(true)} testId={testId ? `${testId}-tab` : undefined} />
 
       <Overlay
         open={open}
         onClose={() => setOpen(false)}
         variant="drawer-right"
         panelClassName="hce-baddrawer-panel"
-        labelledBy="hce-baddrawer-title"
+        labelledBy={titleId}
+        testId={testId ? `${testId}-drawer` : undefined}
       >
         {/* ── Header ── */}
         <div style={{
@@ -391,7 +402,7 @@ export function BedAvailabilityDrawer() {
           <div style={{ display: "flex", alignItems: "center", gap: hceSpacing[3] }}>
             <KingBedGlyph size={24} color="#fff" />
             <div>
-              <div id="hce-baddrawer-title" style={{
+              <div id={titleId} style={{
                 fontFamily: hceTypography.fontFamilyClinical,
                 fontSize:   "16px",
                 fontWeight: hceTypography.weight.bold,
@@ -414,6 +425,7 @@ export function BedAvailabilityDrawer() {
             className="hce-baddrawer-close"
             onClick={() => setOpen(false)}
             aria-label="Cerrar"
+            data-testid={testId ? `${testId}-close` : undefined}
             style={{
               display: "flex",
               alignItems: "center",
@@ -513,6 +525,7 @@ export function BedAvailabilityDrawer() {
                 className="hce-baddrawer-accordion-summary"
                 onClick={() => setWaitingExpanded(v => !v)}
                 aria-expanded={waitingExpanded}
+                data-testid={testId ? `${testId}-waiting-toggle` : undefined}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -565,7 +578,7 @@ export function BedAvailabilityDrawer() {
               {waitingExpanded && (
                 <div style={{ padding: hceSpacing[3], display: "flex", flexDirection: "column", gap: hceSpacing[2] }}>
                   {WAITING.map(p => (
-                    <WaitingRow key={p.id} p={p} onAssign={handleAssign} />
+                    <WaitingRow key={p.id} p={p} onAssign={handleAssign} testId={testId ? `${testId}-assign-${p.id}` : undefined} />
                   ))}
                 </div>
               )}

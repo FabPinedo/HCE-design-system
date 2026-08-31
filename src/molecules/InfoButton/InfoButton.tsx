@@ -16,9 +16,11 @@ interface Props {
   onClick?:  () => void
   tooltip?:  string
   disabled?: boolean
+  /** Hook de pruebas E2E — `data-testid` en el `<button>`. */
+  testId?:   string
 }
 
-export const InfoButton = ({ onClick, tooltip = "Ver información del paciente", disabled = false }: Props) => {
+export const InfoButton = ({ onClick, tooltip = "Ver información del paciente", disabled = false, testId }: Props) => {
   const cssVars = {
     "--infobtn-bg":          `var(--ds-color-secondary, #003d96)`,
     "--infobtn-hover-bg":    `var(--ds-color-primary-dark, #002a66)`,
@@ -34,6 +36,7 @@ export const InfoButton = ({ onClick, tooltip = "Ver información del paciente",
         onClick={onClick}
         disabled={disabled}
         aria-label={tooltip}
+        data-testid={testId}
       >
         <HceEyeIcon size={14} color="#FFFFFF" />
       </button>

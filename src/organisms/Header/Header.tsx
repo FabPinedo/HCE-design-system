@@ -77,6 +77,11 @@ type Props = {
   notifications?:   number
   onToggleSidebar?: () => void
   onLogout?:        () => void
+  /**
+   * Hook de pruebas E2E — id base. Se sufija `-menu-button`,
+   * `-notifications`, `-user-menu`, `-logout`.
+   */
+  testId?: string
 }
 
 export function Header({
@@ -86,6 +91,7 @@ export function Header({
   userRole      = "",
   onToggleSidebar,
   onLogout,
+  testId,
 }: Props) {
   const userTriggerRef  = useRef<HTMLButtonElement>(null)
   const notifTriggerRef = useRef<HTMLButtonElement>(null)
@@ -123,6 +129,7 @@ export function Header({
         position:        "relative",
         boxSizing:       "border-box",
       }}
+      data-testid={testId}
     >
       {/* ── Izquierda ── */}
       <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 12 }}>
@@ -131,6 +138,7 @@ export function Header({
             type="button"
             className="hce-header-iconbtn hce-header-toggle-sidebar"
             onClick={onToggleSidebar}
+            data-testid={testId ? `${testId}-menu-button` : undefined}
           >
             <MenuBurgerIcon size={20} color="#ffffff" />
           </button>
@@ -211,6 +219,7 @@ export function Header({
           className="hce-header-iconbtn"
           onClick={handleNotifOpen}
           aria-label="Notificaciones"
+          data-testid={testId ? `${testId}-notifications` : undefined}
         >
           <span style={{ position: "relative", display: "flex" }}>
             <BellGlyph />
@@ -359,6 +368,7 @@ export function Header({
           type="button"
           className="hce-header-user-trigger"
           onClick={() => setUserOpen(o => !o)}
+          data-testid={testId ? `${testId}-user-menu` : undefined}
         >
           <span style={{
             display:         "flex",
@@ -414,7 +424,7 @@ export function Header({
           <button type="button" className="hce-menu-item" onClick={handleUserClose}>Perfil</button>
           <button type="button" className="hce-menu-item" onClick={handleUserClose}>Cambiar contraseña</button>
           <div style={{ height: 1, backgroundColor: "rgba(0,0,0,0.12)" }} />
-          <button type="button" className="hce-menu-item" onClick={handleLogout} style={{ color: hceColors.alert.error[500] }}>
+          <button type="button" className="hce-menu-item" onClick={handleLogout} data-testid={testId ? `${testId}-logout` : undefined} style={{ color: hceColors.alert.error[500] }}>
             Cerrar sesión
           </button>
         </Menu>

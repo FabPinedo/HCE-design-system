@@ -13,15 +13,19 @@ interface Props<T = object> {
   columns: Column<T>[]
   rows: T[]
   emptyMessage?: string
+  /** Hook de pruebas E2E — id base del contenedor; sufijado `-row-{index}` en cada fila. */
+  testId?: string
 }
 
 export const DataTable = <T extends object>({
   columns,
   rows,
   emptyMessage = 'No hay datos disponibles.',
+  testId,
 }: Props<T>) => {
   return (
     <div
+      data-testid={testId}
       style={{
         borderRadius: 24, // sx borderRadius:3 de MUI -> ×8 (theme.shape.borderRadius)
         border: '1px solid #D0DBF0',
@@ -72,6 +76,7 @@ export const DataTable = <T extends object>({
               <tr
                 key={rowIndex}
                 className="hce-datatable-row"
+                data-testid={testId ? `${testId}-row-${rowIndex}` : undefined}
                 style={{
                   backgroundColor: rowIndex % 2 === 1 ? '#F4F7FB' : '#fff',
                   cursor: 'default',

@@ -14,6 +14,8 @@ export type HCEQuickAccessProps = {
   onAcceder?:   () => void
   /** Si true, el card y el botón aparecen deshabilitados */
   disabled?:    boolean
+  /** Hook de pruebas E2E — id base; se sufija `-button` en el botón "Acceder". */
+  testId?:      string
 }
 
 export function HCEQuickAccess({
@@ -22,11 +24,13 @@ export function HCEQuickAccess({
   description,
   onAcceder,
   disabled = false,
-  labelBtn = "Acceder"
+  labelBtn = "Acceder",
+  testId,
 }: HCEQuickAccessProps) {
   return (
     <div
       className={`hce-quickaccess${!disabled ? " hce-quickaccess--enabled" : ""}`}
+      data-testid={testId}
       style={{
         border:          `1px solid ${disabled ? " #e6e6e6" : "var(--ds-color-divider, #e6ecf6)"}`,
         backgroundColor: disabled ? "var(--ds-color-background, #f5f7fa)" : " #ffffff",
@@ -85,6 +89,7 @@ export function HCEQuickAccess({
         className="hce-quickaccess-btn"
         disabled={disabled}
         onClick={disabled ? undefined : onAcceder}
+        data-testid={testId ? `${testId}-button` : undefined}
       >
         {labelBtn}
       </button>

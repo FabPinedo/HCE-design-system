@@ -59,13 +59,15 @@ interface Props {
   icon: ComponentType<CustomIconProps>
   /** Texto descriptivo para el tooltip (opcional, sobreescribe el label por defecto) */
   tooltipLabel?: string
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
-export const ClinicalStatusIcon = ({ status, icon: Icon, tooltipLabel }: Props) => {
+export const ClinicalStatusIcon = ({ status, icon: Icon, tooltipLabel, testId }: Props) => {
   const config = STATUS_CONFIG[status]
 
   if (status === "empty") {
-    return <div style={{ width: 28, height: 28, flexShrink: 0 }} aria-hidden="true" />
+    return <div style={{ width: 28, height: 28, flexShrink: 0 }} aria-hidden="true" data-testid={testId} />
   }
 
   return (
@@ -89,6 +91,7 @@ export const ClinicalStatusIcon = ({ status, icon: Icon, tooltipLabel }: Props) 
         }}
         role="img"
         aria-label={tooltipLabel ?? config.label}
+        data-testid={testId}
       >
         <Icon size= {16} color= {config.color} />
       </div>

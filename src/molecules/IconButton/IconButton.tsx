@@ -44,6 +44,8 @@ interface Props {
    * ícono que pasaste ya trae su propio `size` explícito — ese siempre gana.
    */
   iconSize?: number
+  /** Hook de pruebas E2E — `data-testid` en el `<button>`. */
+  testId?: string
 }
 
 // Tamaño de ícono por defecto según el tamaño del botón — los íconos propios
@@ -57,7 +59,7 @@ const ICON_SIZE_BY_BUTTON_SIZE: Record<IconButtonSize, number> = {
   large: 24,
 }
 
-export const IconButton = ({ icon, onClick, disabled, size = "medium", style, className, sx, iconSize }: Props) => {
+export const IconButton = ({ icon, onClick, disabled, size = "medium", style, className, sx, iconSize, testId }: Props) => {
   const breakpoint = useCurrentBreakpoint()
   const resolvedIconSize = iconSize ?? ICON_SIZE_BY_BUTTON_SIZE[size]
 
@@ -75,6 +77,7 @@ export const IconButton = ({ icon, onClick, disabled, size = "medium", style, cl
       className={["hce-iconbtn", `hce-iconbtn--${size}`, className].filter(Boolean).join(" ")}
       onClick={onClick}
       disabled={disabled}
+      data-testid={testId}
       style={{ ...style, ...sxToStyle(sx, breakpoint) }}
     >
       {sizedIcon}

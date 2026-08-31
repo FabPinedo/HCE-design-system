@@ -13,6 +13,8 @@ interface Props<T extends string | boolean> {
   onChange: (v: T) => void;
   options: Option<T>[] | readonly Option<T>[];
   disabled?: boolean;
+  /** Hook de pruebas E2E — id base, sufijado `-{value}` en cada radio. */
+  testId?: string;
 }
 
 export const RadioGroup = <T extends string | boolean>({
@@ -24,6 +26,7 @@ export const RadioGroup = <T extends string | boolean>({
     { value: "si" as unknown as T, label: "Si" },
     { value: "no" as unknown as T, label: "No" },
   ],
+  testId,
 }: Props<T>) => {
   const groupName = useId();
   return (
@@ -90,6 +93,7 @@ export const RadioGroup = <T extends string | boolean>({
                   }
                 }}
                 disabled={disabled}
+                data-testid={testId ? `${testId}-${optionKey}` : undefined}
                 style={
                   {
                     "--radio-color": `var(

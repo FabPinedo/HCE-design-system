@@ -24,16 +24,17 @@ import {
 import type { GenericColumnType, GenericTableColumn } from "./GenericCell";
 
 export interface CellRenderContext<T> {
-  row: T;
-  column: GenericTableColumn<T>;
-  value: unknown;
-  color?: string;
-  disabled: boolean;
-  canClick: boolean;
-  boldText: boolean;
-  handleColumnClick: (event: MouseEvent<HTMLElement>) => void;
-  clickableA11yProps: HTMLAttributes<HTMLElement>;
-  tooltip?: string;
+  row: T
+  column: GenericTableColumn<T>
+  value: unknown
+  color?: string
+  disabled: boolean
+  canClick: boolean
+  boldText: boolean
+  handleColumnClick: (event: MouseEvent<HTMLElement>) => void
+  clickableA11yProps: HTMLAttributes<HTMLElement>
+  tooltip?: string
+  testId?: string
 }
 
 export type CellRenderer<T> = (context: CellRenderContext<T>) => ReactNode;
@@ -161,7 +162,15 @@ export const cellRenderers: {
     return <AttentionCode code={code} bold={boldText} />;
   },
 
-  "info-button": ({ row, column, value, disabled, canClick, tooltip }) => (
+  "info-button": ({
+    row,
+    column,
+    value,
+    disabled,
+    canClick,
+    tooltip,
+    testId,
+  }) => (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <InfoButton
         onClick={() => {
@@ -171,6 +180,7 @@ export const cellRenderers: {
         }}
         disabled={disabled}
         tooltip={tooltip}
+        testId={testId}
       />
     </div>
   ),
@@ -193,6 +203,7 @@ export const cellRenderers: {
     canClick,
     handleColumnClick,
     clickableA11yProps,
+    testId,
   }) => {
     const Icon = column.icon;
 
@@ -210,6 +221,7 @@ export const cellRenderers: {
       <div
         onClick={handleColumnClick}
         {...clickableA11yProps}
+        data-testid={testId}
         style={{
           width: 28,
           height: 28,
@@ -232,7 +244,13 @@ export const cellRenderers: {
     );
   },
 
-  switch: ({ row, column, value, disabled }) => {
+  switch: ({
+    row,
+    column,
+    value,
+    disabled,
+    testId,
+  }) => {
     const checked = column.checkedGetter
       ? column.checkedGetter(row)
       : Boolean(value);
@@ -268,6 +286,7 @@ export const cellRenderers: {
 
             column.onClick?.(row, event.target.checked);
           }}
+          testId={testId}
         />
 
         {showLabel && (

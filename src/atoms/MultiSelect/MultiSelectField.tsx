@@ -30,6 +30,8 @@ interface Props {
   /** Muestra la opción "Todos" al inicio de la lista, que selecciona/deselecciona
    * todas las opciones a la vez. Default: true */
   showSelectAll?: boolean;
+  /** Hook de pruebas E2E — id base, aplicado al trigger. */
+  testId?: string;
 }
 
 /** Ícono de "ojo" — visibility del resumen de seleccionados */
@@ -98,6 +100,7 @@ export const MultiSelect = ({
   required,
   error,
   showSelectAll = true,
+  testId,
 }: Props) => {
   const [open, setOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState(-1);
@@ -279,6 +282,7 @@ export const MultiSelect = ({
           }
           aria-labelledby={triggerId}
           aria-required={required}
+          data-testid={testId}
           style={{
             // `align-items: center` de .hce-multiselect-trigger centra hijos
             // flex — funcionaba con el <button> anterior porque su contenido

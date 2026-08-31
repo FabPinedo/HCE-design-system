@@ -19,6 +19,8 @@ export interface OverlayProps {
   disableBackdropClose?: boolean
   /** Bloquea el cierre al presionar Escape (equivalente a `disableEscapeClose`) */
   disableEscapeClose?: boolean
+  /** Hook de pruebas E2E — `data-testid` del panel (nodo raíz del overlay). */
+  testId?: string
 }
 
 /**
@@ -42,6 +44,7 @@ export function Overlay({
   panelClassName,
   disableBackdropClose = false,
   disableEscapeClose = false,
+  testId,
 }: OverlayProps) {
   const panelRef = useRef<HTMLDivElement>(null)
   // Igual que en atoms/Menu: este backdrop+panel se porta a document.body,
@@ -71,6 +74,7 @@ export function Overlay({
         aria-modal="true"
         aria-labelledby={labelledBy}
         aria-describedby={describedBy}
+        data-testid={testId}
         tabIndex={-1}
         className={`hce-overlay-panel--${variant}${panelClassName ? ` ${panelClassName}` : ""}`}
         style={panelStyle}
