@@ -4,6 +4,7 @@ import type { CSSProperties, ReactNode } from "react"
 import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 import { Box } from "../Box/Box"
 import { Typography } from "../Typography/Typography"
+import type { SxProps } from "../../utils/sx"
 
 const labelSx = {
   fontFamily: hceTypography.fontFamily,
@@ -14,12 +15,13 @@ const labelSx = {
   mb: 0.75,
 }
 
-const valueSx = {
+const valueSx: SxProps = {
   fontFamily: hceTypography.fontFamily,
   fontSize: "0.8125rem",
   fontWeight: 400,
   color: hceColors.primary.blue[500],
   lineHeight: 1.3,
+  overflow: "break-word", // para que el valor se rompa en varias líneas si es muy largo
 }
 
 export interface PatientFieldProps {
