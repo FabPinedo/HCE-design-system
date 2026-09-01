@@ -29,6 +29,13 @@ export const RadioGroup = <T extends string | boolean>({
   testId,
 }: Props<T>) => {
   const groupName = useId();
+
+  // Texto de las opciones (labels) — azul fijo de hceColors, no theme-aware,
+  // mismo criterio que NumericField/SelectField/TextareaField.
+  const optionTextColor = disabled
+    ? hceColors.neutro.black[400]
+    : hceColors.primary.blue[600];
+
   return (
     <fieldset
       style={{
@@ -79,6 +86,7 @@ export const RadioGroup = <T extends string | boolean>({
                 cursor: disabled ? "not-allowed" : "pointer",
                 fontFamily: hceTypography.fontFamily,
                 fontSize: "0.875rem",
+                color: optionTextColor,
               }}
             >
               {opt.label}
