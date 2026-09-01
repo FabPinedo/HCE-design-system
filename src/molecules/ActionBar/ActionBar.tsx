@@ -53,7 +53,6 @@ export const ActionBar = ({
         alignItems: "center",
         justifyContent: "space-between",
         gap: "6px",
-        padding: "6px 10px",
         borderRadius: "10px",
         width: isVertical ? "fit-content" : "fit-content",
         boxSizing: "border-box",
@@ -67,7 +66,6 @@ export const ActionBar = ({
           flexDirection: isVertical ? "column" : "row",
           alignItems: isVertical ? "start" : "center",
           gap: "0.5rem",
-          padding: "6px 10px",
           width: isVertical ? "fit-content" : "100%",
           boxSizing: "border-box",
         }}
