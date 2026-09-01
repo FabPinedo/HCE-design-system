@@ -52,6 +52,8 @@ export interface MenuItemProps extends Omit<HTMLAttributes<HTMLElement>, "color"
   // cuando el MenuItem se usa como opción dentro de un Select (duck typing:
   // Select lee `child.props.value` sin que MenuItem tenga que saber de Select).
   value?: string | number
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 export const MenuItem = forwardRef<HTMLElement, MenuItemProps>(function MenuItem(
@@ -70,6 +72,7 @@ export const MenuItem = forwardRef<HTMLElement, MenuItemProps>(function MenuItem
     selected = false,
     tabIndex,
     value: _value, // se extrae para no filtrarlo como atributo HTML del <li>; Select lo lee desde el elemento original antes de clonar
+    testId,
     onFocus,
     onBlur,
     onMouseDown,
@@ -179,6 +182,7 @@ export const MenuItem = forwardRef<HTMLElement, MenuItemProps>(function MenuItem
       "aria-selected": selected || undefined,
       className: rootClassName,
       style: computedStyle,
+      "data-testid": testId,
       onFocus: handleFocus,
       onBlur: handleBlur,
       onMouseDown: handleMouseDown,

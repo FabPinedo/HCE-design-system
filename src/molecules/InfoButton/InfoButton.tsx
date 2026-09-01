@@ -8,7 +8,7 @@
  */
 import type { CSSProperties } from "react"
 import "./InfoButton.css"
-import { Tooltip } from "../../atoms/Tooltip/Tooltip"
+import { HceTooltip } from "../../atoms/HceTooltip/HceTooltip"
 import { HceEyeIcon } from "../../atoms/Icon/SvgIconsHce"
 
 
@@ -16,9 +16,11 @@ interface Props {
   onClick?:  () => void
   tooltip?:  string
   disabled?: boolean
+  /** Hook de pruebas E2E — `data-testid` en el `<button>`. */
+  testId?:   string
 }
 
-export const InfoButton = ({ onClick, tooltip = "Ver información del paciente", disabled = false }: Props) => {
+export const InfoButton = ({ onClick, tooltip = "Ver información del paciente", disabled = false, testId }: Props) => {
   const cssVars = {
     "--infobtn-bg":          `var(--ds-color-secondary, #003d96)`,
     "--infobtn-hover-bg":    `var(--ds-color-primary-dark, #002a66)`,
@@ -26,7 +28,7 @@ export const InfoButton = ({ onClick, tooltip = "Ver información del paciente",
   } as CSSProperties
 
   return (
-    <Tooltip title={disabled ? "" : tooltip} placement="top">
+    <HceTooltip title={disabled ? "" : tooltip} placement="top">
       <button
         type="button"
         className="hce-infobtn"
@@ -34,9 +36,10 @@ export const InfoButton = ({ onClick, tooltip = "Ver información del paciente",
         onClick={onClick}
         disabled={disabled}
         aria-label={tooltip}
+        data-testid={testId}
       >
         <HceEyeIcon size={14} color="#FFFFFF" />
       </button>
-    </Tooltip>
+    </HceTooltip>
   )
 }

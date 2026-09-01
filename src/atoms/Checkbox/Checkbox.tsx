@@ -13,6 +13,8 @@ interface Props {
    * para lectores de pantalla (WCAG 4.1.2).
    */
   ariaLabel?: string;
+  /** Hook de pruebas E2E — `data-testid` en el `<input>` (elemento interactivo). */
+  testId?: string;
 }
 
 const PLACEMENT_FLEX_DIRECTION: Record<NonNullable<Props["sideLabel"]>, string> = {
@@ -29,6 +31,7 @@ export const Checkbox = ({
   disabled,
   sideLabel = "end",
   ariaLabel,
+  testId,
 }: Props) => {
   return (
     <label
@@ -42,6 +45,7 @@ export const Checkbox = ({
         disabled={disabled}
         onChange={(e) => onChange(e.target.checked)}
         aria-label={!label ? ariaLabel : undefined}
+        data-testid={testId}
       />
       <span className="hce-checkbox__box" aria-hidden="true">
         {checked && (

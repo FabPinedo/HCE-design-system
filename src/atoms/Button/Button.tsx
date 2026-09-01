@@ -145,6 +145,13 @@ interface Props {
    * Ej: <Button label="Guardar" tenantTheme={sannaCompanyColors} />
    */
   tenantTheme?: HceCompanyColors
+  /**
+   * Hook de pruebas E2E (Playwright) — se renderiza como `data-testid` en el
+   * `<button>`. Convención: `{microfrontend}-{componente}[-elemento][-instancia]`
+   * (ver docs/testing-convention.md). No usar datos identificables del
+   * paciente (nombre, DNI) como valor — solo ids técnicos opacos.
+   */
+  testId?: string
 }
 
 const SIZE_CLASS: Record<string, string> = {
@@ -246,6 +253,7 @@ export const Button = ({
   sx,
   className: extraClassName,
   tenantTheme,
+  testId,
 }: Props) => {
   const breakpoint = useCurrentBreakpoint()
 
@@ -306,6 +314,7 @@ export const Button = ({
       className={className}
       onClick={onClick}
       disabled={disabled}
+      data-testid={testId}
       style={{ ...cssVars, ...style, ...sxToStyle(sx, breakpoint) }}
     >
       {startIcon}

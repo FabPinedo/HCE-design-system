@@ -10,11 +10,13 @@ interface Props {
   tabs: NavTabItem[];
   value: string;
   onChange: (v:string) => void;
+  /** Hook de pruebas E2E — id base, sufijado `-{value}` en cada tab. */
+  testId?: string;
 }
 
-export const NavTab = ({tabs, value, onChange}: Props) => {
+export const NavTab = ({tabs, value, onChange, testId}: Props) => {
   return (
-    <div className="hce-navtab-list" role="tablist">
+    <div className="hce-navtab-list" role="tablist" data-testid={testId}>
         {tabs.map((tab)=>(
             <button
             type="button"
@@ -24,8 +26,9 @@ export const NavTab = ({tabs, value, onChange}: Props) => {
             aria-selected={value === tab.value}
             disabled={tab.disabled}
             onClick={() => onChange(tab.value)}
+            data-testid={testId ? `${testId}-${tab.value}` : undefined}
             >
-                {tab.value}
+                {tab.label}
             </button>
         ))}
     </div>

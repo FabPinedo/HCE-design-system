@@ -1,61 +1,72 @@
-import type { ReactNode } from "react"
-import { hceTypography } from "../../tokens/hce.tokens"
+// atoms/PatientField/PatientField.tsx
+import type { CSSProperties, ReactNode } from "react"
+
+import { hceColors, hceTypography } from "../../tokens/hce.tokens"
 import { Box } from "../Box/Box"
 import { Typography } from "../Typography/Typography"
 
-export interface PatientFieldProps {
-  /** Etiqueta descriptiva mostrada sobre el valor. */
-  label: ReactNode
-  /** Dato clínico o demográfico que se desea mostrar. */
-  value?: ReactNode | null
-  /** Alineación horizontal de la etiqueta y el valor. */
-  align?: "left" | "center" | "right"
-  /** Contenido utilizado cuando el valor es null, undefined o una cadena vacía. */
-  emptyValue?: ReactNode
+const labelSx = {
+  fontFamily: hceTypography.fontFamily,
+  fontSize: "0.625rem",
+  fontWeight: 700,
+  color: hceColors.primary.blue[500],
+  lineHeight: 1.2,
+  mb: 0.75,
 }
 
-/**
- * Campo de solo lectura para mostrar una etiqueta y su valor asociado.
- * Está pensado para resúmenes de pacientes, fichas clínicas y tarjetas informativas.
- */
+const valueSx = {
+  fontFamily: hceTypography.fontFamily,
+  fontSize: "0.8125rem",
+  fontWeight: 400,
+  color: hceColors.primary.blue[500],
+  lineHeight: 1.3,
+}
+
+export interface PatientFieldProps {
+  label: string;
+  value: ReactNode;
+  /**
+   * Alineación del contenido (label + value). Se aplica como `textAlign` al
+   * contenedor raíz — ni el label ni el value fuerzan su propio `textAlign`,
+   * así que ambos lo heredan por CSS normal.
+   * @default "left"
+   */
+  align?: "left" | "center" | "right";
+  /**
+   * Hook de pruebas E2E (Playwright) — se renderiza como `data-testid` en el
+   * contenedor raíz. Convención: `{microfrontend}-{componente}[-elemento][-instancia]`
+   * (ver docs/testing-convention.md). No usar datos identificables del
+   * paciente (nombre, DNI) como valor — solo ids técnicos opacos.
+   */
+  testId?: string;
+  /** Clase CSS extra en el contenedor raíz — escape-hatch para reglas que `sx` no puede expresar. */
+  className?: string;
+  /** Estilo inline adicional, mergeado sobre los estilos por defecto del contenedor raíz. */
+  style?: CSSProperties;
+}
+
 export function PatientField({
   label,
   value,
   align = "left",
-  emptyValue = "-",
+  testId,
+  className,
+  style,
 }: PatientFieldProps) {
-  const displayedValue =
-    value === null || value === undefined || value === ""
-      ? emptyValue
-      : value
-
   return (
-    <Box sx={{ minWidth: 0, textAlign: align }}>
-      <Typography
-        component="div"
-        sx={{
-          mb: 0.5,
-          color: "var(--ds-color-primary, #0043a5)",
-          fontFamily: hceTypography.fontFamily,
-          fontSize: "0.625rem",
-          fontWeight: 700,
-        }}
-      >
+    <Box
+      data-testid={testId}
+      className={className}
+      style={style}
+      sx={{ minWidth: 0, textAlign: align }}
+    >
+      <Typography sx={labelSx}>
         {label}
       </Typography>
 
-      <Typography
-        component="div"
-        sx={{
-          color: "var(--ds-color-primary, #0043a5)",
-          fontFamily: hceTypography.fontFamily,
-          fontSize: "0.875rem",
-          fontWeight: 400,
-          overflowWrap: "anywhere",
-        }}
-      >
-        {displayedValue}
-      </Typography>
+      <Box sx={valueSx}>
+        {value}
+      </Box>
     </Box>
   )
 }

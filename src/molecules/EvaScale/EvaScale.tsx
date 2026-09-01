@@ -41,6 +41,8 @@ export interface EvaScaleProps {
   value?: number | null;
   onChange?: (value: number) => void;
   readOnly?: boolean;
+  /** Hook de pruebas E2E — id base, sufijado `-step-{n}` en cada círculo. */
+  testId?: string;
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -49,6 +51,7 @@ export function EvaScale({
   value = null,
   onChange,
   readOnly = false,
+  testId,
 }: EvaScaleProps) {
   const selected = value !== null ? STEPS[value] : null;
 
@@ -195,6 +198,7 @@ export function EvaScale({
                 onClick={readOnly ? undefined : () => onChange?.(step.value)}
                 aria-label={`Dolor ${step.value}`}
                 aria-pressed={isSelected}
+                data-testid={testId ? `${testId}-step-${step.value}` : undefined}
                 className={readOnly ? undefined : "hce-evascale-circle--interactive"}
                 style={{
                   width: CIRCLE,

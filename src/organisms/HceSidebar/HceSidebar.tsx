@@ -1,6 +1,6 @@
 import { useState, type ComponentType, type CSSProperties, type KeyboardEvent, type MouseEvent } from "react"
 import "./HceSidebar.css"
-import { Tooltip } from "../../atoms/Tooltip/Tooltip"
+import { HceTooltip } from "../../atoms/HceTooltip/HceTooltip"
 import { hceColors, hceTypography, hceShadows } from "../../tokens/hce.tokens"
 import { LogoutIcon, HceMenuIcon, HceStarIcon, HceConfigIcon } from "../../atoms/Icon/SvgIconsHce"
 import { useDsTenant } from "../../provider/ThemeProvider"
@@ -182,6 +182,11 @@ export type HceSidebarProps = {
   /** Label para boton de inicio de Sidebar */
   labelHome?:    string
   titleOptions?: string
+  /**
+   * Hook de pruebas E2E — id base. Se sufija `-toggle`, `-home` y
+   * `-item-{idMenu|codigo}` por cada opción de primer nivel.
+   */
+  testId?: string
 }
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
@@ -338,9 +343,10 @@ type FirstLevelProps = {
   currentPath: string
   onNavigate:  (vista: string) => void
   multiLevel:  boolean
+  testId?:     string
 }
 
-function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }: FirstLevelProps) {
+function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel, testId }: FirstLevelProps) {
   const hasChildren = (item.opciones?.length ?? 0) > 0
   const canNavigate = !!item.vista
   const isActive    = !hasChildren && canNavigate && currentPath === item.vista
@@ -381,12 +387,13 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
       /* Tooltip.hce-tooltip-wrapper es inline-flex (shrink-to-fit) por defecto
          — sin este override queda anclado al borde izquierdo del riel en vez
          de centrado, ver el mismo override en el Tooltip de "Inicio". */
-      <Tooltip title={item.titulo} placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
+      <HceTooltip title={item.titulo} placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
         <div
           role="button"
           tabIndex={0}
           aria-label={item.titulo}
           aria-current={isActive ? "page" : undefined}
+          data-testid={testId}
           className="hce-sidebar-icon-btn"
           style={{
             "--row-hover-bg": "rgba(255,255,255,0.15)",
@@ -429,7 +436,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
             </span>
           )}
         </div>
-      </Tooltip>
+      </HceTooltip>
     )
   }
 
@@ -448,6 +455,7 @@ function FirstLevelItem({ item, collapsed, currentPath, onNavigate, multiLevel }
         aria-label={item.titulo}
         aria-expanded={hasChildren ? open : undefined}
         aria-current={isActive ? "page" : undefined}
+        data-testid={testId}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         className="hce-sidebar-row"
@@ -698,8 +706,9 @@ export function HceSidebar({
   onHome,
   floating    = false,
   multiLevel  = false,
-  labelHome   = "Inicio", 
-  titleOptions = "Menu"
+  labelHome   = "Inicio",
+  titleOptions = "Menu",
+  testId,
 }: HceSidebarProps) {
   // Identidad de tenant (no solo color) para elegir el logo correcto —
   // ver el comentario de `useDsTenant` en provider/ThemeProvider.tsx.
@@ -757,6 +766,7 @@ export function HceSidebar({
       tabIndex={collapsed ? 0 : undefined}
       role={collapsed ? "button" : undefined}
       aria-label={collapsed ? "Expandir menú lateral" : undefined}
+      data-testid={testId}
     >
 
       {/* ── Cabecera ─────────────────────────────────────────── */}
@@ -775,6 +785,7 @@ export function HceSidebar({
             role="button"
             tabIndex={0}
             aria-label="Expandir menú lateral"
+            data-testid={testId ? `${testId}-toggle` : undefined}
             onClick={e => { e.stopPropagation(); onToggle() }}
             onKeyDown={e => {
               if (e.key === "Enter" || e.key === " ") {
@@ -803,6 +814,7 @@ export function HceSidebar({
               role="button"
               tabIndex={0}
               aria-label="Colapsar menú lateral"
+              data-testid={testId ? `${testId}-toggle` : undefined}
               onClick={e => { e.stopPropagation(); onToggle() }}
               onKeyDown={e => {
                 if (e.key === "Enter" || e.key === " ") {
@@ -846,11 +858,12 @@ export function HceSidebar({
           /* Tooltip.hce-tooltip-wrapper es inline-flex (shrink-to-fit) por
              defecto — sin este override queda anclado al borde izquierdo
              del riel en vez de centrado, igual que en FirstLevelItem. */
-          <Tooltip title={labelHome} placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
+          <HceTooltip title={labelHome} placement="right" arrow style={{ display: "flex", width: "100%", justifyContent: "center" }}>
             <div
               role="button"
               tabIndex={0}
               aria-label={labelHome}
+              data-testid={testId ? `${testId}-home` : undefined}
               onClick={e => { e.stopPropagation(); onHome?.() }}
               onKeyDown={e => {
                 if (e.key === "Enter" || e.key === " ") {
@@ -877,12 +890,13 @@ export function HceSidebar({
             >
               <HomeGlyph size={22} color="white" />
             </div>
-          </Tooltip>
+          </HceTooltip>
         ) : (
           <div
             role="button"
             tabIndex={0}
             aria-label="Inicio"
+            data-testid={testId ? `${testId}-home` : undefined}
             onClick={onHome}
             onKeyDown={e =>      {
               if (e.key === "Enter" || e.key === " ") {
@@ -961,6 +975,7 @@ export function HceSidebar({
             currentPath={currentPath}
             onNavigate={onNavigate}
             multiLevel={multiLevel}
+            testId={testId ? `${testId}-item-${op.idMenu ?? op.codigo}` : undefined}
           />
         ))}
       </div>

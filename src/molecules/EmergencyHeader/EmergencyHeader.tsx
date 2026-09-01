@@ -23,6 +23,8 @@ interface Props {
   dateTime?: string
   /** Nombre de la sede activa */
   sede?: string
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 /** Estilos compartidos para los chips del header */
@@ -77,9 +79,11 @@ export const EmergencyHeader = ({
   logoAlt = "Logo clínica",
   dateTime,
   sede,
+  testId,
 }: Props) => {
   return (
     <header
+      data-testid={testId}
       style={{
         width:           "100%",
         backgroundColor: hceClinicalColors.headerBg,

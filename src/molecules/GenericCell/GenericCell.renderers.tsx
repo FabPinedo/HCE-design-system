@@ -1,30 +1,27 @@
-import type { HTMLAttributes, MouseEvent, ReactNode } from "react"
-import { AntSwitch } from "./AntSwitch"
-import { PriorityBadge } from "../../atoms/PriorityBadge/PriorityBadge"
-import { BoxBadge } from "../../atoms/BoxBadge/BoxBadge"
-import { AttentionCode } from "../../atoms/AttentionCode/AttentionCode"
-import { WaitingBadge } from "../../atoms/WaitingBadge/WaitingBadge"
-import { InfoButton } from "../InfoButton/InfoButton"
-import { ClinicalStatusIcon } from "../ClinicalStatusIcon/ClinicalStatusIcon"
-import "./GenericCell.css"
+import type { HTMLAttributes, MouseEvent, ReactNode } from "react";
+import { AntSwitch } from "./AntSwitch";
+import { PriorityBadge } from "../../atoms/PriorityBadge/PriorityBadge";
+import { BoxBadge } from "../../atoms/BoxBadge/BoxBadge";
+import { AttentionCode } from "../../atoms/AttentionCode/AttentionCode";
+import { WaitingBadge } from "../../atoms/WaitingBadge/WaitingBadge";
+import { InfoButton } from "../InfoButton/InfoButton";
+import { ClinicalStatusIcon } from "../ClinicalStatusIcon/ClinicalStatusIcon";
+import "./GenericCell.css";
 
 import {
   UiBloodTestIcon,
   UiConversationIcon,
   UiPrescriptionIcon,
   UiXRaysIcon,
-} from "../../atoms/Icon/SvgIconsHce"
+} from "../../atoms/Icon/SvgIconsHce";
 
 import {
   hceBorderRadius,
   hceColors,
   hceTypography,
-} from "../../tokens/hce.tokens"
+} from "../../tokens/hce.tokens";
 
-import type {
-  GenericColumnType,
-  GenericTableColumn,
-} from "./GenericCell"
+import type { GenericColumnType, GenericTableColumn } from "./GenericCell";
 
 export interface CellRenderContext<T> {
   row: T
@@ -37,34 +34,30 @@ export interface CellRenderContext<T> {
   handleColumnClick: (event: MouseEvent<HTMLElement>) => void
   clickableA11yProps: HTMLAttributes<HTMLElement>
   tooltip?: string
+  testId?: string
 }
 
-export type CellRenderer<T> = (context: CellRenderContext<T>) => ReactNode
+export type CellRenderer<T> = (context: CellRenderContext<T>) => ReactNode;
 
 const clinicalIcons = {
   lab: UiBloodTestIcon,
   img: UiXRaysIcon,
   indication: UiPrescriptionIcon,
   interconsult: UiConversationIcon,
-}
+};
 
 type BoxCellValue =
   | {
-      label?: string
-      stage: "ESPERA" | "SALA_D" | "BOX_ASIGNADO"
-      color?: "green" | "yellow" | "red" | null
+      label?: string;
+      stage: "ESPERA" | "SALA_D" | "BOX_ASIGNADO";
+      color?: "green" | "yellow" | "red" | null;
     }
-  | undefined
+  | undefined;
 
 export const cellRenderers: {
-  [K in GenericColumnType]: CellRenderer<any>
+  [K in GenericColumnType]: CellRenderer<any>;
 } = {
-  priority: ({
-    value,
-    canClick,
-    handleColumnClick,
-    clickableA11yProps,
-  }) => (
+  priority: ({ value, canClick, handleColumnClick, clickableA11yProps }) => (
     <div
       onClick={handleColumnClick}
       {...clickableA11yProps}
@@ -74,19 +67,17 @@ export const cellRenderers: {
         cursor: canClick ? "pointer" : "default",
       }}
     >
-      <PriorityBadge priority={value as any} cursor={canClick ? "pointer" : "default"} />
+      <PriorityBadge
+        priority={value as any}
+        cursor={canClick ? "pointer" : "default"}
+      />
     </div>
   ),
 
-  box: ({
-    value,
-    canClick,
-    handleColumnClick,
-    clickableA11yProps,
-  }) => {
-    const boxie = value as BoxCellValue
+  box: ({ value, canClick, handleColumnClick, clickableA11yProps }) => {
+    const boxie = value as BoxCellValue;
 
-    if (!boxie) return <>-</>
+    if (!boxie) return <>-</>;
 
     return (
       <div
@@ -105,7 +96,7 @@ export const cellRenderers: {
           cursor={canClick ? "pointer" : "default"}
         />
       </div>
-    )
+    );
   },
 
   "patient-name": ({
@@ -131,9 +122,7 @@ export const cellRenderers: {
           : hceTypography.weight.regular,
         display: "block",
         justifyContent: "center",
-        textAlign: 'center',
-      
-      
+        textAlign: "center",
       }}
     >
       {String(value ?? "-")}
@@ -148,9 +137,9 @@ export const cellRenderers: {
   }) => {
     const icon = column.clinicalIcon
       ? clinicalIcons[column.clinicalIcon]
-      : UiBloodTestIcon
+      : UiBloodTestIcon;
 
-    const status = value ?? "empty"
+    const status = value ?? "empty";
 
     return (
       <div
@@ -164,13 +153,13 @@ export const cellRenderers: {
           tooltipLabel={`${column.header}: ${String(status)}`}
         />
       </div>
-    )
+    );
   },
 
   "attention-code": ({ value, boldText }) => {
-    const code = value === "none" || !value ? "-" : String(value)
+    const code = value === "none" || !value ? "-" : String(value);
 
-    return <AttentionCode code={code} bold={boldText} />
+    return <AttentionCode code={code} bold={boldText} />;
   },
 
   "info-button": ({
@@ -179,17 +168,19 @@ export const cellRenderers: {
     value,
     disabled,
     canClick,
-    tooltip
+    tooltip,
+    testId,
   }) => (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <InfoButton
         onClick={() => {
-          if (!canClick) return
+          if (!canClick) return;
 
-          column.onClick?.(row, value)
+          column.onClick?.(row, value);
         }}
         disabled={disabled}
         tooltip={tooltip}
+        testId={testId}
       />
     </div>
   ),
@@ -201,10 +192,7 @@ export const cellRenderers: {
         justifyContent: "center",
       }}
     >
-      <WaitingBadge
-        color={color}
-        label={String(value ?? "-")}
-      />
+      <WaitingBadge color={color} label={String(value ?? "-")} />
     </div>
   ),
 
@@ -215,23 +203,25 @@ export const cellRenderers: {
     canClick,
     handleColumnClick,
     clickableA11yProps,
+    testId,
   }) => {
-    const Icon = column.icon
+    const Icon = column.icon;
 
-    if (!Icon) return null
+    if (!Icon) return null;
 
     const iconColor = disabled
       ? hceColors.neutro.white[800]
-      : color || "var(--ds-color-primary, #374151)"
+      : color || "var(--ds-color-primary, #374151)";
 
     const backgroundColor = disabled
       ? "#F2F2F2"
-      : `color-mix(in srgb, ${iconColor} 10%, white)`
+      : `color-mix(in srgb, ${iconColor} 10%, white)`;
 
     return (
       <div
         onClick={handleColumnClick}
         {...clickableA11yProps}
+        data-testid={testId}
         style={{
           width: 28,
           height: 28,
@@ -249,10 +239,9 @@ export const cellRenderers: {
           color={iconColor}
           disable={disabled}
           size={column.iconSize ?? 20}
-        
         />
       </div>
-    )
+    );
   },
 
   switch: ({
@@ -260,18 +249,19 @@ export const cellRenderers: {
     column,
     value,
     disabled,
+    testId,
   }) => {
     const checked = column.checkedGetter
       ? column.checkedGetter(row)
-      : Boolean(value)
+      : Boolean(value);
 
-    const showLabel = column.showSwitchLabel ?? false
+    const showLabel = column.showSwitchLabel ?? false;
 
     const label = column.switchLabelGetter
       ? column.switchLabelGetter(row, checked)
       : checked
         ? "Sí"
-        : "No"
+        : "No";
 
     return (
       <div
@@ -287,15 +277,16 @@ export const cellRenderers: {
           checked={checked}
           disabled={disabled}
           onClick={(event) => {
-            event.stopPropagation()
+            event.stopPropagation();
           }}
           onChange={(event) => {
-            event.stopPropagation()
+            event.stopPropagation();
 
-            if (disabled) return
+            if (disabled) return;
 
-            column.onClick?.(row, event.target.checked)
+            column.onClick?.(row, event.target.checked);
           }}
+          testId={testId}
         />
 
         {showLabel && (
@@ -313,7 +304,7 @@ export const cellRenderers: {
           </span>
         )}
       </div>
-    )
+    );
   },
 
   tag: ({
@@ -324,9 +315,9 @@ export const cellRenderers: {
     handleColumnClick,
     clickableA11yProps,
   }) => {
-    const label = String(value ?? "-")
-    const tagColor = color || "var(--ds-color-primary, #374151)"
-    const backgroundColor = `color-mix(in srgb, ${tagColor} 10%, white)`
+    const label = String(value ?? "-");
+    const tagColor = color || "var(--ds-color-primary, #374151)";
+    const backgroundColor = `color-mix(in srgb, ${tagColor} 10%, white)`;
 
     return (
       <div
@@ -363,7 +354,7 @@ export const cellRenderers: {
           {label}
         </span>
       </div>
-    )
+    );
   },
 
   text: ({
@@ -389,7 +380,7 @@ export const cellRenderers: {
         cursor: canClick ? "pointer" : "default",
         textDecoration: canClick ? "underline" : "none",
         opacity: disabled ? 0.5 : 1,
-        textAlign: 'center',
+        textAlign: "center",
         display: "block",
       }}
     >
@@ -401,24 +392,46 @@ export const cellRenderers: {
     const items = Array.isArray(value)
       ? value
       : value
-        ? String(value).split(",").map((item) => item.trim())
-        : []
+        ? String(value)
+            .split(",")
+            .map((item) => item.trim())
+        : [];
 
-    if (items.length === 0) return <>-</>
+    if (items.length === 0) return <>-</>;
 
     return (
       <ul
         className={`hce-generic-cell-list${boldText ? " hce-generic-cell-list--bold" : ""}`}
       >
         {items.map((item, index) => (
-          <li
-            key={`${item}-${index}`}
-            className="hce-generic-cell-list__item"
-          >
+          <li key={`${item}-${index}`} className="hce-generic-cell-list__item">
             {String(item)}
           </li>
         ))}
       </ul>
-    )
+    );
   },
-}
+
+  datetime: ({ value, boldText }) => {
+    const text = String(value ?? "-");
+
+    return (
+      <span
+        style={{
+          display: "block",
+          whiteSpace: "normal", // ← permite wrap natural, no fuerza nada
+          wordBreak: "break-word",
+          textAlign: "center",
+          lineHeight: 1.3,
+          color: "var(--ds-color-primary, #374151)",
+          fontSize: hceTypography.size.base,
+          fontWeight: boldText
+            ? hceTypography.weight.bold
+            : hceTypography.weight.regular,
+        }}
+      >
+        {text}
+      </span>
+    );
+  },
+};

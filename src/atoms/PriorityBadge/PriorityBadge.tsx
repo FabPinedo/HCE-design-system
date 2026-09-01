@@ -16,7 +16,7 @@
  *   <PriorityBadge priority="none" />
  * ---------------------------------------------------------
  */
-import { Tooltip } from "../Tooltip/Tooltip"
+import { HceTooltip } from "../HceTooltip/HceTooltip"
 import { hceClinicalColors, hceTypography } from "../../tokens/hce.tokens"
 import type { CSSProperties } from "react"
 
@@ -43,6 +43,8 @@ interface Props {
   tooltipText?: string
   /** Cursor visual del badge. Por defecto es informativo. */
   cursor?: CSSProperties["cursor"]
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 /**
@@ -52,13 +54,13 @@ interface Props {
  * - Prioridades 1–4: fondo sólido del color de prioridad, número en blanco
  * - "none": círculo vacío con borde gris, sin número
  */
-export const PriorityBadge = ({ priority, tooltipText,cursor='default' }: Props) => {
+export const PriorityBadge = ({ priority, tooltipText, cursor='default', testId }: Props) => {
   const key = String(priority)
   const config = PRIORITY_CONFIG[key]
   const isNone = priority === "none"
 
   return (
-    <Tooltip
+    <HceTooltip
       title={tooltipText ?? config.description}
       placement="top"
       arrow
@@ -90,9 +92,10 @@ export const PriorityBadge = ({ priority, tooltipText,cursor='default' }: Props)
         }}
         aria-label={config.description}
         role="img"
+        data-testid={testId}
       >
         {!isNone && config.label}
       </div>
-    </Tooltip>
+    </HceTooltip>
   )
 }

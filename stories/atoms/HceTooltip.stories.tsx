@@ -2,111 +2,52 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Box, hceColors, HceTooltip, UiDisketteIcon, IconButton } from "@hce/design-system";
 
 const meta: Meta<typeof HceTooltip> = {
-  title: "Atoms/Tooltip",
+  title: "Atoms/HceTooltip",
   component: HceTooltip,
   tags: ["autodocs"],
+  render: (args) => (
+    <HceTooltip {...args}>
+      <Box
+        sx={{
+          cursor: "pointer",
+          borderRadius: "8px",
+          backgroundColor: hceColors.primary.blue[600],
+          color: "#fff",
+          p: 0.4,
+          fontSize: 13,
+        }}
+      >
+        <IconButton icon={<UiDisketteIcon size={16} color="#fff" />} />
+      </Box>
+    </HceTooltip>
+  ),
+  argTypes: {
+    placement: {
+      control: "select",
+      options: ["top", "bottom", "left", "right"],
+    },
+  },
 };
 export default meta;
 
 type Story = StoryObj<typeof HceTooltip>;
 
-/**Tooltip por defecto (tootip abajo) */
+/** Tooltip por defecto (abajo) */
 export const Default: Story = {
-  render: (args) => (
-    <HceTooltip {...args}>
-      <Box
-        sx={{
-          cursor: "pointer",
-          borderRadius: "8px",
-          backgroundColor: hceColors.primary.blue[600],
-          color: "#fff",
-          p: .4,
-          fontSize: 13,
-        }}
-      >
-        <IconButton icon={<UiDisketteIcon size={16} color="#fff" />} />
-      </Box>
-    </HceTooltip>
-  ),
-  args: {
-    title: "Guardar",
-    placement:"bottom"
-  },
+  args: { title: "Guardar", placement: "bottom" },
 };
 
-/**Tooltip arriba */
-
+/** Tooltip arriba */
 export const HceTooltipTop: Story = {
-  render: (args) => (
-    <HceTooltip {...args}>
-      <Box
-        sx={{
-          cursor: "pointer",
-          borderRadius: "8px",
-          backgroundColor: hceColors.primary.blue[600],
-          color: "#fff",
-          p: .4,
-          fontSize: 13,
-        }}
-      >
-        <IconButton icon={<UiDisketteIcon size={16} color="#fff" />} />
-      </Box>
-    </HceTooltip>
-  ),
-  args: {
-    title: "Guardar",
-    placement: "top"
-  },
+  args: { title: "Guardar", placement: "top" },
 };
 
-
-/**Tooltip a la izquierda */
-
+/** Tooltip a la izquierda */
 export const HceTooltipLeft: Story = {
-  render: (args) => (
-    <HceTooltip {...args}>
-      <Box
-        sx={{
-          cursor: "pointer",
-          borderRadius: "8px",
-          backgroundColor: hceColors.primary.blue[600],
-          color: "#fff",
-          p: .4,
-          fontSize: 13,
-        }}
-      >
-        <IconButton icon={<UiDisketteIcon size={16} color="#fff" />} />
-      </Box>
-    </HceTooltip>
-  ),
-  args: {
-    title: "Guardar",
-    placement: "left"
-  },
+  args: { title: "Guardar", placement: "left" },
 };
 
-
-/**Tooltip a la derecha */
-
+/** Tooltip a la derecha */
 export const HceTooltipRight: Story = {
-  render: (args) => (
-    <HceTooltip {...args}>
-      <Box
-        sx={{
-          cursor: "pointer",
-          borderRadius: "8px",
-          backgroundColor: hceColors.primary.blue[600],
-          color: "#fff",
-          p: .4,
-          fontSize: 13,
-        }}
-      >
-        <IconButton icon={<UiDisketteIcon size={16} color="#fff" />} />
-      </Box>
-    </HceTooltip>
-  ),
-  args: {
-    title: "Guardar",
-    placement: "right"
-  },
+  args: { title: "Guardar", placement: "right" },
 };

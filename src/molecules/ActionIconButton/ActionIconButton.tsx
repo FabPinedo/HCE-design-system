@@ -10,7 +10,7 @@
 import type { CSSProperties } from "react"
 import "./ActionIconButton.css"
 import { hceColors } from "../../tokens/hce.tokens"
-import { HceTooltip } from "../../atoms/Tooltip/HceTooltip"
+import { HceTooltip } from "../../atoms/HceTooltip/HceTooltip"
 
 interface Props {
   /** Componente de ícono (HceIcon custom o cualquier ElementType compatible con size/color/sx) */
@@ -19,9 +19,11 @@ interface Props {
   tooltip?:   string
   onClick?:  () => void
   disabled?: boolean
+  /** Hook de pruebas E2E — `data-testid` en el `<button>`. */
+  testId?:   string
 }
 
-export const ActionIconButton = ({ icon: Icon, tooltip, onClick, disabled = false }: Props) => {
+export const ActionIconButton = ({ icon: Icon, tooltip, onClick, disabled = false, testId }: Props) => {
   const cssVars = {
     "--aib-color":        `var(--ds-color-interactive, ${hceColors.primary.blue[700]})`,
     "--aib-border":       `var(--ds-color-primary, ${hceColors.primary.blue[500]})`,
@@ -40,6 +42,7 @@ export const ActionIconButton = ({ icon: Icon, tooltip, onClick, disabled = fals
         onClick={onClick}
         disabled={disabled}
         aria-label={tooltip}
+        data-testid={testId}
       >
         <Icon sx={{ fontSize: 18 }} size={18} color="var(--aib-color)" />
       </button>

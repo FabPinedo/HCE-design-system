@@ -28,6 +28,9 @@ export interface StatusBadgeProps {
   textColor?: string
 
   sx?: CSSProperties
+
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 const variantStyles: Record<
@@ -76,6 +79,7 @@ export function StatusBadge({
   borderColor,
   textColor,
   sx,
+  testId,
 }: StatusBadgeProps) {
   const colors = variantStyles[variant]
   const canClick = clickable && !disabled && !!onClick
@@ -87,6 +91,7 @@ export function StatusBadge({
       type={canClick ? "button" : undefined}
       onClick={canClick ? onClick : undefined}
       aria-disabled={disabled || undefined}
+      data-testid={testId}
       className={[
         "hce-status-badge",
         size === "small" ? "hce-status-badge--sm" : "hce-status-badge--md",

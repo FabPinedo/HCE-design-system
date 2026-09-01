@@ -17,6 +17,11 @@ export interface HceBreadcrumbItem {
 export interface HceBreadcrumbProps {
   items: HceBreadcrumbItem[]
   onItemClick?: (item: HceBreadcrumbItem, index: number) => void
+  /**
+   * Hook de pruebas E2E — id base. Se aplica al contenedor y se sufija
+   * `-item-{index}` en cada link/span.
+   */
+  testId?: string
 }
 
 /** Chevron ">" — evita depender del sistema de íconos (se migra en el paso de íconos) */
@@ -31,10 +36,12 @@ function ChevronRightGlyph() {
 export function HceBreadcrumb({
   items,
   onItemClick,
+  testId,
 }: HceBreadcrumbProps) {
   return (
     <div
       aria-label="breadcrumb"
+      data-testid={testId}
       style={{
         display: "flex",
         alignItems: "center",
@@ -61,6 +68,7 @@ export function HceBreadcrumb({
             <Tag
               href={item.href && !isLast ? item.href : undefined}
               onClick={handleClick}
+              data-testid={testId ? `${testId}-item-${index}` : undefined}
               className={`hce-breadcrumb-link${!isLast && !item.disabled ? " hce-breadcrumb-link--hoverable" : ""}`}
               style={{
                 fontFamily: hceTypography.fontFamily,

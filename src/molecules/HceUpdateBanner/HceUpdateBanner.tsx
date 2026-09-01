@@ -10,6 +10,8 @@ export interface HceUpdateBannerProps {
   seconds:     number
   /** Callback del botón "Recargar ahora" y al terminar la cuenta regresiva */
   onReloadNow: () => void
+  /** Hook de pruebas E2E — reenviado tal cual al `HceModal` interno. */
+  testId?: string
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -22,7 +24,7 @@ export interface HceUpdateBannerProps {
  * Uso típico en mf-shell:
  *   <HceUpdateBanner open={updateAvailable} seconds={countdown} onReloadNow={reload} />
  */
-export function HceUpdateBanner({ open, seconds, onReloadNow }: HceUpdateBannerProps) {
+export function HceUpdateBanner({ open, seconds, onReloadNow, testId }: HceUpdateBannerProps) {
   const plural = seconds !== 1 ? "s" : ""
 
   return (
@@ -40,6 +42,7 @@ export function HceUpdateBanner({ open, seconds, onReloadNow }: HceUpdateBannerP
         label:   `Recargar ahora`,
         onClick: onReloadNow,
       }}
+      testId={testId}
     />
   )
 }

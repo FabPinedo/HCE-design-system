@@ -15,6 +15,8 @@ interface Props {
   disabled?:     boolean
   /** Activa el estado de error: todo (label, borde, ícono, texto) cambia a rojo */
   error?:        boolean
+  /** Hook de pruebas E2E — `data-testid` en el `<input>`. */
+  testId?:       string
 }
 
 export function TextInput({
@@ -29,6 +31,7 @@ export function TextInput({
   required,
   disabled,
   error = false,
+  testId,
 }: Props) {
   // ── Colores reactivos ──────────────────────────────────────
   // El hover/focus ahora es CSS real (:hover/:focus-within), así que estos
@@ -70,6 +73,7 @@ export function TextInput({
           onChange={(e) => onChange(e.target.value)}
           required={required}
           disabled={disabled}
+          data-testid={testId}
         />
         {endAdornment}
       </div>

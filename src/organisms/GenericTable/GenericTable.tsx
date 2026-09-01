@@ -32,6 +32,13 @@ interface GenericTableProps<T> {
   rows: T[]
   columns: GenericTableColumn<T>[]
   getRowId: (row: T) => string
+  /**
+   * Hook de pruebas E2E (Playwright) — `data-testid` por fila, análogo a
+   * `getRowId`. Debe derivarse de un id técnico opaco (ej. `row.id`), nunca
+   * de datos identificables del paciente (nombre, DNI). Convención:
+   * `{microfrontend}-{componente}-row-{id}` (ver docs/testing-convention.md).
+   */
+  getRowTestId?: (row: T) => string
   maxHeight?: number | string
 
   /** Estilo puntual por fila — objeto plano de CSS (antes SxProps<Theme> de MUI). */
@@ -79,6 +86,7 @@ export const GenericTable = <T,>({
   rows,
   columns,
   getRowId,
+  getRowTestId,
   maxHeight,
   getRowSx,
   rowAlertGetter,
@@ -320,7 +328,7 @@ export const GenericTable = <T,>({
                         color: hceClinicalColors.textSecondary,
                       }}
                     >
-                      No hay pacientes en el Monitor de Emergencia
+                      No hay datos disponibles
                     </span>
                   </div>
                 </td>
@@ -334,6 +342,7 @@ export const GenericTable = <T,>({
                   columns={columns}
                   rowSx={getRowSx?.(row, index)}
                   rowAlertGetter={rowAlertGetter}
+                  testId={getRowTestId?.(row)}
                 />
               ))
             )}

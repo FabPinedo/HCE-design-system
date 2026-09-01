@@ -28,6 +28,13 @@ interface Props {
   onPageChange: (page: number) => void
   /** Máximo de páginas visibles a ambos lados de la página actual (default: 2) */
   siblingCount?: number
+  /**Mostrar casillas genéricas */
+  viewChip?:boolean
+  /**
+   * Hook de pruebas E2E — id base. Se sufija `-prev`, `-next`,
+   * `-page-{n}` en los botones correspondientes.
+   */
+  testId?: string
 }
 
 /** Genera el array de páginas visibles con "..." cuando corresponde */
@@ -69,11 +76,14 @@ export const EmergencyPagination = ({
   totalPages,
   onPageChange,
   siblingCount = 2,
+  viewChip = true,
+  testId,
 }: Props) => {
   const pages = buildPageRange(currentPage, totalPages, siblingCount)
 
   return (
     <div
+      data-testid={testId}
       style={{
         display:         "flex",
         alignItems:      "center",
@@ -85,7 +95,7 @@ export const EmergencyPagination = ({
       aria-label="Paginación de pacientes"
     >
       {/* casillas genericas */}
-      {summary.map((item) => (
+      {viewChip && summary.map((item) => (
         <span key={item.label} className="hce-empag-chip">
           <span style={{ fontWeight: hceTypography.weight.bold }}>{item.value}</span>{" "}
           {item.label}
@@ -99,6 +109,7 @@ export const EmergencyPagination = ({
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
         aria-label="Página anterior"
+        data-testid={testId ? `${testId}-prev` : undefined}
       >
         <ChevronLeftGlyph />
       </button>
@@ -134,6 +145,7 @@ export const EmergencyPagination = ({
             } as CSSProperties}
             aria-label={`Página ${page}`}
             aria-current={page === currentPage ? "page" : undefined}
+            data-testid={testId ? `${testId}-page-${page}` : undefined}
           >
             {page}
           </button>
@@ -147,6 +159,7 @@ export const EmergencyPagination = ({
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
         aria-label="Página siguiente"
+        data-testid={testId ? `${testId}-next` : undefined}
       >
         <ChevronRightGlyph />
       </button>

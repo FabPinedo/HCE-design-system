@@ -90,6 +90,8 @@ export interface SelectProps<T = Value> extends Omit<HTMLAttributes<HTMLElement>
   SelectDisplayProps?: HTMLAttributes<HTMLDivElement>
   value?: T
   variant?: Variant
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz (trigger/`<select>` nativo). */
+  testId?: string
 }
 
 function DefaultArrowIcon({ open, className }: { open?: boolean; className?: string }) {
@@ -147,6 +149,7 @@ const SelectImpl = forwardRef<HTMLElement, SelectProps<Value>>(function Select(
     value: valueProp,
     variant = "outlined",
     onKeyDown,
+    testId,
     ...rest
   },
   forwardedRef
@@ -322,6 +325,7 @@ const SelectImpl = forwardRef<HTMLElement, SelectProps<Value>>(function Select(
               : event.target.value
           ),
         "aria-invalid": error || undefined,
+        "data-testid": testId,
         ...inputProps,
         ...rest,
       },
@@ -421,6 +425,7 @@ const SelectImpl = forwardRef<HTMLElement, SelectProps<Value>>(function Select(
         "aria-disabled": disabled || undefined,
         "aria-invalid": error || undefined,
         "aria-required": required || undefined,
+        "data-testid": testId,
         tabIndex: disabled ? -1 : 0,
         style: triggerStyle,
         onClick: (event: ReactMouseEvent) => (open ? requestClose(event) : requestOpen(event)),

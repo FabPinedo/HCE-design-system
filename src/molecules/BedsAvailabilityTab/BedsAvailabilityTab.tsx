@@ -17,6 +17,8 @@ interface Props {
   label?:    string
   /** Si el panel de camas está actualmente abierto */
   isActive?: boolean
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 /** Ícono de cama (King Bed) — evita depender del sistema de íconos (se
@@ -37,11 +39,13 @@ export const BedsAvailabilityTab = ({
   onClick,
   label = "Ver disponibilidad de camas",
   isActive = false,
+  testId,
 }: Props) => {
   return (
     <div
       className={`hce-beds-tab${isActive ? " hce-beds-tab--active" : ""}`}
       onClick={onClick}
+      data-testid={testId}
       role="button"
       tabIndex={0}
       aria-label={label}

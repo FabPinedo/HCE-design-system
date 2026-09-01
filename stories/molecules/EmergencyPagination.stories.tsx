@@ -11,7 +11,7 @@ interface summaryContent{
 
 injectHceTokens()
 
-function PaginationDemo({ summary, pages }: { summary: summaryContent[]; pages: number }) {
+function PaginationDemo({ summary, pages, viewChip = true }: { summary: summaryContent[]; pages: number, viewChip?:boolean }) {
   const [page, setPage] = useState(1)
   return (
     <EmergencyPagination
@@ -19,6 +19,7 @@ function PaginationDemo({ summary, pages }: { summary: summaryContent[]; pages: 
       currentPage={page}
       totalPages={pages}
       onPageChange={setPage}
+      viewChip={viewChip}
     />
   )
 }
@@ -74,4 +75,8 @@ export const Default: StoryObj = {
 
 export const PocasPaginas: StoryObj = {
   render: () => <PaginationDemo summary={summaryExample2} pages={2} />,
+}
+
+export const SinCasillasGenericas: StoryObj = {
+  render: () => <PaginationDemo summary={summaryExample2} pages={2} viewChip={false}/>,
 }

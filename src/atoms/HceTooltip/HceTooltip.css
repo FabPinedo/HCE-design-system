@@ -40,13 +40,6 @@
   transition-delay: 150ms, 0ms;
 }
 
-.hce-tooltip-wrapper:hover .hce-tooltip-bubble,
-.hce-tooltip-wrapper:focus-within .hce-tooltip-bubble {
-  opacity: 1;
-  visibility: visible;
-  transition-delay: 150ms, 0ms;
-}
-
 .hce-tooltip-bubble__arrow {
   position: absolute;
   width: 10px;

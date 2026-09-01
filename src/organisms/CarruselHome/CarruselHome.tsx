@@ -42,6 +42,8 @@ export type CarruselHomeProps = {
   borderRadius?:    string | number
   /** Cómo ajustar la imagen al contenedor (default "contain") */
   objectFit?:       "contain" | "cover"
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?:          string
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -52,6 +54,7 @@ export function CarruselHome({
   autoPlaySeconds = 5,
   borderRadius    = "12px",
   objectFit       = "contain",
+  testId,
 }: CarruselHomeProps) {
   const [current,   setCurrent]   = useState(0)
   const [previous,  setPrevious]  = useState<number | null>(null)
@@ -100,6 +103,7 @@ export function CarruselHome({
       className="hce-carrusel"
       role="region"
       aria-label="Carrusel de imágenes"
+      data-testid={testId}
       tabIndex={0}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}

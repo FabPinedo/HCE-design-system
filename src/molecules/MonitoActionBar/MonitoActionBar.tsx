@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import "./MonitoActionBar.css"
-import { HceTooltip } from "../../atoms/Tooltip/HceTooltip"
+import { HceTooltip } from "../../atoms/HceTooltip/HceTooltip"
 import { hceTypography } from "../../tokens/hce.tokens"
 import { UiDoctorIcon } from "../../atoms/Icon/Icon"
 
@@ -52,6 +52,12 @@ export interface MonitoActionBarProps {
   orientation?: "horizontal" | "vertical"
 
   box?: boolean
+
+  /**
+   * Hook de pruebas E2E — id base. Se sufija `-action-{key}` por cada acción
+   * y `-asignar-medicos` en el botón pill.
+   */
+  testId?: string
 }
 
 // ─── Componente ───────────────────────────────────────────────────────────────
@@ -63,7 +69,8 @@ export function MonitoActionBar({
   tooltipPlacement = "top",
   orientation      = "horizontal",
   box= false,
-  labelBtn
+  labelBtn,
+  testId,
 }: MonitoActionBarProps) {
   const isVertical = orientation === "vertical"
   const iconSize   = 17
@@ -72,6 +79,7 @@ export function MonitoActionBar({
     <div
       role="toolbar"
       aria-label="Barra de acciones de monitoreo"
+      data-testid={testId}
       style={{
         display:         "flex",
         flexDirection:   isVertical ? "column" : "row",
@@ -109,6 +117,7 @@ export function MonitoActionBar({
             onClick={action.onClick}
             disabled={action.disabled}
             aria-label={action.ariaLabel ?? action.tooltip}
+            data-testid={testId ? `${testId}-action-${action.key}` : undefined}
           >
             {action.icon}
           </button>
@@ -125,6 +134,7 @@ export function MonitoActionBar({
           onClick={onAsignarMedicos}
           disabled={disabled.asignarMedicos}
           aria-label="Asignar médico"
+          data-testid={testId ? `${testId}-asignar-medicos` : undefined}
         >
           <UiDoctorIcon
             size={iconSize}

@@ -50,6 +50,9 @@ interface Props {
   color?: BoxBadgeColor
 
   cursor?: CSSProperties["cursor"]
+
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 const STAGE_COLORS: Partial<Record<BoxStage, BoxBadgeColors>> = {
@@ -79,12 +82,14 @@ export const BoxBadge = ({
   stage,
   color = null,
   cursor = "default",
+  testId,
 }: Props) => {
   const colors = getBoxBadgeColors(stage, color)
   const visibleLabel = label ?? stage
 
   return (
     <span
+      data-testid={testId}
       style={{
         display: "inline-flex",
         alignItems: "center",

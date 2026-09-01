@@ -27,6 +27,8 @@ interface Props {
   actions?: ExtraAction[];
   /** Boton adicional para ocultar o mostrar barra de botones */
   closeAction?: boolean;
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string;
 }
 
 /**
@@ -38,23 +40,21 @@ export const ActionBar = ({
   orientation = "horizontal",
   actions,
   closeAction,
+  testId,
 }: Props) => {
   const isVertical = orientation === "vertical";
   const [closeBar, setCloseBar] = useState(false);
   return (
     <div
+      data-testid={testId}
       style={{
         display: "flex",
         flexDirection: isVertical ? "column" : "row",
         alignItems: "center",
         justifyContent: "space-between",
         gap: "6px",
-        padding: "6px 10px",
-        backgroundColor: "#ffffff",
         borderRadius: "10px",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
-        border: `1px solid var(--ds-color-divider, ${hceColors.primary.blue[100]})`,
-        width: isVertical ? "fit-content" : "100%",
+        width: isVertical ? "fit-content" : "fit-content",
         boxSizing: "border-box",
       }}
       role="toolbar"
@@ -66,8 +66,6 @@ export const ActionBar = ({
           flexDirection: isVertical ? "column" : "row",
           alignItems: isVertical ? "start" : "center",
           gap: "0.5rem",
-          padding: "6px 10px",
-          backgroundColor: "#ffffff",
           width: isVertical ? "fit-content" : "100%",
           boxSizing: "border-box",
         }}
@@ -123,6 +121,7 @@ export const ActionBar = ({
               icon={action.icon}
               onClick={action.onClick}
               disabled={action.disabled}
+              testId={testId ? `${testId}-action-${action.id}` : undefined}
             />
           ))}
       </div>

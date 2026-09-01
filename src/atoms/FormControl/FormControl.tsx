@@ -54,6 +54,8 @@ export interface FormControlProps extends Omit<HTMLAttributes<HTMLElement>, "col
   required?: boolean
   size?: Size
   variant?: Variant
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
 // Estado + acciones que se comparten con FormLabel, FormHelperText, Input, InputLabel
@@ -100,6 +102,7 @@ export const FormControl = forwardRef<HTMLElement, FormControlProps>(function Fo
     required = false,
     size = "medium",
     variant = "outlined",
+    testId,
     ...rest
   },
   ref
@@ -197,6 +200,7 @@ export const FormControl = forwardRef<HTMLElement, FormControlProps>(function Fo
         className: rootClassName,
         style: computedStyle,
         "aria-disabled": disabled || undefined,
+        "data-testid": testId,
         ...rest,
       },
       children

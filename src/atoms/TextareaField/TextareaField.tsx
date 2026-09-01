@@ -9,6 +9,8 @@ export interface TextareaFieldProps {
   maxLength?: number
   placeholder?: string
   disabled?: boolean
+  /** Hook de pruebas E2E — `data-testid` en el `<textarea>`. */
+  testId?: string
 }
 
 /** Textarea con label y contador de caracteres. */
@@ -18,7 +20,8 @@ export function TextareaField({
   onChange,
   maxLength = 100,
   placeholder = "Ingrese texto",
-  disabled = false
+  disabled = false,
+  testId,
 }: TextareaFieldProps) {
   const id = useId()
 
@@ -56,6 +59,7 @@ export function TextareaField({
           maxLength={maxLength}
           placeholder={placeholder}
           rows={3}
+          data-testid={testId}
         />
         <span className="hce-textarea-counter">
           {value.length}/{maxLength}

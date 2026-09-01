@@ -22,6 +22,8 @@ export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "classNa
    * div portado (ver `...rest` más abajo).
    */
   role?: string
+  /** Hook de pruebas E2E — `data-testid` en el panel portado. */
+  testId?: string
 }
 
 // Margen mínimo respecto al borde del viewport, para que el panel nunca
@@ -55,6 +57,7 @@ export function Menu({
   panelStyle,
   panelClassName,
   role = "menu",
+  testId,
   ...rest
 }: MenuProps) {
   const panelRef = useRef<HTMLDivElement>(null)
@@ -167,6 +170,7 @@ export function Menu({
       role={role}
       tabIndex={-1}
       className={`hce-menu-panel${panelClassName ? ` ${panelClassName}` : ""}`}
+      data-testid={testId}
       style={{
         ...(dsTheme as CSSProperties),
         top: position.top,

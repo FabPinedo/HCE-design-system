@@ -6,11 +6,14 @@ interface Props {
   title: string
   description?: string
   actions?: ReactNode
+  /** Hook de pruebas E2E — `data-testid` en el nodo raíz. */
+  testId?: string
 }
 
-export const PageHeader = ({ icon, title, description, actions }: Props) => {
+export const PageHeader = ({ icon, title, description, actions, testId }: Props) => {
   return (
     <div
+      data-testid={testId}
       style={{
         display: 'flex',
         flexDirection: 'row',
