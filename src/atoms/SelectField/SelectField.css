@@ -1,8 +1,8 @@
 /**
- * SelectField.css — reemplazo de MUI Select/FormControl con un <select>
- * nativo. Un <select> nativo da gratis el menú desplegable, navegación por
- * teclado, cierre al hacer click afuera y accesibilidad — mucho más robusto
- * que reimplementar un listbox custom para este caso (sin búsqueda).
+ * SelectField.css — listbox custom (reemplaza el <select> nativo).
+ * Control total sobre el diseño del popup: borde redondo, sombra,
+ * colores del sistema de diseño — a cambio de manejar nosotros mismos
+ * teclado, click-outside y accesibilidad (ver SelectField.tsx).
  */
 
 .hce-selectfield-label {
@@ -25,7 +25,8 @@
               box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.hce-selectfield-box:focus-within {
+.hce-selectfield-box:focus-within,
+.hce-selectfield-box--open {
   box-shadow: 0 0 0 3px var(--sf-focus-ring);
 }
 
@@ -33,7 +34,7 @@
   width: 100%;
 }
 
-.hce-selectfield {
+.hce-selectfield-trigger {
   appearance: none;
   width: 100%;
   height: 100%;
@@ -43,18 +44,22 @@
   background: transparent;
   font-family: var(--ds-font-family, 'Poppins', sans-serif);
   font-size: 0.875rem;
-  color: var(--sf-value-default);
   box-sizing: border-box;
   cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
 }
 
-.hce-selectfield:hover,
-.hce-selectfield:focus {
-  color: var(--sf-value-active);
-}
-
-.hce-selectfield:disabled {
+.hce-selectfield-trigger:disabled {
   cursor: not-allowed;
+}
+
+.hce-selectfield-value {
+  color: var(--sf-value-default);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .hce-selectfield-arrow {
@@ -65,4 +70,52 @@
   pointer-events: none;
   color: var(--sf-main);
   display: flex;
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hce-selectfield-box--open .hce-selectfield-arrow {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* ── Popup del listbox ──────────────────────────────────────── */
+
+.hce-selectfield-listbox--portal {
+  position: fixed;
+  z-index: 1500; /* por encima de modal (1300) y snackbar (1400) de MUI */
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  max-height: var(--sf-menu-max-height, 260px);
+  overflow-y: auto;
+  outline: none;
+}
+
+.hce-selectfield-option {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: var(--ds-font-family, 'Poppins', sans-serif);
+  font-size: 0.875rem;
+  color: var(--sf-value-default);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hce-selectfield-option--active {
+  background-color: var(--ds-color-interactive-subtle, #eef2ff);
+}
+
+.hce-selectfield-option--selected {
+  background-color: var(--sf-selected-bg);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.hce-selectfield-option--selected.hce-selectfield-option--active {
+  background-color: var(--sf-selected-bg);
 }
