@@ -21,7 +21,8 @@ const valueSx: SxProps = {
   fontWeight: 400,
   color: hceColors.primary.blue[500],
   lineHeight: 1.3,
-  overflow: "break-word", // para que el valor se rompa en varias líneas si es muy largo
+  overflowWrap: "break-word", // para que el valor se rompa en varias líneas si es muy largo
+  wordBreak: "break-word",
 }
 
 export interface PatientFieldProps {

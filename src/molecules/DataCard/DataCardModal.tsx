@@ -45,7 +45,9 @@ export function DataCardModal({
   const generatedId = useId()
 
   const maxWidthPx =
-    typeof maxWidth === "number" ? maxWidth : BREAKPOINT_PX[maxWidth];
+    typeof maxWidth === "number"
+      ? maxWidth
+      : BREAKPOINT_PX[maxWidth] ?? maxWidth; // fallback: string CSS arbitrario (ej. "400px") si no es un breakpoint conocido
 
   return (
     <Overlay
