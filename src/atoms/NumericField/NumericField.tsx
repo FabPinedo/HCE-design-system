@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react"
+import { useRef, type CSSProperties } from "react"
 import "./NumericField.css"
 import { hceColors } from "../../tokens/hce.tokens"
 
@@ -6,34 +6,29 @@ export interface NumericFieldProps {
   label: string
   value: string
   onChange?: (v: string) => void
-  /** Unidad mostrada como placeholder dentro del input cuando está vacío (ej. "Kg", "°C"). */
   suffix: string
-  /** "decimal" permite coma/punto (ej. peso, temperatura); "natural" solo dígitos enteros. */
+  unitLabel?: string
   numberType?: "decimal" | "natural"
   readOnly?: boolean
   disabled?: boolean
-  /** Activa el estado de error: label, borde y texto cambian a rojo, igual que TextInput/DatePicker. */
   error?: boolean
-  /** Hook de pruebas E2E — `data-testid` en el `<input>`. */
   testId?: string
 }
 
-/** Campo numérico con label y unidad como placeholder. */
 export function NumericField({
   label,
   value,
   onChange,
   suffix,
+  unitLabel,
   numberType = "decimal",
   readOnly = false,
   disabled = false,
   error = false,
   testId,
 }: NumericFieldProps) {
-  // ── Colores reactivos (ahora vía :hover/:focus-within en CSS) ──────────
-  // blue[600] == --ds-color-interactive exactamente — reactivo al tema activo
-  // de DSProvider, mismo hex de siempre como fallback. Rojo si error, mismo
-  // criterio que TextInput/DatePicker (error pisa disabled/readOnly).
+  const inputRef = useRef<HTMLInputElement>(null)
+
   const mainColor = disabled
     ? hceColors.neutro.black[300]
     : error
@@ -46,43 +41,56 @@ export function NumericField({
       ? hceColors.alert.error[600]
       : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
-  // Si es readOnly, el texto nunca "reacciona" (antes el listener de
-  // hover/focus estaba deshabilitado) — mismo valor en default y active.
+  // El texto escrito por el usuario usa el mismo azul del placeholder,
+  // fijo desde hceColors (no la var del tema), tanto en reposo como en hover/focus.
   const textDefaultColor = disabled
     ? hceColors.neutro.black[300]
     : error
       ? hceColors.alert.error[600]
-      : hceColors.neutro.black[700]
-  const textActiveColor  = disabled
+      : hceColors.primary.blue[600]
+
+  const textActiveColor = disabled
     ? hceColors.neutro.black[300]
     : error
       ? hceColors.alert.error[600]
-      : readOnly
-        ? hceColors.neutro.black[700]
-        : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+      : hceColors.primary.blue[600]
 
   const cssVars = {
-    "--nf-main":         mainColor,
-    "--nf-active":       activeColor,
-    "--nf-focus-ring":   hceColors.primary.blue[100],
+    "--nf-main": mainColor,
+    "--nf-active": activeColor,
+    "--nf-focus-ring": hceColors.primary.blue[100],
     "--nf-text-default": textDefaultColor,
-    "--nf-text-active":  textActiveColor,
-    "--nf-bg":           readOnly || disabled ? hceColors.neutro.white[50] : "#ffffff",
+    "--nf-text-active": textActiveColor,
+    "--nf-bg": readOnly || disabled ? hceColors.neutro.white[50] : "#ffffff",
   } as CSSProperties
+
+  // La unidad solo se "pega" al valor cuando hay algo escrito. Con el
+  // campo vacío, el input usa su ancho normal para no cortar el
+  // placeholder (ej. "lpm", "mmHg").
+  const showUnit = Boolean(unitLabel && value)
 
   return (
     <div style={cssVars}>
       {label && <label className="hce-numeric-label">{label}</label>}
-      <div className="hce-numeric-box">
+      <div
+        className="hce-numeric-box"
+        onClick={() => inputRef.current?.focus()}
+      >
         <input
+          ref={inputRef}
           disabled={disabled}
           type="text"
           inputMode={numberType === "decimal" ? "decimal" : "numeric"}
           value={value}
           placeholder={suffix || undefined}
           readOnly={readOnly}
-          className="hce-numeric-field"
+          className={
+            showUnit
+              ? "hce-numeric-field hce-numeric-field--with-unit"
+              : "hce-numeric-field"
+          }
           data-testid={testId}
+          style={showUnit ? { width: `${value.length}ch` } : undefined}
           onChange={(e) =>
             onChange?.(
               numberType === "decimal"
@@ -91,6 +99,7 @@ export function NumericField({
             )
           }
         />
+        {showUnit && <span className="hce-numeric-unit">{unitLabel}</span>}
       </div>
     </div>
   )

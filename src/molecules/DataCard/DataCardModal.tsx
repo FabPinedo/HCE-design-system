@@ -21,6 +21,14 @@ export interface DataCardModalProps extends DataCardProps {
   disableEscapeClose?: boolean
 }
 
+const BREAKPOINT_PX: Record<string, number> = {
+  xs: 444,
+  sm: 600,
+  md: 900,
+  lg: 1200,
+  xl: 1536,
+};
+
 export function DataCardModal({
   open,
   onClose,
@@ -29,12 +37,17 @@ export function DataCardModal({
   disableOutsideClose = false,
   disableEscapeClose = false,
 
-  maxWidth = 420,
+  maxWidth = "sm",
   maxHeight = "90vh",
 
   ...dataCardProps
 }: DataCardModalProps) {
   const generatedId = useId()
+
+  const maxWidthPx =
+    typeof maxWidth === "number"
+      ? maxWidth
+      : BREAKPOINT_PX[maxWidth] ?? maxWidth; // fallback: string CSS arbitrario (ej. "400px") si no es un breakpoint conocido
 
   return (
     <Overlay
@@ -45,8 +58,8 @@ export function DataCardModal({
       disableBackdropClose={disableOutsideClose}
       disableEscapeClose={disableEscapeClose}
       panelStyle={{
-        width: "calc(100% - 32px)",
-        maxWidth,
+        width: "100%",
+        maxWidth: maxWidthPx,
         maxHeight,
         margin: "auto",
         backgroundColor: "transparent",

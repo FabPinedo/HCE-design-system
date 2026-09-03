@@ -172,7 +172,7 @@ export const Modal = {
           onClose={() => setOpen(false)}
           showCloseButton
           disableOutsideClose
-          maxWidth={320}
+          maxWidth={340}
           backgroundColor={hceColors.primary.green[50]}
           borderColor={hceColors.primary.blue[500]}
           borderWidth={2}
@@ -233,9 +233,9 @@ function PatientModalContent() {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          columnGap: 3,
-          rowGap: 2,
+          gridTemplateColumns: "4fr 2fr",
+          columnGap: 20,
+          rowGap: 10,
         }}
       >
         <PatientField
@@ -265,7 +265,7 @@ function PatientModalContent() {
 
         <PatientField
           label="Especialidad:"
-          value="Oncología"
+          value="Anestesiología"
         />
 
         <PatientField
@@ -290,7 +290,7 @@ function PatientModalContent() {
 
         <PatientField
           label="Correo:"
-          value="santivea@gmail.com"
+          value="santivea234@example.com"
         />
 
         <PatientField

@@ -32,8 +32,15 @@ export function TextareaField({
     ? hceColors.neutro.black[300]
     : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
 
-  const textDefaultColor = disabled ? hceColors.neutro.black[300] : hceColors.neutro.black[700]
-  const textActiveColor  = disabled ? hceColors.neutro.black[300] : `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`
+  // El texto escrito por el usuario usa el mismo azul fijo de hceColors
+  // (no la var del tema), tanto en reposo como en hover/focus — igual
+  // criterio que NumericField y SelectField.
+  const textDefaultColor = disabled
+    ? hceColors.neutro.black[300]
+    : hceColors.primary.blue[600]
+  const textActiveColor = disabled
+    ? hceColors.neutro.black[300]
+    : hceColors.primary.blue[600]
 
   const cssVars = {
     "--ta-main":         mainColor,

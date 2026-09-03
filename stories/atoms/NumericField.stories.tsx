@@ -16,6 +16,10 @@ const meta: Meta<typeof NumericField> = {
       control:     "text",
       description: "Unidad mostrada como placeholder dentro del input vacío (ej. \"Kg\", \"°C\", \"mmHg\").",
     },
+    unitLabel: {
+      control:     "text",
+      description: "Unidad que queda pegada al valor mientras se escribe (ej. \"kg\", \"% O2\", \"mmHg\"). No forma parte del value editable — si se omite, el campo se comporta igual que antes.",
+    },
     numberType: {
       control:     "radio",
       options:     ["decimal", "natural"],
@@ -78,5 +82,42 @@ export const ErrorState: Story = {
     value:  "",
     suffix: "Kg",
     error:  true,
+  },
+}
+
+/** unitLabel: la unidad queda pegada al número mientras se escribe (no un placeholder, sino parte visual del valor). */
+export const WithUnitLabel: Story = {
+  args: {
+    label:     "Peso",
+    value:     "75",
+    suffix:    "Kg",
+    unitLabel: "kg",
+  },
+  render: (args) => {
+    const [v, setV] = useState(args.value)
+    return <NumericField {...args} value={v} onChange={setV} />
+  },
+}
+
+/** Mismo set de Signos Vitales que VitalSignsUnits, pero con unitLabel pegado al valor una vez que hay dato ingresado. */
+export const VitalSignsUnitsFilled: Story = {
+  render: () => {
+    const [peso, setPeso] = useState("75")
+    const [talla, setTalla] = useState("172")
+    const [sistolica, setSistolica] = useState("120")
+    const [saturacion, setSaturacion] = useState("96")
+    const [cardiaca, setCardiaca] = useState("98")
+    const [temperatura, setTemperatura] = useState("39")
+
+    return (
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+        <NumericField label="Peso" value={peso} suffix="Kg" unitLabel="kg" numberType="decimal" onChange={setPeso} />
+        <NumericField label="Talla" value={talla} suffix="cm" unitLabel="cm" numberType="natural" onChange={setTalla} />
+        <NumericField label="P. Sistólica" value={sistolica} suffix="mmHg" unitLabel="mmHg" numberType="natural" onChange={setSistolica} />
+        <NumericField label="Saturación O2" value={saturacion} suffix="%" unitLabel="% O2" numberType="natural" onChange={setSaturacion} />
+        <NumericField label="Fr. Cardiaca" value={cardiaca} suffix="LPM" unitLabel="lpm" numberType="natural" onChange={setCardiaca} />
+        <NumericField label="Temperatura" value={temperatura} suffix="°C" unitLabel="°C" numberType="decimal" onChange={setTemperatura} />
+      </div>
+    )
   },
 }

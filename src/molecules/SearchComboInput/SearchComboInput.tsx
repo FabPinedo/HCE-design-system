@@ -48,7 +48,7 @@ export interface SearchComboInputProps {
    * input de búsqueda simple sin selector de modo.
    */
   showModeToggle?: boolean;
- /**
+  /**
    * Hook de pruebas E2E — id base. Se aplica al `<input>` y se sufija
    * `-mode-toggle` y `-option-{value}`.
    */
@@ -90,6 +90,7 @@ export function SearchComboInput({
   const BLUE = `var(--ds-color-interactive, ${hceColors.primary.blue[600]})`;
   const GRAY = hceColors.neutro.black[400];
   const BORDER = hceColors.neutro.black[200];
+  const INPUT_BORDER = disabled ? BORDER : hceColors.primary.blue[600]; // ← nueva
   const isLeft = modePosition === "left";
 
   useEffect(() => {
@@ -259,23 +260,25 @@ export function SearchComboInput({
         style={{
           paddingLeft: "12px",
           paddingRight: loading ? "36px" : "12px",
-          border: `1.5px solid ${BORDER}`,
+          border: `1.5px solid ${INPUT_BORDER}`,
           borderRadius: !showModeToggle
             ? "8px"
             : isLeft
               ? "0 8px 8px 0"
               : "8px 0 0 8px",
           borderLeft: !showModeToggle
-            ? `1.5px solid ${BORDER}`
+            ? `1.5px solid ${INPUT_BORDER}`
             : isLeft
               ? "none"
-              : `1.5px solid ${BORDER}`,
+              : `1.5px solid ${INPUT_BORDER}`,
           borderRight: !showModeToggle
-            ? `1.5px solid ${BORDER}`
+            ? `1.5px solid ${INPUT_BORDER}`
             : isLeft
-              ? `1.5px solid ${BORDER}`
+              ? `1.5px solid ${INPUT_BORDER}`
               : "none",
-          color: hceColors.neutro.black[700],
+          color: disabled
+            ? hceColors.neutro.black[400]
+            : hceColors.primary.blue[600],
           backgroundColor: disabled ? hceColors.neutro.black[50] : "#ffffff",
         }}
       />

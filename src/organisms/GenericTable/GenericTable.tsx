@@ -54,8 +54,10 @@ interface GenericTableProps<T> {
    * Ejemplo Monitor: prioridad ascendente y luego fecha/hora de atención.
    */
   sortComparator?: (a: T, b: T) => number
-
-
+  /**
+   * Campo para definir mensaje por defecto cuando la tabla se encuentre sin datos
+  */
+  emptyMessage?: string
 }
 
 
@@ -91,7 +93,7 @@ export const GenericTable = <T,>({
   getRowSx,
   rowAlertGetter,
   sortComparator,
-
+  emptyMessage = 'No hay datos disponibles.'
 }: GenericTableProps<T>) => {
   const sortedRows = useMemo(() => {
     if (!sortComparator) return rows
@@ -328,7 +330,7 @@ export const GenericTable = <T,>({
                         color: hceClinicalColors.textSecondary,
                       }}
                     >
-                      No hay datos disponibles
+                      {emptyMessage}
                     </span>
                   </div>
                 </td>
