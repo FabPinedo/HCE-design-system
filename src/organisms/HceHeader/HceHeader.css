@@ -62,8 +62,9 @@
 }
 
 .hce-hceheader-sede-select:disabled {
-  -webkit-text-fill-color: rgba(255, 255, 255, 0.85);
-  color: rgba(255, 255, 255, 0.85);
+  -webkit-text-fill-color: var(--ds-color-interactive, #003d96);
+  color: black;
+  background-color: #f5f7fa;
   cursor: default;
 }
 

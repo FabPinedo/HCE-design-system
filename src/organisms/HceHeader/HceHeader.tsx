@@ -105,6 +105,8 @@ export type HceHeaderProps = {
   sede?:             string | number
   sucursales?:       Sucursal[]
   onSedeCambiada?:  (sedeId: string | number) => void
+  /** Deshabilita el selector de sede aunque existan varias sucursales. */
+  sedeDisabled?:     boolean
   userName?:         string
   userRole?:         string
   /** URL de la foto de perfil del usuario. Si carga correctamente, reemplaza las iniciales. */
@@ -137,6 +139,7 @@ export function HceHeader({
   sede,
   sucursales      = [],
   onSedeCambiada,
+  sedeDisabled    = false,
   userName        = "Usuario",
   userRole        = "",
   userPhotoUrl,
@@ -247,7 +250,7 @@ export function HceHeader({
             className="hce-hceheader-sede-select"
             value={selectedSede}
             onChange={e => onSedeCambiada?.(e.target.value)}
-            disabled={!multiSede}
+            disabled={sedeDisabled || !multiSede}
           >
             {sucursales.map(s => (
               <option key={String(s.id)} value={String(s.id)}>
